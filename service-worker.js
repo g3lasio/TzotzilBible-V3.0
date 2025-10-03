@@ -3,7 +3,6 @@ const BIBLE_CACHE = 'bible-content-v1';
 const STATIC_CACHE = 'static-assets-v1';
 
 const STATIC_ASSETS = [
-  '/',
   '/static/css/style.css',
   '/static/js/bible.js',
   '/static/js/offline_manager.js',
