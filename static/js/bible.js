@@ -9,7 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
             { name: 'Verse Highlighting', fn: setupVerseHighlighting },
             { name: 'Error Handling', fn: setupErrorHandling },
             { name: 'Click Outside Handler', fn: setupClickOutsideHandler },
-            { name: 'Language Toggle', fn: initializeLanguageToggle }
+            { name: 'Language Toggle', fn: initializeLanguageToggle },
+            { name: 'Version Selector', fn: initializeVersionSelector }
         ];
 
         components.forEach(component => {
@@ -360,6 +361,99 @@ function showErrorToast(message) {
     } else {
         console.error("Error:", message);
     }
+}
+
+// Function to initialize version selector
+function initializeVersionSelector() {
+    const versionSelect = document.getElementById('spanishVersionSelect');
+    
+    if (!versionSelect) {
+        return; // No hay selector en esta página
+    }
+    
+    // Variable para rastrear la versión actualmente seleccionada
+    let currentVersion = versionSelect.value;
+    
+    versionSelect.addEventListener('change', function(e) {
+        const selectedOption = e.target.options[e.target.selectedIndex];
+        
+        // Si la opción está deshabilitada, mostrar mensaje y revertir
+        if (selectedOption.disabled) {
+            e.preventDefault();
+            
+            // Mostrar mensaje "Coming Soon"
+            showComingSoonMessage();
+            
+            // Revertir a la versión actual
+            versionSelect.value = currentVersion;
+        } else {
+            // Actualizar la versión actual si es válida
+            currentVersion = e.target.value;
+            // Aquí se puede agregar lógica futura para cambiar de versión
+        }
+    });
+    
+    // También interceptar el click en opciones deshabilitadas
+    versionSelect.addEventListener('mousedown', function(e) {
+        if (e.target.tagName === 'OPTION' && e.target.disabled) {
+            e.preventDefault();
+            showComingSoonMessage();
+        }
+    });
+}
+
+function showComingSoonMessage() {
+    // Crear elemento de mensaje temporal
+    const message = document.createElement('div');
+    message.className = 'coming-soon-toast';
+    message.innerHTML = '<i class="bi bi-info-circle"></i> Próximamente disponible';
+    message.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: rgba(0, 243, 255, 0.95);
+        color: #0d1117;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 0.95rem;
+        box-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
+        z-index: 10000;
+        animation: slideIn 0.3s ease-out;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    `;
+    
+    document.body.appendChild(message);
+    
+    // Agregar animación de entrada
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // Remover después de 2.5 segundos
+    setTimeout(() => {
+        message.style.transition = 'all 0.3s ease-out';
+        message.style.transform = 'translateX(400px)';
+        message.style.opacity = '0';
+        setTimeout(() => {
+            document.body.removeChild(message);
+            document.head.removeChild(style);
+        }, 300);
+    }, 2500);
 }
 
 // Function to load a random promise
