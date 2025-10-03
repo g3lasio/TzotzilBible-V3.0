@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
         initializeSettings();
         setupEventListeners();
         setupBackupAndSync();
+        setupOfflineMode();
     } catch (error) {
         console.error("Error durante la inicialización:", error);
         window.createToast("Error al cargar la configuración", "error");
@@ -150,6 +151,84 @@ function setupBackupAndSync() {
             input.click();
         });
     }
+}
+
+function setupOfflineMode() {
+    const downloadBtn = document.getElementById('download-offline-btn');
+    const checkBtn = document.getElementById('check-offline-btn');
+    const clearBtn = document.getElementById('clear-offline-btn');
+    const statusDiv = document.getElementById('offline-status');
+    const statusText = document.getElementById('offline-status-text');
+
+    function showStatus(message, type = 'info') {
+        statusDiv.style.display = 'block';
+        statusDiv.className = `alert alert-${type} mb-3`;
+        statusText.textContent = message;
+    }
+
+    function hideStatus() {
+        statusDiv.style.display = 'none';
+    }
+
+    if (downloadBtn) {
+        downloadBtn.addEventListener('click', async function() {
+            try {
+                downloadBtn.disabled = true;
+                downloadBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Descargando...';
+                
+                const success = await window.offlineManager.downloadBibleData();
+                
+                if (success) {
+                    showStatus('✓ Biblia descargada exitosamente para uso offline', 'success');
+                } else {
+                    showStatus('✗ Error al descargar la Biblia', 'danger');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showStatus('✗ Error al descargar la Biblia', 'danger');
+            } finally {
+                downloadBtn.disabled = false;
+                downloadBtn.innerHTML = '<i class="bi bi-download me-2"></i>Descargar Biblia Offline';
+            }
+        });
+    }
+
+    if (checkBtn) {
+        checkBtn.addEventListener('click', async function() {
+            try {
+                const hasData = await window.offlineManager.checkOfflineData();
+                
+                if (hasData) {
+                    const books = await window.offlineManager.getOfflineBooks();
+                    showStatus(`✓ Datos offline disponibles (${books.length} libros)`, 'success');
+                } else {
+                    showStatus('✗ No hay datos offline disponibles', 'warning');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showStatus('✗ Error al verificar datos offline', 'danger');
+            }
+        });
+    }
+
+    if (clearBtn) {
+        clearBtn.addEventListener('click', async function() {
+            if (confirm('¿Estás seguro de que deseas eliminar todos los datos offline?')) {
+                try {
+                    clearBtn.disabled = true;
+                    await window.offlineManager.clearOfflineData();
+                    showStatus('✓ Datos offline eliminados', 'info');
+                } catch (error) {
+                    console.error('Error:', error);
+                    showStatus('✗ Error al eliminar datos offline', 'danger');
+                } finally {
+                    clearBtn.disabled = false;
+                }
+            }
+        });
+    }
+
+    checkBtn?.click();
 }
 
 // Additional donation functions removed
