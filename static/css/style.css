@@ -1048,10 +1048,13 @@ body {
                 0 0 60px rgba(0, 243, 255, 0.15),
                 inset 0 0 20px rgba(0, 243, 255, 0.05);
     backdrop-filter: blur(12px);
+    display: none;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px) scale(0.95);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                visibility 0.3s;
     z-index: 1000;
     max-height: 320px;
     overflow-y: auto;
@@ -1077,6 +1080,7 @@ body {
 }
 
 .version-dropdown-panel.active {
+    display: block;
     opacity: 1;
     visibility: visible;
     transform: translateY(0) scale(1);
