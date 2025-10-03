@@ -963,6 +963,17 @@ def validate():
             'status': 'error',
             'message': 'Internal server error'
         }), 500
+@routes.route('/service-worker.js')
+def serve_service_worker():
+    """Sirve el service worker desde la raíz para scope correcto"""
+    from flask import send_from_directory
+    import os
+    root_dir = os.path.dirname(os.path.abspath(__file__))
+    response = send_from_directory(root_dir, 'service-worker.js')
+    response.headers['Content-Type'] = 'application/javascript'
+    response.headers['Service-Worker-Allowed'] = '/'
+    return response
+
 @routes.route('/api/bible/offline-data')
 @cross_origin()
 def get_offline_bible_data():
