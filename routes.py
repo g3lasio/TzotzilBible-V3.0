@@ -1,4 +1,4 @@
-from flask import Blueprint, request, Flask, jsonify, render_template, redirect, url_for, g, session, flash
+from flask import Blueprint, request, Flask, jsonify, render_template, redirect, url_for, g, session, flash, send_file
 from flask_login import login_required, current_user
 from auth import token_required
 from database import db_manager, get_db
@@ -963,6 +963,47 @@ def validate():
             'status': 'error',
             'message': 'Internal server error'
         }), 500
+@routes.route('/api/bible/offline-data')
+@cross_origin()
+def get_offline_bible_data():
+    """Obtiene todos los datos bíblicos en formato JSON para uso offline"""
+    try:
+        verses = BibleVerse.query.all()
+        
+        bible_data = {}
+        for verse in verses:
+            book = verse.book
+            chapter = verse.chapter
+            
+            if book not in bible_data:
+                bible_data[book] = {}
+            
+            if chapter not in bible_data[book]:
+                bible_data[book][chapter] = []
+            
+            bible_data[book][chapter].append({
+                'verse': verse.verse,
+                'spanish_text': verse.spanish_text,
+                'tzotzil_text': verse.tzotzil_text
+            })
+        
+        books_list = sorted(bible_data.keys(), key=lambda x: BIBLE_BOOKS_ORDER.index(x) if x in BIBLE_BOOKS_ORDER else 999)
+        
+        response_data = {
+            'books': books_list,
+            'content': bible_data,
+            'last_updated': datetime.now().isoformat(),
+            'total_verses': len(verses)
+        }
+        
+        return jsonify(response_data), 200
+        
+    except Exception as e:
+        logger.error(f"Error obteniendo datos offline: {str(e)}")
+        return jsonify({
+            'error': 'Error obteniendo datos bíblicos'
+        }), 500
+
 @routes.route('/download_bible')
 def download_bible():
     """Descarga la base de datos bíblica para uso offline"""
