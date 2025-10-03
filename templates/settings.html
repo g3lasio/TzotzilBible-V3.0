@@ -65,7 +65,42 @@
             </div>
         </div>
 
-
+        <!-- Offline Mode Section -->
+        <div class="col-12 col-md-6">
+            <div class="card settings-card">
+                <div class="card-header d-flex align-items-center">
+                    <i class="bi bi-cloud-download me-2 settings-icon"></i>
+                    <h5 class="mb-0">Modo Offline</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">
+                        Descarga la Biblia completa para leerla sin conexión a internet.
+                    </p>
+                    <div id="offline-status" class="alert alert-info mb-3" style="display: none;">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <span id="offline-status-text">Verificando...</span>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button id="download-offline-btn" class="btn btn-primary">
+                            <i class="bi bi-download me-2"></i>
+                            Descargar Biblia Offline
+                        </button>
+                        <button id="check-offline-btn" class="btn btn-secondary">
+                            <i class="bi bi-check-circle me-2"></i>
+                            Verificar Datos Offline
+                        </button>
+                        <button id="clear-offline-btn" class="btn btn-outline-danger">
+                            <i class="bi bi-trash me-2"></i>
+                            Eliminar Datos Offline
+                        </button>
+                    </div>
+                    <small class="text-muted d-block mt-3">
+                        <i class="bi bi-info-circle"></i>
+                        La descarga puede tardar algunos minutos dependiendo de tu conexión.
+                    </small>
+                </div>
+            </div>
+        </div>
 
         <!-- Feedback Section -->
         <div class="col-12 col-md-6">
