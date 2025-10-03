@@ -79,25 +79,58 @@
                                 </div>
                             </div>
                             <div class="language-header spanish compact">
-                                <div class="version-selector-wrapper">
-                                    <i class="bi bi-translate"></i>
-                                    <select class="version-dropdown" id="spanishVersionSelect">
-                                        <option value="rv1960" selected>RV1960</option>
-                                        <option value="rvr95" disabled>Reina-Valera 1995 (RVR95)</option>
-                                        <option value="rvc" disabled>Reina-Valera Contemporánea (RVC)</option>
-                                        <option value="rva2015" disabled>Reina-Valera Actualizada 2015 (RVA-2015)</option>
-                                        <option value="nvi" disabled>Nueva Versión Internacional (NVI)</option>
-                                        <option value="ntv" disabled>Nueva Traducción Viviente (NTV)</option>
-                                        <option value="lbla" disabled>Biblia de las Américas (LBLA)</option>
-                                        <option value="nbla" disabled>Nueva Biblia de las Américas (NBLA)</option>
-                                        <option value="dhh" disabled>Dios Habla Hoy (DHH)</option>
-                                        <option value="tla" disabled>Traducción en Lenguaje Actual (TLA)</option>
-                                        <option value="pdt" disabled>Palabra de Dios para Todos (PDT)</option>
-                                        <option value="bj" disabled>Biblia de Jerusalén (BJ)</option>
-                                        <option value="bjl" disabled>Biblia de Jerusalén Latinoamericana (BJL)</option>
-                                        <option value="bl" disabled>Biblia Latinoamericana (BL)</option>
-                                        <option value="btx" disabled>Biblia Textual (BTX)</option>
-                                    </select>
+                                <div class="version-selector-custom" id="versionSelector">
+                                    <button class="version-btn" id="versionButton" aria-haspopup="true" aria-expanded="false">
+                                        <span class="version-text">RV1960</span>
+                                        <i class="bi bi-chevron-down"></i>
+                                    </button>
+                                    <div class="version-dropdown-panel" id="versionDropdown" role="menu">
+                                        <div class="version-item active" data-version="rv1960" role="menuitem" tabindex="0">
+                                            RV1960
+                                        </div>
+                                        <div class="version-item locked" data-version="rvr95" role="menuitem" tabindex="-1">
+                                            RVR95 <span class="coming-soon-badge">PRONTO</span>
+                                        </div>
+                                        <div class="version-item locked" data-version="rvc" role="menuitem" tabindex="-1">
+                                            RVC <span class="coming-soon-badge">PRONTO</span>
+                                        </div>
+                                        <div class="version-item locked" data-version="rva2015" role="menuitem" tabindex="-1">
+                                            RVA-2015 <span class="coming-soon-badge">PRONTO</span>
+                                        </div>
+                                        <div class="version-item locked" data-version="nvi" role="menuitem" tabindex="-1">
+                                            NVI <span class="coming-soon-badge">PRONTO</span>
+                                        </div>
+                                        <div class="version-item locked" data-version="ntv" role="menuitem" tabindex="-1">
+                                            NTV <span class="coming-soon-badge">PRONTO</span>
+                                        </div>
+                                        <div class="version-item locked" data-version="lbla" role="menuitem" tabindex="-1">
+                                            LBLA <span class="coming-soon-badge">PRONTO</span>
+                                        </div>
+                                        <div class="version-item locked" data-version="nbla" role="menuitem" tabindex="-1">
+                                            NBLA <span class="coming-soon-badge">PRONTO</span>
+                                        </div>
+                                        <div class="version-item locked" data-version="dhh" role="menuitem" tabindex="-1">
+                                            DHH <span class="coming-soon-badge">PRONTO</span>
+                                        </div>
+                                        <div class="version-item locked" data-version="tla" role="menuitem" tabindex="-1">
+                                            TLA <span class="coming-soon-badge">PRONTO</span>
+                                        </div>
+                                        <div class="version-item locked" data-version="pdt" role="menuitem" tabindex="-1">
+                                            PDT <span class="coming-soon-badge">PRONTO</span>
+                                        </div>
+                                        <div class="version-item locked" data-version="bj" role="menuitem" tabindex="-1">
+                                            BJ <span class="coming-soon-badge">PRONTO</span>
+                                        </div>
+                                        <div class="version-item locked" data-version="bjl" role="menuitem" tabindex="-1">
+                                            BJL <span class="coming-soon-badge">PRONTO</span>
+                                        </div>
+                                        <div class="version-item locked" data-version="bl" role="menuitem" tabindex="-1">
+                                            BL <span class="coming-soon-badge">PRONTO</span>
+                                        </div>
+                                        <div class="version-item locked" data-version="btx" role="menuitem" tabindex="-1">
+                                            BTX <span class="coming-soon-badge">PRONTO</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

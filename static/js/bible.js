@@ -365,41 +365,94 @@ function showErrorToast(message) {
 
 // Function to initialize version selector
 function initializeVersionSelector() {
-    const versionSelect = document.getElementById('spanishVersionSelect');
+    const versionButton = document.getElementById('versionButton');
+    const versionDropdown = document.getElementById('versionDropdown');
+    const versionSelector = document.getElementById('versionSelector');
     
-    if (!versionSelect) {
+    if (!versionButton || !versionDropdown) {
         return; // No hay selector en esta página
     }
     
-    // Variable para rastrear la versión actualmente seleccionada
-    let currentVersion = versionSelect.value;
+    let currentVersion = 'rv1960';
     
-    versionSelect.addEventListener('change', function(e) {
-        const selectedOption = e.target.options[e.target.selectedIndex];
+    // Toggle dropdown al hacer click en el botón
+    versionButton.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const isOpen = versionDropdown.classList.contains('active');
         
-        // Si la opción está deshabilitada, mostrar mensaje y revertir
-        if (selectedOption.disabled) {
-            e.preventDefault();
-            
-            // Mostrar mensaje "Coming Soon"
-            showComingSoonMessage();
-            
-            // Revertir a la versión actual
-            versionSelect.value = currentVersion;
+        if (isOpen) {
+            closeDropdown();
         } else {
-            // Actualizar la versión actual si es válida
-            currentVersion = e.target.value;
+            openDropdown();
+        }
+    });
+    
+    // Manejar clicks en items del dropdown
+    versionDropdown.addEventListener('click', function(e) {
+        const versionItem = e.target.closest('.version-item');
+        
+        if (!versionItem) return;
+        
+        // Si está bloqueada, mostrar mensaje
+        if (versionItem.classList.contains('locked')) {
+            showComingSoonMessage();
+            return;
+        }
+        
+        // Cambiar versión activa
+        const newVersion = versionItem.dataset.version;
+        if (newVersion !== currentVersion) {
+            // Remover active de todos
+            versionDropdown.querySelectorAll('.version-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Agregar active al nuevo
+            versionItem.classList.add('active');
+            
+            // Actualizar texto del botón
+            const versionText = versionButton.querySelector('.version-text');
+            versionText.textContent = versionItem.textContent.trim().replace('PRONTO', '').trim();
+            
+            currentVersion = newVersion;
+            
             // Aquí se puede agregar lógica futura para cambiar de versión
         }
+        
+        closeDropdown();
     });
     
-    // También interceptar el click en opciones deshabilitadas
-    versionSelect.addEventListener('mousedown', function(e) {
-        if (e.target.tagName === 'OPTION' && e.target.disabled) {
-            e.preventDefault();
-            showComingSoonMessage();
+    // Cerrar dropdown al hacer click fuera
+    document.addEventListener('click', function(e) {
+        if (!versionSelector.contains(e.target)) {
+            closeDropdown();
         }
     });
+    
+    // Soporte para teclado
+    versionButton.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            versionButton.click();
+        }
+    });
+    
+    versionDropdown.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeDropdown();
+            versionButton.focus();
+        }
+    });
+    
+    function openDropdown() {
+        versionDropdown.classList.add('active');
+        versionButton.setAttribute('aria-expanded', 'true');
+    }
+    
+    function closeDropdown() {
+        versionDropdown.classList.remove('active');
+        versionButton.setAttribute('aria-expanded', 'false');
+    }
 }
 
 function showComingSoonMessage() {
