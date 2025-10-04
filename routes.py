@@ -510,6 +510,12 @@ def search():
                              error="Ocurrió un error durante la búsqueda. Por favor, intente nuevamente."), 500
 
 
+@routes.route('/offline')
+def offline():
+    """Página para mostrar cuando no hay conexión"""
+    return render_template('offline.html')
+
+
 @routes.route('/settings', methods=['GET', 'POST'])
 @token_required
 def settings(current_user):
