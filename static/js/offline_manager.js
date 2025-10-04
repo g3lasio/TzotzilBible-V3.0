@@ -86,6 +86,9 @@ class OfflineManager {
             
             await this.saveBibleData(data);
             
+            // Precachear algunos capítulos importantes para acceso offline
+            await this.precacheImportantChapters();
+            
             this.showNotification('Biblia descargada exitosamente para uso offline', 'success');
             return true;
             
@@ -94,6 +97,45 @@ class OfflineManager {
             this.showNotification('Error al descargar la Biblia', 'danger');
             return false;
         }
+    }
+
+    async precacheImportantChapters() {
+        // Lista de capítulos importantes para precachear
+        const importantChapters = [
+            { book: 'Génesis', chapter: 1 },
+            { book: 'Génesis', chapter: 2 },
+            { book: 'Éxodo', chapter: 20 },
+            { book: 'Salmos', chapter: 23 },
+            { book: 'Salmos', chapter: 91 },
+            { book: 'Proverbios', chapter: 3 },
+            { book: 'Isaías', chapter: 53 },
+            { book: 'Mateo', chapter: 5 },
+            { book: 'Mateo', chapter: 6 },
+            { book: 'Juan', chapter: 1 },
+            { book: 'Juan', chapter: 3 },
+            { book: 'Juan', chapter: 14 },
+            { book: 'Romanos', chapter: 8 },
+            { book: '1 Corintios', chapter: 13 },
+            { book: 'Apocalipsis', chapter: 21 }
+        ];
+
+        console.log('Precacheando capítulos importantes...');
+        
+        // Hacer fetch de cada capítulo importante para que se cachee
+        const fetchPromises = importantChapters.map(({ book, chapter }) => {
+            return fetch(`/chapter/${book}/${chapter}`)
+                .then(response => {
+                    if (response.ok) {
+                        console.log(`Capítulo ${book} ${chapter} cacheado`);
+                    }
+                })
+                .catch(err => {
+                    console.warn(`No se pudo cachear ${book} ${chapter}:`, err);
+                });
+        });
+
+        await Promise.all(fetchPromises);
+        console.log('Capítulos importantes precacheados');
     }
 
     async saveBibleData(data) {
