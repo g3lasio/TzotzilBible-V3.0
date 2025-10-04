@@ -1,6 +1,6 @@
-const CACHE_NAME = 'tzotzil-bible-v1';
-const BIBLE_CACHE = 'bible-content-v1';
-const STATIC_CACHE = 'static-assets-v1';
+const CACHE_NAME = 'tzotzil-bible-v2';
+const BIBLE_CACHE = 'bible-content-v2';
+const STATIC_CACHE = 'static-assets-v2';
 
 const STATIC_ASSETS = [
   '/static/css/style.css',
@@ -10,13 +10,27 @@ const STATIC_ASSETS = [
   '/static/manifest.json'
 ];
 
+const HTML_PAGES = [
+  '/',
+  '/books',
+  '/offline'
+];
+
 self.addEventListener('install', (event) => {
   console.log('[Service Worker] Installing...');
   event.waitUntil(
-    caches.open(STATIC_CACHE).then((cache) => {
-      console.log('[Service Worker] Caching static assets');
-      return cache.addAll(STATIC_ASSETS);
-    })
+    Promise.all([
+      caches.open(STATIC_CACHE).then((cache) => {
+        console.log('[Service Worker] Caching static assets');
+        return cache.addAll(STATIC_ASSETS);
+      }),
+      caches.open(CACHE_NAME).then((cache) => {
+        console.log('[Service Worker] Caching HTML pages');
+        return cache.addAll(HTML_PAGES).catch(err => {
+          console.warn('[Service Worker] Failed to cache some HTML pages:', err);
+        });
+      })
+    ])
   );
   self.skipWaiting();
 });
@@ -88,9 +102,12 @@ self.addEventListener('fetch', (event) => {
           return response;
         }).catch(() => {
           if (url.pathname.startsWith('/chapter/') || url.pathname === '/books') {
-            return caches.match('/').then((offlinePage) => {
-              return offlinePage || new Response(
-                '<html><body><h1>Sin conexión</h1><p>No se puede cargar esta página sin internet.</p></body></html>',
+            return caches.match('/offline').then((offlinePage) => {
+              if (offlinePage) {
+                return offlinePage;
+              }
+              return new Response(
+                '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Sin conexión</title></head><body style="font-family:sans-serif;text-align:center;padding:50px;background:#0d1117;color:#00f3ff;"><h1>📡 Sin Conexión</h1><p>No puedes acceder a esta página sin internet.</p><p>Descarga la Biblia en Ajustes para leerla offline.</p></body></html>',
                 { headers: { 'Content-Type': 'text/html' } }
               );
             });
