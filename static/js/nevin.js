@@ -77,73 +77,25 @@ class NevinChat {
     }
 
     async showWelcomeMessage() {
-        const username = localStorage.getItem("username");
-        let welcomeText = "";
-
-        if (username && username !== "null" && username.trim() !== "") {
-            const greetings = [
-                "¡Me alegra verte de nuevo",
-                "¡Qué gusto tenerte de vuelta",
-                "¡Bienvenido nuevamente",
-                "¡Es un placer verte otra vez",
-            ];
-            const randomGreeting =
-                greetings[Math.floor(Math.random() * greetings.length)];
-            welcomeText = `${randomGreeting}, ${username}! Soy Nevin, tu asistente bíblico. ¿En qué puedo ayudarte hoy?`;
-        } else {
-            const genericGreetings = [
-                "¡Hola! Soy Nevin, tu asistente bíblico. Estoy aquí para ayudarte a explorar las Escrituras.",
-                "¡Bienvenido! Soy Nevin, tu compañero en el estudio bíblico. ¿En qué puedo ayudarte hoy?",
-                "¡Paz a ti! Soy Nevin, tu asistente para comprender mejor la Palabra de Dios.",
-                "¡Qué alegría tenerte aquí! Soy Nevin, y estoy para ayudarte con tus consultas bíblicas."
-            ];
-            welcomeText = genericGreetings[Math.floor(Math.random() * genericGreetings.length)];
-        }
+        // Sistema de autenticación deshabilitado - usar siempre saludos genéricos
+        // Limpiar cualquier nombre guardado de sesiones anteriores
+        localStorage.removeItem("username");
+        
+        const genericGreetings = [
+            "¡Hola! Soy Nevin, tu asistente bíblico. Estoy aquí para ayudarte a explorar las Escrituras.",
+            "¡Bienvenido! Soy Nevin, tu compañero en el estudio bíblico. ¿En qué puedo ayudarte hoy?",
+            "¡Paz a ti! Soy Nevin, tu asistente para comprender mejor la Palabra de Dios.",
+            "¡Qué alegría tenerte aquí! Soy Nevin, y estoy para ayudarte con tus consultas bíblicas."
+        ];
+        const welcomeText = genericGreetings[Math.floor(Math.random() * genericGreetings.length)];
 
         await this.showTransformationMessage(welcomeText);
     }
 
     showNameInput() {
-        const chatHistory = document.getElementById("chat-history");
-        if (!chatHistory) return;
-
-        const inputContainer = document.createElement("div");
-        inputContainer.classList.add(
-            "name-input-container",
-            "transform-effect",
-        );
-
-        const nameInput = document.createElement("input");
-        nameInput.type = "text";
-        nameInput.placeholder = "Escribe tu nombre aquí...";
-        nameInput.classList.add("name-input");
-
-        const submitButton = document.createElement("button");
-        submitButton.textContent = "Continuar";
-        submitButton.classList.add("name-submit", "transform-button");
-
-        const handleNameSubmit = async () => {
-            const name = nameInput.value.trim();
-            if (name) {
-                localStorage.setItem("username", name);
-                inputContainer.remove();
-                await this.showTransformationMessage(
-                    `¡Gracias, ${name}! Es un placer conocerte. Estoy aquí para ayudarte a explorar y comprender mejor las verdades bíblicas. ¿Qué te gustaría aprender hoy?`,
-                );
-                this.displayRandomSuggestions();
-            }
-        };
-
-        submitButton.onclick = handleNameSubmit;
-        nameInput.onkeypress = (e) => {
-            if (e.key === "Enter") handleNameSubmit();
-        };
-
-        inputContainer.appendChild(nameInput);
-        inputContainer.appendChild(submitButton);
-        chatHistory.appendChild(inputContainer);
-
-        inputContainer.scrollIntoView({ behavior: "smooth" });
+        // Sistema de autenticación deshabilitado - no pedir nombres
+        // Mostrar mensaje directamente y sugerencias
+        this.displayRandomSuggestions();
     }
 
     formatReferences(text) {
