@@ -1,0 +1,44 @@
+{
+  "bundleId": "com.tzotzilbible.app",
+  "primaryLanguage": "es-MX",
+  "primaryCategory": "Books",
+  "secondaryCategory": "Education",
+  "ageRating": "4+",
+  "localizations": {
+    "es-MX": {
+      "name": "Tzotzil Bible - Biblia Bilingüe",
+      "subtitle": "Biblia Español/Tzotzil con IA Nevin",
+      "privacyPolicyUrl": "https://tzotzil-bible-chyrris.replit.app/privacy",
+      "description": "🙏 Tzotzil Bible - La Biblia Bilingüe Definitiva\n\nDescubre la Palabra de Dios en dos idiomas: Español y Tzotzil (Maya). Perfecta para comunidades indígenas, misioneros, estudiantes de lenguas y todos los que buscan profundizar en las Escrituras.\n\nCARACTERÍSTICAS PRINCIPALES:\n\n📖 BIBLIA BILINGÜE COMPLETA\n• Texto completo en Español y Tzotzil\n• Navegación intuitiva por libros y capítulos\n• Búsqueda avanzada de versículos\n• Promesa del día con imágenes inspiradoras\n\n🤖 NEVIN AI - TU ASISTENTE BÍBLICO\n• Respuestas a preguntas bíblicas y teológicas\n• Basado en los escritos de Elena G. de White\n• Interpretación contextual de las Escrituras\n\n📴 MODO OFFLINE\n• Descarga la Biblia completa para leer sin internet\n• Acceso a versículos guardados sin conexión\n\n🎨 DISEÑO MODERNO\n• Interfaz futurista y elegante\n• Tema oscuro para lectura nocturna\n• Optimizado para iPhone y iPad\n\n¡Descarga ahora y lleva la Biblia contigo!",
+      "keywords": "biblia,tzotzil,español,bilingue,maya,chiapas,nevin,ai,adventista,egw,offline",
+      "promotionalText": "¡Nueva versión con Nevin AI mejorado y mejor rendimiento offline!",
+      "whatsNew": "• Nueva versión con Nevin AI mejorado\n• Mejor rendimiento offline\n• Correcciones de errores\n• Interfaz optimizada"
+    },
+    "en-US": {
+      "name": "Tzotzil Bible - Bilingual Bible",
+      "subtitle": "Spanish/Tzotzil Bible with Nevin AI",
+      "privacyPolicyUrl": "https://tzotzil-bible-chyrris.replit.app/privacy",
+      "description": "🙏 Tzotzil Bible - The Ultimate Bilingual Bible\n\nDiscover God's Word in two languages: Spanish and Tzotzil (Mayan). Perfect for indigenous communities, missionaries, language students, and Scripture lovers.\n\nMAIN FEATURES:\n\n📖 COMPLETE BILINGUAL BIBLE\n• Full text in Spanish and Tzotzil\n• Intuitive navigation by books and chapters\n• Advanced verse search\n• Daily promise with inspiring images\n\n🤖 NEVIN AI - YOUR BIBLICAL ASSISTANT\n• Answers to biblical and theological questions\n• Based on Ellen G. White's writings\n• Contextual interpretation of Scriptures\n\n📴 OFFLINE MODE\n• Download the complete Bible for offline reading\n• Access saved verses without connection\n\n🎨 MODERN DESIGN\n• Futuristic and elegant interface\n• Dark theme for night reading\n• Optimized for iPhone and iPad\n\nDownload now and take the Bible with you!",
+      "keywords": "bible,tzotzil,spanish,bilingual,mayan,chiapas,nevin,ai,adventist,egw,offline",
+      "promotionalText": "New version with improved Nevin AI and better offline performance!",
+      "whatsNew": "• New version with improved Nevin AI\n• Better offline performance\n• Bug fixes\n• Optimized interface"
+    }
+  },
+  "appReviewInfo": {
+    "contactFirstName": "",
+    "contactLastName": "",
+    "contactPhone": "",
+    "contactEmail": "tzotzilbible@gmail.com",
+    "demoAccountName": "",
+    "demoAccountPassword": "",
+    "notes": "La aplicación es gratuita y no requiere cuenta para funcionar. El modo Nevin AI requiere conexión a internet."
+  },
+  "privacyInfo": {
+    "dataCollection": {
+      "collectsData": false
+    },
+    "trackingInfo": {
+      "tracksUsers": false
+    }
+  }
+}
