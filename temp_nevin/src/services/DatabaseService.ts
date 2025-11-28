@@ -1,7 +1,5 @@
-
 import * as SQLite from 'expo-sqlite';
 import * as FileSystem from 'expo-file-system';
-import { Asset } from 'expo-asset';
 import { Platform } from 'react-native';
 import { BibleVerse, Book, Chapter } from '../types/bible';
 
@@ -19,8 +17,16 @@ export class DatabaseService {
     return DatabaseService.instance;
   }
 
+  async initDatabase(): Promise<boolean> {
+    return this.initialize();
+  }
+
   async initialize(): Promise<boolean> {
     try {
+      if (Platform.OS === 'web') {
+        console.log('SQLite not available on web, using API only');
+        return true;
+      }
       await this.copyDatabaseFile();
       this.db = await SQLite.openDatabaseAsync(DatabaseService.DB_NAME);
       return true;
@@ -38,14 +44,10 @@ export class DatabaseService {
 
     if (!fileExists.exists) {
       try {
-        // Asegurar que el directorio existe
         await FileSystem.makeDirectoryAsync(
           `${FileSystem.documentDirectory}SQLite`,
           { intermediates: true }
         );
-
-        // Para esta app, usamos la API del backend en lugar de archivo local
-        // Crear una base de datos vacía si no existe
         console.log('Creando base de datos SQLite local para caché...');
       } catch (error) {
         console.error('Error copying database:', error);

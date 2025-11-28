@@ -1,63 +1,76 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { openDatabaseSync as SQLite } from 'expo-sqlite';
-import * as FileSystem from 'expo-file-system';
+interface CacheEntry {
+  value: string;
+  expiry: number;
+}
 
 export class CacheService {
-  private static db = SQLite.openDatabase('bible_cache.db');
+  private static readonly CACHE_PREFIX = 'cache_';
 
-  static async initializeCache() {
+  static async get(key: string): Promise<string | null> {
     try {
-      await this.db.transaction(tx => {
-        tx.executeSql(
-          `CREATE TABLE IF NOT EXISTS verses_cache (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            book TEXT,
-            chapter INTEGER,
-            verse INTEGER,
-            tzotzil_text TEXT,
-            spanish_text TEXT,
-            last_updated INTEGER
-          )`
-        );
-      });
+      const data = await AsyncStorage.getItem(this.CACHE_PREFIX + key);
+      if (!data) return null;
+
+      const entry: CacheEntry = JSON.parse(data);
+      
+      if (entry.expiry && entry.expiry < Date.now()) {
+        await this.remove(key);
+        return null;
+      }
+
+      return entry.value;
     } catch (error) {
-      console.error('Error initializing cache:', error);
+      console.error('CacheService.get error:', error);
+      return null;
     }
   }
 
-  static async updateCache(verses: any[]) {
+  static async set(key: string, value: string, ttlSeconds: number = 3600): Promise<void> {
     try {
-      await this.db.transaction(tx => {
-        verses.forEach(verse => {
-          tx.executeSql(
-            `INSERT OR REPLACE INTO verses_cache 
-            (book, chapter, verse, tzotzil_text, spanish_text, last_updated)
-            VALUES (?, ?, ?, ?, ?, ?)`,
-            [verse.book, verse.chapter, verse.verse, verse.tzotzil_text, 
-             verse.spanish_text, Date.now()]
-          );
-        });
-      });
+      const entry: CacheEntry = {
+        value,
+        expiry: Date.now() + (ttlSeconds * 1000)
+      };
+      await AsyncStorage.setItem(this.CACHE_PREFIX + key, JSON.stringify(entry));
     } catch (error) {
-      console.error('Error updating cache:', error);
+      console.error('CacheService.set error:', error);
+    }
+  }
+
+  static async remove(key: string): Promise<void> {
+    try {
+      await AsyncStorage.removeItem(this.CACHE_PREFIX + key);
+    } catch (error) {
+      console.error('CacheService.remove error:', error);
+    }
+  }
+
+  static async clear(): Promise<void> {
+    try {
+      const keys = await AsyncStorage.getAllKeys();
+      const cacheKeys = keys.filter(key => key.startsWith(this.CACHE_PREFIX));
+      await AsyncStorage.multiRemove(cacheKeys);
+    } catch (error) {
+      console.error('CacheService.clear error:', error);
+    }
+  }
+
+  static async initializeCache(): Promise<void> {
+    console.log('CacheService initialized');
+  }
+
+  static async updateCache(verses: any[]): Promise<void> {
+    for (const verse of verses) {
+      const key = `verse_${verse.book}_${verse.chapter}_${verse.verse}`;
+      await this.set(key, JSON.stringify(verse), 86400);
     }
   }
 
   static async getCachedVerses(book: string, chapter: number): Promise<any[]> {
-    return new Promise((resolve, reject) => {
-      this.db.transaction(tx => {
-        tx.executeSql(
-          `SELECT * FROM verses_cache 
-           WHERE book = ? AND chapter = ?
-           ORDER BY verse`,
-          [book, chapter],
-          (_, { rows: { _array } }) => resolve(_array),
-          (_, error) => {
-            reject(error);
-            return false;
-          }
-        );
-      });
-    });
+    const cacheKey = `verses_${book}_${chapter}`;
+    const cached = await this.get(cacheKey);
+    return cached ? JSON.parse(cached) : [];
   }
 }
