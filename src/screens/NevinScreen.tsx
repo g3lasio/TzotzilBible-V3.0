@@ -1,8 +1,13 @@
-import React, { useState, useRef } from 'react';
-import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
-import { Text, TextInput, Button, Card, IconButton } from 'react-native-paper';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, Alert } from 'react-native';
+import { Text, TextInput, Button, Card, ActivityIndicator } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { api } from '../services/api';
+import { useNavigation } from '@react-navigation/native';
+import { NevinAIService } from '../services/NevinAIService';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { RootStackParamList } from '../types/navigation';
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 interface Message {
   id: string;
@@ -12,11 +17,35 @@ interface Message {
 }
 
 export default function NevinScreen() {
+  const navigation = useNavigation<NavigationProp>();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [hasApiKey, setHasApiKey] = useState(false);
+  const [checkingKey, setCheckingKey] = useState(true);
   const scrollViewRef = useRef<ScrollView>(null);
-  const [showDonationModal, setShowDonationModal] = useState(false);
+
+  useEffect(() => {
+    checkApiKey();
+    loadHistory();
+  }, []);
+
+  const checkApiKey = async () => {
+    const hasKey = await NevinAIService.hasApiKey();
+    setHasApiKey(hasKey);
+    setCheckingKey(false);
+  };
+
+  const loadHistory = async () => {
+    const history = await NevinAIService.getChatHistory();
+    const loadedMessages: Message[] = history.map((msg: { role: 'user' | 'assistant'; content: string }, index: number) => ({
+      id: index.toString(),
+      content: msg.content,
+      isUser: msg.role === 'user',
+      timestamp: new Date()
+    }));
+    setMessages(loadedMessages);
+  };
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
@@ -33,33 +62,83 @@ export default function NevinScreen() {
     setLoading(true);
 
     try {
-      const response = await api.post('/nevin/chat', {
-        message: newUserMessage.content,
-        conversation_history: messages.map(msg => ({
-          role: msg.isUser ? 'user' : 'assistant',
-          content: msg.content,
-        })),
-      });
+      const response = await NevinAIService.sendMessage(newUserMessage.content);
 
       const nevinResponse: Message = {
         id: (Date.now() + 1).toString(),
-        content: response.data.response,
+        content: response,
         isUser: false,
         timestamp: new Date(),
       };
 
       setMessages(prev => [...prev, nevinResponse]);
 
-      // Scroll al último mensaje
       setTimeout(() => {
         scrollViewRef.current?.scrollToEnd({ animated: true });
       }, 100);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error sending message:', error);
+      Alert.alert('Error', error.message || 'No se pudo enviar el mensaje');
     } finally {
       setLoading(false);
     }
   };
+
+  const handleClearHistory = () => {
+    Alert.alert(
+      'Limpiar Historial',
+      '¿Estás seguro que deseas eliminar toda la conversación?',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Limpiar',
+          style: 'destructive',
+          onPress: async () => {
+            await NevinAIService.clearChatHistory();
+            setMessages([]);
+          }
+        }
+      ]
+    );
+  };
+
+  if (checkingKey) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.centered}>
+          <ActivityIndicator size="large" />
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (!hasApiKey) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.centered}>
+          <Text variant="headlineMedium" style={styles.title}>Nevin AI</Text>
+          <Card style={styles.setupCard}>
+            <Card.Content>
+              <Text style={styles.setupText}>
+                Para usar Nevin AI, necesitas configurar una clave API de Anthropic.
+              </Text>
+              <Text style={styles.setupSubtext}>
+                Puedes obtener una en console.anthropic.com
+              </Text>
+            </Card.Content>
+            <Card.Actions>
+              <Button 
+                mode="contained" 
+                onPress={() => navigation.navigate('Settings')}
+              >
+                Ir a Configuración
+              </Button>
+            </Card.Actions>
+          </Card>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -67,15 +146,37 @@ export default function NevinScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardAvoid}
       >
-        <Text variant="headlineMedium" style={styles.title}>
-          Nevin AI
-        </Text>
+        <View style={styles.header}>
+          <Text variant="headlineMedium" style={styles.title}>Nevin AI</Text>
+          {messages.length > 0 && (
+            <Button 
+              mode="text" 
+              onPress={handleClearHistory}
+              compact
+            >
+              Limpiar
+            </Button>
+          )}
+        </View>
 
         <ScrollView
           ref={scrollViewRef}
           style={styles.messagesContainer}
           contentContainerStyle={styles.messagesContent}
         >
+          {messages.length === 0 && (
+            <Card style={styles.welcomeCard}>
+              <Card.Content>
+                <Text style={styles.welcomeTitle}>¡Hola! Soy Nevin</Text>
+                <Text style={styles.welcomeText}>
+                  Tu asistente bíblico con inteligencia artificial. 
+                  Puedo ayudarte con preguntas sobre la Biblia, 
+                  interpretaciones y principios adventistas.
+                </Text>
+              </Card.Content>
+            </Card>
+          )}
+          
           {messages.map((message) => (
             <Card
               key={message.id}
@@ -89,6 +190,14 @@ export default function NevinScreen() {
               </Card.Content>
             </Card>
           ))}
+          
+          {loading && (
+            <Card style={[styles.messageCard, styles.nevinMessage]}>
+              <Card.Content>
+                <ActivityIndicator size="small" />
+              </Card.Content>
+            </Card>
+          )}
         </ScrollView>
 
         <View style={styles.inputContainer}>
@@ -108,7 +217,6 @@ export default function NevinScreen() {
               />
             }
           />
-          <Button style={styles.donateButton} onPress={() => setShowDonationModal(true)}>Donate</Button>
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -120,12 +228,54 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f5f5f5',
   },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
   keyboardAvoid: {
     flex: 1,
   },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+  },
   title: {
+    fontWeight: 'bold',
+  },
+  setupCard: {
+    margin: 20,
+    maxWidth: 400,
+  },
+  setupText: {
+    fontSize: 16,
+    marginBottom: 12,
     textAlign: 'center',
-    padding: 20,
+  },
+  setupSubtext: {
+    fontSize: 14,
+    color: '#666',
+    textAlign: 'center',
+  },
+  welcomeCard: {
+    marginBottom: 20,
+    backgroundColor: '#e8f5e9',
+  },
+  welcomeTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  welcomeText: {
+    fontSize: 14,
+    lineHeight: 20,
+    color: '#333',
   },
   messagesContainer: {
     flex: 1,
@@ -136,7 +286,7 @@ const styles = StyleSheet.create({
   },
   messageCard: {
     marginVertical: 5,
-    maxWidth: '80%',
+    maxWidth: '85%',
   },
   userMessage: {
     alignSelf: 'flex-end',
@@ -144,18 +294,15 @@ const styles = StyleSheet.create({
   },
   nevinMessage: {
     alignSelf: 'flex-start',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#fff',
   },
   inputContainer: {
     padding: 10,
     borderTopWidth: 1,
     borderTopColor: '#eee',
+    backgroundColor: '#fff',
   },
   input: {
     maxHeight: 100,
-  },
-  donateButton: {
-    margin: 16,
-    backgroundColor: '#4caf50',
   },
 });

@@ -1,71 +1,36 @@
-
-import React, { useState } from 'react';
-import { View, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
-import { TextInput, Button, Text, Surface } from 'react-native-paper';
+import React, { useEffect } from 'react';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { Text, Surface, Button } from 'react-native-paper';
 import { AuthService } from '../../services/AuthService';
 import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { RootStackParamList } from '../../types/navigation';
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export default function LoginScreen() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp>();
 
-  const handleLogin = async () => {
-    try {
-      const success = await AuthService.login({ email, password });
-      if (success) {
-        navigation.replace('Home');
-      }
-    } catch (err) {
-      setError('Error al iniciar sesión');
-    }
+  useEffect(() => {
+    autoLogin();
+  }, []);
+
+  const autoLogin = async () => {
+    await AuthService.ensureLocalUser();
+    navigation.replace('Home');
   };
 
   return (
-    <KeyboardAvoidingView 
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
-    >
+    <View style={styles.container}>
       <Surface style={styles.surface}>
-        <Text variant="headlineMedium" style={styles.title}>Iniciar Sesión</Text>
-        
-        <TextInput
-          label="Email"
-          value={email}
-          onChangeText={setEmail}
-          mode="outlined"
-          style={styles.input}
-          autoCapitalize="none"
-        />
-
-        <TextInput
-          label="Contraseña"
-          value={password}
-          onChangeText={setPassword}
-          mode="outlined"
-          style={styles.input}
-          secureTextEntry
-        />
-
-        {error && <Text style={styles.errorText}>{error}</Text>}
-
-        <Button 
-          mode="contained" 
-          onPress={handleLogin}
-          style={styles.button}
-        >
-          Iniciar Sesión
-        </Button>
-
-        <Button 
-          mode="text" 
-          onPress={() => navigation.navigate('Register')}
-        >
-          ¿No tienes cuenta? Regístrate
+        <Text variant="headlineMedium" style={styles.title}>Biblia Tzotzil</Text>
+        <Text style={styles.subtitle}>Cargando...</Text>
+        <ActivityIndicator size="large" color="#6200ee" style={styles.loader} />
+        <Button mode="contained" onPress={autoLogin} style={styles.button}>
+          Entrar
         </Button>
       </Surface>
-    </KeyboardAvoidingView>
+    </View>
   );
 }
 
@@ -80,22 +45,21 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 8,
     elevation: 4,
+    alignItems: 'center',
   },
   title: {
     textAlign: 'center',
+    marginBottom: 12,
+  },
+  subtitle: {
+    textAlign: 'center',
+    color: '#666',
     marginBottom: 24,
   },
-  input: {
-    marginBottom: 16,
-    backgroundColor: '#fff',
+  loader: {
+    marginBottom: 24,
   },
   button: {
-    marginTop: 8,
-    marginBottom: 16,
+    minWidth: 150,
   },
-  errorText: {
-    color: 'red',
-    textAlign: 'center',
-    marginBottom: 16,
-  }
 });

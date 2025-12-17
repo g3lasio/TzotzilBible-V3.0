@@ -150,4 +150,49 @@ export class NevinAIService {
       console.error('Error limpiando historial:', error);
     }
   }
+
+  static async getChatHistory(): Promise<{ role: 'user' | 'assistant'; content: string }[]> {
+    try {
+      const history = await AsyncStorage.getItem(this.CHAT_HISTORY_KEY);
+      if (!history) return [];
+      const messages: ChatMessage[] = JSON.parse(history);
+      return messages.map(msg => ({
+        role: msg.type === 'user' ? 'user' as const : 'assistant' as const,
+        content: msg.content
+      }));
+    } catch (error) {
+      console.error('Error getting chat history:', error);
+      return [];
+    }
+  }
+
+  static async sendMessage(message: string): Promise<string> {
+    const history = await this.loadChatHistory();
+    
+    const result = await this.processQuery(message, '', history);
+    
+    if (!result.success) {
+      throw new Error(result.error || 'Error procesando mensaje');
+    }
+
+    const newHistory: ChatMessage[] = [
+      ...history,
+      {
+        id: Date.now().toString(),
+        content: message,
+        type: 'user',
+        timestamp: new Date()
+      },
+      {
+        id: (Date.now() + 1).toString(),
+        content: result.response || '',
+        type: 'assistant',
+        timestamp: new Date()
+      }
+    ];
+
+    await this.saveChatHistory(newHistory);
+    
+    return result.response || '';
+  }
 }
