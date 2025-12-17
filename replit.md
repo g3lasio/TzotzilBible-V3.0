@@ -5,8 +5,9 @@ Tzotzil Bible is a bilingual Bible mobile application (Spanish/Tzotzil) with an 
 # System Architecture
 
 ## Mobile Application (Expo)
-- **Framework**: React Native with Expo SDK 52
-- **Navigation**: React Navigation v6
+- **Framework**: React Native 0.81.5 with Expo SDK 54
+- **React**: React 19.1.0
+- **Navigation**: React Navigation v7
 - **UI Library**: React Native Paper for Material Design components
 - **State Management**: React Query for server state and async operations
 - **Local Storage**: Expo SQLite for offline Bible data (31,105 verses)
@@ -107,6 +108,7 @@ Nevin AI requires internet:
 
 # Changelog
 
+- December 17, 2025. **UPGRADED TO SDK 54**: Updated to Expo SDK 54, React 19.1.0, React Native 0.81.5, and React Navigation v7
 - December 17, 2025. **COMPLETE CONVERSION TO EXPO**: Removed all Flask backend code, converted to pure Expo mobile app, implemented direct Anthropic API integration for Nevin AI, configured EAS for APK/IPA builds
 - September 18, 2025. Revolutionary Nevin AI v2.0 with Claude 4 integration
 - June 22, 2025. Initial setup with Flask backend
