@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">Tzotzil Bible</string>
-    <string name="title_activity_main">Tzotzil Bible</string>
-    <string name="package_name">com.tzotzilbible.app</string>
-    <string name="custom_url_scheme">tzotzilbible</string>
-</resources>
