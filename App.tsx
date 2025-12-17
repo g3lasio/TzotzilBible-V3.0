@@ -1,14 +1,28 @@
 import 'react-native-gesture-handler';
 import React, { useState, useEffect } from 'react';
-import { View, ActivityIndicator, StyleSheet, Text } from 'react-native';
+import { View, ActivityIndicator, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { Provider as PaperProvider, Button } from 'react-native-paper';
+import { Provider as PaperProvider, MD3DarkTheme } from 'react-native-paper';
 import AppNavigator from './src/navigation/AppNavigator';
 import { StatusBar } from 'expo-status-bar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { databaseService } from './src/services/DatabaseService';
+import { LinearGradient } from 'expo-linear-gradient';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const queryClient = new QueryClient();
+
+const darkTheme = {
+  ...MD3DarkTheme,
+  colors: {
+    ...MD3DarkTheme.colors,
+    primary: '#00f3ff',
+    secondary: '#00ff88',
+    background: '#0a0e14',
+    surface: '#0d1117',
+    text: '#e6f3ff',
+  },
+};
 
 type AppState = 'loading' | 'ready' | 'error';
 
@@ -52,8 +66,15 @@ export default function App() {
   if (appState === 'loading') {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#6200ee" />
-        <Text style={styles.loadingText}>Cargando Biblia...</Text>
+        <LinearGradient
+          colors={['#0a0e14', '#1a2332']}
+          style={styles.gradient}
+        >
+          <MaterialCommunityIcons name="book-cross" size={60} color="#00ff88" />
+          <Text style={styles.loadingTitle}>Tzotzil Bible</Text>
+          <ActivityIndicator size="large" color="#00f3ff" style={styles.loader} />
+          <Text style={styles.loadingText}>Cargando Biblia...</Text>
+        </LinearGradient>
       </View>
     );
   }
@@ -61,21 +82,27 @@ export default function App() {
   if (appState === 'error') {
     return (
       <View style={styles.errorContainer}>
-        <Text style={styles.errorTitle}>Error de Inicialización</Text>
-        <Text style={styles.errorMessage}>{errorMessage}</Text>
-        <Button mode="contained" onPress={initializeApp} style={styles.retryButton}>
-          Reintentar
-        </Button>
+        <LinearGradient
+          colors={['#0a0e14', '#1a2332']}
+          style={styles.gradient}
+        >
+          <MaterialCommunityIcons name="alert-circle" size={60} color="#ff6b6b" />
+          <Text style={styles.errorTitle}>Error de Inicialización</Text>
+          <Text style={styles.errorMessage}>{errorMessage}</Text>
+          <TouchableOpacity style={styles.retryButton} onPress={initializeApp}>
+            <Text style={styles.retryButtonText}>Reintentar</Text>
+          </TouchableOpacity>
+        </LinearGradient>
       </View>
     );
   }
 
   return (
     <QueryClientProvider client={queryClient}>
-      <PaperProvider>
+      <PaperProvider theme={darkTheme}>
         <NavigationContainer>
           <AppNavigator />
-          <StatusBar style="auto" />
+          <StatusBar style="light" />
         </NavigationContainer>
       </PaperProvider>
     </QueryClientProvider>
@@ -85,35 +112,56 @@ export default function App() {
 const styles = StyleSheet.create({
   loadingContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
   },
-  loadingText: {
-    marginTop: 16,
-    fontSize: 16,
-    color: '#666',
-  },
-  errorContainer: {
+  gradient: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 24,
-    backgroundColor: '#f5f5f5',
+  },
+  loadingTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#00ff88',
+    marginTop: 16,
+    textShadowColor: '#00ff88',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 10,
+  },
+  loader: {
+    marginTop: 32,
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: '#6b7c93',
+  },
+  errorContainer: {
+    flex: 1,
   },
   errorTitle: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
-    color: '#d32f2f',
+    color: '#ff6b6b',
+    marginTop: 16,
     marginBottom: 12,
   },
   errorMessage: {
     fontSize: 16,
-    color: '#666',
+    color: '#6b7c93',
     textAlign: 'center',
     marginBottom: 24,
+    paddingHorizontal: 20,
   },
   retryButton: {
-    minWidth: 150,
+    backgroundColor: '#00f3ff',
+    paddingHorizontal: 32,
+    paddingVertical: 14,
+    borderRadius: 12,
+  },
+  retryButtonText: {
+    color: '#0a0e14',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });

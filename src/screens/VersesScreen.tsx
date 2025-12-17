@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, StyleSheet, ScrollView, RefreshControl, Share, Animated } from 'react-native';
-import { Text, Card, ActivityIndicator, Switch, Divider, Surface, IconButton, Chip, Menu } from 'react-native-paper';
+import { View, StyleSheet, ScrollView, RefreshControl, Share, TouchableOpacity, Dimensions } from 'react-native';
+import { Text, ActivityIndicator, Chip, IconButton } from 'react-native-paper';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { BibleService } from '../services/BibleService';
@@ -10,9 +9,12 @@ import type { BibleVerse } from '../types/bible';
 import type { RootStackParamList } from '../types/navigation';
 import type { RouteProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import MainLayout from '../components/MainLayout';
 
 type VersesRouteProp = RouteProp<RootStackParamList, 'Verses'>;
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+
+const { width } = Dimensions.get('window');
 
 export default function VersesScreen() {
   const route = useRoute<VersesRouteProp>();
@@ -25,7 +27,6 @@ export default function VersesScreen() {
   const [error, setError] = useState<string | null>(null);
   const [showTzotzil, setShowTzotzil] = useState(true);
   const [showSpanish, setShowSpanish] = useState(true);
-  const [selectedVerse, setSelectedVerse] = useState<BibleVerse | null>(null);
   const scrollViewRef = useRef<ScrollView>(null);
 
   const loadVerses = async () => {
@@ -59,7 +60,7 @@ export default function VersesScreen() {
         : `${book} ${chapter}:${verse.verse}\n\n${verse.text || verse.text_tzotzil}`;
       
       await Share.share({
-        message: `${text}\n\n- Biblia Tzotzil`,
+        message: `${text}\n\n- Tzotzil Bible`,
       });
     } catch (error) {
       console.error('Error sharing:', error);
@@ -75,195 +76,190 @@ export default function VersesScreen() {
 
   if (loading && !refreshing) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#1a237e" />
-        <Text style={styles.loadingText}>Cargando versículos...</Text>
-      </View>
+      <MainLayout title={`${book} ${chapter}`} showBackButton>
+        <View style={styles.centered}>
+          <ActivityIndicator size="large" color="#00f3ff" />
+          <Text style={styles.loadingText}>Cargando versículos...</Text>
+        </View>
+      </MainLayout>
     );
   }
 
   if (error) {
     return (
-      <View style={styles.centered}>
-        <MaterialCommunityIcons name="alert-circle" size={60} color="#f44336" />
-        <Text style={styles.errorText}>{error}</Text>
-      </View>
+      <MainLayout title={`${book} ${chapter}`} showBackButton>
+        <View style={styles.centered}>
+          <MaterialCommunityIcons name="alert-circle" size={60} color="#ff6b6b" />
+          <Text style={styles.errorText}>{error}</Text>
+        </View>
+      </MainLayout>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container} edges={['bottom']}>
-      <LinearGradient
-        colors={['#1a237e', '#3949ab']}
-        style={styles.header}
-      >
-        <Text style={styles.headerTitle}>{book} {chapter}</Text>
-        <Text style={styles.headerSubtitle}>{verses.length} versículos</Text>
-      </LinearGradient>
-
-      <Surface style={styles.controls} elevation={2}>
-        <View style={styles.languageToggles}>
-          <Chip
-            selected={showTzotzil}
-            onPress={() => setShowTzotzil(!showTzotzil)}
-            style={styles.languageChip}
-            selectedColor="#4CAF50"
-          >
-            Tzotzil
-          </Chip>
-          <Chip
-            selected={showSpanish}
-            onPress={() => setShowSpanish(!showSpanish)}
-            style={styles.languageChip}
-            selectedColor="#2196F3"
-          >
-            Español
-          </Chip>
-        </View>
-        <View style={styles.navButtons}>
-          <IconButton
-            icon="chevron-left"
-            size={24}
-            onPress={() => navigateChapter('prev')}
-            disabled={chapter <= 1}
-          />
-          <IconButton
-            icon="chevron-right"
-            size={24}
-            onPress={() => navigateChapter('next')}
-          />
-        </View>
-      </Surface>
-
-      <ScrollView 
-        ref={scrollViewRef}
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollContent}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        showsVerticalScrollIndicator={false}
-      >
-        {!showTzotzil && !showSpanish && (
-          <Surface style={styles.warningCard} elevation={1}>
-            <MaterialCommunityIcons name="alert" size={24} color="#f57c00" />
-            <Text style={styles.warningText}>
-              Selecciona al menos un idioma para ver los versículos
-            </Text>
-          </Surface>
-        )}
-
-        {verses.map((verse) => (
-          <Card
-            key={verse.id || `${verse.chapter}-${verse.verse}`}
-            style={[
-              styles.verseCard,
-              initialVerse === verse.verse && styles.highlightedVerse
-            ]}
-            onLongPress={() => handleShare(verse)}
-          >
-            <Card.Content>
-              <View style={styles.verseHeader}>
-                <View style={styles.verseNumberBadge}>
-                  <Text style={styles.verseNumber}>{verse.verse}</Text>
-                </View>
-                <IconButton
-                  icon="share-variant"
-                  size={18}
-                  onPress={() => handleShare(verse)}
-                  style={styles.shareIcon}
-                />
-              </View>
-              
-              {showTzotzil && verse.text_tzotzil && (
-                <View style={styles.textBlock}>
-                  <View style={styles.languageHeader}>
-                    <MaterialCommunityIcons name="translate" size={14} color="#4CAF50" />
-                    <Text style={[styles.languageLabel, { color: '#4CAF50' }]}>Tzotzil</Text>
-                  </View>
-                  <Text style={styles.verseText}>{verse.text_tzotzil}</Text>
-                </View>
-              )}
-              
-              {showTzotzil && showSpanish && verse.text_tzotzil && verse.text && (
-                <Divider style={styles.divider} />
-              )}
-              
-              {showSpanish && verse.text && (
-                <View style={styles.textBlock}>
-                  <View style={styles.languageHeader}>
-                    <MaterialCommunityIcons name="translate" size={14} color="#2196F3" />
-                    <Text style={[styles.languageLabel, { color: '#2196F3' }]}>Español</Text>
-                  </View>
-                  <Text style={styles.verseText}>{verse.text}</Text>
-                </View>
-              )}
-            </Card.Content>
-          </Card>
-        ))}
-        
-        <View style={styles.bottomNav}>
-          <Card
-            style={[styles.navCard, chapter <= 1 && styles.navCardDisabled]}
-            onPress={() => chapter > 1 && navigateChapter('prev')}
-          >
-            <Card.Content style={styles.navCardContent}>
+    <MainLayout title={`${book} ${chapter}`} showBackButton hideBottomNav>
+      <View style={styles.container}>
+        <View style={styles.controls}>
+          <View style={styles.languageToggles}>
+            <TouchableOpacity
+              style={[styles.languageChip, showTzotzil && styles.languageChipActive]}
+              onPress={() => setShowTzotzil(!showTzotzil)}
+            >
+              <Text style={[styles.languageChipText, showTzotzil && styles.languageChipTextActive]}>
+                Tzotzil
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.languageChip, showSpanish && styles.languageChipActiveCyan]}
+              onPress={() => setShowSpanish(!showSpanish)}
+            >
+              <Text style={[styles.languageChipText, showSpanish && styles.languageChipTextActiveCyan]}>
+                Español
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.navButtons}>
+            <TouchableOpacity
+              style={[styles.navButton, chapter <= 1 && styles.navButtonDisabled]}
+              onPress={() => navigateChapter('prev')}
+              disabled={chapter <= 1}
+            >
               <MaterialCommunityIcons 
                 name="chevron-left" 
                 size={24} 
-                color={chapter <= 1 ? '#ccc' : '#1a237e'} 
+                color={chapter <= 1 ? '#6b7c93' : '#00f3ff'} 
               />
-              <Text style={[styles.navCardText, chapter <= 1 && styles.navCardTextDisabled]}>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.navButton}
+              onPress={() => navigateChapter('next')}
+            >
+              <MaterialCommunityIcons name="chevron-right" size={24} color="#00f3ff" />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <ScrollView 
+          ref={scrollViewRef}
+          style={styles.scrollView}
+          contentContainerStyle={styles.scrollContent}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#00f3ff" />
+          }
+          showsVerticalScrollIndicator={false}
+        >
+          {!showTzotzil && !showSpanish && (
+            <View style={styles.warningCard}>
+              <LinearGradient
+                colors={['rgba(255, 107, 107, 0.15)', 'rgba(255, 107, 107, 0.05)']}
+                style={styles.warningGradient}
+              >
+                <MaterialCommunityIcons name="alert" size={24} color="#ff6b6b" />
+                <Text style={styles.warningText}>
+                  Selecciona al menos un idioma para ver los versículos
+                </Text>
+              </LinearGradient>
+            </View>
+          )}
+
+          {verses.map((verse) => (
+            <TouchableOpacity
+              key={verse.id || `${verse.chapter}-${verse.verse}`}
+              style={[
+                styles.verseCard,
+                initialVerse === verse.verse && styles.highlightedVerse
+              ]}
+              onLongPress={() => handleShare(verse)}
+              activeOpacity={0.8}
+            >
+              <LinearGradient
+                colors={initialVerse === verse.verse 
+                  ? ['rgba(0, 255, 136, 0.2)', 'rgba(0, 255, 136, 0.1)']
+                  : ['rgba(20, 30, 45, 0.8)', 'rgba(15, 25, 40, 0.9)']}
+                style={styles.verseGradient}
+              >
+                <View style={styles.verseHeader}>
+                  <View style={styles.verseNumberBadge}>
+                    <Text style={styles.verseNumber}>{verse.verse}</Text>
+                  </View>
+                  <TouchableOpacity
+                    style={styles.shareButton}
+                    onPress={() => handleShare(verse)}
+                  >
+                    <MaterialCommunityIcons name="share-variant" size={18} color="#6b7c93" />
+                  </TouchableOpacity>
+                </View>
+                
+                {showTzotzil && verse.text_tzotzil && (
+                  <View style={styles.textBlock}>
+                    <View style={styles.languageHeader}>
+                      <MaterialCommunityIcons name="translate" size={14} color="#00ff88" />
+                      <Text style={[styles.languageLabel, { color: '#00ff88' }]}>Tzotzil</Text>
+                    </View>
+                    <Text style={styles.verseText}>{verse.text_tzotzil}</Text>
+                  </View>
+                )}
+                
+                {showTzotzil && showSpanish && verse.text_tzotzil && verse.text && (
+                  <View style={styles.divider} />
+                )}
+                
+                {showSpanish && verse.text && (
+                  <View style={styles.textBlock}>
+                    <View style={styles.languageHeader}>
+                      <MaterialCommunityIcons name="translate" size={14} color="#00f3ff" />
+                      <Text style={[styles.languageLabel, { color: '#00f3ff' }]}>Español</Text>
+                    </View>
+                    <Text style={styles.verseText}>{verse.text}</Text>
+                  </View>
+                )}
+              </LinearGradient>
+            </TouchableOpacity>
+          ))}
+          
+          <View style={styles.bottomNav}>
+            <TouchableOpacity
+              style={[styles.bottomNavCard, chapter <= 1 && styles.bottomNavCardDisabled]}
+              onPress={() => chapter > 1 && navigateChapter('prev')}
+              disabled={chapter <= 1}
+            >
+              <MaterialCommunityIcons 
+                name="chevron-left" 
+                size={24} 
+                color={chapter <= 1 ? '#6b7c93' : '#00f3ff'} 
+              />
+              <Text style={[styles.bottomNavText, chapter <= 1 && styles.bottomNavTextDisabled]}>
                 Capítulo anterior
               </Text>
-            </Card.Content>
-          </Card>
-          
-          <Card
-            style={styles.navCard}
-            onPress={() => navigateChapter('next')}
-          >
-            <Card.Content style={styles.navCardContent}>
-              <Text style={styles.navCardText}>Siguiente capítulo</Text>
-              <MaterialCommunityIcons name="chevron-right" size={24} color="#1a237e" />
-            </Card.Content>
-          </Card>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+            </TouchableOpacity>
+            
+            <TouchableOpacity
+              style={styles.bottomNavCard}
+              onPress={() => navigateChapter('next')}
+            >
+              <Text style={styles.bottomNavText}>Siguiente capítulo</Text>
+              <MaterialCommunityIcons name="chevron-right" size={24} color="#00f3ff" />
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </View>
+    </MainLayout>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
   },
   centered: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
   },
   loadingText: {
     marginTop: 16,
-    color: '#666',
+    color: '#6b7c93',
     fontSize: 16,
-  },
-  header: {
-    paddingVertical: 20,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#fff',
-  },
-  headerSubtitle: {
-    fontSize: 14,
-    color: 'rgba(255,255,255,0.8)',
-    marginTop: 4,
   },
   controls: {
     flexDirection: 'row',
@@ -271,17 +267,56 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0, 243, 255, 0.2)',
   },
   languageToggles: {
     flexDirection: 'row',
     gap: 8,
   },
   languageChip: {
-    backgroundColor: '#f5f5f5',
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 243, 255, 0.3)',
+    backgroundColor: 'rgba(20, 30, 45, 0.6)',
+  },
+  languageChipActive: {
+    backgroundColor: 'rgba(0, 255, 136, 0.15)',
+    borderColor: '#00ff88',
+  },
+  languageChipActiveCyan: {
+    backgroundColor: 'rgba(0, 243, 255, 0.15)',
+    borderColor: '#00f3ff',
+  },
+  languageChipText: {
+    color: '#6b7c93',
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  languageChipTextActive: {
+    color: '#00ff88',
+  },
+  languageChipTextActiveCyan: {
+    color: '#00f3ff',
   },
   navButtons: {
     flexDirection: 'row',
+    gap: 4,
+  },
+  navButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(0, 243, 255, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 243, 255, 0.2)',
+  },
+  navButtonDisabled: {
+    opacity: 0.5,
   },
   scrollView: {
     flex: 1,
@@ -290,27 +325,34 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   warningCard: {
+    borderRadius: 12,
+    overflow: 'hidden',
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 107, 107, 0.3)',
+  },
+  warningGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
-    borderRadius: 12,
-    backgroundColor: '#fff3e0',
-    marginBottom: 16,
   },
   warningText: {
     marginLeft: 12,
-    color: '#e65100',
+    color: '#ff6b6b',
     flex: 1,
   },
   verseCard: {
     marginBottom: 12,
-    borderRadius: 12,
-    backgroundColor: '#fff',
+    borderRadius: 16,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 243, 255, 0.2)',
   },
   highlightedVerse: {
-    borderWidth: 2,
-    borderColor: '#4CAF50',
-    backgroundColor: '#e8f5e9',
+    borderColor: 'rgba(0, 255, 136, 0.5)',
+  },
+  verseGradient: {
+    padding: 16,
   },
   verseHeader: {
     flexDirection: 'row',
@@ -322,17 +364,22 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#1a237e',
+    backgroundColor: '#00f3ff',
     justifyContent: 'center',
     alignItems: 'center',
   },
   verseNumber: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#fff',
+    color: '#0a0e14',
   },
-  shareIcon: {
-    margin: 0,
+  shareButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(107, 124, 147, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   textBlock: {
     marginVertical: 8,
@@ -343,17 +390,20 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   languageLabel: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: 'bold',
     marginLeft: 6,
     textTransform: 'uppercase',
+    letterSpacing: 1,
   },
   verseText: {
     fontSize: 16,
     lineHeight: 26,
-    color: '#333',
+    color: '#e6f3ff',
   },
   divider: {
+    height: 1,
+    backgroundColor: 'rgba(0, 243, 255, 0.2)',
     marginVertical: 12,
   },
   bottomNav: {
@@ -362,28 +412,30 @@ const styles = StyleSheet.create({
     marginTop: 20,
     gap: 12,
   },
-  navCard: {
+  bottomNavCard: {
     flex: 1,
-    borderRadius: 12,
-  },
-  navCardDisabled: {
-    opacity: 0.5,
-  },
-  navCardContent: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: 16,
+    borderRadius: 12,
+    backgroundColor: 'rgba(20, 30, 45, 0.8)',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 243, 255, 0.3)',
   },
-  navCardText: {
+  bottomNavCardDisabled: {
+    opacity: 0.5,
+  },
+  bottomNavText: {
     fontSize: 13,
-    color: '#1a237e',
+    color: '#00f3ff',
     fontWeight: '500',
   },
-  navCardTextDisabled: {
-    color: '#ccc',
+  bottomNavTextDisabled: {
+    color: '#6b7c93',
   },
   errorText: {
-    color: '#f44336',
+    color: '#ff6b6b',
     textAlign: 'center',
     marginTop: 16,
     fontSize: 16,

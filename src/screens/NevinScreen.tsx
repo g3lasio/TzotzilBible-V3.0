@@ -1,15 +1,17 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, Alert, Animated } from 'react-native';
-import { Text, TextInput, Button, Card, ActivityIndicator, IconButton, Surface } from 'react-native-paper';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, Alert, Animated, TouchableOpacity, Dimensions } from 'react-native';
+import { Text, TextInput, ActivityIndicator, IconButton } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { NevinAIService } from '../services/NevinAIService';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../types/navigation';
+import MainLayout from '../components/MainLayout';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+
+const { width } = Dimensions.get('window');
 
 interface Message {
   id: string;
@@ -112,80 +114,81 @@ export default function NevinScreen() {
 
   if (checkingKey) {
     return (
-      <SafeAreaView style={styles.container}>
+      <MainLayout title="Nevin" hideBottomNav>
         <View style={styles.centered}>
-          <ActivityIndicator size="large" color="#2196F3" />
+          <ActivityIndicator size="large" color="#00f3ff" />
           <Text style={styles.loadingText}>Verificando configuración...</Text>
         </View>
-      </SafeAreaView>
+      </MainLayout>
     );
   }
 
   if (!hasApiKey) {
     return (
-      <SafeAreaView style={styles.container}>
-        <LinearGradient
-          colors={['#1a237e', '#3949ab', '#5c6bc0']}
-          style={styles.setupGradient}
-        >
+      <MainLayout title="Nevin">
+        <View style={styles.setupContainer}>
           <Animated.View style={[styles.setupContent, { opacity: fadeAnim }]}>
-            <MaterialCommunityIcons name="robot" size={80} color="#fff" />
+            <View style={styles.robotIconContainer}>
+              <MaterialCommunityIcons name="robot" size={80} color="#00ff88" />
+            </View>
             <Text style={styles.setupTitle}>Nevin AI</Text>
             <Text style={styles.setupSubtitle}>Tu asistente bíblico inteligente</Text>
             
-            <Surface style={styles.setupCard} elevation={4}>
-              <MaterialCommunityIcons name="key" size={40} color="#f57c00" />
-              <Text style={styles.setupCardTitle}>Configuración Requerida</Text>
-              <Text style={styles.setupCardText}>
-                Para usar Nevin AI, necesitas configurar una clave API de Anthropic (Claude).
-              </Text>
-              <Text style={styles.setupCardHint}>
-                Puedes obtener una clave gratuita en console.anthropic.com
-              </Text>
-              <Button 
-                mode="contained" 
-                onPress={() => navigation.navigate('Settings')}
-                icon="cog"
-                style={styles.setupButton}
-                buttonColor="#1a237e"
+            <View style={styles.setupCard}>
+              <LinearGradient
+                colors={['rgba(20, 30, 45, 0.9)', 'rgba(15, 25, 40, 0.95)']}
+                style={styles.setupCardGradient}
               >
-                Ir a Configuración
-              </Button>
-            </Surface>
+                <MaterialCommunityIcons name="key" size={40} color="#00f3ff" />
+                <Text style={styles.setupCardTitle}>Configuración Requerida</Text>
+                <Text style={styles.setupCardText}>
+                  Para usar Nevin AI, necesitas configurar una clave API de Anthropic (Claude).
+                </Text>
+                <Text style={styles.setupCardHint}>
+                  Puedes obtener una clave en console.anthropic.com
+                </Text>
+                <TouchableOpacity 
+                  style={styles.setupButton}
+                  onPress={() => navigation.navigate('Settings')}
+                >
+                  <MaterialCommunityIcons name="cog" size={18} color="#0a0e14" />
+                  <Text style={styles.setupButtonText}>Ir a Configuración</Text>
+                </TouchableOpacity>
+              </LinearGradient>
+            </View>
           </Animated.View>
-        </LinearGradient>
-      </SafeAreaView>
+        </View>
+      </MainLayout>
     );
   }
 
   return (
-    <SafeAreaView style={styles.container} edges={['bottom']}>
+    <MainLayout title="Nevin" hideBottomNav>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardAvoid}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
       >
-        <LinearGradient
-          colors={['#1a237e', '#3949ab']}
-          style={styles.header}
-        >
-          <View style={styles.headerRow}>
-            <View style={styles.headerInfo}>
-              <MaterialCommunityIcons name="robot" size={28} color="#fff" />
-              <View style={styles.headerText}>
-                <Text style={styles.headerTitle}>Nevin AI</Text>
-                <Text style={styles.headerSubtitle}>Asistente Bíblico</Text>
-              </View>
+        <View style={styles.chatHeader}>
+          <View style={styles.chatHeaderInfo}>
+            <View style={styles.nevinAvatar}>
+              <MaterialCommunityIcons name="robot" size={24} color="#00ff88" />
             </View>
-            {messages.length > 0 && (
-              <IconButton 
-                icon="delete-outline"
-                iconColor="#fff"
-                size={24}
-                onPress={handleClearHistory}
-              />
-            )}
+            <View>
+              <Text style={styles.chatHeaderTitle}>Nevin</Text>
+              <Text style={styles.chatHeaderSubtitle}>Asistente Bíblico</Text>
+            </View>
           </View>
-        </LinearGradient>
+          {messages.length > 0 && (
+            <IconButton 
+              icon="delete-outline"
+              iconColor="#6b7c93"
+              size={24}
+              onPress={handleClearHistory}
+            />
+          )}
+        </View>
+        <View style={styles.chatDivider} />
 
         <ScrollView
           ref={scrollViewRef}
@@ -194,13 +197,13 @@ export default function NevinScreen() {
           showsVerticalScrollIndicator={false}
         >
           {messages.length === 0 && (
-            <Surface style={styles.welcomeCard} elevation={2}>
+            <View style={styles.welcomeCard}>
               <LinearGradient
-                colors={['#e8f5e9', '#c8e6c9']}
+                colors={['rgba(0, 255, 136, 0.1)', 'rgba(0, 243, 255, 0.05)']}
                 style={styles.welcomeGradient}
               >
-                <MaterialCommunityIcons name="hand-wave" size={40} color="#4CAF50" />
-                <Text style={styles.welcomeTitle}>¡Hola! Soy Nevin</Text>
+                <MaterialCommunityIcons name="hand-wave" size={40} color="#00ff88" />
+                <Text style={styles.welcomeTitle}>¡Paz a ti! Soy Nevin</Text>
                 <Text style={styles.welcomeText}>
                   Tu asistente bíblico con inteligencia artificial. 
                   Puedo ayudarte con preguntas sobre la Biblia, 
@@ -213,19 +216,17 @@ export default function NevinScreen() {
                     '¿Cuál es el día de reposo bíblico?',
                     'Explica la parábola del hijo pródigo'
                   ].map((suggestion, index) => (
-                    <Button
+                    <TouchableOpacity
                       key={index}
-                      mode="outlined"
-                      onPress={() => setInputMessage(suggestion)}
                       style={styles.suggestionButton}
-                      compact
+                      onPress={() => setInputMessage(suggestion)}
                     >
-                      {suggestion}
-                    </Button>
+                      <Text style={styles.suggestionButtonText}>{suggestion}</Text>
+                    </TouchableOpacity>
                   ))}
                 </View>
               </LinearGradient>
-            </Surface>
+            </View>
           )}
           
           {messages.map((message) => (
@@ -238,15 +239,14 @@ export default function NevinScreen() {
             >
               {!message.isUser && (
                 <View style={styles.avatarContainer}>
-                  <MaterialCommunityIcons name="robot" size={20} color="#1a237e" />
+                  <MaterialCommunityIcons name="robot" size={16} color="#00ff88" />
                 </View>
               )}
-              <Surface
+              <View
                 style={[
                   styles.messageCard,
                   message.isUser ? styles.userMessage : styles.nevinMessage,
                 ]}
-                elevation={1}
               >
                 <Text style={[
                   styles.messageText,
@@ -254,57 +254,66 @@ export default function NevinScreen() {
                 ]}>
                   {message.content}
                 </Text>
-                <Text style={styles.timestamp}>
+                <Text style={[styles.timestamp, message.isUser && styles.userTimestamp]}>
                   {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </Text>
-              </Surface>
+              </View>
             </View>
           ))}
           
           {loading && (
             <View style={[styles.messageWrapper, styles.nevinMessageWrapper]}>
               <View style={styles.avatarContainer}>
-                <MaterialCommunityIcons name="robot" size={20} color="#1a237e" />
+                <MaterialCommunityIcons name="robot" size={16} color="#00ff88" />
               </View>
-              <Surface style={[styles.messageCard, styles.nevinMessage, styles.typingIndicator]} elevation={1}>
-                <ActivityIndicator size="small" color="#1a237e" />
+              <View style={[styles.messageCard, styles.nevinMessage, styles.typingIndicator]}>
+                <ActivityIndicator size="small" color="#00f3ff" />
                 <Text style={styles.typingText}>Nevin está escribiendo...</Text>
-              </Surface>
+              </View>
             </View>
           )}
         </ScrollView>
 
-        <Surface style={styles.inputContainer} elevation={4}>
-          <TextInput
-            value={inputMessage}
-            onChangeText={setInputMessage}
-            placeholder="Escribe tu pregunta..."
-            mode="outlined"
-            multiline
-            style={styles.input}
-            disabled={loading}
-            outlineColor="#e0e0e0"
-            activeOutlineColor="#1a237e"
-            right={
-              <TextInput.Icon
-                icon="send"
-                onPress={handleSendMessage}
-                disabled={loading || !inputMessage.trim()}
-                color={inputMessage.trim() ? '#1a237e' : '#ccc'}
+        <View style={styles.inputContainer}>
+          <View style={styles.inputRow}>
+            <TouchableOpacity 
+              style={styles.settingsButton}
+              onPress={() => navigation.navigate('Settings')}
+            >
+              <MaterialCommunityIcons name="cog" size={22} color="#6b7c93" />
+            </TouchableOpacity>
+            <TextInput
+              value={inputMessage}
+              onChangeText={setInputMessage}
+              placeholder="Escribe tu pregunta aquí..."
+              mode="outlined"
+              multiline
+              style={styles.input}
+              disabled={loading}
+              placeholderTextColor="#6b7c93"
+              textColor="#e6f3ff"
+              outlineColor="rgba(0, 243, 255, 0.3)"
+              activeOutlineColor="#00f3ff"
+            />
+            <TouchableOpacity 
+              style={[styles.sendButton, (!inputMessage.trim() || loading) && styles.sendButtonDisabled]}
+              onPress={handleSendMessage}
+              disabled={loading || !inputMessage.trim()}
+            >
+              <MaterialCommunityIcons 
+                name="send" 
+                size={22} 
+                color={inputMessage.trim() && !loading ? '#0a0e14' : '#6b7c93'} 
               />
-            }
-          />
-        </Surface>
+            </TouchableOpacity>
+          </View>
+        </View>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </MainLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
   centered: {
     flex: 1,
     justifyContent: 'center',
@@ -313,38 +322,48 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     marginTop: 16,
-    color: '#666',
+    color: '#6b7c93',
     fontSize: 16,
   },
   keyboardAvoid: {
     flex: 1,
   },
-  header: {
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-  },
-  headerRow: {
+  chatHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
-  headerInfo: {
+  chatHeaderInfo: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  headerText: {
-    marginLeft: 12,
+  nevinAvatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(0, 255, 136, 0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 255, 136, 0.4)',
   },
-  headerTitle: {
-    fontSize: 20,
+  chatHeaderTitle: {
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#fff',
+    color: '#e6f3ff',
   },
-  headerSubtitle: {
-    fontSize: 13,
-    color: 'rgba(255,255,255,0.8)',
+  chatHeaderSubtitle: {
+    fontSize: 12,
+    color: '#6b7c93',
   },
-  setupGradient: {
+  chatDivider: {
+    height: 1,
+    backgroundColor: 'rgba(0, 243, 255, 0.2)',
+  },
+  setupContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
@@ -354,68 +373,92 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
   },
+  robotIconContainer: {
+    marginBottom: 16,
+  },
   setupTitle: {
-    fontSize: 36,
+    fontSize: 32,
     fontWeight: 'bold',
-    color: '#fff',
-    marginTop: 16,
+    color: '#00ff88',
+    textShadowColor: '#00ff88',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 10,
   },
   setupSubtitle: {
-    fontSize: 18,
-    color: 'rgba(255,255,255,0.9)',
+    fontSize: 16,
+    color: '#6b7c93',
     marginTop: 8,
     marginBottom: 32,
   },
   setupCard: {
-    backgroundColor: '#fff',
+    width: '100%',
+    maxWidth: 380,
     borderRadius: 20,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 243, 255, 0.3)',
+  },
+  setupCardGradient: {
     padding: 24,
     alignItems: 'center',
-    width: '100%',
-    maxWidth: 400,
   },
   setupCardTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     marginTop: 16,
     marginBottom: 12,
-    color: '#333',
+    color: '#e6f3ff',
   },
   setupCardText: {
     fontSize: 15,
     textAlign: 'center',
-    color: '#666',
+    color: '#6b7c93',
     marginBottom: 8,
   },
   setupCardHint: {
     fontSize: 13,
     textAlign: 'center',
-    color: '#999',
+    color: '#6b7c93',
     marginBottom: 20,
   },
   setupButton: {
-    borderRadius: 10,
-    paddingHorizontal: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#00f3ff',
+    paddingHorizontal: 24,
+    paddingVertical: 14,
+    borderRadius: 12,
+  },
+  setupButtonText: {
+    color: '#0a0e14',
+    fontWeight: 'bold',
+    fontSize: 16,
+    marginLeft: 8,
   },
   welcomeCard: {
-    borderRadius: 16,
+    borderRadius: 20,
     overflow: 'hidden',
     marginBottom: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 255, 136, 0.3)',
   },
   welcomeGradient: {
-    padding: 20,
+    padding: 24,
     alignItems: 'center',
   },
   welcomeTitle: {
     fontSize: 22,
     fontWeight: 'bold',
     marginTop: 12,
-    color: '#2e7d32',
+    color: '#00ff88',
+    textShadowColor: '#00ff88',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 8,
   },
   welcomeText: {
     fontSize: 15,
     lineHeight: 22,
-    color: '#333',
+    color: '#e6f3ff',
     textAlign: 'center',
     marginTop: 12,
   },
@@ -426,12 +469,21 @@ const styles = StyleSheet.create({
   suggestionsTitle: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#666',
+    color: '#6b7c93',
     marginBottom: 10,
   },
   suggestionButton: {
+    backgroundColor: 'rgba(0, 255, 136, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 255, 136, 0.3)',
+    borderRadius: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
     marginBottom: 8,
-    borderColor: '#4CAF50',
+  },
+  suggestionButtonText: {
+    color: '#00ff88',
+    fontSize: 14,
   },
   messagesContainer: {
     flex: 1,
@@ -452,13 +504,15 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   avatarContainer: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: '#e3f2fd',
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: 'rgba(0, 255, 136, 0.15)',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 255, 136, 0.3)',
   },
   messageCard: {
     maxWidth: '80%',
@@ -466,26 +520,31 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   userMessage: {
-    backgroundColor: '#1a237e',
+    backgroundColor: '#00f3ff',
     borderBottomRightRadius: 4,
   },
   nevinMessage: {
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(20, 30, 45, 0.9)',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 255, 136, 0.3)',
     borderBottomLeftRadius: 4,
   },
   messageText: {
     fontSize: 15,
     lineHeight: 22,
-    color: '#333',
+    color: '#e6f3ff',
   },
   userMessageText: {
-    color: '#fff',
+    color: '#0a0e14',
   },
   timestamp: {
-    fontSize: 11,
-    color: '#999',
+    fontSize: 10,
+    color: '#6b7c93',
     marginTop: 6,
     textAlign: 'right',
+  },
+  userTimestamp: {
+    color: 'rgba(10, 14, 20, 0.6)',
   },
   typingIndicator: {
     flexDirection: 'row',
@@ -495,15 +554,46 @@ const styles = StyleSheet.create({
   },
   typingText: {
     marginLeft: 10,
-    color: '#666',
+    color: '#6b7c93',
     fontSize: 14,
   },
   inputContainer: {
-    padding: 12,
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(10, 14, 20, 0.95)',
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0, 243, 255, 0.2)',
+  },
+  inputRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+  },
+  settingsButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: 'rgba(20, 30, 45, 0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 243, 255, 0.2)',
   },
   input: {
+    flex: 1,
     maxHeight: 100,
-    backgroundColor: '#fff',
+    backgroundColor: 'rgba(20, 30, 45, 0.8)',
+    marginRight: 8,
+  },
+  sendButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#00f3ff',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sendButtonDisabled: {
+    backgroundColor: 'rgba(0, 243, 255, 0.3)',
   },
 });
