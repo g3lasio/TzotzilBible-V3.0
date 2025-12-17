@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { LoginCredentials, RegisterCredentials, User } from '../types/auth';
+import { User } from '../types/auth';
 import { AuthService } from '../services/AuthService';
 
 export function useAuth() {
@@ -13,7 +13,7 @@ export function useAuth() {
 
   const checkAuthStatus = async () => {
     try {
-      const userData = await AuthService.getCurrentUser();
+      const userData = await AuthService.ensureLocalUser();
       setUser(userData);
     } catch (err) {
       console.error('Error checking auth status:', err);
@@ -22,44 +22,14 @@ export function useAuth() {
     }
   };
 
-  const login = async (credentials: LoginCredentials) => {
+  const login = async () => {
     try {
       setError(null);
-      const { user } = await AuthService.login(credentials.email, credentials.password);
-      setUser(user);
+      await AuthService.login();
+      const userData = await AuthService.getCurrentUser();
+      setUser(userData);
     } catch (err) {
       setError('Error al iniciar sesión');
-      throw err;
-    }
-  };
-
-  const register = async (credentials: RegisterCredentials) => {
-    try {
-      setError(null);
-      const { user } = await AuthService.register(credentials);
-      setUser(user);
-    } catch (err) {
-      setError('Error al registrar usuario');
-      throw err;
-    }
-  };
-
-  const forgotPassword = async (email: string) => {
-    try {
-      setError(null);
-      await AuthService.forgotPassword(email);
-    } catch (err) {
-      setError('Error al enviar el correo de recuperación');
-      throw err;
-    }
-  };
-
-  const resetPassword = async (code: string, password: string) => {
-    try {
-      setError(null);
-      await AuthService.resetPassword(code, password);
-    } catch (err) {
-      setError('Error al restablecer la contraseña');
       throw err;
     }
   };
@@ -80,9 +50,6 @@ export function useAuth() {
     loading,
     error,
     login,
-    register,
     logout,
-    forgotPassword,
-    resetPassword,
   };
 }
