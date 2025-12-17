@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { Text, TextInput, Button, Card, useTheme, ActivityIndicator } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation } from '@react-navigation/native';
 import { BibleService } from '../services/BibleService';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { RootStackParamList } from '../types/navigation';
 
-type SearchScreenProps = {
-  navigation: NativeStackNavigationProp<any, 'Search'>;
-};
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
-export default function SearchScreen({ navigation }: SearchScreenProps) {
+export default function SearchScreen() {
+  const navigation = useNavigation<NavigationProp>();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);

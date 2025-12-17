@@ -1,19 +1,22 @@
-
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
 import { Text, Card, Searchbar, ActivityIndicator, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BibleService } from '../services/BibleService';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { RootStackParamList } from '../types/navigation';
+import type { Book } from '../types/bible';
 
-type Book = {
-  id: string;
+interface BookDisplay {
+  id: number;
   name: string;
   chapters: number;
-};
+}
 
-export default function BibleScreen({ navigation }: NativeStackScreenProps<any>) {
-  const [books, setBooks] = useState<Book[]>([]);
+type Props = NativeStackScreenProps<RootStackParamList, 'Bible'>;
+
+export default function BibleScreen({ navigation }: Props) {
+  const [books, setBooks] = useState<BookDisplay[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const theme = useTheme();
@@ -25,7 +28,12 @@ export default function BibleScreen({ navigation }: NativeStackScreenProps<any>)
   const loadBooks = async () => {
     try {
       const data = await BibleService.getBooks();
-      setBooks(data);
+      const displayBooks: BookDisplay[] = data.map((book: any) => ({
+        id: book.id || book.book_number || 0,
+        name: book.name,
+        chapters: book.chapters || book.chapters_count || 0
+      }));
+      setBooks(displayBooks);
     } catch (error) {
       console.error('Error loading books:', error);
     } finally {
@@ -37,7 +45,7 @@ export default function BibleScreen({ navigation }: NativeStackScreenProps<any>)
     book.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const renderBookItem = ({ item }: { item: Book }) => (
+  const renderBookItem = ({ item }: { item: BookDisplay }) => (
     <Card
       style={styles.bookCard}
       onPress={() => navigation.navigate('Chapter', { book: item.name })}
@@ -68,7 +76,7 @@ export default function BibleScreen({ navigation }: NativeStackScreenProps<any>)
       <FlatList
         data={filteredBooks}
         renderItem={renderBookItem}
-        keyExtractor={item => item.id}
+        keyExtractor={item => String(item.id)}
         contentContainerStyle={styles.listContent}
       />
     </SafeAreaView>

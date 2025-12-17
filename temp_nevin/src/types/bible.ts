@@ -4,6 +4,7 @@ export interface Book {
   name: string;
   book_number: number;
   testament: string;
+  chapters?: number;
 }
 
 export interface Chapter {

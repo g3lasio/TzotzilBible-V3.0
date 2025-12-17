@@ -5,10 +5,15 @@ import { Text, Card, ActivityIndicator, useTheme } from 'react-native-paper';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { BibleService } from '../services/BibleService';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import type { RouteProp } from '@react-navigation/native';
+import type { RootStackParamList } from '../types/navigation';
+
+type ChapterRouteProp = RouteProp<RootStackParamList, 'Chapter'>;
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export default function ChapterScreen() {
-  const route = useRoute<any>();
-  const navigation = useNavigation<NativeStackNavigationProp<any>>();
+  const route = useRoute<ChapterRouteProp>();
+  const navigation = useNavigation<NavigationProp>();
   const theme = useTheme();
   const { book } = route.params;
   
@@ -41,8 +46,8 @@ export default function ChapterScreen() {
     loadChapters();
   }, [book]);
 
-  const handleChapterPress = (chapter: number) => {
-    navigation.navigate('Verses', { book, chapter });
+  const handleChapterPress = (chapterNum: number) => {
+    navigation.navigate('Verses', { book, chapter: chapterNum });
   };
 
   if (loading && !refreshing) {

@@ -1,13 +1,16 @@
-
 import React, { useState, useEffect } from 'react';
 import { View, ScrollView, StyleSheet } from 'react-native';
 import { Text, Card, Button, useTheme, Surface } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { BibleService } from '../services/BibleService';
+import type { RootStackParamList } from '../types/navigation';
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export default function HomeScreen() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp>();
   const theme = useTheme();
   const [dailyPromise, setDailyPromise] = useState('');
 
@@ -35,7 +38,7 @@ export default function HomeScreen() {
           <Text style={styles.promiseText}>{dailyPromise}</Text>
           <Button 
             mode="outlined" 
-            onPress={() => {/* Implementar compartir */}}
+            onPress={() => {}}
             style={styles.shareButton}
           >
             Compartir
