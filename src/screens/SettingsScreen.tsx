@@ -1,25 +1,26 @@
-
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Alert } from 'react-native';
-import { List, Switch, Button, Divider, Title, Text, useTheme, IconButton } from 'react-native-paper';
+import { View, StyleSheet, ScrollView, Alert, TextInput } from 'react-native';
+import { List, Switch, Button, Divider, Title, Text, IconButton, Portal, Modal, Card } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useAuth } from '../hooks/useAuth';
-import DonationModal from '../components/DonationModal';
-import { PaymentService } from '../services/PaymentService';
+import { NevinAIService } from '../services/NevinAIService';
 
 export default function SettingsScreen() {
   const [darkMode, setDarkMode] = useState(false);
-  const [offlineMode, setOfflineMode] = useState(false);
   const [bilingualMode, setBilingualMode] = useState(true);
-  const [autoPlay, setAutoPlay] = useState(false);
   const [fontSize, setFontSize] = useState('medium');
-  const [showDonationModal, setShowDonationModal] = useState(false);
-  const theme = useTheme();
-  const { logout } = useAuth();
+  const [hasApiKey, setHasApiKey] = useState(false);
+  const [showApiKeyModal, setShowApiKeyModal] = useState(false);
+  const [apiKeyInput, setApiKeyInput] = useState('');
 
   useEffect(() => {
     loadSettings();
+    checkApiKey();
   }, []);
+
+  const checkApiKey = async () => {
+    const hasKey = await NevinAIService.hasApiKey();
+    setHasApiKey(hasKey);
+  };
 
   const loadSettings = async () => {
     try {
@@ -27,9 +28,7 @@ export default function SettingsScreen() {
       if (settings) {
         const parsed = JSON.parse(settings);
         setDarkMode(parsed.darkMode ?? false);
-        setOfflineMode(parsed.offlineMode ?? false);
         setBilingualMode(parsed.bilingualMode ?? true);
-        setAutoPlay(parsed.autoPlay ?? false);
         setFontSize(parsed.fontSize ?? 'medium');
       }
     } catch (error) {
@@ -48,21 +47,57 @@ export default function SettingsScreen() {
     }
   };
 
-  const handleLogout = async () => {
+  const handleSaveApiKey = async () => {
+    if (apiKeyInput.trim()) {
+      await NevinAIService.setApiKey(apiKeyInput.trim());
+      setHasApiKey(true);
+      setShowApiKeyModal(false);
+      setApiKeyInput('');
+      Alert.alert('Listo', 'La clave API se guardó correctamente.');
+    }
+  };
+
+  const handleRemoveApiKey = () => {
     Alert.alert(
-      'Cerrar Sesión',
-      '¿Estás seguro que deseas cerrar sesión?',
+      'Eliminar Clave API',
+      '¿Estás seguro? Nevin AI dejará de funcionar sin una clave API.',
       [
         { text: 'Cancelar', style: 'cancel' },
-        { 
-          text: 'Cerrar Sesión',
+        {
+          text: 'Eliminar',
+          style: 'destructive',
           onPress: async () => {
-            await logout();
-          },
-          style: 'destructive'
+            await NevinAIService.setApiKey('');
+            await NevinAIService.clearChatHistory();
+            setHasApiKey(false);
+          }
         }
       ]
     );
+  };
+
+  const handleClearData = () => {
+    Alert.alert(
+      'Limpiar Datos',
+      '¿Estás seguro? Esto eliminará tu historial de chat y preferencias.',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Limpiar',
+          style: 'destructive',
+          onPress: async () => {
+            await NevinAIService.clearChatHistory();
+            await AsyncStorage.removeItem('userSettings');
+            Alert.alert('Listo', 'Datos eliminados correctamente.');
+          }
+        }
+      ]
+    );
+  };
+
+  const handleFontSizeChange = (size: string) => {
+    setFontSize(size);
+    saveSettings('fontSize', size);
   };
 
   return (
@@ -86,13 +121,21 @@ export default function SettingsScreen() {
         />
         <List.Item
           title="Tamaño de Fuente"
-          description="Ajusta el tamaño del texto"
+          description={fontSize === 'small' ? 'Pequeño' : fontSize === 'large' ? 'Grande' : 'Mediano'}
           left={props => <List.Icon {...props} icon="format-size" />}
           right={() => (
             <View style={styles.fontSizeControl}>
-              <IconButton icon="minus" onPress={() => setFontSize('small')} />
+              <IconButton 
+                icon="minus" 
+                onPress={() => handleFontSizeChange('small')} 
+                disabled={fontSize === 'small'}
+              />
               <Text>A</Text>
-              <IconButton icon="plus" onPress={() => setFontSize('large')} />
+              <IconButton 
+                icon="plus" 
+                onPress={() => handleFontSizeChange('large')} 
+                disabled={fontSize === 'large'}
+              />
             </View>
           )}
         />
@@ -116,67 +159,75 @@ export default function SettingsScreen() {
             />
           )}
         />
+      </List.Section>
+
+      <Divider />
+
+      <List.Section>
+        <List.Subheader>Nevin AI</List.Subheader>
         <List.Item
-          title="Modo Sin Conexión"
-          description="Descargar contenido para uso sin internet"
-          left={props => <List.Icon {...props} icon="wifi-off" />}
-          right={() => (
-            <Switch
-              value={offlineMode}
-              onValueChange={(value) => {
-                setOfflineMode(value);
-                saveSettings('offlineMode', value);
-              }}
-            />
-          )}
+          title="Clave API de Anthropic"
+          description={hasApiKey ? "Configurada ✓" : "No configurada"}
+          left={props => <List.Icon {...props} icon="key" />}
+          onPress={() => setShowApiKeyModal(true)}
         />
+        {hasApiKey && (
+          <List.Item
+            title="Eliminar Clave API"
+            description="Desactivar Nevin AI"
+            left={props => <List.Icon {...props} icon="key-remove" />}
+            onPress={handleRemoveApiKey}
+          />
+        )}
+      </List.Section>
+
+      <Divider />
+
+      <List.Section>
+        <List.Subheader>Datos</List.Subheader>
         <List.Item
-          title="Auto-reproducción"
-          description="Reproducir audio automáticamente"
-          left={props => <List.Icon {...props} icon="play-circle" />}
-          right={() => (
-            <Switch
-              value={autoPlay}
-              onValueChange={(value) => {
-                setAutoPlay(value);
-                saveSettings('autoPlay', value);
-              }}
-            />
-          )}
+          title="Limpiar Historial de Chat"
+          description="Eliminar conversaciones con Nevin"
+          left={props => <List.Icon {...props} icon="delete" />}
+          onPress={handleClearData}
         />
       </List.Section>
 
-      <View style={styles.donateContainer}>
-        <Text style={styles.donateText}>
-          Ayúdanos a mantener y mejorar esta aplicación para seguir compartiendo la Palabra de Dios
+      <View style={styles.infoContainer}>
+        <Text style={styles.infoText}>
+          Versión 2.1.0 - Tzotzil Bible
         </Text>
-        <Button 
-          mode="contained"
-          onPress={() => setShowDonationModal(true)}
-          style={styles.donateButton}
-          icon="heart"
-        >
-          Realizar Donación
-        </Button>
+        <Text style={styles.infoSubtext}>
+          La Biblia funciona completamente sin internet.
+          Nevin AI requiere conexión a internet y una clave API.
+        </Text>
       </View>
 
-      <Button 
-        mode="outlined" 
-        onPress={handleLogout}
-        style={styles.logoutButton}
-        icon="logout"
-      >
-        Cerrar Sesión
-      </Button>
-
-      <DonationModal
-        visible={showDonationModal}
-        onDismiss={() => setShowDonationModal(false)}
-        onDonationComplete={() => {
-          setShowDonationModal(false);
-          Alert.alert('¡Gracias!', 'Tu donación nos ayuda a seguir mejorando.');
-        }}
-      />
+      <Portal>
+        <Modal visible={showApiKeyModal} onDismiss={() => setShowApiKeyModal(false)} contentContainerStyle={styles.modalContainer}>
+          <Card>
+            <Card.Title title="Configurar Nevin AI" />
+            <Card.Content>
+              <Text style={styles.modalText}>
+                Para usar Nevin AI, necesitas una clave API de Anthropic. 
+                Puedes obtener una en console.anthropic.com
+              </Text>
+              <TextInput
+                style={styles.apiInput}
+                placeholder="sk-ant-..."
+                value={apiKeyInput}
+                onChangeText={setApiKeyInput}
+                secureTextEntry
+                autoCapitalize="none"
+              />
+            </Card.Content>
+            <Card.Actions>
+              <Button onPress={() => setShowApiKeyModal(false)}>Cancelar</Button>
+              <Button mode="contained" onPress={handleSaveApiKey}>Guardar</Button>
+            </Card.Actions>
+          </Card>
+        </Modal>
+      </Portal>
     </ScrollView>
   );
 }
@@ -195,22 +246,37 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  donateContainer: {
+  infoContainer: {
     padding: 16,
     alignItems: 'center',
     marginTop: 20,
+    marginBottom: 40,
   },
-  donateText: {
+  infoText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 8,
+  },
+  infoSubtext: {
     textAlign: 'center',
+    color: '#666',
+    fontSize: 12,
+  },
+  modalContainer: {
+    padding: 20,
+    margin: 20,
+  },
+  modalText: {
     marginBottom: 16,
     color: '#666',
   },
-  donateButton: {
-    width: '80%',
-    marginBottom: 10,
-  },
-  logoutButton: {
-    margin: 16,
-    marginTop: 0,
+  apiInput: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 12,
+    fontSize: 14,
+    backgroundColor: '#fff',
   }
 });

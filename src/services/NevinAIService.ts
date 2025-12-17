@@ -1,9 +1,46 @@
-import { api } from './api';
 import { AIResponse, ChatMessage } from '../types/nevin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constants from 'expo-constants';
+
+const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
+
+const NEVIN_SYSTEM_PROMPT = `Eres Nevin, un asistente de IA especializado en estudios bíblicos y teología adventista del séptimo día. Tu propósito es ayudar a los usuarios a comprender mejor la Biblia, especialmente en el contexto de la comunidad Tzotzil de Chiapas, México.
+
+Principios guía:
+1. Siempre basa tus respuestas en las Escrituras
+2. Respeta y aplica los principios hermenéuticos adventistas
+3. Cuando sea relevante, cita escritos de Elena G. de White
+4. Sé compasivo, respetuoso y culturalmente sensible
+5. Responde en español de forma clara y accesible
+6. Cuando no estés seguro de algo, admítelo honestamente
+
+Tu conocimiento incluye:
+- La Biblia completa (Antiguo y Nuevo Testamento)
+- Doctrinas y creencias adventistas del séptimo día
+- Escritos de Elena G. de White
+- Contexto histórico y cultural de las Escrituras
+- La cultura y tradiciones del pueblo Tzotzil`;
 
 export class NevinAIService {
   private static readonly CHAT_HISTORY_KEY = 'nevin_chat_history';
+  private static readonly API_KEY_STORAGE = 'anthropic_api_key';
+
+  static async setApiKey(apiKey: string): Promise<void> {
+    await AsyncStorage.setItem(this.API_KEY_STORAGE, apiKey);
+  }
+
+  static async getApiKey(): Promise<string | null> {
+    const storedKey = await AsyncStorage.getItem(this.API_KEY_STORAGE);
+    if (storedKey) return storedKey;
+    
+    const envKey = Constants.expoConfig?.extra?.anthropicApiKey;
+    return envKey || null;
+  }
+
+  static async hasApiKey(): Promise<boolean> {
+    const key = await this.getApiKey();
+    return !!key;
+  }
 
   static async processQuery(
     message: string,
@@ -11,49 +48,78 @@ export class NevinAIService {
     chatHistory: ChatMessage[] = []
   ): Promise<AIResponse> {
     try {
-      const token = await AsyncStorage.getItem('user_token');
+      const apiKey = await this.getApiKey();
 
-      if (!token) {
+      if (!apiKey) {
         return {
           success: false,
-          error: 'No se encontró el token de autenticación',
+          error: 'Se necesita una clave API de Anthropic para usar Nevin AI. Por favor configúrala en ajustes.',
           emotions: {}
         };
       }
 
-      // Use the revolutionary Nevin AI system with Claude 4 + EGW search + doctrinal validation
-      const response = await api.post('/api/nevin/chat/revolutionary', {
-        question: message,
-        context,
-        language: 'Spanish',
-        extended_thinking: true,
-        chat_history: chatHistory.map(msg => ({
-          role: msg.type === 'user' ? 'user' : 'assistant',
+      const messages = [
+        ...chatHistory.map(msg => ({
+          role: msg.type === 'user' ? 'user' as const : 'assistant' as const,
           content: msg.content
-        }))
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+        })),
+        {
+          role: 'user' as const,
+          content: context ? `Contexto: ${context}\n\nPregunta: ${message}` : message
         }
+      ];
+
+      const response = await fetch(ANTHROPIC_API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01'
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 4096,
+          system: NEVIN_SYSTEM_PROMPT,
+          messages: messages
+        })
       });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Anthropic API error:', errorData);
+        
+        if (response.status === 401) {
+          return {
+            success: false,
+            error: 'Clave API inválida. Por favor verifica tu configuración.',
+            emotions: {}
+          };
+        }
+        
+        return {
+          success: false,
+          error: 'Error al comunicarse con el servicio de IA. Intenta nuevamente.',
+          emotions: {}
+        };
+      }
+
+      const data = await response.json();
+      const assistantMessage = data.content?.[0]?.text || '';
 
       return {
         success: true,
-        response: response.data.response,
-        emotions: response.data.emotions || {},
-        metadata: response.data.metadata || {
-          system_version: "Revolutionary Nevin AI v2.0",
-          powered_by: "Claude 4 + EGW Web Search + Doctrinal Validation"
-        },
-        egw_sources: response.data.egw_sources || [],
-        doctrinal_validation: response.data.doctrinal_validation || {}
+        response: assistantMessage,
+        emotions: {},
+        metadata: {
+          system_version: "Nevin AI v3.0 Mobile",
+          powered_by: "Claude Sonnet 4"
+        }
       };
     } catch (error) {
       console.error('Error en NevinAIService.processQuery:', error);
       return {
         success: false,
-        error: 'Hubo un error procesando tu mensaje',
+        error: 'Hubo un error procesando tu mensaje. Verifica tu conexión a internet.',
         emotions: {}
       };
     }

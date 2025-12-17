@@ -13,7 +13,7 @@
       "backgroundColor": "#1a1a2e"
     },
     "assetBundlePatterns": [
-      "**/*"
+      "assets/**/*"
     ],
     "ios": {
       "supportsTablet": true,
@@ -25,19 +25,23 @@
         "backgroundColor": "#1a1a2e"
       },
       "package": "com.chyrris.tzotzilbible",
-      "versionCode": 22,
-      "permissions": [],
+      "versionCode": 23,
+      "permissions": [
+        "android.permission.INTERNET"
+      ],
       "compileSdkVersion": 34,
       "targetSdkVersion": 34,
       "minSdkVersion": 21
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
     },
     "extra": {
       "eas": {
         "projectId": "a810d3d6-839d-49b2-9dab-c42a44e3a6b0"
       }
-    }
+    },
+    "plugins": []
   }
 }

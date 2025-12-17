@@ -1,134 +1,115 @@
 # Overview
 
-This is a bilingual Bible app (Spanish/Tzotzil) with an AI assistant called "Nevin" powered by OpenAI GPT-4. The application consists of a Flask backend with a React Native frontend (using Expo), featuring biblical text access, AI-powered biblical interpretation, and user management with subscription tiers.
+Tzotzil Bible is a bilingual Bible mobile application (Spanish/Tzotzil) with an AI assistant called "Nevin" powered by Claude (Anthropic). This is a **pure Expo/React Native mobile application** designed for iOS, Android, and Web platforms. The Bible works completely offline using an embedded SQLite database, while Nevin AI requires internet connectivity.
 
 # System Architecture
 
-## Backend Architecture
-- **Framework**: Flask with Python 3.11
-- **Database**: PostgreSQL (via Neon.tech) with SQLAlchemy ORM
-- **AI Integration**: OpenAI GPT-4 with FAISS for vector search and knowledge retrieval
-- **Authentication**: JWT-based authentication with role-based access control
-- **Caching**: Redis for distributed caching with local TTL cache fallback
-- **File Storage**: Replit Object Storage for documents and assets
-
-## Frontend Architecture
-- **Framework**: React Native with Expo SDK 49.0
+## Mobile Application (Expo)
+- **Framework**: React Native with Expo SDK 52
 - **Navigation**: React Navigation v6
 - **UI Library**: React Native Paper for Material Design components
 - **State Management**: React Query for server state and async operations
-- **Local Storage**: Expo SQLite for offline Bible data
+- **Local Storage**: Expo SQLite for offline Bible data (31,105 verses)
 - **Platform Support**: iOS, Android, and Web via Expo
 
-## Database Schema
-- **Users**: User authentication and subscription management
-- **BibleVerse**: Bilingual biblical text storage (Spanish/Tzotzil)
-- **Promise**: Biblical promises with associated images
-- **Conversations**: Chat history for Nevin AI interactions
+## Offline Bible Database
+- **Format**: SQLite database embedded in app assets (21.70 MB)
+- **Content**: 66 books, 31,105 bilingual verses, 198 promises
+- **Tables**: books, verses, promises
+- **Languages**: Spanish and Tzotzil side-by-side
+
+## Nevin AI Assistant
+- **Provider**: Anthropic Claude Sonnet 4
+- **API**: Direct HTTPS calls to Anthropic API from mobile app
+- **Features**: Biblical interpretation, theological guidance, Adventist doctrinal principles
+- **Storage**: API key stored securely in device storage
 
 # Key Components
 
-## Nevin AI Assistant
-- **Knowledge Base**: FAISS-powered vector search through theological content
-- **Response Engine**: Context-aware biblical interpretation with doctrinal validation
-- **Content Sources**: Biblical text, Ellen G. White writings, and theological materials
-- **Rate Limiting**: Intelligent request throttling to manage OpenAI API usage
+## DatabaseService (`src/services/DatabaseService.ts`)
+- Manages SQLite database initialization and queries
+- Copies database from assets to device on first launch
+- Provides methods for books, chapters, verses, search, and promises
+- Handles platform differences (native SQLite vs web fallback)
 
-## Bible Data Management
-- **Bilingual Support**: Spanish and Tzotzil text side-by-side
-- **Offline Capability**: Local SQLite database for offline reading
-- **Search Functionality**: Advanced text search across both languages
-- **Content Validation**: Input sanitization and biblical reference validation
+## BibleService (`src/services/BibleService.ts`)
+- High-level Bible data access layer
+- Prioritizes offline SQLite data on native platforms
+- Falls back to API/AsyncStorage cache on web
 
-## User Management
-- **Subscription Tiers**: Free, Trial, and Premium access levels
-- **Access Control**: Role-based permissions for Nevin AI features
-- **Profile Management**: User preferences and reading history
+## NevinAIService (`src/services/NevinAIService.ts`)
+- Direct integration with Anthropic Claude API
+- Chat history management with AsyncStorage
+- User-configurable API key via Settings screen
 
-## Caching Strategy
-- **Multi-level Cache**: Redis for distributed caching with local TTL fallback
-- **Cache Keys**: Structured naming for biblical content, AI responses, and user data
-- **Cache Invalidation**: Time-based expiration with manual invalidation support
+# File Structure
 
-# Data Flow
+```
+/
+├── App.tsx                    # Main app entry point
+├── index.ts                   # Expo entry point
+├── app.json                   # Expo configuration
+├── eas.json                   # EAS Build configuration
+├── assets/
+│   ├── bible.db               # SQLite database (31,105 verses)
+│   ├── icon.png               # App icon
+│   ├── splash-icon.png        # Splash screen
+│   └── adaptive-icon.png      # Android adaptive icon
+├── src/
+│   ├── screens/               # App screens
+│   ├── components/            # Reusable components
+│   ├── services/              # API and database services
+│   ├── navigation/            # React Navigation setup
+│   ├── types/                 # TypeScript type definitions
+│   ├── hooks/                 # Custom React hooks
+│   └── config.ts              # App configuration
+└── android/                   # Android native files (optional)
+```
 
-## Bible Reading Flow
-1. User requests biblical content via REST API
-2. System checks local cache first (TTL cache → Redis)
-3. If cache miss, queries PostgreSQL database
-4. Results are cached and returned to frontend
-5. React Native displays bilingual text with Paper UI components
+# Build & Deployment
 
-## Nevin AI Interaction Flow
-1. User submits question through chat interface
-2. Backend validates user permissions and rate limits
-3. Question is processed through interpretation engine
-4. FAISS performs vector similarity search on knowledge base
-5. OpenAI GPT-4 generates contextual response with retrieved knowledge
-6. Response is validated against doctrinal principles
-7. Final answer is cached and returned to user
+## Development
+```bash
+npx expo start --web --port 5000
+```
 
-## Offline Synchronization
-1. User initiates database download
-2. Backend exports SQLite database with biblical content
-3. Frontend downloads and stores locally using Expo FileSystem
-4. App switches to local database when offline
-5. Online/offline status determines data source
+## Build APK (Android)
+```bash
+eas build --platform android --profile preview
+```
 
-# External Dependencies
+## Build AAB for Play Store
+```bash
+eas build --platform android --profile production
+```
 
-## AI and Machine Learning
-- **OpenAI API**: GPT-4 for natural language processing and biblical interpretation
-- **FAISS**: Local vector search for theological knowledge retrieval
-- **NumPy**: Numerical operations for embeddings and vector math
+## Build IPA (iOS)
+```bash
+eas build --platform ios --profile production
+```
 
-## Database and Storage
-- **PostgreSQL**: Primary database via Neon.tech
-- **Redis**: Distributed caching layer
-- **SQLite**: Local storage for offline functionality
+## EAS Configuration
+- **Preview**: Generates APK for internal testing
+- **Production**: Generates AAB/IPA for app store submission
+- **Bundle ID**: com.chyrris.tzotzilbible
 
-## Authentication and Security
-- **JWT**: Token-based authentication
-- **Werkzeug**: Password hashing and security utilities
-- **Flask-CORS**: Cross-origin resource sharing for web platform
+# Offline Functionality
 
-## Mobile Development
-- **Expo SDK**: Cross-platform mobile development
-- **React Native**: Mobile UI framework
-- **Metro**: JavaScript bundler for React Native
+The Bible works completely offline:
+1. On first launch, the SQLite database is copied from app assets to device storage
+2. All Bible reading, searching, and navigation works without internet
+3. Database includes all 66 books in both Spanish and Tzotzil
 
-# Deployment Strategy
-
-## Backend Deployment
-- **Platform**: Replit with Cloud Run deployment target
-- **Environment**: Python 3.11 with required dependencies
-- **Database**: Managed PostgreSQL via Neon.tech
-- **Caching**: Redis instance for production caching
-
-## Frontend Deployment
-- **Development**: Expo development server on port 8083
-- **Web**: Static web build via Expo webpack
-- **Mobile**: Native builds through Expo Application Services (EAS)
-
-## Configuration Management
-- **Environment Variables**: Sensitive configuration via Replit secrets
-- **Feature Flags**: Subscription-based feature access control
-- **Monitoring**: Application logging with structured log format
-
-## Performance Optimization
-- **Database**: Connection pooling with pre-ping health checks
-- **API**: Rate limiting and request batching for OpenAI calls
-- **Caching**: Multi-tier caching strategy with intelligent invalidation
-- **Mobile**: Lazy loading and optimized asset bundling
+Nevin AI requires internet:
+1. User must configure their Anthropic API key in Settings
+2. API calls are made directly to Anthropic servers
+3. Chat history is stored locally on device
 
 # Changelog
-- June 22, 2025. Initial setup
-- June 22, 2025. Disabled authentication system for free access to all users, removed login requirements for Nevin AI, fixed duplicate welcome message issue
-- June 22, 2025. Fixed Google Play compliance issues: unified package ID to com.chyrris.tzotzilbible, cleaned problematic images, updated app configuration for Play Store approval
-- June 22, 2025. Prepared APK build configuration: fixed assets, created build instructions, prepared Play Store submission materials with proper app name "Tzotzil Bible"
-- June 22, 2025. Fixed deployment configuration: added root health endpoint, configured Flask app for port 5000, added missing API endpoints for Nevin chat, improved health check endpoints
-- June 22, 2025. Resolved deployment port conflict: Flask backend properly configured for port 5000, created web-deploy script for Expo frontend, identified deployment configuration pointing to wrong application
-- September 18, 2025. **REVOLUTIONARY NEVIN AI v2.0 COMPLETED**: Integrated Claude 4 for superior theological reasoning with transparent thinking processes, implemented dynamic web-based EGW search replacing static FAISS, integrated comprehensive theological framework using JSON materials for hermeneutic principles and doctrinal validation, created new API endpoints with backward compatibility, updated frontend web and mobile for full system integration
+
+- December 17, 2025. **COMPLETE CONVERSION TO EXPO**: Removed all Flask backend code, converted to pure Expo mobile app, implemented direct Anthropic API integration for Nevin AI, configured EAS for APK/IPA builds
+- September 18, 2025. Revolutionary Nevin AI v2.0 with Claude 4 integration
+- June 22, 2025. Initial setup with Flask backend
 
 # User Preferences
 
