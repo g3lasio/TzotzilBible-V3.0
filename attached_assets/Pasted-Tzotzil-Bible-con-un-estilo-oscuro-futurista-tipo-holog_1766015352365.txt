@@ -1,0 +1,72 @@
+Tzotzil Bible con un estilo oscuro futurista tipo “holográfico”, manteniendo navegación mobile-first y estas pantallas: Home, Leer, Buscar, Nevin, Ajustes.
+
+1) Estilo visual (obligatorio)
+	•	Tema: Dark UI elegante, con sensación “holográfica”.
+	•	Fondo: degradado oscuro (gris azulado/negro) y, en Home, un background tipo foto desenfocada (blur) para dar profundidad.
+	•	Acentos neon:
+	•	Verde/menta brillante para títulos principales (ej. “Promesa del día”).
+	•	Cian/azul neón para bordes, separadores y botones (outline glow).
+	•	Componentes tipo glassmorphism:
+	•	Cards grandes con bordes redondeados, sombra suave, y transparencia ligera.
+	•	Bordes con línea neón (cian/verde) y efecto glow sutil.
+	•	Tipografía:
+	•	Texto general limpio y legible.
+	•	En “Leer”, encabezados con estilo tech (ej. “OLD TESTAMENT” en cian con look futurista).
+
+2) Layout y navegación (como en las capturas)
+	•	Header fijo:
+	•	Izquierda: ícono/logo (Biblia + cruz).
+	•	Texto: “Tzotzil Bible”.
+	•	Derecha: botón hamburguesa que abre menú.
+	•	Menú hamburguesa (overlay):
+	•	Lista vertical centrada: Home, Explorar la Biblia, Buscar, Nevin AI, Ajustes con sus íconos.
+	•	Bottom navigation fijo (muy importante):
+	•	4 tabs con ícono + texto: BUSCAR, LEER, NEVIN, AJUSTES.
+	•	Línea superior fina en cian/azul (separador).
+	•	Debe ser cómodo en iPhone (touch-friendly).
+
+3) Pantallas y contenido
+
+Home
+	•	Un card principal que muestra “Promesa del día”:
+	•	Referencia bíblica + fragmento del versículo.
+	•	Botón “Compartir” con ícono (share). Debe compartir el texto de la promesa (ideal: Web Share API si está disponible, si no copiar al portapapeles).
+	•	Firma pequeña: “by Tzotzil Bible”.
+
+Leer (Explorar la Biblia)
+	•	Flujo de lectura tipo selector:
+	•	Pantalla “Select a Book”.
+	•	Sección por testamento (ej. OLD TESTAMENT).
+	•	Lista de libros en botones grandes tipo tarjeta, negros con borde cian neón (ej. Génesis, Éxodo, Levítico…).
+	•	Después del libro: selector de capítulo y luego vista de versículos (lectura limpia, centrada, con scroll).
+
+Buscar
+	•	Buscador para encontrar por:
+	•	Referencia (ej. “Juan 3:16”)
+	•	Palabras clave (búsqueda textual)
+	•	Resultados en lista clara, tocables, que lleven al versículo en modo lectura.
+
+Nevin (chat)
+	•	Pantalla de chat con:
+	•	Header con “Nevin” y una línea separadora.
+	•	Burbuja inicial: “¡Paz a ti! Soy Nevin…”
+	•	Barra inferior de input:
+	•	Botón de configuración (gear) a la izquierda.
+	•	Campo con placeholder: “Escribe tu pregunta aquí…”
+	•	Botón enviar (flecha) en azul/cian brillante.
+	•	Nevin debe funcionar como asistente bíblico.
+
+Ajustes
+	•	Opciones mínimas claras para el usuario:
+	•	Elegir versión bíblica por defecto.
+	•	Información básica de la app (opcional).
+
+4) Requisito clave de contenido bíblico
+
+La app debe contener dos versiones:
+	•	Tzotzil
+	•	Reina-Valera 1960 (RV1960)
+
+Y permitir:
+	•	Cambiar versión (mínimo en ajustes o dentro de lectura/búsqueda).
+	•	Mantener la versión seleccionada como preferida del usuario.
