@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, StyleSheet, Share, Dimensions } from 'react-native';
-import { Text, Card, Button, useTheme, Surface, IconButton } from 'react-native-paper';
+import { View, ScrollView, StyleSheet, Share, Dimensions, TouchableOpacity } from 'react-native';
+import { Text, ActivityIndicator, IconButton } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { BibleService } from '../services/BibleService';
 import type { RootStackParamList } from '../types/navigation';
+import MainLayout from '../components/MainLayout';
+import { theme, glassStyle } from '../theme';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -14,8 +16,8 @@ const { width } = Dimensions.get('window');
 
 export default function HomeScreen() {
   const navigation = useNavigation<NavigationProp>();
-  const theme = useTheme();
   const [dailyPromise, setDailyPromise] = useState('');
+  const [promiseReference, setPromiseReference] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -25,10 +27,18 @@ export default function HomeScreen() {
   const loadDailyPromise = async () => {
     try {
       const promise = await BibleService.getRandomPromise();
-      setDailyPromise(promise);
+      const parts = promise.split(' - ');
+      if (parts.length > 1) {
+        setDailyPromise(parts[0]);
+        setPromiseReference(parts[1]);
+      } else {
+        setDailyPromise(promise);
+        setPromiseReference('Salmo 23:1');
+      }
     } catch (error) {
       console.error('Error loading daily promise:', error);
-      setDailyPromise('El Señor es mi pastor; nada me faltará. - Salmo 23:1');
+      setDailyPromise('El Señor es mi pastor; nada me faltará.');
+      setPromiseReference('Salmo 23:1');
     } finally {
       setLoading(false);
     }
@@ -37,189 +47,161 @@ export default function HomeScreen() {
   const handleShare = async () => {
     try {
       await Share.share({
-        message: `${dailyPromise}\n\n- Biblia Tzotzil`,
+        message: `${dailyPromise}\n\n${promiseReference}\n\n- Tzotzil Bible`,
       });
     } catch (error) {
       console.error('Error sharing:', error);
     }
   };
 
-  const menuItems = [
-    {
-      title: 'Biblia',
-      subtitle: 'Lee la Palabra de Dios en Tzotzil y Español',
-      icon: 'book-open-page-variant',
-      color: '#4CAF50',
-      route: 'Bible' as const,
-    },
-    {
-      title: 'Nevin AI',
-      subtitle: 'Consulta con tu asistente bíblico inteligente',
-      icon: 'robot',
-      color: '#2196F3',
-      route: 'Nevin' as const,
-    },
-    {
-      title: 'Búsqueda',
-      subtitle: 'Encuentra versículos por palabra clave',
-      icon: 'magnify',
-      color: '#FF9800',
-      route: 'Search' as const,
-    },
-    {
-      title: 'Configuración',
-      subtitle: 'Personaliza tu experiencia de lectura',
-      icon: 'cog',
-      color: '#9C27B0',
-      route: 'Settings' as const,
-    },
-  ];
-
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <LinearGradient
-        colors={['#1a237e', '#3949ab', '#5c6bc0']}
-        style={styles.headerGradient}
+    <MainLayout>
+      <ScrollView 
+        style={styles.container} 
+        contentContainerStyle={styles.contentContainer}
+        showsVerticalScrollIndicator={false}
       >
-        <View style={styles.headerContent}>
-          <Text style={styles.appTitle}>Biblia Tzotzil</Text>
-          <Text style={styles.appSubtitle}>La Palabra de Dios en tu idioma</Text>
-        </View>
-      </LinearGradient>
-
-      <View style={styles.content}>
-        <Surface style={styles.promiseCard} elevation={4}>
+        <View style={styles.promiseCard}>
           <LinearGradient
-            colors={['#fff8e1', '#ffecb3']}
+            colors={['rgba(20, 30, 45, 0.8)', 'rgba(15, 25, 40, 0.9)']}
             style={styles.promiseGradient}
           >
             <View style={styles.promiseHeader}>
-              <MaterialCommunityIcons name="star-four-points" size={24} color="#f57c00" />
-              <Text style={styles.promiseTitle}>Promesa del Día</Text>
+              <MaterialCommunityIcons name="star-four-points" size={20} color="#00ff88" />
+              <Text style={styles.promiseTitle}>Promesa del día</Text>
+            </View>
+            
+            <View style={styles.referenceBadge}>
+              <Text style={styles.referenceText}>{promiseReference}</Text>
             </View>
             
             {loading ? (
-              <Text style={styles.promiseText}>Cargando promesa...</Text>
+              <ActivityIndicator size="small" color="#00f3ff" style={styles.loader} />
             ) : (
               <Text style={styles.promiseText}>{dailyPromise}</Text>
             )}
             
-            <View style={styles.promiseActions}>
-              <Button 
-                mode="contained" 
-                onPress={handleShare}
-                icon="share-variant"
-                style={styles.shareButton}
-                buttonColor="#f57c00"
-              >
-                Compartir
-              </Button>
-              <IconButton 
-                icon="refresh"
-                size={24}
-                onPress={loadDailyPromise}
-                style={styles.refreshButton}
-              />
-            </View>
+            <TouchableOpacity style={styles.shareButton} onPress={handleShare}>
+              <MaterialCommunityIcons name="share-variant" size={18} color="#0a0e14" />
+              <Text style={styles.shareButtonText}>Compartir</Text>
+            </TouchableOpacity>
+            
+            <Text style={styles.byLine}>by Tzotzil Bible</Text>
           </LinearGradient>
-        </Surface>
-
-        <View style={styles.menuGrid}>
-          {menuItems.map((item, index) => (
-            <Card 
-              key={item.route}
-              style={styles.menuCard} 
-              onPress={() => navigation.navigate(item.route)}
-            >
-              <LinearGradient
-                colors={[item.color, adjustColor(item.color, -30)]}
-                style={styles.menuCardGradient}
-              >
-                <MaterialCommunityIcons 
-                  name={item.icon as any} 
-                  size={40} 
-                  color="#fff" 
-                />
-                <Text style={styles.menuCardTitle}>{item.title}</Text>
-                <Text style={styles.menuCardSubtitle}>{item.subtitle}</Text>
-              </LinearGradient>
-            </Card>
-          ))}
+          <View style={styles.cardGlow} />
         </View>
 
-        <Surface style={styles.statsCard} elevation={2}>
-          <View style={styles.statsRow}>
-            <View style={styles.statItem}>
-              <Text style={styles.statNumber}>66</Text>
-              <Text style={styles.statLabel}>Libros</Text>
-            </View>
-            <View style={styles.statDivider} />
-            <View style={styles.statItem}>
-              <Text style={styles.statNumber}>31,105</Text>
-              <Text style={styles.statLabel}>Versículos</Text>
-            </View>
-            <View style={styles.statDivider} />
-            <View style={styles.statItem}>
-              <Text style={styles.statNumber}>2</Text>
-              <Text style={styles.statLabel}>Idiomas</Text>
-            </View>
+        <View style={styles.quickActionsContainer}>
+          <Text style={styles.sectionTitle}>Acceso Rápido</Text>
+          <View style={styles.quickActions}>
+            <TouchableOpacity 
+              style={styles.actionCard} 
+              onPress={() => navigation.navigate('Bible')}
+            >
+              <View style={styles.actionCardInner}>
+                <MaterialCommunityIcons name="book-open-page-variant" size={32} color="#00f3ff" />
+                <Text style={styles.actionTitle}>Leer</Text>
+                <Text style={styles.actionSubtitle}>Explorar la Biblia</Text>
+              </View>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={styles.actionCard} 
+              onPress={() => navigation.navigate('Search')}
+            >
+              <View style={styles.actionCardInner}>
+                <MaterialCommunityIcons name="magnify" size={32} color="#00f3ff" />
+                <Text style={styles.actionTitle}>Buscar</Text>
+                <Text style={styles.actionSubtitle}>Encontrar versículos</Text>
+              </View>
+            </TouchableOpacity>
           </View>
-        </Surface>
+          
+          <View style={styles.quickActions}>
+            <TouchableOpacity 
+              style={styles.actionCard} 
+              onPress={() => navigation.navigate('Nevin')}
+            >
+              <View style={styles.actionCardInner}>
+                <MaterialCommunityIcons name="robot" size={32} color="#00ff88" />
+                <Text style={styles.actionTitle}>Nevin</Text>
+                <Text style={styles.actionSubtitle}>Asistente bíblico</Text>
+              </View>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={styles.actionCard} 
+              onPress={() => navigation.navigate('Settings')}
+            >
+              <View style={styles.actionCardInner}>
+                <MaterialCommunityIcons name="cog" size={32} color="#00f3ff" />
+                <Text style={styles.actionTitle}>Ajustes</Text>
+                <Text style={styles.actionSubtitle}>Personalizar</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
 
-        <Text style={styles.footer}>
-          Biblia Tzotzil - Adventista del Séptimo Día
-        </Text>
-      </View>
-    </ScrollView>
+        <View style={styles.statsCard}>
+          <LinearGradient
+            colors={['rgba(20, 30, 45, 0.7)', 'rgba(15, 25, 40, 0.8)']}
+            style={styles.statsGradient}
+          >
+            <View style={styles.statsRow}>
+              <View style={styles.statItem}>
+                <Text style={styles.statNumber}>66</Text>
+                <Text style={styles.statLabel}>Libros</Text>
+              </View>
+              <View style={styles.statDivider} />
+              <View style={styles.statItem}>
+                <Text style={styles.statNumber}>2</Text>
+                <Text style={styles.statLabel}>Versiones</Text>
+              </View>
+              <View style={styles.statDivider} />
+              <View style={styles.statItem}>
+                <Text style={styles.statNumber}>∞</Text>
+                <Text style={styles.statLabel}>Offline</Text>
+              </View>
+            </View>
+          </LinearGradient>
+        </View>
+      </ScrollView>
+    </MainLayout>
   );
-}
-
-function adjustColor(color: string, amount: number): string {
-  const hex = color.replace('#', '');
-  const num = parseInt(hex, 16);
-  const r = Math.min(255, Math.max(0, (num >> 16) + amount));
-  const g = Math.min(255, Math.max(0, ((num >> 8) & 0x00FF) + amount));
-  const b = Math.min(255, Math.max(0, (num & 0x0000FF) + amount));
-  return `#${((r << 16) | (g << 8) | b).toString(16).padStart(6, '0')}`;
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
   },
-  headerGradient: {
-    paddingTop: 60,
-    paddingBottom: 40,
-    paddingHorizontal: 20,
-  },
-  headerContent: {
-    alignItems: 'center',
-  },
-  appTitle: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#fff',
-    textShadowColor: 'rgba(0,0,0,0.3)',
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 3,
-  },
-  appSubtitle: {
-    fontSize: 16,
-    color: 'rgba(255,255,255,0.9)',
-    marginTop: 8,
-  },
-  content: {
+  contentContainer: {
     padding: 16,
-    marginTop: -20,
+    paddingBottom: 24,
   },
   promiseCard: {
-    borderRadius: 16,
+    borderRadius: 20,
     overflow: 'hidden',
-    marginBottom: 20,
+    marginBottom: 24,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 255, 136, 0.4)',
+    position: 'relative',
+  },
+  cardGlow: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderRadius: 20,
+    shadowColor: '#00ff88',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.3,
+    shadowRadius: 20,
+    pointerEvents: 'none',
   },
   promiseGradient: {
-    padding: 20,
+    padding: 24,
+    alignItems: 'center',
   },
   promiseHeader: {
     flexDirection: 'row',
@@ -227,67 +209,107 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   promiseTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
-    color: '#e65100',
-    marginLeft: 10,
-  },
-  promiseText: {
-    fontSize: 18,
-    lineHeight: 28,
-    color: '#5d4037',
-    textAlign: 'center',
-    fontStyle: 'italic',
-    marginVertical: 16,
-  },
-  promiseActions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 8,
-  },
-  shareButton: {
-    borderRadius: 20,
-  },
-  refreshButton: {
+    color: '#00ff88',
     marginLeft: 8,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    textShadowColor: '#00ff88',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 8,
   },
-  menuGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
+  referenceBadge: {
+    backgroundColor: 'rgba(0, 243, 255, 0.15)',
+    paddingHorizontal: 16,
+    paddingVertical: 6,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 243, 255, 0.4)',
     marginBottom: 20,
   },
-  menuCard: {
-    width: (width - 48) / 2,
+  referenceText: {
+    color: '#00f3ff',
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  promiseText: {
+    fontSize: 20,
+    lineHeight: 32,
+    color: '#e6f3ff',
+    textAlign: 'center',
+    fontStyle: 'italic',
+    marginBottom: 24,
+  },
+  loader: {
+    marginVertical: 40,
+  },
+  shareButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#00ff88',
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 25,
     marginBottom: 16,
+  },
+  shareButtonText: {
+    color: '#0a0e14',
+    fontWeight: 'bold',
+    fontSize: 14,
+    marginLeft: 8,
+  },
+  byLine: {
+    color: '#6b7c93',
+    fontSize: 12,
+  },
+  quickActionsContainer: {
+    marginBottom: 24,
+  },
+  sectionTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#6b7c93',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    marginBottom: 16,
+  },
+  quickActions: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 12,
+  },
+  actionCard: {
+    width: (width - 44) / 2,
     borderRadius: 16,
     overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 243, 255, 0.3)',
+    backgroundColor: 'rgba(20, 30, 45, 0.6)',
   },
-  menuCardGradient: {
+  actionCardInner: {
     padding: 20,
     alignItems: 'center',
-    minHeight: 140,
-    justifyContent: 'center',
   },
-  menuCardTitle: {
-    fontSize: 18,
+  actionTitle: {
+    fontSize: 16,
     fontWeight: 'bold',
-    color: '#fff',
+    color: '#e6f3ff',
     marginTop: 12,
-    textAlign: 'center',
   },
-  menuCardSubtitle: {
+  actionSubtitle: {
     fontSize: 12,
-    color: 'rgba(255,255,255,0.9)',
-    marginTop: 6,
-    textAlign: 'center',
+    color: '#6b7c93',
+    marginTop: 4,
   },
   statsCard: {
     borderRadius: 16,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 243, 255, 0.2)',
+  },
+  statsGradient: {
     padding: 20,
-    backgroundColor: '#fff',
-    marginBottom: 20,
   },
   statsRow: {
     flexDirection: 'row',
@@ -299,24 +321,22 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   statNumber: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
-    color: '#1a237e',
+    color: '#00f3ff',
+    textShadowColor: '#00f3ff',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 8,
   },
   statLabel: {
-    fontSize: 14,
-    color: '#666',
+    fontSize: 12,
+    color: '#6b7c93',
     marginTop: 4,
+    textTransform: 'uppercase',
   },
   statDivider: {
     width: 1,
     height: 40,
-    backgroundColor: '#e0e0e0',
-  },
-  footer: {
-    textAlign: 'center',
-    color: '#999',
-    fontSize: 12,
-    marginBottom: 20,
+    backgroundColor: 'rgba(0, 243, 255, 0.2)',
   },
 });
