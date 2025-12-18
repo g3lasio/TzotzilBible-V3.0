@@ -143,7 +143,7 @@ export default function MainLayout({ children, showBackButton = false, title }: 
                   );
                 })}
                 <View style={styles.menuFooter}>
-                  <Text style={styles.menuFooterText}>by Tzotzil Bible</Text>
+                  <Text style={styles.menuFooterText}>by <Text style={styles.menuFooterBrand}>Tzotzil Bible</Text></Text>
                 </View>
               </LinearGradient>
             </View>
@@ -274,5 +274,9 @@ const styles = StyleSheet.create({
   menuFooterText: {
     fontSize: 12,
     color: '#6b7c93',
+  },
+  menuFooterBrand: {
+    fontFamily: FONTS.bold,
+    color: '#00ff88',
   },
 });
