@@ -1,6 +1,8 @@
 
 { pkgs }: {
   deps = [
+    pkgs.nodejs_20
+    pkgs.poppler_utils
     pkgs.openjdk17
     pkgs.openjdk11
     pkgs.xcodebuild
