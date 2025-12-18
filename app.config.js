@@ -5,23 +5,31 @@ export default {
     version: "2.1.0",
     orientation: "portrait",
     icon: "./assets/icon.png",
-    userInterfaceStyle: "light",
+    userInterfaceStyle: "dark",
     splash: {
       image: "./assets/splash-icon.png",
       resizeMode: "contain",
-      backgroundColor: "#1a1a2e"
+      backgroundColor: "#0a0e14"
     },
     assetBundlePatterns: [
       "assets/**/*"
     ],
     ios: {
       supportsTablet: true,
-      bundleIdentifier: "com.chyrris.tzotzilbible"
+      bundleIdentifier: "com.chyrris.tzotzilbible",
+      buildNumber: "23",
+      infoPlist: {
+        CFBundleDisplayName: "Tzotzil Bible",
+        UIBackgroundModes: []
+      },
+      config: {
+        usesNonExemptEncryption: false
+      }
     },
     android: {
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
-        backgroundColor: "#1a1a2e"
+        backgroundColor: "#0a0e14"
       },
       package: "com.chyrris.tzotzilbible",
       versionCode: 23,
@@ -30,7 +38,11 @@ export default {
       ],
       compileSdkVersion: 34,
       targetSdkVersion: 34,
-      minSdkVersion: 21
+      minSdkVersion: 21,
+      blockedPermissions: [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ]
     },
     web: {
       favicon: "./assets/favicon.png",
@@ -41,6 +53,26 @@ export default {
         projectId: "a810d3d6-839d-49b2-9dab-c42a44e3a6b0"
       }
     },
-    plugins: []
+    plugins: [
+      "expo-font",
+      [
+        "expo-splash-screen",
+        {
+          backgroundColor: "#0a0e14",
+          image: "./assets/splash-icon.png",
+          dark: {
+            backgroundColor: "#0a0e14",
+            image: "./assets/splash-icon.png"
+          },
+          imageWidth: 200
+        }
+      ]
+    ],
+    updates: {
+      fallbackToCacheTimeout: 0
+    },
+    runtimeVersion: {
+      policy: "sdkVersion"
+    }
   }
 };

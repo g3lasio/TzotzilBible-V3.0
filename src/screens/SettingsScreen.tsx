@@ -364,5 +364,6 @@ const styles = StyleSheet.create({
   copyright: {
     fontSize: 11,
     color: '#4a5568',
+    fontFamily: FONTS.regular,
   },
 });
