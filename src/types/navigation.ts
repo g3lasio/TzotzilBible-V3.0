@@ -16,7 +16,16 @@ export type BibleStackParamList = {
 export type TabParamList = {
   SearchTab: undefined;
   BibleTab: NavigatorScreenParams<BibleStackParamList>;
-  NevinTab: undefined;
+  NevinTab: { 
+    initialQuestion?: string;
+    verseContext?: {
+      book: string;
+      chapter: number;
+      verse: number;
+      textTzotzil?: string;
+      textSpanish?: string;
+    };
+  } | undefined;
   SettingsTab: undefined;
 };
 
