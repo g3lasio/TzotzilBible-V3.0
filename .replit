@@ -8,6 +8,10 @@ run = ["sh", "-c", "cd temp_nevin && npm run web"]
 deploymentTarget = "cloudrun"
 
 [[ports]]
+localPort = 3001
+externalPort = 5000
+
+[[ports]]
 localPort = 5000
 externalPort = 80
 
@@ -41,7 +45,7 @@ externalPort = 3002
 
 [nix]
 channel = "stable-24_05"
-packages = ["bash", "cacert", "cargo", "freetype", "gitFull", "glibcLocales", "grpc", "lcms2", "libffi", "libiconv", "libimagequant", "libjpeg", "libtiff", "libwebp", "libxcrypt", "openjpeg", "openssl", "pkg-config", "postgresql", "rustc", "tcl", "tk", "which", "xcodebuild", "xsimd", "zlib"]
+packages = ["bash", "cacert", "cargo", "freetype", "gitFull", "glibcLocales", "grpc", "lcms2", "libffi", "libiconv", "libimagequant", "libjpeg", "libtiff", "libwebp", "libxcrypt", "openjpeg", "openssl", "pkg-config", "postgresql", "rustc", "tcl", "tk", "which", "xcodebuild", "xsimd", "zlib", "python311Packages.flask", "python311Packages.flask-cors", "python311Packages.requests"]
 
 [workflows]
 runButton = "Project"
@@ -54,6 +58,10 @@ author = "agent"
 [[workflows.workflow.tasks]]
 task = "workflow.run"
 args = "Expo Server"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Backend API"
 
 [[workflows.workflow]]
 name = "Expo Server"
@@ -76,6 +84,18 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python main.py"
+
+[[workflows.workflow]]
+name = "Backend API"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python backend/app.py"
+waitForPort = 3001
+
+[workflows.workflow.metadata]
+outputType = "console"
 
 [agent]
 integrations = ["perplexity_v0:1.0.0", "python_anthropic:1.0.0"]

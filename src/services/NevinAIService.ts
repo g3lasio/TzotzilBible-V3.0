@@ -1,12 +1,8 @@
 import { AIResponse, ChatMessage } from '../types/nevin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 import { NEVIN_SYSTEM_PROMPT, VERSE_COMMENTARY_PROMPT } from '../constants/nevinTheology';
-import { getAnthropicApiKey } from '../config';
-
-const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
-const DEFAULT_MODEL = 'claude-sonnet-4-20250514';
+import { getBackendUrl } from '../config';
 
 export interface VerseCommentaryRequest {
   book: string;
@@ -24,26 +20,9 @@ export interface VerseCommentary {
 
 export class NevinAIService {
   private static readonly CHAT_HISTORY_KEY = 'nevin_chat_history';
-  private static readonly API_KEY_STORAGE = 'anthropic_api_key';
-
-  static async setApiKey(apiKey: string): Promise<void> {
-    await AsyncStorage.setItem(this.API_KEY_STORAGE, apiKey);
-  }
-
-  static async getApiKey(): Promise<string | null> {
-    const storedKey = await AsyncStorage.getItem(this.API_KEY_STORAGE);
-    if (storedKey) return storedKey;
-    
-    const expoKey = Constants.expoConfig?.extra?.anthropicApiKey;
-    if (expoKey) return expoKey;
-    
-    const envKey = getAnthropicApiKey();
-    return envKey || null;
-  }
 
   static async hasApiKey(): Promise<boolean> {
-    const key = await this.getApiKey();
-    return !!key;
+    return true;
   }
 
   static async processQuery(
@@ -52,67 +31,38 @@ export class NevinAIService {
     chatHistory: ChatMessage[] = []
   ): Promise<AIResponse> {
     try {
-      const apiKey = await this.getApiKey();
+      const backendUrl = getBackendUrl();
 
-      if (!apiKey) {
-        return {
-          success: false,
-          error: 'Se necesita una clave API de Anthropic para usar Nevin AI. Por favor configúrala en ajustes.',
-          emotions: {}
-        };
-      }
+      const history = chatHistory.map(msg => ({
+        role: msg.type === 'user' ? 'user' : 'assistant',
+        content: msg.content
+      }));
 
-      const messages = [
-        ...chatHistory.map(msg => ({
-          role: msg.type === 'user' ? 'user' as const : 'assistant' as const,
-          content: msg.content
-        })),
-        {
-          role: 'user' as const,
-          content: context ? `Contexto: ${context}\n\nPregunta: ${message}` : message
-        }
-      ];
-
-      const response = await fetch(ANTHROPIC_API_URL, {
+      const response = await fetch(`${backendUrl}/api/nevin/chat`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01'
         },
         body: JSON.stringify({
-          model: DEFAULT_MODEL,
-          max_tokens: 4096,
-          system: NEVIN_SYSTEM_PROMPT,
-          messages: messages
+          message,
+          context,
+          history
         })
       });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        console.error('Anthropic API error:', errorData);
-        
-        if (response.status === 401) {
-          return {
-            success: false,
-            error: 'Clave API inválida. Por favor verifica tu configuración.',
-            emotions: {}
-          };
-        }
-        
+      const data = await response.json();
+
+      if (!data.success) {
         return {
           success: false,
-          error: 'Error al comunicarse con el servicio de IA. Intenta nuevamente.',
+          error: data.error || 'Error al comunicarse con Nevin',
           emotions: {}
         };
       }
 
-      const data = await response.json();
-      const assistantMessage = data.content?.[0]?.text || '';
-
       return {
         success: true,
-        response: assistantMessage,
+        response: data.response,
         emotions: {},
         metadata: {
           system_version: "Nevin AI v4.0 Teológico",
@@ -131,63 +81,34 @@ export class NevinAIService {
 
   static async getVerseCommentary(request: VerseCommentaryRequest): Promise<VerseCommentary> {
     try {
-      const apiKey = await this.getApiKey();
+      const backendUrl = getBackendUrl();
 
-      if (!apiKey) {
-        return {
-          success: false,
-          error: 'Se necesita una clave API de Anthropic para obtener comentarios de Nevin.'
-        };
-      }
-
-      const verseReference = `${request.book} ${request.chapter}:${request.verse}`;
-      
-      let verseContent = '';
-      if (request.textTzotzil) {
-        verseContent += `\n\n**Tzotzil:** "${request.textTzotzil}"`;
-      }
-      if (request.textSpanish) {
-        verseContent += `\n\n**RV1960:** "${request.textSpanish}"`;
-      }
-
-      const userMessage = `${VERSE_COMMENTARY_PROMPT}
-
-VERSÍCULO A ANALIZAR: ${verseReference}
-${verseContent}
-
-Por favor, proporciona un comentario teológico completo siguiendo la metodología hermenéutica adventista.`;
-
-      const response = await fetch(ANTHROPIC_API_URL, {
+      const response = await fetch(`${backendUrl}/api/nevin/verse-commentary`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01'
         },
         body: JSON.stringify({
-          model: DEFAULT_MODEL,
-          max_tokens: 6000,
-          system: NEVIN_SYSTEM_PROMPT,
-          messages: [{ role: 'user', content: userMessage }]
+          book: request.book,
+          chapter: request.chapter,
+          verse: request.verse,
+          textTzotzil: request.textTzotzil,
+          textSpanish: request.textSpanish
         })
       });
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        console.error('Anthropic API error for verse commentary:', errorData);
-        
+      const data = await response.json();
+
+      if (!data.success) {
         return {
           success: false,
-          error: 'Error al obtener el comentario. Intenta nuevamente.'
+          error: data.error || 'Error al obtener comentario'
         };
       }
 
-      const data = await response.json();
-      const commentary = data.content?.[0]?.text || '';
-
       return {
         success: true,
-        commentary
+        commentary: data.commentary
       };
     } catch (error) {
       console.error('Error en getVerseCommentary:', error);

@@ -39,8 +39,7 @@ export default {
     extra: {
       eas: {
         projectId: "a810d3d6-839d-49b2-9dab-c42a44e3a6b0"
-      },
-      anthropicApiKey: process.env.ANTHROPIC_API_KEY
+      }
     },
     plugins: []
   }
