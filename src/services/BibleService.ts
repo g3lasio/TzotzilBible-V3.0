@@ -1,5 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
 import { databaseService } from './DatabaseService';
+import { WebBibleService } from './WebBibleService';
 import { BibleVerse, Book } from '../types/bible';
 import bibleBooks from '../../assets/bible_books.json';
 
@@ -16,10 +18,24 @@ const OFFLINE_PROMISES = [
   "Juan 14:27 - La paz os dejo, mi paz os doy; yo no os la doy como el mundo la da."
 ];
 
+const isWeb = Platform.OS === 'web';
+
 export class BibleService {
+  static async initialize(): Promise<boolean> {
+    if (isWeb) {
+      return WebBibleService.initialize();
+    }
+    return databaseService.initDatabase();
+  }
+
   static async getBooks(): Promise<Book[]> {
     try {
-      if (databaseService.isReady()) {
+      if (isWeb) {
+        const books = await WebBibleService.getBooks();
+        if (books.length > 0) {
+          return books;
+        }
+      } else if (databaseService.isReady()) {
         const books = await databaseService.getBooks();
         if (books.length > 0) {
           return books;
@@ -35,7 +51,12 @@ export class BibleService {
 
   static async getChapters(book: string): Promise<number[]> {
     try {
-      if (databaseService.isReady()) {
+      if (isWeb) {
+        const chapters = await WebBibleService.getChaptersCount(book);
+        if (chapters.length > 0) {
+          return chapters;
+        }
+      } else if (databaseService.isReady()) {
         const chapters = await databaseService.getChaptersCount(book);
         if (chapters.length > 0) {
           return chapters;
@@ -56,7 +77,12 @@ export class BibleService {
 
   static async getVerses(book: string, chapter: number): Promise<BibleVerse[]> {
     try {
-      if (databaseService.isReady()) {
+      if (isWeb) {
+        const verses = await WebBibleService.getVerses(book, chapter);
+        if (verses.length > 0) {
+          return verses;
+        }
+      } else if (databaseService.isReady()) {
         const verses = await databaseService.getVerses(book, chapter);
         if (verses.length > 0) {
           return verses;
@@ -74,8 +100,8 @@ export class BibleService {
         book_id: 1,
         chapter: chapter,
         verse: 1,
-        text: 'La Biblia offline solo está disponible en la app móvil. Por favor descarga la app para acceder a todos los versículos.',
-        text_tzotzil: 'Li Bibliae ta jech no\'ox stael ti ta selular apke. Ak\'o xa yal li apke sventa xu\' xak\'el skotol li k\'opetik li\'e.',
+        text: 'Cargando versículos...',
+        text_tzotzil: 'Ta xjatav li k\'opetike...',
         book_name: book
       }];
     } catch (error) {
@@ -86,7 +112,7 @@ export class BibleService {
 
   static async getRandomPromise(): Promise<string> {
     try {
-      if (databaseService.isReady()) {
+      if (!isWeb && databaseService.isReady()) {
         const promise = await databaseService.getRandomPromise();
         if (promise) {
           return promise.text;
@@ -102,9 +128,10 @@ export class BibleService {
 
   static async searchVerses(query: string): Promise<BibleVerse[]> {
     try {
-      if (databaseService.isReady()) {
-        const results = await databaseService.searchVerses(query);
-        return results;
+      if (isWeb) {
+        return WebBibleService.searchVerses(query);
+      } else if (databaseService.isReady()) {
+        return databaseService.searchVerses(query);
       }
 
       return [];
@@ -116,9 +143,10 @@ export class BibleService {
 
   static async getVerse(book: string, chapter: number, verse: number): Promise<BibleVerse | null> {
     try {
-      if (databaseService.isReady()) {
-        const result = await databaseService.getVerse(book, chapter, verse);
-        return result;
+      if (isWeb) {
+        return WebBibleService.getVerse(book, chapter, verse);
+      } else if (databaseService.isReady()) {
+        return databaseService.getVerse(book, chapter, verse);
       }
 
       return null;
