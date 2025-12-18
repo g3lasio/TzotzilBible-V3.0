@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Alert, TouchableOpacity } from 'react-native';
-import { Switch, Text } from 'react-native-paper';
+import { View, StyleSheet, ScrollView, Alert, TouchableOpacity, Linking, Share } from 'react-native';
+import { Text } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NevinAIService } from '../services/NevinAIService';
 import MainLayout from '../components/MainLayout';
 
+const APP_VERSION = '2.1.0';
+const FEEDBACK_EMAIL = 'feedback@tzotzilbible.app';
+
 export default function SettingsScreen() {
-  const [bilingualMode, setBilingualMode] = useState(true);
-  const [selectedVersion, setSelectedVersion] = useState<'tzotzil' | 'rv1960'>('tzotzil');
   const [fontSize, setFontSize] = useState('medium');
 
   useEffect(() => {
@@ -21,8 +22,6 @@ export default function SettingsScreen() {
       const settings = await AsyncStorage.getItem('userSettings');
       if (settings) {
         const parsed = JSON.parse(settings);
-        setBilingualMode(parsed.bilingualMode ?? true);
-        setSelectedVersion(parsed.selectedVersion ?? 'tzotzil');
         setFontSize(parsed.fontSize ?? 'medium');
       }
     } catch (error) {
@@ -41,10 +40,10 @@ export default function SettingsScreen() {
     }
   };
 
-  const handleClearData = () => {
+  const handleClearHistory = () => {
     Alert.alert(
-      'Limpiar Datos',
-      '¿Estás seguro? Esto eliminará tu historial de chat y preferencias.',
+      'Limpiar Historial',
+      '¿Estás seguro? Esto eliminará tu historial de conversaciones con Nevin.',
       [
         { text: 'Cancelar', style: 'cancel' },
         {
@@ -52,103 +51,48 @@ export default function SettingsScreen() {
           style: 'destructive',
           onPress: async () => {
             await NevinAIService.clearChatHistory();
-            await AsyncStorage.removeItem('userSettings');
-            Alert.alert('Listo', 'Datos eliminados correctamente.');
+            Alert.alert('Listo', 'Historial eliminado correctamente.');
           }
         }
       ]
     );
   };
 
-  const handleVersionChange = (version: 'tzotzil' | 'rv1960') => {
-    setSelectedVersion(version);
-    saveSettings('selectedVersion', version);
+  const handleSendFeedback = () => {
+    const subject = encodeURIComponent(`Feedback - Tzotzil Bible v${APP_VERSION}`);
+    const body = encodeURIComponent('\n\n---\nDispositivo: \nVersión: ' + APP_VERSION);
+    Linking.openURL(`mailto:${FEEDBACK_EMAIL}?subject=${subject}&body=${body}`);
+  };
+
+  const handleShareApp = async () => {
+    try {
+      await Share.share({
+        message: '¡Descarga Tzotzil Bible! Una Biblia bilingüe en Tzotzil y Español con asistente AI. https://tzotzilbible.app',
+        title: 'Tzotzil Bible'
+      });
+    } catch (error) {
+      console.error('Error sharing:', error);
+    }
+  };
+
+  const handleFontSizeChange = (size: string) => {
+    setFontSize(size);
+    saveSettings('fontSize', size);
+  };
+
+  const getFontSizeLabel = () => {
+    switch (fontSize) {
+      case 'small': return 'Pequeño';
+      case 'large': return 'Grande';
+      default: return 'Mediano';
+    }
   };
 
   return (
     <MainLayout title="Ajustes">
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>VERSIÓN BÍBLICA</Text>
-          <View style={styles.versionContainer}>
-            <TouchableOpacity
-              style={[styles.versionCard, selectedVersion === 'tzotzil' && styles.versionCardActive]}
-              onPress={() => handleVersionChange('tzotzil')}
-            >
-              <LinearGradient
-                colors={selectedVersion === 'tzotzil' 
-                  ? ['rgba(0, 255, 136, 0.2)', 'rgba(0, 255, 136, 0.1)']
-                  : ['rgba(20, 30, 45, 0.8)', 'rgba(15, 25, 40, 0.9)']}
-                style={styles.versionGradient}
-              >
-                <MaterialCommunityIcons 
-                  name={selectedVersion === 'tzotzil' ? 'radiobox-marked' : 'radiobox-blank'} 
-                  size={24} 
-                  color={selectedVersion === 'tzotzil' ? '#00ff88' : '#6b7c93'} 
-                />
-                <View style={styles.versionInfo}>
-                  <Text style={[styles.versionName, selectedVersion === 'tzotzil' && styles.versionNameActive]}>
-                    Tzotzil
-                  </Text>
-                  <Text style={styles.versionDesc}>Biblia en lengua Tzotzil</Text>
-                </View>
-              </LinearGradient>
-            </TouchableOpacity>
-            
-            <TouchableOpacity
-              style={[styles.versionCard, selectedVersion === 'rv1960' && styles.versionCardActive]}
-              onPress={() => handleVersionChange('rv1960')}
-            >
-              <LinearGradient
-                colors={selectedVersion === 'rv1960' 
-                  ? ['rgba(0, 243, 255, 0.2)', 'rgba(0, 243, 255, 0.1)']
-                  : ['rgba(20, 30, 45, 0.8)', 'rgba(15, 25, 40, 0.9)']}
-                style={styles.versionGradient}
-              >
-                <MaterialCommunityIcons 
-                  name={selectedVersion === 'rv1960' ? 'radiobox-marked' : 'radiobox-blank'} 
-                  size={24} 
-                  color={selectedVersion === 'rv1960' ? '#00f3ff' : '#6b7c93'} 
-                />
-                <View style={styles.versionInfo}>
-                  <Text style={[styles.versionName, selectedVersion === 'rv1960' && styles.versionNameActiveCyan]}>
-                    Reina-Valera 1960
-                  </Text>
-                  <Text style={styles.versionDesc}>Reina-Valera 1960</Text>
-                </View>
-              </LinearGradient>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>CONTENIDO</Text>
-          <View style={styles.settingCard}>
-            <LinearGradient
-              colors={['rgba(20, 30, 45, 0.8)', 'rgba(15, 25, 40, 0.9)']}
-              style={styles.settingGradient}
-            >
-              <View style={styles.settingRow}>
-                <View style={styles.settingLeft}>
-                  <MaterialCommunityIcons name="translate" size={24} color="#00f3ff" />
-                  <View style={styles.settingInfo}>
-                    <Text style={styles.settingTitle}>Modo Bilingüe</Text>
-                    <Text style={styles.settingDesc}>Mostrar texto en español y tzotzil</Text>
-                  </View>
-                </View>
-                <Switch
-                  value={bilingualMode}
-                  onValueChange={(value) => {
-                    setBilingualMode(value);
-                    saveSettings('bilingualMode', value);
-                  }}
-                  color="#00ff88"
-                />
-              </View>
-            </LinearGradient>
-          </View>
-        </View>
-
+        
+        {/* Apariencia */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>APARIENCIA</Text>
           <View style={styles.settingCard}>
@@ -161,32 +105,27 @@ export default function SettingsScreen() {
                   <MaterialCommunityIcons name="format-size" size={24} color="#00f3ff" />
                   <View style={styles.settingInfo}>
                     <Text style={styles.settingTitle}>Tamaño de Fuente</Text>
-                    <Text style={styles.settingDesc}>
-                      {fontSize === 'small' ? 'Pequeño' : fontSize === 'large' ? 'Grande' : 'Mediano'}
-                    </Text>
+                    <Text style={styles.settingDesc}>{getFontSizeLabel()}</Text>
                   </View>
                 </View>
                 <View style={styles.fontSizeControl}>
                   <TouchableOpacity 
-                    style={[styles.fontButton, fontSize === 'small' && styles.fontButtonDisabled]}
-                    onPress={() => {
-                      setFontSize('small');
-                      saveSettings('fontSize', 'small');
-                    }}
-                    disabled={fontSize === 'small'}
+                    style={[styles.fontButton, fontSize === 'small' && styles.fontButtonActive]}
+                    onPress={() => handleFontSizeChange('small')}
                   >
-                    <MaterialCommunityIcons name="minus" size={20} color={fontSize === 'small' ? '#6b7c93' : '#00f3ff'} />
+                    <Text style={[styles.fontButtonText, fontSize === 'small' && styles.fontButtonTextActive]}>A</Text>
                   </TouchableOpacity>
-                  <Text style={styles.fontSizeIndicator}>A</Text>
                   <TouchableOpacity 
-                    style={[styles.fontButton, fontSize === 'large' && styles.fontButtonDisabled]}
-                    onPress={() => {
-                      setFontSize('large');
-                      saveSettings('fontSize', 'large');
-                    }}
-                    disabled={fontSize === 'large'}
+                    style={[styles.fontButton, fontSize === 'medium' && styles.fontButtonActive]}
+                    onPress={() => handleFontSizeChange('medium')}
                   >
-                    <MaterialCommunityIcons name="plus" size={20} color={fontSize === 'large' ? '#6b7c93' : '#00f3ff'} />
+                    <Text style={[styles.fontButtonTextMedium, fontSize === 'medium' && styles.fontButtonTextActive]}>A</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity 
+                    style={[styles.fontButton, fontSize === 'large' && styles.fontButtonActive]}
+                    onPress={() => handleFontSizeChange('large')}
+                  >
+                    <Text style={[styles.fontButtonTextLarge, fontSize === 'large' && styles.fontButtonTextActive]}>A</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -194,11 +133,12 @@ export default function SettingsScreen() {
           </View>
         </View>
 
+        {/* Datos */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>DATOS</Text>
           <TouchableOpacity 
             style={styles.settingCard}
-            onPress={handleClearData}
+            onPress={handleClearHistory}
           >
             <LinearGradient
               colors={['rgba(20, 30, 45, 0.8)', 'rgba(15, 25, 40, 0.9)']}
@@ -206,25 +146,79 @@ export default function SettingsScreen() {
             >
               <View style={styles.settingRow}>
                 <View style={styles.settingLeft}>
-                  <MaterialCommunityIcons name="delete" size={24} color="#ff6b6b" />
+                  <MaterialCommunityIcons name="delete-outline" size={24} color="#ff6b6b" />
                   <View style={styles.settingInfo}>
                     <Text style={[styles.settingTitle, { color: '#ff6b6b' }]}>Limpiar Historial</Text>
                     <Text style={styles.settingDesc}>Eliminar conversaciones con Nevin</Text>
                   </View>
                 </View>
+                <MaterialCommunityIcons name="chevron-right" size={24} color="#6b7c93" />
               </View>
             </LinearGradient>
           </TouchableOpacity>
         </View>
 
-        <View style={styles.infoContainer}>
-          <Text style={styles.infoText}>Versión 2.1.0</Text>
-          <Text style={styles.infoSubtext}>Tzotzil Bible</Text>
-          <Text style={styles.infoNote}>
-            La Biblia funciona completamente sin internet.{'\n'}
-            Nevin AI requiere conexión a internet.
-          </Text>
+        {/* Comunidad */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>COMUNIDAD</Text>
+          
+          <TouchableOpacity 
+            style={styles.settingCard}
+            onPress={handleSendFeedback}
+          >
+            <LinearGradient
+              colors={['rgba(20, 30, 45, 0.8)', 'rgba(15, 25, 40, 0.9)']}
+              style={styles.settingGradient}
+            >
+              <View style={styles.settingRow}>
+                <View style={styles.settingLeft}>
+                  <MaterialCommunityIcons name="message-text-outline" size={24} color="#00ff88" />
+                  <View style={styles.settingInfo}>
+                    <Text style={styles.settingTitle}>Enviar Comentarios</Text>
+                    <Text style={styles.settingDesc}>Ayúdanos a mejorar la app</Text>
+                  </View>
+                </View>
+                <MaterialCommunityIcons name="chevron-right" size={24} color="#6b7c93" />
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            style={styles.settingCard}
+            onPress={handleShareApp}
+          >
+            <LinearGradient
+              colors={['rgba(20, 30, 45, 0.8)', 'rgba(15, 25, 40, 0.9)']}
+              style={styles.settingGradient}
+            >
+              <View style={styles.settingRow}>
+                <View style={styles.settingLeft}>
+                  <MaterialCommunityIcons name="share-variant" size={24} color="#00f3ff" />
+                  <View style={styles.settingInfo}>
+                    <Text style={styles.settingTitle}>Compartir App</Text>
+                    <Text style={styles.settingDesc}>Recomienda Tzotzil Bible</Text>
+                  </View>
+                </View>
+                <MaterialCommunityIcons name="chevron-right" size={24} color="#6b7c93" />
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
         </View>
+
+        {/* Información */}
+        <View style={styles.infoContainer}>
+          <View style={styles.logoContainer}>
+            <MaterialCommunityIcons name="book-cross" size={48} color="#00f3ff" />
+          </View>
+          <Text style={styles.appName}>Tzotzil Bible</Text>
+          <Text style={styles.versionText}>Versión {APP_VERSION}</Text>
+          <Text style={styles.infoNote}>
+            La Biblia funciona sin internet.{'\n'}
+            Nevin AI requiere conexión.
+          </Text>
+          <Text style={styles.copyright}>© 2025 Tzotzil Bible</Text>
+        </View>
+
       </ScrollView>
     </MainLayout>
   );
@@ -247,42 +241,6 @@ const styles = StyleSheet.create({
     textShadowColor: '#00f3ff',
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 4,
-  },
-  versionContainer: {
-    gap: 12,
-  },
-  versionCard: {
-    borderRadius: 16,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: 'rgba(0, 243, 255, 0.2)',
-  },
-  versionCardActive: {
-    borderColor: 'rgba(0, 255, 136, 0.5)',
-  },
-  versionGradient: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-  },
-  versionInfo: {
-    marginLeft: 16,
-  },
-  versionName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#e6f3ff',
-  },
-  versionNameActive: {
-    color: '#00ff88',
-  },
-  versionNameActiveCyan: {
-    color: '#00f3ff',
-  },
-  versionDesc: {
-    fontSize: 13,
-    color: '#6b7c93',
-    marginTop: 2,
   },
   settingCard: {
     borderRadius: 16,
@@ -321,48 +279,77 @@ const styles = StyleSheet.create({
   fontSizeControl: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 8,
   },
   fontButton: {
     width: 36,
     height: 36,
-    borderRadius: 18,
-    backgroundColor: 'rgba(0, 243, 255, 0.15)',
+    borderRadius: 8,
+    backgroundColor: 'rgba(0, 243, 255, 0.1)',
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 243, 255, 0.2)',
   },
-  fontButtonDisabled: {
-    backgroundColor: 'rgba(107, 124, 147, 0.1)',
+  fontButtonActive: {
+    backgroundColor: 'rgba(0, 255, 136, 0.2)',
+    borderColor: '#00ff88',
   },
-  fontSizeIndicator: {
-    fontSize: 18,
-    color: '#e6f3ff',
-    marginHorizontal: 12,
+  fontButtonText: {
+    fontSize: 12,
+    color: '#6b7c93',
     fontWeight: 'bold',
+  },
+  fontButtonTextMedium: {
+    fontSize: 16,
+    color: '#6b7c93',
+    fontWeight: 'bold',
+  },
+  fontButtonTextLarge: {
+    fontSize: 20,
+    color: '#6b7c93',
+    fontWeight: 'bold',
+  },
+  fontButtonTextActive: {
+    color: '#00ff88',
   },
   infoContainer: {
     alignItems: 'center',
     marginTop: 20,
     marginBottom: 40,
-    padding: 20,
+    padding: 24,
   },
-  infoText: {
-    fontSize: 18,
+  logoContainer: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: 'rgba(0, 243, 255, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
+    borderWidth: 2,
+    borderColor: 'rgba(0, 243, 255, 0.3)',
+  },
+  appName: {
+    fontSize: 22,
     fontWeight: 'bold',
-    color: '#00f3ff',
-    textShadowColor: '#00f3ff',
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 6,
+    color: '#e6f3ff',
+    marginBottom: 4,
   },
-  infoSubtext: {
+  versionText: {
     fontSize: 14,
-    color: '#6b7c93',
-    marginTop: 4,
+    color: '#00f3ff',
+    marginBottom: 12,
   },
   infoNote: {
     fontSize: 12,
     color: '#6b7c93',
     textAlign: 'center',
-    marginTop: 16,
     lineHeight: 18,
+    marginBottom: 16,
+  },
+  copyright: {
+    fontSize: 11,
+    color: '#4a5568',
   },
 });
