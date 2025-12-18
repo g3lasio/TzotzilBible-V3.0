@@ -109,7 +109,7 @@ export default function VerseCommentaryScreen() {
           >
             <View style={styles.verseHeaderContent}>
               <View style={styles.nevinBadge}>
-                <MaterialCommunityIcons name="robot" size={20} color="#00ff88" />
+                <MaterialCommunityIcons name="creation" size={20} color="#00ff88" />
                 <Text style={styles.nevinBadgeText}>NEVIN AI</Text>
               </View>
               

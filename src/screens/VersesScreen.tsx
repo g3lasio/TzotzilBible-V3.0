@@ -487,7 +487,7 @@ export default function VersesScreen() {
                   style={styles.menuItem}
                   onPress={() => selectedVerse && askNevinAboutVerse(selectedVerse)}
                 >
-                  <MaterialCommunityIcons name="robot" size={20} color="#00ff88" />
+                  <MaterialCommunityIcons name="creation" size={20} color="#00ff88" />
                   <Text style={styles.menuItemText}>Preguntar a Nevin</Text>
                 </TouchableOpacity>
 

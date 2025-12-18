@@ -30,7 +30,7 @@ const menuItems: MenuItem[] = [
   { name: 'Home', icon: 'home', label: 'Inicio', route: 'HomeTab', isTab: true },
   { name: 'Bible', icon: 'book-open-page-variant', label: 'Explorar la Biblia', route: 'BibleTab', isTab: true },
   { name: 'Search', icon: 'magnify', label: 'Buscar', route: 'SearchTab', isTab: true },
-  { name: 'Nevin', icon: 'robot', label: 'Nevin AI', route: 'NevinTab', isTab: true },
+  { name: 'Nevin', icon: 'creation', label: 'Nevin AI', route: 'NevinTab', isTab: true },
   { name: 'Settings', icon: 'cog', label: 'Ajustes', route: 'SettingsTab', isTab: true },
 ];
 

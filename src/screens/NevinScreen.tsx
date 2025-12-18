@@ -178,7 +178,7 @@ export default function NevinScreen() {
         <View style={styles.chatHeader}>
           <View style={styles.chatHeaderInfo}>
             <View style={styles.nevinAvatar}>
-              <MaterialCommunityIcons name="robot" size={24} color="#00ff88" />
+              <MaterialCommunityIcons name="creation" size={24} color="#00ff88" />
             </View>
             <View>
               <Text style={styles.chatHeaderTitle}>Nevin</Text>
@@ -245,7 +245,7 @@ export default function NevinScreen() {
             >
               {!message.isUser && (
                 <View style={styles.avatarContainer}>
-                  <MaterialCommunityIcons name="robot" size={16} color="#00ff88" />
+                  <MaterialCommunityIcons name="creation" size={16} color="#00ff88" />
                 </View>
               )}
               <View
@@ -270,7 +270,7 @@ export default function NevinScreen() {
           {loading && (
             <View style={[styles.messageWrapper, styles.nevinMessageWrapper]}>
               <View style={styles.avatarContainer}>
-                <MaterialCommunityIcons name="robot" size={16} color="#00ff88" />
+                <MaterialCommunityIcons name="creation" size={16} color="#00ff88" />
               </View>
               <View style={[styles.messageCard, styles.nevinMessage, styles.typingIndicator]}>
                 <ActivityIndicator size="small" color="#00f3ff" />
