@@ -3,13 +3,14 @@ import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, Alert, An
 import { Text, TextInput, ActivityIndicator, IconButton } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp, CommonActions } from '@react-navigation/native';
 import { NevinAIService } from '../services/NevinAIService';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import type { RootStackParamList } from '../types/navigation';
+import type { RootStackParamList, TabParamList } from '../types/navigation';
 import MainLayout from '../components/MainLayout';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+type NevinRouteProp = RouteProp<TabParamList, 'NevinTab'>;
 
 const { width } = Dimensions.get('window');
 
@@ -22,13 +23,18 @@ interface Message {
 
 export default function NevinScreen() {
   const navigation = useNavigation<NavigationProp>();
+  const route = useRoute<NevinRouteProp>();
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [hasApiKey, setHasApiKey] = useState(false);
   const [checkingKey, setCheckingKey] = useState(true);
+  const [initialQuestionProcessed, setInitialQuestionProcessed] = useState(false);
   const scrollViewRef = useRef<ScrollView>(null);
   const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  const initialQuestion = route.params?.initialQuestion;
+  const verseContext = route.params?.verseContext;
 
   useEffect(() => {
     checkApiKey();
@@ -39,6 +45,65 @@ export default function NevinScreen() {
       useNativeDriver: true,
     }).start();
   }, []);
+
+  const [historyLoaded, setHistoryLoaded] = useState(false);
+
+  useEffect(() => {
+    if (initialQuestion && hasApiKey && !initialQuestionProcessed && !checkingKey && historyLoaded) {
+      setInitialQuestionProcessed(true);
+      handleInitialQuestion();
+    }
+  }, [initialQuestion, hasApiKey, checkingKey, historyLoaded]);
+
+  const handleInitialQuestion = async () => {
+    if (!initialQuestion) return;
+    
+    const newUserMessage: Message = {
+      id: Date.now().toString(),
+      content: initialQuestion,
+      isUser: true,
+      timestamp: new Date(),
+    };
+
+    setMessages(prev => [...prev, newUserMessage]);
+    setLoading(true);
+
+    try {
+      let response: string;
+      
+      if (verseContext) {
+        const result = await NevinAIService.askAboutVerse(
+          verseContext.book,
+          verseContext.chapter,
+          verseContext.verse,
+          initialQuestion,
+          verseContext.textTzotzil,
+          verseContext.textSpanish
+        );
+        response = result.response || result.error || 'No pude procesar tu pregunta';
+      } else {
+        response = await NevinAIService.sendMessage(initialQuestion);
+      }
+
+      const nevinResponse: Message = {
+        id: (Date.now() + 1).toString(),
+        content: response,
+        isUser: false,
+        timestamp: new Date(),
+      };
+
+      setMessages(prev => [...prev, nevinResponse]);
+
+      setTimeout(() => {
+        scrollViewRef.current?.scrollToEnd({ animated: true });
+      }, 100);
+    } catch (error: any) {
+      console.error('Error sending initial message:', error);
+      Alert.alert('Error', error.message || 'No se pudo enviar el mensaje');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const checkApiKey = async () => {
     const hasKey = await NevinAIService.hasApiKey();
@@ -55,6 +120,7 @@ export default function NevinScreen() {
       timestamp: new Date()
     }));
     setMessages(loadedMessages);
+    setHistoryLoaded(true);
   };
 
   const handleSendMessage = async () => {
@@ -149,7 +215,7 @@ export default function NevinScreen() {
                 </Text>
                 <TouchableOpacity 
                   style={styles.setupButton}
-                  onPress={() => navigation.navigate('Settings')}
+                  onPress={() => navigation.dispatch(CommonActions.navigate({ name: 'MainTabs', params: { screen: 'SettingsTab' } }))}
                 >
                   <MaterialCommunityIcons name="cog" size={18} color="#0a0e14" />
                   <Text style={styles.setupButtonText}>Ir a Configuración</Text>
@@ -278,7 +344,7 @@ export default function NevinScreen() {
           <View style={styles.inputRow}>
             <TouchableOpacity 
               style={styles.settingsButton}
-              onPress={() => navigation.navigate('Settings')}
+              onPress={() => navigation.dispatch(CommonActions.navigate({ name: 'MainTabs', params: { screen: 'SettingsTab' } }))}
             >
               <MaterialCommunityIcons name="cog" size={22} color="#6b7c93" />
             </TouchableOpacity>

@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, StyleSheet, ScrollView, RefreshControl, Share, TouchableOpacity, Dimensions } from 'react-native';
+import { View, StyleSheet, ScrollView, RefreshControl, Share, TouchableOpacity, Dimensions, Modal, Pressable } from 'react-native';
 import { Text, ActivityIndicator } from 'react-native-paper';
-import { useRoute, useNavigation } from '@react-navigation/native';
+import { useRoute, useNavigation, CommonActions } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BibleService } from '../services/BibleService';
 import type { BibleVerse } from '../types/bible';
 import type { BibleStackParamList } from '../types/navigation';
@@ -20,6 +21,8 @@ const isSmallScreen = width < 600;
 
 type ViewMode = 'stacked' | 'parallel';
 
+const FAVORITES_KEY = 'verse_favorites';
+
 export default function VersesScreen() {
   const route = useRoute<VersesRouteProp>();
   const navigation = useNavigation<NavigationProp>();
@@ -32,6 +35,9 @@ export default function VersesScreen() {
   const [activeVersions, setActiveVersions] = useState<Set<string>>(new Set(['tzotzil', 'rv1960']));
   const [viewMode, setViewMode] = useState<ViewMode>('stacked');
   const scrollViewRef = useRef<ScrollView>(null);
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [selectedVerse, setSelectedVerse] = useState<BibleVerse | null>(null);
+  const [favorites, setFavorites] = useState<Set<string>>(new Set());
 
   const loadVerses = async () => {
     try {
@@ -55,7 +61,71 @@ export default function VersesScreen() {
 
   useEffect(() => {
     loadVerses();
+    loadFavorites();
   }, [book, chapter]);
+
+  const loadFavorites = async () => {
+    try {
+      const stored = await AsyncStorage.getItem(FAVORITES_KEY);
+      if (stored) {
+        setFavorites(new Set(JSON.parse(stored)));
+      }
+    } catch (error) {
+      console.error('Error loading favorites:', error);
+    }
+  };
+
+  const toggleFavorite = async (verse: BibleVerse) => {
+    const verseKey = `${book}-${chapter}-${verse.verse}`;
+    const newFavorites = new Set(favorites);
+    
+    if (newFavorites.has(verseKey)) {
+      newFavorites.delete(verseKey);
+    } else {
+      newFavorites.add(verseKey);
+    }
+    
+    setFavorites(newFavorites);
+    await AsyncStorage.setItem(FAVORITES_KEY, JSON.stringify([...newFavorites]));
+    setMenuVisible(false);
+    setSelectedVerse(null);
+  };
+
+  const isFavorite = (verse: BibleVerse) => {
+    return favorites.has(`${book}-${chapter}-${verse.verse}`);
+  };
+
+  const openVerseMenu = (verse: BibleVerse) => {
+    setSelectedVerse(verse);
+    setMenuVisible(true);
+  };
+
+  const askNevinAboutVerse = (verse: BibleVerse) => {
+    setMenuVisible(false);
+    setSelectedVerse(null);
+    
+    const question = `Nevin, explícame este versículo: ${book} ${chapter}:${verse.verse}`;
+    
+    navigation.dispatch(
+      CommonActions.navigate({
+        name: 'MainTabs',
+        params: {
+          screen: 'NevinTab',
+          params: {
+            initialQuestion: question,
+            verseContext: {
+              book,
+              chapter,
+              verse: verse.verse,
+              textTzotzil: verse.text_tzotzil,
+              textSpanish: verse.text
+            }
+          }
+        },
+        merge: true
+      })
+    );
+  };
 
   const toggleVersion = (versionId: string) => {
     const newActiveVersions = new Set(activeVersions);
@@ -121,29 +191,20 @@ export default function VersesScreen() {
           style={styles.verseGradient}
         >
           <View style={styles.verseHeader}>
-            <View style={styles.verseNumberBadge}>
-              <Text style={styles.verseNumber}>{verse.verse}</Text>
+            <View style={styles.verseHeaderLeft}>
+              <View style={styles.verseNumberBadge}>
+                <Text style={styles.verseNumber}>{verse.verse}</Text>
+              </View>
+              {isFavorite(verse) && (
+                <MaterialCommunityIcons name="heart" size={14} color="#ff6b6b" style={{ marginLeft: 8 }} />
+              )}
             </View>
-            <View style={styles.verseActions}>
-              <TouchableOpacity
-                style={styles.nevinButton}
-                onPress={() => navigation.navigate('VerseCommentary', {
-                  book,
-                  chapter,
-                  verse: verse.verse,
-                  textTzotzil: verse.text_tzotzil,
-                  textSpanish: verse.text
-                })}
-              >
-                <MaterialCommunityIcons name="robot" size={16} color="#00ff88" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.shareButton}
-                onPress={() => handleShare(verse)}
-              >
-                <MaterialCommunityIcons name="share-variant" size={18} color="#6b7c93" />
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+              style={styles.menuButton}
+              onPress={() => openVerseMenu(verse)}
+            >
+              <MaterialCommunityIcons name="dots-vertical" size={20} color="#6b7c93" />
+            </TouchableOpacity>
           </View>
           
           {activeVersionsList.map((version, index) => {
@@ -189,29 +250,20 @@ export default function VersesScreen() {
           style={styles.parallelGradient}
         >
           <View style={styles.parallelHeader}>
-            <View style={styles.verseNumberBadge}>
-              <Text style={styles.verseNumber}>{verse.verse}</Text>
+            <View style={styles.verseHeaderLeft}>
+              <View style={styles.verseNumberBadge}>
+                <Text style={styles.verseNumber}>{verse.verse}</Text>
+              </View>
+              {isFavorite(verse) && (
+                <MaterialCommunityIcons name="heart" size={14} color="#ff6b6b" style={{ marginLeft: 8 }} />
+              )}
             </View>
-            <View style={styles.verseActions}>
-              <TouchableOpacity
-                style={styles.nevinButton}
-                onPress={() => navigation.navigate('VerseCommentary', {
-                  book,
-                  chapter,
-                  verse: verse.verse,
-                  textTzotzil: verse.text_tzotzil,
-                  textSpanish: verse.text
-                })}
-              >
-                <MaterialCommunityIcons name="robot" size={16} color="#00ff88" />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.shareButton}
-                onPress={() => handleShare(verse)}
-              >
-                <MaterialCommunityIcons name="share-variant" size={18} color="#6b7c93" />
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+              style={styles.menuButton}
+              onPress={() => openVerseMenu(verse)}
+            >
+              <MaterialCommunityIcons name="dots-vertical" size={20} color="#6b7c93" />
+            </TouchableOpacity>
           </View>
           
           <View style={styles.parallelColumns}>
@@ -395,6 +447,78 @@ export default function VersesScreen() {
             </TouchableOpacity>
           </View>
         </ScrollView>
+
+        <Modal
+          visible={menuVisible}
+          transparent
+          animationType="fade"
+          onRequestClose={() => {
+            setMenuVisible(false);
+            setSelectedVerse(null);
+          }}
+        >
+          <Pressable 
+            style={styles.modalOverlay}
+            onPress={() => {
+              setMenuVisible(false);
+              setSelectedVerse(null);
+            }}
+          >
+            <View style={styles.menuContainer}>
+              <LinearGradient
+                colors={['rgba(25, 35, 50, 0.98)', 'rgba(15, 25, 40, 0.98)']}
+                style={styles.menuGradient}
+              >
+                {selectedVerse && (
+                  <Text style={styles.menuTitle}>
+                    {book} {chapter}:{selectedVerse.verse}
+                  </Text>
+                )}
+                
+                <TouchableOpacity
+                  style={styles.menuItem}
+                  onPress={() => selectedVerse && handleShare(selectedVerse)}
+                >
+                  <MaterialCommunityIcons name="share-variant" size={20} color="#00f3ff" />
+                  <Text style={styles.menuItemText}>Compartir</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.menuItem}
+                  onPress={() => selectedVerse && askNevinAboutVerse(selectedVerse)}
+                >
+                  <MaterialCommunityIcons name="robot" size={20} color="#00ff88" />
+                  <Text style={styles.menuItemText}>Preguntar a Nevin</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.menuItem}
+                  onPress={() => selectedVerse && toggleFavorite(selectedVerse)}
+                >
+                  <MaterialCommunityIcons 
+                    name={selectedVerse && isFavorite(selectedVerse) ? "heart" : "heart-outline"} 
+                    size={20} 
+                    color="#ff6b6b" 
+                  />
+                  <Text style={styles.menuItemText}>
+                    {selectedVerse && isFavorite(selectedVerse) ? 'Quitar de favoritos' : 'Marcar como favorito'}
+                  </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[styles.menuItem, styles.menuItemLast]}
+                  onPress={() => {
+                    setMenuVisible(false);
+                    setSelectedVerse(null);
+                  }}
+                >
+                  <MaterialCommunityIcons name="close" size={20} color="#6b7c93" />
+                  <Text style={[styles.menuItemText, { color: '#6b7c93' }]}>Cerrar</Text>
+                </TouchableOpacity>
+              </LinearGradient>
+            </View>
+          </Pressable>
+        </Modal>
       </View>
     </MainLayout>
   );
@@ -555,28 +679,57 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#0a0e14',
   },
-  verseActions: {
+  verseHeaderLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
   },
-  nevinButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: 'rgba(0, 255, 136, 0.15)',
+  menuButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  menuContainer: {
+    width: '80%',
+    maxWidth: 300,
+    borderRadius: 16,
+    overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(0, 255, 136, 0.3)',
+    borderColor: 'rgba(0, 243, 255, 0.3)',
   },
-  shareButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: 'rgba(107, 124, 147, 0.2)',
-    justifyContent: 'center',
+  menuGradient: {
+    padding: 16,
+  },
+  menuTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#00f3ff',
+    marginBottom: 16,
+    textAlign: 'center',
+  },
+  menuItem: {
+    flexDirection: 'row',
     alignItems: 'center',
+    paddingVertical: 14,
+    paddingHorizontal: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0, 243, 255, 0.15)',
+  },
+  menuItemLast: {
+    borderBottomWidth: 0,
+    marginTop: 8,
+  },
+  menuItemText: {
+    fontSize: 15,
+    color: '#e6f3ff',
+    marginLeft: 12,
   },
   textBlock: {
     marginVertical: 8,
