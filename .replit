@@ -20,6 +20,10 @@ localPort = 5001
 externalPort = 4200
 
 [[ports]]
+localPort = 8000
+externalPort = 8000
+
+[[ports]]
 localPort = 8080
 externalPort = 8080
 
@@ -89,13 +93,13 @@ args = "python main.py"
 name = "Backend API"
 author = "agent"
 
+[workflows.workflow.metadata]
+outputType = "console"
+
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python backend/app.py"
-waitForPort = 3001
-
-[workflows.workflow.metadata]
-outputType = "console"
+waitForPort = 8000
 
 [agent]
 integrations = ["perplexity_v0:1.0.0", "python_anthropic:1.0.0"]

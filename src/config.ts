@@ -5,7 +5,7 @@ export const getBackendUrl = (): string => {
   if (typeof window !== 'undefined' && window.location) {
     const protocol = window.location.protocol;
     const hostname = window.location.hostname;
-    return `${protocol}//${hostname}:3001`;
+    return `${protocol}//${hostname}:8000`;
   }
-  return 'http://localhost:3001';
+  return 'http://localhost:8000';
 };
