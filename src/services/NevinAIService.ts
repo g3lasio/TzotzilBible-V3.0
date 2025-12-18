@@ -1,7 +1,9 @@
 import { AIResponse, ChatMessage } from '../types/nevin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
+import { Platform } from 'react-native';
 import { NEVIN_SYSTEM_PROMPT, VERSE_COMMENTARY_PROMPT } from '../constants/nevinTheology';
+import { getAnthropicApiKey } from '../config';
 
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
 const DEFAULT_MODEL = 'claude-sonnet-4-20250514';
@@ -32,8 +34,10 @@ export class NevinAIService {
     const storedKey = await AsyncStorage.getItem(this.API_KEY_STORAGE);
     if (storedKey) return storedKey;
     
-    const envKey = process.env.ANTHROPIC_API_KEY || 
-                   Constants.expoConfig?.extra?.anthropicApiKey;
+    const expoKey = Constants.expoConfig?.extra?.anthropicApiKey;
+    if (expoKey) return expoKey;
+    
+    const envKey = getAnthropicApiKey();
     return envKey || null;
   }
 
