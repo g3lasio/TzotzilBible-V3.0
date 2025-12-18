@@ -1,25 +1,24 @@
 import { AIResponse, ChatMessage } from '../types/nevin';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
+import { NEVIN_SYSTEM_PROMPT, VERSE_COMMENTARY_PROMPT } from '../constants/nevinTheology';
 
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
+const DEFAULT_MODEL = 'claude-sonnet-4-20250514';
 
-const NEVIN_SYSTEM_PROMPT = `Eres Nevin, un asistente de IA especializado en estudios bíblicos y teología adventista del séptimo día. Tu propósito es ayudar a los usuarios a comprender mejor la Biblia, especialmente en el contexto de la comunidad Tzotzil de Chiapas, México.
+export interface VerseCommentaryRequest {
+  book: string;
+  chapter: number;
+  verse: number;
+  textTzotzil?: string;
+  textSpanish?: string;
+}
 
-Principios guía:
-1. Siempre basa tus respuestas en las Escrituras
-2. Respeta y aplica los principios hermenéuticos adventistas
-3. Cuando sea relevante, cita escritos de Elena G. de White
-4. Sé compasivo, respetuoso y culturalmente sensible
-5. Responde en español de forma clara y accesible
-6. Cuando no estés seguro de algo, admítelo honestamente
-
-Tu conocimiento incluye:
-- La Biblia completa (Antiguo y Nuevo Testamento)
-- Doctrinas y creencias adventistas del séptimo día
-- Escritos de Elena G. de White
-- Contexto histórico y cultural de las Escrituras
-- La cultura y tradiciones del pueblo Tzotzil`;
+export interface VerseCommentary {
+  success: boolean;
+  commentary?: string;
+  error?: string;
+}
 
 export class NevinAIService {
   private static readonly CHAT_HISTORY_KEY = 'nevin_chat_history';
@@ -33,7 +32,8 @@ export class NevinAIService {
     const storedKey = await AsyncStorage.getItem(this.API_KEY_STORAGE);
     if (storedKey) return storedKey;
     
-    const envKey = Constants.expoConfig?.extra?.anthropicApiKey;
+    const envKey = process.env.ANTHROPIC_API_KEY || 
+                   Constants.expoConfig?.extra?.anthropicApiKey;
     return envKey || null;
   }
 
@@ -77,7 +77,7 @@ export class NevinAIService {
           'anthropic-version': '2023-06-01'
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
+          model: DEFAULT_MODEL,
           max_tokens: 4096,
           system: NEVIN_SYSTEM_PROMPT,
           messages: messages
@@ -111,7 +111,7 @@ export class NevinAIService {
         response: assistantMessage,
         emotions: {},
         metadata: {
-          system_version: "Nevin AI v3.0 Mobile",
+          system_version: "Nevin AI v4.0 Teológico",
           powered_by: "Claude Sonnet 4"
         }
       };
@@ -123,6 +123,96 @@ export class NevinAIService {
         emotions: {}
       };
     }
+  }
+
+  static async getVerseCommentary(request: VerseCommentaryRequest): Promise<VerseCommentary> {
+    try {
+      const apiKey = await this.getApiKey();
+
+      if (!apiKey) {
+        return {
+          success: false,
+          error: 'Se necesita una clave API de Anthropic para obtener comentarios de Nevin.'
+        };
+      }
+
+      const verseReference = `${request.book} ${request.chapter}:${request.verse}`;
+      
+      let verseContent = '';
+      if (request.textTzotzil) {
+        verseContent += `\n\n**Tzotzil:** "${request.textTzotzil}"`;
+      }
+      if (request.textSpanish) {
+        verseContent += `\n\n**RV1960:** "${request.textSpanish}"`;
+      }
+
+      const userMessage = `${VERSE_COMMENTARY_PROMPT}
+
+VERSÍCULO A ANALIZAR: ${verseReference}
+${verseContent}
+
+Por favor, proporciona un comentario teológico completo siguiendo la metodología hermenéutica adventista.`;
+
+      const response = await fetch(ANTHROPIC_API_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01'
+        },
+        body: JSON.stringify({
+          model: DEFAULT_MODEL,
+          max_tokens: 6000,
+          system: NEVIN_SYSTEM_PROMPT,
+          messages: [{ role: 'user', content: userMessage }]
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('Anthropic API error for verse commentary:', errorData);
+        
+        return {
+          success: false,
+          error: 'Error al obtener el comentario. Intenta nuevamente.'
+        };
+      }
+
+      const data = await response.json();
+      const commentary = data.content?.[0]?.text || '';
+
+      return {
+        success: true,
+        commentary
+      };
+    } catch (error) {
+      console.error('Error en getVerseCommentary:', error);
+      return {
+        success: false,
+        error: 'Error de conexión. Verifica tu internet e intenta nuevamente.'
+      };
+    }
+  }
+
+  static async askAboutVerse(
+    book: string,
+    chapter: number,
+    verse: number,
+    question: string,
+    textTzotzil?: string,
+    textSpanish?: string
+  ): Promise<AIResponse> {
+    const verseReference = `${book} ${chapter}:${verse}`;
+    
+    let context = `Estamos estudiando ${verseReference}.`;
+    if (textTzotzil) {
+      context += `\n\nTexto en Tzotzil: "${textTzotzil}"`;
+    }
+    if (textSpanish) {
+      context += `\n\nTexto en RV1960: "${textSpanish}"`;
+    }
+
+    return this.processQuery(question, context, []);
   }
 
   static async loadChatHistory(): Promise<ChatMessage[]> {

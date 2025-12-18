@@ -9,6 +9,7 @@ import HomeScreen from '../screens/HomeScreen';
 import BibleScreen from '../screens/BibleScreen';
 import ChapterScreen from '../screens/ChapterScreen';
 import VersesScreen from '../screens/VersesScreen';
+import VerseCommentaryScreen from '../screens/VerseCommentaryScreen';
 import SearchScreen from '../screens/SearchScreen';
 import NevinScreen from '../screens/NevinScreen';
 import SettingsScreen from '../screens/SettingsScreen';
@@ -30,6 +31,7 @@ function BibleStackNavigator() {
       <BibleStack.Screen name="BibleList" component={BibleScreen} />
       <BibleStack.Screen name="Chapter" component={ChapterScreen} />
       <BibleStack.Screen name="Verses" component={VersesScreen} />
+      <BibleStack.Screen name="VerseCommentary" component={VerseCommentaryScreen} />
     </BibleStack.Navigator>
   );
 }

@@ -4,6 +4,13 @@ export type BibleStackParamList = {
   BibleList: undefined;
   Chapter: { book: string };
   Verses: { book: string; chapter: number; initialVerse?: number };
+  VerseCommentary: { 
+    book: string; 
+    chapter: number; 
+    verse: number; 
+    textTzotzil?: string; 
+    textSpanish?: string; 
+  };
 };
 
 export type TabParamList = {

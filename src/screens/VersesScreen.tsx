@@ -124,12 +124,26 @@ export default function VersesScreen() {
             <View style={styles.verseNumberBadge}>
               <Text style={styles.verseNumber}>{verse.verse}</Text>
             </View>
-            <TouchableOpacity
-              style={styles.shareButton}
-              onPress={() => handleShare(verse)}
-            >
-              <MaterialCommunityIcons name="share-variant" size={18} color="#6b7c93" />
-            </TouchableOpacity>
+            <View style={styles.verseActions}>
+              <TouchableOpacity
+                style={styles.nevinButton}
+                onPress={() => navigation.navigate('VerseCommentary', {
+                  book,
+                  chapter,
+                  verse: verse.verse,
+                  textTzotzil: verse.text_tzotzil,
+                  textSpanish: verse.text
+                })}
+              >
+                <MaterialCommunityIcons name="robot" size={16} color="#00ff88" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.shareButton}
+                onPress={() => handleShare(verse)}
+              >
+                <MaterialCommunityIcons name="share-variant" size={18} color="#6b7c93" />
+              </TouchableOpacity>
+            </View>
           </View>
           
           {activeVersionsList.map((version, index) => {
@@ -178,12 +192,26 @@ export default function VersesScreen() {
             <View style={styles.verseNumberBadge}>
               <Text style={styles.verseNumber}>{verse.verse}</Text>
             </View>
-            <TouchableOpacity
-              style={styles.shareButton}
-              onPress={() => handleShare(verse)}
-            >
-              <MaterialCommunityIcons name="share-variant" size={18} color="#6b7c93" />
-            </TouchableOpacity>
+            <View style={styles.verseActions}>
+              <TouchableOpacity
+                style={styles.nevinButton}
+                onPress={() => navigation.navigate('VerseCommentary', {
+                  book,
+                  chapter,
+                  verse: verse.verse,
+                  textTzotzil: verse.text_tzotzil,
+                  textSpanish: verse.text
+                })}
+              >
+                <MaterialCommunityIcons name="robot" size={16} color="#00ff88" />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.shareButton}
+                onPress={() => handleShare(verse)}
+              >
+                <MaterialCommunityIcons name="share-variant" size={18} color="#6b7c93" />
+              </TouchableOpacity>
+            </View>
           </View>
           
           <View style={styles.parallelColumns}>
@@ -527,10 +555,25 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#0a0e14',
   },
+  verseActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  nevinButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(0, 255, 136, 0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 255, 136, 0.3)',
+  },
   shareButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     backgroundColor: 'rgba(107, 124, 147, 0.2)',
     justifyContent: 'center',
     alignItems: 'center',
