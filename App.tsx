@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useState, useEffect } from 'react';
-import { View, ActivityIndicator, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, ActivityIndicator, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider as PaperProvider, MD3DarkTheme } from 'react-native-paper';
 import AppNavigator from './src/navigation/AppNavigator';
@@ -9,6 +9,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { databaseService } from './src/services/DatabaseService';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useFonts, Quantico_400Regular, Quantico_700Bold } from '@expo-google-fonts/quantico';
+import * as SplashScreen from 'expo-splash-screen';
+
+SplashScreen.preventAutoHideAsync();
 
 const queryClient = new QueryClient();
 
@@ -29,10 +33,21 @@ type AppState = 'loading' | 'ready' | 'error';
 export default function App() {
   const [appState, setAppState] = useState<AppState>('loading');
   const [errorMessage, setErrorMessage] = useState<string>('');
+  
+  const [fontsLoaded] = useFonts({
+    Quantico_400Regular,
+    Quantico_700Bold,
+  });
 
   useEffect(() => {
     initializeApp();
   }, []);
+
+  useEffect(() => {
+    if (fontsLoaded && appState !== 'loading') {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, appState]);
 
   const initializeApp = async () => {
     setAppState('loading');
@@ -63,14 +78,18 @@ export default function App() {
     }
   };
 
-  if (appState === 'loading') {
+  if (appState === 'loading' || !fontsLoaded) {
     return (
       <View style={styles.loadingContainer}>
         <LinearGradient
           colors={['#0a0e14', '#1a2332']}
           style={styles.gradient}
         >
-          <MaterialCommunityIcons name="book-cross" size={60} color="#00ff88" />
+          <Image 
+            source={require('./assets/icon.png')} 
+            style={styles.appLogo}
+            resizeMode="contain"
+          />
           <Text style={styles.loadingTitle}>Tzotzil Bible</Text>
           <ActivityIndicator size="large" color="#00f3ff" style={styles.loader} />
           <Text style={styles.loadingText}>Cargando Biblia...</Text>
@@ -119,14 +138,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 24,
   },
+  appLogo: {
+    width: 100,
+    height: 100,
+  },
   loadingTitle: {
     fontSize: 28,
-    fontWeight: 'bold',
+    fontFamily: 'Quantico_700Bold',
     color: '#00ff88',
     marginTop: 16,
     textShadowColor: '#00ff88',
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 10,
+    letterSpacing: 1,
   },
   loader: {
     marginTop: 32,

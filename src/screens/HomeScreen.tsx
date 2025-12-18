@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, ScrollView, StyleSheet, Share, Dimensions, TouchableOpacity } from 'react-native';
+import { View, ScrollView, StyleSheet, Share, Dimensions, TouchableOpacity, Image } from 'react-native';
 import { Text, ActivityIndicator } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { BibleService } from '../services/BibleService';
 import MainLayout from '../components/MainLayout';
+import { FONTS } from '../config';
 
 const { width } = Dimensions.get('window');
 
@@ -148,9 +149,10 @@ const styles = StyleSheet.create({
   },
   appName: {
     fontSize: 28,
-    fontWeight: 'bold',
+    fontFamily: FONTS.bold,
     color: '#00ff88',
     marginTop: 4,
+    letterSpacing: 1,
     textShadowColor: '#00ff88',
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 10,

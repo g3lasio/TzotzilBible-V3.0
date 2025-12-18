@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, Modal, Dimensions, Platform } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Modal, Dimensions, Platform, Image } from 'react-native';
 import { Text, IconButton } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -7,6 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute, CommonActions } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList, TabParamList } from '../types/navigation';
+import { FONTS } from '../config';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -75,10 +76,14 @@ export default function MainLayout({ children, showBackButton = false, title }: 
                 />
               ) : (
                 <View style={styles.logoContainer}>
-                  <MaterialCommunityIcons name="book-cross" size={28} color="#00ff88" />
+                  <Image 
+                    source={require('../../assets/icon.png')} 
+                    style={styles.headerLogo}
+                    resizeMode="contain"
+                  />
                 </View>
               )}
-              <Text style={styles.headerTitle}>{title || 'Tzotzil Bible'}</Text>
+              <Text style={[styles.headerTitle, !title && styles.headerTitleBrand]}>{title || 'Tzotzil Bible'}</Text>
             </View>
             <IconButton
               icon="menu"
@@ -110,7 +115,11 @@ export default function MainLayout({ children, showBackButton = false, title }: 
                 style={styles.menuGradient}
               >
                 <View style={styles.menuHeader}>
-                  <MaterialCommunityIcons name="book-cross" size={40} color="#00ff88" />
+                  <Image 
+                    source={require('../../assets/icon.png')} 
+                    style={styles.menuLogo}
+                    resizeMode="contain"
+                  />
                   <Text style={styles.menuTitle}>Tzotzil Bible</Text>
                 </View>
                 <View style={styles.menuDivider} />
@@ -174,12 +183,24 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     marginRight: 8,
   },
+  headerLogo: {
+    width: 32,
+    height: 32,
+  },
   headerTitle: {
     fontSize: 20,
     fontWeight: 'bold',
     color: '#e6f3ff',
     marginLeft: 4,
     flexShrink: 1,
+  },
+  headerTitleBrand: {
+    fontFamily: FONTS.bold,
+    letterSpacing: 1,
+    color: '#00ff88',
+    textShadowColor: '#00ff88',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 6,
   },
   content: {
     flex: 1,
@@ -205,11 +226,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
+  menuLogo: {
+    width: 60,
+    height: 60,
+  },
   menuTitle: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontFamily: FONTS.bold,
     color: '#00ff88',
     marginTop: 12,
+    letterSpacing: 1,
     textShadowColor: '#00ff88',
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 10,

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Alert, TouchableOpacity, Linking, Share } from 'react-native';
+import { View, StyleSheet, ScrollView, Alert, TouchableOpacity, Linking, Share, Image } from 'react-native';
 import { Text } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { NevinAIService } from '../services/NevinAIService';
 import MainLayout from '../components/MainLayout';
+import { FONTS } from '../config';
 
 const APP_VERSION = '2.1.0';
 const FEEDBACK_EMAIL = 'feedback@tzotzilbible.app';
@@ -208,7 +209,11 @@ export default function SettingsScreen() {
         {/* Información */}
         <View style={styles.infoContainer}>
           <View style={styles.logoContainer}>
-            <MaterialCommunityIcons name="book-cross" size={48} color="#00f3ff" />
+            <Image 
+              source={require('../../assets/icon.png')} 
+              style={styles.appLogo}
+              resizeMode="contain"
+            />
           </View>
           <Text style={styles.appName}>Tzotzil Bible</Text>
           <Text style={styles.versionText}>Versión {APP_VERSION}</Text>
@@ -330,11 +335,19 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: 'rgba(0, 243, 255, 0.3)',
   },
+  appLogo: {
+    width: 60,
+    height: 60,
+  },
   appName: {
     fontSize: 22,
-    fontWeight: 'bold',
-    color: '#e6f3ff',
+    fontFamily: FONTS.bold,
+    color: '#00ff88',
     marginBottom: 4,
+    letterSpacing: 1,
+    textShadowColor: '#00ff88',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 8,
   },
   versionText: {
     fontSize: 14,
