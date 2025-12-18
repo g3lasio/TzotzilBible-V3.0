@@ -154,7 +154,7 @@ export default function SettingsScreen() {
                   <Text style={[styles.versionName, selectedVersion === 'rv1960' && styles.versionNameActiveCyan]}>
                     Reina-Valera 1960
                   </Text>
-                  <Text style={styles.versionDesc}>Español tradicional</Text>
+                  <Text style={styles.versionDesc}>Reina-Valera 1960</Text>
                 </View>
               </LinearGradient>
             </TouchableOpacity>

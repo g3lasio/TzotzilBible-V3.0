@@ -42,7 +42,13 @@ export default function SearchScreen() {
   };
 
   const navigateToVerse = (book: string, chapter: number, verse: number) => {
-    navigation.navigate('Verses', { book, chapter, initialVerse: verse });
+    navigation.navigate('MainTabs', { 
+      screen: 'BibleTab', 
+      params: { 
+        screen: 'Verses', 
+        params: { book, chapter, initialVerse: verse } 
+      } 
+    });
   };
 
   return (
@@ -151,7 +157,7 @@ export default function SearchScreen() {
                   
                   {result.text && (
                     <View style={styles.resultTextBlock}>
-                      <Text style={styles.languageIndicator}>Español</Text>
+                      <Text style={styles.languageIndicator}>RV1960</Text>
                       <Text style={styles.verseText} numberOfLines={3}>
                         {result.text}
                       </Text>
