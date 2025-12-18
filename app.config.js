@@ -1,0 +1,47 @@
+export default {
+  expo: {
+    name: "Tzotzil Bible",
+    slug: "tzotzil-bible",
+    version: "2.1.0",
+    orientation: "portrait",
+    icon: "./assets/icon.png",
+    userInterfaceStyle: "light",
+    splash: {
+      image: "./assets/splash-icon.png",
+      resizeMode: "contain",
+      backgroundColor: "#1a1a2e"
+    },
+    assetBundlePatterns: [
+      "assets/**/*"
+    ],
+    ios: {
+      supportsTablet: true,
+      bundleIdentifier: "com.chyrris.tzotzilbible"
+    },
+    android: {
+      adaptiveIcon: {
+        foregroundImage: "./assets/adaptive-icon.png",
+        backgroundColor: "#1a1a2e"
+      },
+      package: "com.chyrris.tzotzilbible",
+      versionCode: 23,
+      permissions: [
+        "android.permission.INTERNET"
+      ],
+      compileSdkVersion: 34,
+      targetSdkVersion: 34,
+      minSdkVersion: 21
+    },
+    web: {
+      favicon: "./assets/favicon.png",
+      bundler: "metro"
+    },
+    extra: {
+      eas: {
+        projectId: "a810d3d6-839d-49b2-9dab-c42a44e3a6b0"
+      },
+      anthropicApiKey: process.env.ANTHROPIC_API_KEY
+    },
+    plugins: []
+  }
+};
