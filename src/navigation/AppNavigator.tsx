@@ -50,7 +50,7 @@ function CustomTabBar({ state, descriptors, navigation }: any) {
             route.name === 'HomeTab' ? 'home' :
             route.name === 'SearchTab' ? 'magnify' :
             route.name === 'BibleTab' ? 'book-open-page-variant' :
-            route.name === 'NevinTab' ? 'robot' :
+            route.name === 'NevinTab' ? 'creation' :
             route.name === 'SettingsTab' ? 'cog' : 'circle';
 
           const isNevin = route.name === 'NevinTab';
