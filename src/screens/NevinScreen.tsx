@@ -3,7 +3,7 @@ import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, Alert, An
 import { Text, TextInput, ActivityIndicator, IconButton } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useNavigation, useRoute, RouteProp, CommonActions } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { NevinAIService } from '../services/NevinAIService';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList, TabParamList } from '../types/navigation';
@@ -27,9 +27,8 @@ export default function NevinScreen() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [loading, setLoading] = useState(false);
-  const [hasApiKey, setHasApiKey] = useState(false);
-  const [checkingKey, setCheckingKey] = useState(true);
   const [initialQuestionProcessed, setInitialQuestionProcessed] = useState(false);
+  const [historyLoaded, setHistoryLoaded] = useState(false);
   const scrollViewRef = useRef<ScrollView>(null);
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
@@ -37,7 +36,6 @@ export default function NevinScreen() {
   const verseContext = route.params?.verseContext;
 
   useEffect(() => {
-    checkApiKey();
     loadHistory();
     Animated.timing(fadeAnim, {
       toValue: 1,
@@ -46,14 +44,12 @@ export default function NevinScreen() {
     }).start();
   }, []);
 
-  const [historyLoaded, setHistoryLoaded] = useState(false);
-
   useEffect(() => {
-    if (initialQuestion && hasApiKey && !initialQuestionProcessed && !checkingKey && historyLoaded) {
+    if (initialQuestion && !initialQuestionProcessed && historyLoaded) {
       setInitialQuestionProcessed(true);
       handleInitialQuestion();
     }
-  }, [initialQuestion, hasApiKey, checkingKey, historyLoaded]);
+  }, [initialQuestion, historyLoaded]);
 
   const handleInitialQuestion = async () => {
     if (!initialQuestion) return;
@@ -103,12 +99,6 @@ export default function NevinScreen() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const checkApiKey = async () => {
-    const hasKey = await NevinAIService.hasApiKey();
-    setHasApiKey(hasKey);
-    setCheckingKey(false);
   };
 
   const loadHistory = async () => {
@@ -178,56 +168,6 @@ export default function NevinScreen() {
     );
   };
 
-  if (checkingKey) {
-    return (
-      <MainLayout title="Nevin">
-        <View style={styles.centered}>
-          <ActivityIndicator size="large" color="#00f3ff" />
-          <Text style={styles.loadingText}>Verificando configuración...</Text>
-        </View>
-      </MainLayout>
-    );
-  }
-
-  if (!hasApiKey) {
-    return (
-      <MainLayout title="Nevin">
-        <View style={styles.setupContainer}>
-          <Animated.View style={[styles.setupContent, { opacity: fadeAnim }]}>
-            <View style={styles.robotIconContainer}>
-              <MaterialCommunityIcons name="robot" size={80} color="#00ff88" />
-            </View>
-            <Text style={styles.setupTitle}>Nevin AI</Text>
-            <Text style={styles.setupSubtitle}>Tu asistente bíblico inteligente</Text>
-            
-            <View style={styles.setupCard}>
-              <LinearGradient
-                colors={['rgba(20, 30, 45, 0.9)', 'rgba(15, 25, 40, 0.95)']}
-                style={styles.setupCardGradient}
-              >
-                <MaterialCommunityIcons name="key" size={40} color="#00f3ff" />
-                <Text style={styles.setupCardTitle}>Configuración Requerida</Text>
-                <Text style={styles.setupCardText}>
-                  Para usar Nevin AI, necesitas configurar una clave API de Anthropic (Claude).
-                </Text>
-                <Text style={styles.setupCardHint}>
-                  Puedes obtener una clave en console.anthropic.com
-                </Text>
-                <TouchableOpacity 
-                  style={styles.setupButton}
-                  onPress={() => navigation.dispatch(CommonActions.navigate({ name: 'MainTabs', params: { screen: 'SettingsTab' } }))}
-                >
-                  <MaterialCommunityIcons name="cog" size={18} color="#0a0e14" />
-                  <Text style={styles.setupButtonText}>Ir a Configuración</Text>
-                </TouchableOpacity>
-              </LinearGradient>
-            </View>
-          </Animated.View>
-        </View>
-      </MainLayout>
-    );
-  }
-
   return (
     <MainLayout title="Nevin">
       <KeyboardAvoidingView
@@ -263,7 +203,7 @@ export default function NevinScreen() {
           showsVerticalScrollIndicator={false}
         >
           {messages.length === 0 && (
-            <View style={styles.welcomeCard}>
+            <Animated.View style={[styles.welcomeCard, { opacity: fadeAnim }]}>
               <LinearGradient
                 colors={['rgba(0, 255, 136, 0.1)', 'rgba(0, 243, 255, 0.05)']}
                 style={styles.welcomeGradient}
@@ -292,7 +232,7 @@ export default function NevinScreen() {
                   ))}
                 </View>
               </LinearGradient>
-            </View>
+            </Animated.View>
           )}
           
           {messages.map((message) => (
@@ -342,12 +282,6 @@ export default function NevinScreen() {
 
         <View style={styles.inputContainer}>
           <View style={styles.inputRow}>
-            <TouchableOpacity 
-              style={styles.settingsButton}
-              onPress={() => navigation.dispatch(CommonActions.navigate({ name: 'MainTabs', params: { screen: 'SettingsTab' } }))}
-            >
-              <MaterialCommunityIcons name="cog" size={22} color="#6b7c93" />
-            </TouchableOpacity>
             <TextInput
               value={inputMessage}
               onChangeText={setInputMessage}
@@ -380,17 +314,6 @@ export default function NevinScreen() {
 }
 
 const styles = StyleSheet.create({
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  loadingText: {
-    marginTop: 16,
-    color: '#6b7c93',
-    fontSize: 16,
-  },
   keyboardAvoid: {
     flex: 1,
   },
@@ -428,78 +351,6 @@ const styles = StyleSheet.create({
   chatDivider: {
     height: 1,
     backgroundColor: 'rgba(0, 243, 255, 0.2)',
-  },
-  setupContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-  },
-  setupContent: {
-    alignItems: 'center',
-    width: '100%',
-  },
-  robotIconContainer: {
-    marginBottom: 16,
-  },
-  setupTitle: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#00ff88',
-    textShadowColor: '#00ff88',
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 10,
-  },
-  setupSubtitle: {
-    fontSize: 16,
-    color: '#6b7c93',
-    marginTop: 8,
-    marginBottom: 32,
-  },
-  setupCard: {
-    width: '100%',
-    maxWidth: 380,
-    borderRadius: 20,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: 'rgba(0, 243, 255, 0.3)',
-  },
-  setupCardGradient: {
-    padding: 24,
-    alignItems: 'center',
-  },
-  setupCardTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginTop: 16,
-    marginBottom: 12,
-    color: '#e6f3ff',
-  },
-  setupCardText: {
-    fontSize: 15,
-    textAlign: 'center',
-    color: '#6b7c93',
-    marginBottom: 8,
-  },
-  setupCardHint: {
-    fontSize: 13,
-    textAlign: 'center',
-    color: '#6b7c93',
-    marginBottom: 20,
-  },
-  setupButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#00f3ff',
-    paddingHorizontal: 24,
-    paddingVertical: 14,
-    borderRadius: 12,
-  },
-  setupButtonText: {
-    color: '#0a0e14',
-    fontWeight: 'bold',
-    fontSize: 16,
-    marginLeft: 8,
   },
   welcomeCard: {
     borderRadius: 20,
@@ -633,17 +484,6 @@ const styles = StyleSheet.create({
   inputRow: {
     flexDirection: 'row',
     alignItems: 'flex-end',
-  },
-  settingsButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: 'rgba(20, 30, 45, 0.8)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 8,
-    borderWidth: 1,
-    borderColor: 'rgba(0, 243, 255, 0.2)',
   },
   input: {
     flex: 1,
