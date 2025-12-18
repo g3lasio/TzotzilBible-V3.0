@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView, RefreshControl, Dimensions, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, ScrollView, RefreshControl, Dimensions, TouchableOpacity, useWindowDimensions } from 'react-native';
 import { Text, ActivityIndicator } from 'react-native-paper';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -13,13 +13,16 @@ import MainLayout from '../components/MainLayout';
 type ChapterRouteProp = RouteProp<BibleStackParamList, 'Chapter'>;
 type NavigationProp = NativeStackNavigationProp<BibleStackParamList>;
 
-const { width } = Dimensions.get('window');
-const CARD_SIZE = (width - 80) / 5;
-
 export default function ChapterScreen() {
   const route = useRoute<ChapterRouteProp>();
   const navigation = useNavigation<NavigationProp>();
   const { book } = route.params;
+  const { width } = useWindowDimensions();
+  
+  const PADDING = 32;
+  const GAP = 12;
+  const COLUMNS = width < 400 ? 4 : 5;
+  const CARD_SIZE = (width - PADDING - (GAP * (COLUMNS - 1))) / COLUMNS;
   
   const [chapters, setChapters] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
@@ -109,7 +112,7 @@ export default function ChapterScreen() {
             {chapters.map((chapter) => (
               <TouchableOpacity
                 key={chapter}
-                style={styles.chapterCard}
+                style={[styles.chapterCard, { width: CARD_SIZE, height: CARD_SIZE }]}
                 onPress={() => handleChapterPress(chapter)}
                 activeOpacity={0.7}
               >
@@ -189,8 +192,6 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   chapterCard: {
-    width: CARD_SIZE,
-    height: CARD_SIZE,
     borderRadius: 12,
     overflow: 'hidden',
     borderWidth: 1,
