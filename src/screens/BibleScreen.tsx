@@ -201,7 +201,9 @@ export default function BibleScreen() {
   );
 }
 
-const cardWidth = (width - 44) / 2;
+const HORIZONTAL_PADDING = 16;
+const CARD_GAP = 12;
+const cardWidth = (width - (HORIZONTAL_PADDING * 2) - CARD_GAP) / 2;
 
 const styles = StyleSheet.create({
   container: {
