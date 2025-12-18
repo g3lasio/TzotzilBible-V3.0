@@ -14,6 +14,7 @@ export type BibleStackParamList = {
 };
 
 export type TabParamList = {
+  HomeTab: undefined;
   SearchTab: undefined;
   BibleTab: NavigatorScreenParams<BibleStackParamList>;
   NevinTab: { 
@@ -30,7 +31,6 @@ export type TabParamList = {
 };
 
 export type RootStackParamList = {
-  Home: undefined;
   MainTabs: NavigatorScreenParams<TabParamList>;
 };
 

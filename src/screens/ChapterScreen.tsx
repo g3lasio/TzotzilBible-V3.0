@@ -7,11 +7,11 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { BibleService } from '../services/BibleService';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RouteProp } from '@react-navigation/native';
-import type { RootStackParamList } from '../types/navigation';
+import type { BibleStackParamList } from '../types/navigation';
 import MainLayout from '../components/MainLayout';
 
-type ChapterRouteProp = RouteProp<RootStackParamList, 'Chapter'>;
-type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+type ChapterRouteProp = RouteProp<BibleStackParamList, 'Chapter'>;
+type NavigationProp = NativeStackNavigationProp<BibleStackParamList>;
 
 const { width } = Dimensions.get('window');
 const CARD_SIZE = (width - 80) / 5;

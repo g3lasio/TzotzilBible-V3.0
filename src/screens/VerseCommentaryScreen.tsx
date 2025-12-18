@@ -99,8 +99,7 @@ export default function VerseCommentaryScreen() {
   return (
     <MainLayout 
       title="Comentario Bíblico" 
-      showBackButton 
-      onBackPress={() => navigation.goBack()}
+      showBackButton
     >
       <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
         <View style={styles.verseHeader}>
