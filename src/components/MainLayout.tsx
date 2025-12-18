@@ -167,6 +167,8 @@ const styles = StyleSheet.create({
   headerLeft: {
     flexDirection: 'row',
     alignItems: 'center',
+    flex: 1,
+    overflow: 'hidden',
   },
   logoContainer: {
     marginLeft: 12,
@@ -177,6 +179,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#e6f3ff',
     marginLeft: 4,
+    flexShrink: 1,
   },
   content: {
     flex: 1,
