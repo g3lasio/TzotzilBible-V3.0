@@ -201,7 +201,7 @@ export default function BibleScreen() {
   );
 }
 
-const cardWidth = (width - 48) / 2;
+const cardWidth = (width - 44) / 2;
 
 const styles = StyleSheet.create({
   container: {
