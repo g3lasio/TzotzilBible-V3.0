@@ -3,9 +3,10 @@ import { View, StyleSheet, FlatList, Dimensions, TouchableOpacity } from 'react-
 import { Text, Searchbar, ActivityIndicator, Chip } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { BibleService } from '../services/BibleService';
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
-import type { RootStackParamList } from '../types/navigation';
+import type { BibleStackParamList } from '../types/navigation';
 import MainLayout from '../components/MainLayout';
 
 interface BookDisplay {
@@ -15,11 +16,12 @@ interface BookDisplay {
   testament: string;
 }
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Bible'>;
+type NavigationProp = NativeStackNavigationProp<BibleStackParamList>;
 
 const { width } = Dimensions.get('window');
 
-export default function BibleScreen({ navigation }: Props) {
+export default function BibleScreen() {
+  const navigation = useNavigation<NavigationProp>();
   const [books, setBooks] = useState<BookDisplay[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);

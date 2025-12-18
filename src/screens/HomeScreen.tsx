@@ -1,21 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { View, ScrollView, StyleSheet, Share, Dimensions, TouchableOpacity } from 'react-native';
-import { Text, ActivityIndicator, IconButton } from 'react-native-paper';
+import { Text, ActivityIndicator } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
-import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { BibleService } from '../services/BibleService';
-import type { RootStackParamList } from '../types/navigation';
 import MainLayout from '../components/MainLayout';
-import { theme, glassStyle } from '../theme';
-
-type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const { width } = Dimensions.get('window');
 
 export default function HomeScreen() {
-  const navigation = useNavigation<NavigationProp>();
   const [dailyPromise, setDailyPromise] = useState('');
   const [promiseReference, setPromiseReference] = useState('');
   const [loading, setLoading] = useState(true);
@@ -61,6 +54,11 @@ export default function HomeScreen() {
         contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}
       >
+        <View style={styles.welcomeSection}>
+          <Text style={styles.welcomeText}>Bienvenido</Text>
+          <Text style={styles.appName}>Tzotzil Bible</Text>
+        </View>
+
         <View style={styles.promiseCard}>
           <LinearGradient
             colors={['rgba(20, 30, 45, 0.8)', 'rgba(15, 25, 40, 0.9)']}
@@ -85,61 +83,8 @@ export default function HomeScreen() {
               <MaterialCommunityIcons name="share-variant" size={18} color="#0a0e14" />
               <Text style={styles.shareButtonText}>Compartir</Text>
             </TouchableOpacity>
-            
-            <Text style={styles.byLine}>by Tzotzil Bible</Text>
           </LinearGradient>
           <View style={styles.cardGlow} />
-        </View>
-
-        <View style={styles.quickActionsContainer}>
-          <Text style={styles.sectionTitle}>Acceso Rápido</Text>
-          <View style={styles.quickActions}>
-            <TouchableOpacity 
-              style={styles.actionCard} 
-              onPress={() => navigation.navigate('MainTabs', { screen: 'BibleTab' })}
-            >
-              <View style={styles.actionCardInner}>
-                <MaterialCommunityIcons name="book-open-page-variant" size={32} color="#00f3ff" />
-                <Text style={styles.actionTitle}>Leer</Text>
-                <Text style={styles.actionSubtitle}>Explorar la Biblia</Text>
-              </View>
-            </TouchableOpacity>
-            
-            <TouchableOpacity 
-              style={styles.actionCard} 
-              onPress={() => navigation.navigate('MainTabs', { screen: 'SearchTab' })}
-            >
-              <View style={styles.actionCardInner}>
-                <MaterialCommunityIcons name="magnify" size={32} color="#00f3ff" />
-                <Text style={styles.actionTitle}>Buscar</Text>
-                <Text style={styles.actionSubtitle}>Encontrar versículos</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-          
-          <View style={styles.quickActions}>
-            <TouchableOpacity 
-              style={styles.actionCard} 
-              onPress={() => navigation.navigate('MainTabs', { screen: 'NevinTab' })}
-            >
-              <View style={styles.actionCardInner}>
-                <MaterialCommunityIcons name="robot" size={32} color="#00ff88" />
-                <Text style={styles.actionTitle}>Nevin</Text>
-                <Text style={styles.actionSubtitle}>Asistente bíblico</Text>
-              </View>
-            </TouchableOpacity>
-            
-            <TouchableOpacity 
-              style={styles.actionCard} 
-              onPress={() => navigation.navigate('MainTabs', { screen: 'SettingsTab' })}
-            >
-              <View style={styles.actionCardInner}>
-                <MaterialCommunityIcons name="cog" size={32} color="#00f3ff" />
-                <Text style={styles.actionTitle}>Ajustes</Text>
-                <Text style={styles.actionSubtitle}>Personalizar</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
         </View>
 
         <View style={styles.statsCard}>
@@ -165,6 +110,18 @@ export default function HomeScreen() {
             </View>
           </LinearGradient>
         </View>
+
+        <View style={styles.tipCard}>
+          <LinearGradient
+            colors={['rgba(0, 243, 255, 0.08)', 'rgba(0, 255, 136, 0.05)']}
+            style={styles.tipGradient}
+          >
+            <MaterialCommunityIcons name="lightbulb-on-outline" size={24} color="#00f3ff" />
+            <Text style={styles.tipText}>
+              Usa la barra de navegación para explorar la Biblia, buscar versículos o hablar con Nevin AI.
+            </Text>
+          </LinearGradient>
+        </View>
       </ScrollView>
     </MainLayout>
   );
@@ -178,10 +135,30 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingBottom: 24,
   },
+  welcomeSection: {
+    alignItems: 'center',
+    marginBottom: 24,
+    marginTop: 8,
+  },
+  welcomeText: {
+    fontSize: 16,
+    color: '#6b7c93',
+    textTransform: 'uppercase',
+    letterSpacing: 2,
+  },
+  appName: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#00ff88',
+    marginTop: 4,
+    textShadowColor: '#00ff88',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 10,
+  },
   promiseCard: {
     borderRadius: 20,
     overflow: 'hidden',
-    marginBottom: 24,
+    marginBottom: 20,
     borderWidth: 1,
     borderColor: 'rgba(0, 255, 136, 0.4)',
     position: 'relative',
@@ -251,7 +228,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 25,
-    marginBottom: 16,
   },
   shareButtonText: {
     color: '#0a0e14',
@@ -259,54 +235,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginLeft: 8,
   },
-  byLine: {
-    color: '#6b7c93',
-    fontSize: 12,
-  },
-  quickActionsContainer: {
-    marginBottom: 24,
-  },
-  sectionTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#6b7c93',
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    marginBottom: 16,
-  },
-  quickActions: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 12,
-  },
-  actionCard: {
-    width: (width - 44) / 2,
-    borderRadius: 16,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: 'rgba(0, 243, 255, 0.3)',
-    backgroundColor: 'rgba(20, 30, 45, 0.6)',
-  },
-  actionCardInner: {
-    padding: 20,
-    alignItems: 'center',
-  },
-  actionTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#e6f3ff',
-    marginTop: 12,
-  },
-  actionSubtitle: {
-    fontSize: 12,
-    color: '#6b7c93',
-    marginTop: 4,
-  },
   statsCard: {
     borderRadius: 16,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: 'rgba(0, 243, 255, 0.2)',
+    marginBottom: 20,
   },
   statsGradient: {
     padding: 20,
@@ -338,5 +272,23 @@ const styles = StyleSheet.create({
     width: 1,
     height: 40,
     backgroundColor: 'rgba(0, 243, 255, 0.2)',
+  },
+  tipCard: {
+    borderRadius: 16,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 243, 255, 0.2)',
+  },
+  tipGradient: {
+    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  tipText: {
+    flex: 1,
+    fontSize: 14,
+    color: '#6b7c93',
+    marginLeft: 12,
+    lineHeight: 20,
   },
 });

@@ -47,10 +47,13 @@ function CustomTabBar({ state, descriptors, navigation }: any) {
           const isFocused = state.index === index;
 
           const iconName = 
+            route.name === 'HomeTab' ? 'home' :
             route.name === 'SearchTab' ? 'magnify' :
             route.name === 'BibleTab' ? 'book-open-page-variant' :
             route.name === 'NevinTab' ? 'robot' :
             route.name === 'SettingsTab' ? 'cog' : 'circle';
+
+          const isNevin = route.name === 'NevinTab';
 
           const onPress = () => {
             const event = navigation.emit({
@@ -69,13 +72,13 @@ function CustomTabBar({ state, descriptors, navigation }: any) {
               <MaterialCommunityIcons
                 name={iconName as any}
                 size={24}
-                color={isFocused ? '#00f3ff' : '#6b7c93'}
+                color={isFocused ? (isNevin ? '#00ff88' : '#00f3ff') : '#6b7c93'}
                 onPress={onPress}
               />
               <Text
                 style={[
                   styles.tabLabel,
-                  isFocused && styles.tabLabelActive
+                  isFocused && (isNevin ? styles.tabLabelActiveNevin : styles.tabLabelActive)
                 ]}
                 onPress={onPress}
               >
@@ -96,11 +99,12 @@ function MainTabNavigator() {
       screenOptions={{
         headerShown: false,
       }}
+      initialRouteName="HomeTab"
     >
       <Tab.Screen 
-        name="SearchTab" 
-        component={SearchScreen}
-        options={{ tabBarLabel: 'BUSCAR' }}
+        name="HomeTab" 
+        component={HomeScreen}
+        options={{ tabBarLabel: 'INICIO' }}
       />
       <Tab.Screen 
         name="BibleTab" 
@@ -111,6 +115,11 @@ function MainTabNavigator() {
         name="NevinTab" 
         component={NevinScreen}
         options={{ tabBarLabel: 'NEVIN' }}
+      />
+      <Tab.Screen 
+        name="SearchTab" 
+        component={SearchScreen}
+        options={{ tabBarLabel: 'BUSCAR' }}
       />
       <Tab.Screen 
         name="SettingsTab" 
@@ -130,7 +139,6 @@ export default function AppNavigator() {
         contentStyle: { backgroundColor: '#0a0e14' },
       }}
     >
-      <RootStack.Screen name="Home" component={HomeScreen} />
       <RootStack.Screen name="MainTabs" component={MainTabNavigator} />
     </RootStack.Navigator>
   );
@@ -169,5 +177,8 @@ const styles = StyleSheet.create({
   },
   tabLabelActive: {
     color: '#00f3ff',
+  },
+  tabLabelActiveNevin: {
+    color: '#00ff88',
   },
 });

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, Alert, TextInput as RNTextInput, TouchableOpacity } from 'react-native';
-import { List, Switch, Text, IconButton, Portal, Modal } from 'react-native-paper';
+import { View, StyleSheet, ScrollView, Alert, TouchableOpacity } from 'react-native';
+import { Switch, Text } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -8,30 +8,19 @@ import { NevinAIService } from '../services/NevinAIService';
 import MainLayout from '../components/MainLayout';
 
 export default function SettingsScreen() {
-  const [darkMode, setDarkMode] = useState(true);
   const [bilingualMode, setBilingualMode] = useState(true);
   const [selectedVersion, setSelectedVersion] = useState<'tzotzil' | 'rv1960'>('tzotzil');
   const [fontSize, setFontSize] = useState('medium');
-  const [hasApiKey, setHasApiKey] = useState(false);
-  const [showApiKeyModal, setShowApiKeyModal] = useState(false);
-  const [apiKeyInput, setApiKeyInput] = useState('');
 
   useEffect(() => {
     loadSettings();
-    checkApiKey();
   }, []);
-
-  const checkApiKey = async () => {
-    const hasKey = await NevinAIService.hasApiKey();
-    setHasApiKey(hasKey);
-  };
 
   const loadSettings = async () => {
     try {
       const settings = await AsyncStorage.getItem('userSettings');
       if (settings) {
         const parsed = JSON.parse(settings);
-        setDarkMode(parsed.darkMode ?? true);
         setBilingualMode(parsed.bilingualMode ?? true);
         setSelectedVersion(parsed.selectedVersion ?? 'tzotzil');
         setFontSize(parsed.fontSize ?? 'medium');
@@ -50,35 +39,6 @@ export default function SettingsScreen() {
     } catch (error) {
       console.error('Error saving settings:', error);
     }
-  };
-
-  const handleSaveApiKey = async () => {
-    if (apiKeyInput.trim()) {
-      await NevinAIService.setApiKey(apiKeyInput.trim());
-      setHasApiKey(true);
-      setShowApiKeyModal(false);
-      setApiKeyInput('');
-      Alert.alert('Listo', 'La clave API se guardó correctamente.');
-    }
-  };
-
-  const handleRemoveApiKey = () => {
-    Alert.alert(
-      'Eliminar Clave API',
-      '¿Estás seguro? Nevin AI dejará de funcionar sin una clave API.',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Eliminar',
-          style: 'destructive',
-          onPress: async () => {
-            await NevinAIService.setApiKey('');
-            await NevinAIService.clearChatHistory();
-            setHasApiKey(false);
-          }
-        }
-      ]
-    );
   };
 
   const handleClearData = () => {
@@ -235,54 +195,6 @@ export default function SettingsScreen() {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>NEVIN AI</Text>
-          <TouchableOpacity 
-            style={styles.settingCard}
-            onPress={() => setShowApiKeyModal(true)}
-          >
-            <LinearGradient
-              colors={['rgba(20, 30, 45, 0.8)', 'rgba(15, 25, 40, 0.9)']}
-              style={styles.settingGradient}
-            >
-              <View style={styles.settingRow}>
-                <View style={styles.settingLeft}>
-                  <MaterialCommunityIcons name="key" size={24} color="#00f3ff" />
-                  <View style={styles.settingInfo}>
-                    <Text style={styles.settingTitle}>Clave API de Anthropic</Text>
-                    <Text style={[styles.settingDesc, hasApiKey && { color: '#00ff88' }]}>
-                      {hasApiKey ? "Configurada ✓" : "No configurada"}
-                    </Text>
-                  </View>
-                </View>
-                <MaterialCommunityIcons name="chevron-right" size={24} color="#6b7c93" />
-              </View>
-            </LinearGradient>
-          </TouchableOpacity>
-          
-          {hasApiKey && (
-            <TouchableOpacity 
-              style={styles.settingCard}
-              onPress={handleRemoveApiKey}
-            >
-              <LinearGradient
-                colors={['rgba(20, 30, 45, 0.8)', 'rgba(15, 25, 40, 0.9)']}
-                style={styles.settingGradient}
-              >
-                <View style={styles.settingRow}>
-                  <View style={styles.settingLeft}>
-                    <MaterialCommunityIcons name="key-remove" size={24} color="#ff6b6b" />
-                    <View style={styles.settingInfo}>
-                      <Text style={[styles.settingTitle, { color: '#ff6b6b' }]}>Eliminar Clave API</Text>
-                      <Text style={styles.settingDesc}>Desactivar Nevin AI</Text>
-                    </View>
-                  </View>
-                </View>
-              </LinearGradient>
-            </TouchableOpacity>
-          )}
-        </View>
-
-        <View style={styles.section}>
           <Text style={styles.sectionTitle}>DATOS</Text>
           <TouchableOpacity 
             style={styles.settingCard}
@@ -310,51 +222,9 @@ export default function SettingsScreen() {
           <Text style={styles.infoSubtext}>Tzotzil Bible</Text>
           <Text style={styles.infoNote}>
             La Biblia funciona completamente sin internet.{'\n'}
-            Nevin AI requiere conexión a internet y una clave API.
+            Nevin AI requiere conexión a internet.
           </Text>
         </View>
-
-        <Portal>
-          <Modal 
-            visible={showApiKeyModal} 
-            onDismiss={() => setShowApiKeyModal(false)} 
-            contentContainerStyle={styles.modalContainer}
-          >
-            <LinearGradient
-              colors={['rgba(20, 30, 45, 0.98)', 'rgba(15, 25, 40, 0.98)']}
-              style={styles.modalGradient}
-            >
-              <Text style={styles.modalTitle}>Configurar Nevin AI</Text>
-              <Text style={styles.modalText}>
-                Para usar Nevin AI, necesitas una clave API de Anthropic. 
-                Puedes obtener una en console.anthropic.com
-              </Text>
-              <RNTextInput
-                style={styles.apiInput}
-                placeholder="sk-ant-..."
-                placeholderTextColor="#6b7c93"
-                value={apiKeyInput}
-                onChangeText={setApiKeyInput}
-                secureTextEntry
-                autoCapitalize="none"
-              />
-              <View style={styles.modalButtons}>
-                <TouchableOpacity 
-                  style={styles.modalButtonCancel}
-                  onPress={() => setShowApiKeyModal(false)}
-                >
-                  <Text style={styles.modalButtonCancelText}>Cancelar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity 
-                  style={styles.modalButtonSave}
-                  onPress={handleSaveApiKey}
-                >
-                  <Text style={styles.modalButtonSaveText}>Guardar</Text>
-                </TouchableOpacity>
-              </View>
-            </LinearGradient>
-          </Modal>
-        </Portal>
       </ScrollView>
     </MainLayout>
   );
@@ -494,70 +364,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 16,
     lineHeight: 18,
-  },
-  modalContainer: {
-    margin: 20,
-    borderRadius: 20,
-    overflow: 'hidden',
-  },
-  modalGradient: {
-    padding: 24,
-    borderWidth: 1,
-    borderColor: 'rgba(0, 243, 255, 0.3)',
-    borderRadius: 20,
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#e6f3ff',
-    marginBottom: 12,
-    textAlign: 'center',
-  },
-  modalText: {
-    fontSize: 14,
-    color: '#6b7c93',
-    marginBottom: 20,
-    textAlign: 'center',
-    lineHeight: 20,
-  },
-  apiInput: {
-    borderWidth: 1,
-    borderColor: 'rgba(0, 243, 255, 0.3)',
-    borderRadius: 12,
-    padding: 16,
-    fontSize: 14,
-    backgroundColor: 'rgba(10, 14, 20, 0.8)',
-    color: '#e6f3ff',
-    marginBottom: 20,
-  },
-  modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: 12,
-  },
-  modalButtonCancel: {
-    flex: 1,
-    paddingVertical: 14,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: 'rgba(0, 243, 255, 0.3)',
-    alignItems: 'center',
-  },
-  modalButtonCancelText: {
-    color: '#6b7c93',
-    fontWeight: '600',
-    fontSize: 16,
-  },
-  modalButtonSave: {
-    flex: 1,
-    paddingVertical: 14,
-    borderRadius: 12,
-    backgroundColor: '#00f3ff',
-    alignItems: 'center',
-  },
-  modalButtonSaveText: {
-    color: '#0a0e14',
-    fontWeight: 'bold',
-    fontSize: 16,
   },
 });
