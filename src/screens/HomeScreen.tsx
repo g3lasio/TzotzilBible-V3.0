@@ -96,7 +96,7 @@ export default function HomeScreen() {
           <View style={styles.quickActions}>
             <TouchableOpacity 
               style={styles.actionCard} 
-              onPress={() => navigation.navigate('Bible')}
+              onPress={() => navigation.navigate('MainTabs', { screen: 'BibleTab' })}
             >
               <View style={styles.actionCardInner}>
                 <MaterialCommunityIcons name="book-open-page-variant" size={32} color="#00f3ff" />
@@ -107,7 +107,7 @@ export default function HomeScreen() {
             
             <TouchableOpacity 
               style={styles.actionCard} 
-              onPress={() => navigation.navigate('Search')}
+              onPress={() => navigation.navigate('MainTabs', { screen: 'SearchTab' })}
             >
               <View style={styles.actionCardInner}>
                 <MaterialCommunityIcons name="magnify" size={32} color="#00f3ff" />
@@ -120,7 +120,7 @@ export default function HomeScreen() {
           <View style={styles.quickActions}>
             <TouchableOpacity 
               style={styles.actionCard} 
-              onPress={() => navigation.navigate('Nevin')}
+              onPress={() => navigation.navigate('MainTabs', { screen: 'NevinTab' })}
             >
               <View style={styles.actionCardInner}>
                 <MaterialCommunityIcons name="robot" size={32} color="#00ff88" />
@@ -131,7 +131,7 @@ export default function HomeScreen() {
             
             <TouchableOpacity 
               style={styles.actionCard} 
-              onPress={() => navigation.navigate('Settings')}
+              onPress={() => navigation.navigate('MainTabs', { screen: 'SettingsTab' })}
             >
               <View style={styles.actionCardInner}>
                 <MaterialCommunityIcons name="cog" size={32} color="#00f3ff" />

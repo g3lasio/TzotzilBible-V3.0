@@ -114,7 +114,7 @@ export default function NevinScreen() {
 
   if (checkingKey) {
     return (
-      <MainLayout title="Nevin" hideBottomNav>
+      <MainLayout title="Nevin">
         <View style={styles.centered}>
           <ActivityIndicator size="large" color="#00f3ff" />
           <Text style={styles.loadingText}>Verificando configuración...</Text>
@@ -163,7 +163,7 @@ export default function NevinScreen() {
   }
 
   return (
-    <MainLayout title="Nevin" hideBottomNav>
+    <MainLayout title="Nevin">
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardAvoid}

@@ -77,7 +77,7 @@ export default function ChapterScreen() {
   }
 
   return (
-    <MainLayout title={book} showBackButton hideBottomNav>
+    <MainLayout title={book} showBackButton>
       <View style={styles.container}>
         <View style={styles.headerSection}>
           <MaterialCommunityIcons name="book-open-variant" size={28} color="#00ff88" />

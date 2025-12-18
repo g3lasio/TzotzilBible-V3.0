@@ -4,10 +4,9 @@ import { Text, IconButton } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation, useRoute, CommonActions } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import type { RootStackParamList } from '../types/navigation';
-import { theme, glassStyle } from '../theme';
+import type { RootStackParamList, TabParamList } from '../types/navigation';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -17,34 +16,51 @@ interface MainLayoutProps {
   children: React.ReactNode;
   showBackButton?: boolean;
   title?: string;
-  hideBottomNav?: boolean;
 }
 
-const menuItems = [
-  { name: 'Home', icon: 'home', label: 'Inicio', route: 'Home' as const },
-  { name: 'Bible', icon: 'book-open-page-variant', label: 'Explorar la Biblia', route: 'Bible' as const },
-  { name: 'Search', icon: 'magnify', label: 'Buscar', route: 'Search' as const },
-  { name: 'Nevin', icon: 'robot', label: 'Nevin AI', route: 'Nevin' as const },
-  { name: 'Settings', icon: 'cog', label: 'Ajustes', route: 'Settings' as const },
+type MenuItem = {
+  name: string;
+  icon: string;
+  label: string;
+  route: 'Home' | keyof TabParamList;
+  isTab: boolean;
+};
+
+const menuItems: MenuItem[] = [
+  { name: 'Home', icon: 'home', label: 'Inicio', route: 'Home', isTab: false },
+  { name: 'Bible', icon: 'book-open-page-variant', label: 'Explorar la Biblia', route: 'BibleTab', isTab: true },
+  { name: 'Search', icon: 'magnify', label: 'Buscar', route: 'SearchTab', isTab: true },
+  { name: 'Nevin', icon: 'robot', label: 'Nevin AI', route: 'NevinTab', isTab: true },
+  { name: 'Settings', icon: 'cog', label: 'Ajustes', route: 'SettingsTab', isTab: true },
 ];
 
-const bottomTabs = [
-  { icon: 'magnify', label: 'BUSCAR', route: 'Search' as const },
-  { icon: 'book-open-page-variant', label: 'LEER', route: 'Bible' as const },
-  { icon: 'robot', label: 'NEVIN', route: 'Nevin' as const },
-  { icon: 'cog', label: 'AJUSTES', route: 'Settings' as const },
-];
-
-export default function MainLayout({ children, showBackButton = false, title, hideBottomNav = false }: MainLayoutProps) {
+export default function MainLayout({ children, showBackButton = false, title }: MainLayoutProps) {
   const navigation = useNavigation<NavigationProp>();
   const route = useRoute();
   const [menuVisible, setMenuVisible] = useState(false);
 
   const currentRoute = route.name;
 
-  const handleNavigate = (routeName: keyof RootStackParamList) => {
+  const handleNavigate = (item: MenuItem) => {
     setMenuVisible(false);
-    navigation.navigate(routeName as any);
+    if (item.isTab) {
+      navigation.navigate('MainTabs', { screen: item.route as keyof TabParamList });
+    } else {
+      navigation.navigate(item.route as any);
+    }
+  };
+
+  const isActive = (item: MenuItem) => {
+    if (item.route === 'Home') {
+      return currentRoute === 'Home';
+    }
+    const tabRouteMap: Record<string, string[]> = {
+      'BibleTab': ['BibleList', 'Bible', 'Chapter', 'Verses'],
+      'SearchTab': ['Search'],
+      'NevinTab': ['Nevin'],
+      'SettingsTab': ['Settings'],
+    };
+    return tabRouteMap[item.route]?.includes(currentRoute) || false;
   };
 
   return (
@@ -83,39 +99,6 @@ export default function MainLayout({ children, showBackButton = false, title, hi
           </View>
         </SafeAreaView>
 
-        {!hideBottomNav && (
-          <View style={styles.bottomNavContainer}>
-            <View style={styles.bottomNavLine} />
-            <SafeAreaView edges={['bottom']} style={styles.bottomNavSafeArea}>
-              <View style={styles.bottomNav}>
-                {bottomTabs.map((tab) => {
-                  const isActive = currentRoute === tab.route || 
-                    (tab.route === 'Bible' && (currentRoute === 'Chapter' || currentRoute === 'Verses'));
-                  return (
-                    <TouchableOpacity
-                      key={tab.route}
-                      style={styles.bottomTab}
-                      onPress={() => handleNavigate(tab.route)}
-                    >
-                      <MaterialCommunityIcons
-                        name={tab.icon as any}
-                        size={24}
-                        color={isActive ? '#00f3ff' : '#6b7c93'}
-                      />
-                      <Text style={[
-                        styles.bottomTabLabel,
-                        isActive && styles.bottomTabLabelActive
-                      ]}>
-                        {tab.label}
-                      </Text>
-                    </TouchableOpacity>
-                  );
-                })}
-              </View>
-            </SafeAreaView>
-          </View>
-        )}
-
         <Modal
           visible={menuVisible}
           transparent
@@ -138,19 +121,19 @@ export default function MainLayout({ children, showBackButton = false, title, hi
                 </View>
                 <View style={styles.menuDivider} />
                 {menuItems.map((item) => {
-                  const isActive = currentRoute === item.route;
+                  const active = isActive(item);
                   return (
                     <TouchableOpacity
                       key={item.name}
-                      style={[styles.menuItem, isActive && styles.menuItemActive]}
-                      onPress={() => handleNavigate(item.route)}
+                      style={[styles.menuItem, active && styles.menuItemActive]}
+                      onPress={() => handleNavigate(item)}
                     >
                       <MaterialCommunityIcons
                         name={item.icon as any}
                         size={24}
-                        color={isActive ? '#00ff88' : '#00f3ff'}
+                        color={active ? '#00ff88' : '#00f3ff'}
                       />
-                      <Text style={[styles.menuItemText, isActive && styles.menuItemTextActive]}>
+                      <Text style={[styles.menuItemText, active && styles.menuItemTextActive]}>
                         {item.label}
                       </Text>
                     </TouchableOpacity>
@@ -203,44 +186,6 @@ const styles = StyleSheet.create({
   },
   content: {
     flex: 1,
-  },
-  bottomNavContainer: {
-    backgroundColor: 'rgba(10, 14, 20, 0.95)',
-  },
-  bottomNavLine: {
-    height: 1,
-    backgroundColor: '#00f3ff',
-    shadowColor: '#00f3ff',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.8,
-    shadowRadius: 4,
-  },
-  bottomNavSafeArea: {
-    backgroundColor: 'rgba(10, 14, 20, 0.95)',
-  },
-  bottomNav: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-  },
-  bottomTab: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    minWidth: 70,
-  },
-  bottomTabLabel: {
-    fontSize: 10,
-    fontWeight: '600',
-    color: '#6b7c93',
-    marginTop: 4,
-    letterSpacing: 0.5,
-  },
-  bottomTabLabelActive: {
-    color: '#00f3ff',
   },
   modalOverlay: {
     flex: 1,

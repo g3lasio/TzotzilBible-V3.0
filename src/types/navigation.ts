@@ -1,14 +1,21 @@
-export type RootStackParamList = {
-  Login: undefined;
-  Register: undefined;
-  ForgotPassword: undefined;
-  Home: undefined;
-  Bible: undefined;
+import { NavigatorScreenParams } from '@react-navigation/native';
+
+export type BibleStackParamList = {
+  BibleList: undefined;
   Chapter: { book: string };
   Verses: { book: string; chapter: number; initialVerse?: number };
-  Search: undefined;
-  Nevin: undefined;
-  Settings: undefined;
+};
+
+export type TabParamList = {
+  SearchTab: undefined;
+  BibleTab: NavigatorScreenParams<BibleStackParamList>;
+  NevinTab: undefined;
+  SettingsTab: undefined;
+};
+
+export type RootStackParamList = {
+  Home: undefined;
+  MainTabs: NavigatorScreenParams<TabParamList>;
 };
 
 declare global {
