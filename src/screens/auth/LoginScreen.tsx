@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { Text, Surface, Button } from 'react-native-paper';
-import { AuthService } from '../../services/AuthService';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../../types/navigation';
@@ -11,24 +10,12 @@ type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 export default function LoginScreen() {
   const navigation = useNavigation<NavigationProp>();
 
-  useEffect(() => {
-    autoLogin();
-  }, []);
-
-  const autoLogin = async () => {
-    await AuthService.ensureLocalUser();
-    navigation.replace('Home');
-  };
-
   return (
     <View style={styles.container}>
       <Surface style={styles.surface}>
         <Text variant="headlineMedium" style={styles.title}>Biblia Tzotzil</Text>
         <Text style={styles.subtitle}>Cargando...</Text>
         <ActivityIndicator size="large" color="#6200ee" style={styles.loader} />
-        <Button mode="contained" onPress={autoLogin} style={styles.button}>
-          Entrar
-        </Button>
       </Surface>
     </View>
   );

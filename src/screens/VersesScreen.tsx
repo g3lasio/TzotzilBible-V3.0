@@ -97,7 +97,7 @@ export default function VersesScreen() {
   }
 
   return (
-    <MainLayout title={`${book} ${chapter}`} showBackButton hideBottomNav>
+    <MainLayout title={`${book} ${chapter}`} showBackButton>
       <View style={styles.container}>
         <View style={styles.controls}>
           <View style={styles.languageToggles}>
