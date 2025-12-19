@@ -9,49 +9,45 @@ export default {
     splash: {
       image: "./assets/splash-icon.png",
       resizeMode: "contain",
-      backgroundColor: "#0a0e14"
+      backgroundColor: "#0a0e14",
     },
-    assetBundlePatterns: [
-      "**/*"
-    ],
+    assetBundlePatterns: ["**/*"],
     ios: {
       supportsTablet: true,
       bundleIdentifier: "com.chyrris.tzotzilbible",
-      buildNumber: "23",
+      buildNumber: "24",
       infoPlist: {
         CFBundleDisplayName: "Tzotzil Bible",
-        UIBackgroundModes: []
+        UIBackgroundModes: [],
       },
       config: {
-        usesNonExemptEncryption: false
-      }
+        usesNonExemptEncryption: false,
+      },
     },
     android: {
       adaptiveIcon: {
         foregroundImage: "./assets/adaptive-icon.png",
-        backgroundColor: "#0a0e14"
+        backgroundColor: "#0a0e14",
       },
       package: "com.chyrris.tzotzilbible",
-      versionCode: 23,
-      permissions: [
-        "android.permission.INTERNET"
-      ],
+      versionCode: 24,
+      permissions: ["android.permission.INTERNET"],
       compileSdkVersion: 34,
       targetSdkVersion: 34,
       minSdkVersion: 21,
       blockedPermissions: [
         "android.permission.RECORD_AUDIO",
-        "android.permission.MODIFY_AUDIO_SETTINGS"
-      ]
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+      ],
     },
     web: {
       favicon: "./assets/favicon.png",
-      bundler: "metro"
+      bundler: "metro",
     },
     extra: {
       eas: {
-        projectId: ""
-      }
+        projectId: "df16967f-65d9-4e6f-857a-ee208dfad9d8",
+      },
     },
     plugins: [
       "expo-font",
@@ -62,17 +58,17 @@ export default {
           image: "./assets/splash-icon.png",
           dark: {
             backgroundColor: "#0a0e14",
-            image: "./assets/splash-icon.png"
+            image: "./assets/splash-icon.png",
           },
-          imageWidth: 200
-        }
-      ]
+          imageWidth: 200,
+        },
+      ],
     ],
     updates: {
-      fallbackToCacheTimeout: 0
+      fallbackToCacheTimeout: 0,
     },
     runtimeVersion: {
-      policy: "sdkVersion"
-    }
-  }
+      policy: "sdkVersion",
+    },
+  },
 };
