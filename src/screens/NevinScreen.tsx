@@ -14,6 +14,30 @@ type NevinRouteProp = RouteProp<TabParamList, 'NevinTab'>;
 
 const { width } = Dimensions.get('window');
 
+const INTRIGUE_QUESTIONS = [
+  '¿Por qué Dios descansó si no se cansa?',
+  '¿El árbol prohibido era realmente malo?',
+  '¿Judas tuvo opción de no traicionar?',
+  '¿Por qué Jesús lloró si sabía que resucitaría a Lázaro?',
+  '¿Por qué Dios endureció el corazón de Faraón?',
+  '¿Qué idioma hablaban en el Edén?',
+  '¿Satanás puede leer nuestros pensamientos?',
+  '¿Por qué murió Moisés sin entrar a Canaán?',
+  '¿Los ángeles tienen libre albedrío?',
+  '¿Por qué permitió Dios que Job sufriera?',
+  '¿Qué pasó con el arca del pacto?',
+  '¿Por qué Elías tuvo miedo de Jezabel?',
+  '¿Caín encontró esposa en otro lugar?',
+  '¿Por qué Jesús maldijo la higuera?',
+  '¿Los animales van al cielo?',
+];
+
+const getRandomQuestions = () => {
+  const shuffled = [...INTRIGUE_QUESTIONS].sort(() => Math.random() - 0.5);
+  const count = Math.floor(Math.random() * 2) + 3;
+  return shuffled.slice(0, count);
+};
+
 interface Message {
   id: string;
   content: string;
@@ -29,6 +53,7 @@ export default function NevinScreen() {
   const [loading, setLoading] = useState(false);
   const [initialQuestionProcessed, setInitialQuestionProcessed] = useState(false);
   const [historyLoaded, setHistoryLoaded] = useState(false);
+  const [randomQuestions] = useState(() => getRandomQuestions());
   const scrollViewRef = useRef<ScrollView>(null);
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
@@ -176,25 +201,19 @@ export default function NevinScreen() {
         keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
       >
         <View style={styles.chatHeader}>
-          <View style={styles.chatHeaderInfo}>
-            <View style={styles.nevinAvatar}>
-              <MaterialCommunityIcons name="creation" size={24} color="#00ff88" />
-            </View>
-            <View>
-              <Text style={styles.chatHeaderTitle}>Nevin</Text>
-              <Text style={styles.chatHeaderSubtitle}>Asistente Bíblico</Text>
+          <View style={styles.headerLeft}>
+            <Text style={styles.chatHeaderTitle}>Nevin</Text>
+            <View style={styles.statusIndicator}>
+              <View style={styles.statusDot} />
+              <Text style={styles.statusText}>En línea</Text>
             </View>
           </View>
           {messages.length > 0 && (
-            <IconButton 
-              icon="delete-outline"
-              iconColor="#6b7c93"
-              size={24}
-              onPress={handleClearHistory}
-            />
+            <TouchableOpacity style={styles.clearButton} onPress={handleClearHistory}>
+              <MaterialCommunityIcons name="trash-can-outline" size={18} color="#6b7c93" />
+            </TouchableOpacity>
           )}
         </View>
-        <View style={styles.chatDivider} />
 
         <ScrollView
           ref={scrollViewRef}
@@ -203,35 +222,28 @@ export default function NevinScreen() {
           showsVerticalScrollIndicator={false}
         >
           {messages.length === 0 && (
-            <Animated.View style={[styles.welcomeCard, { opacity: fadeAnim }]}>
-              <LinearGradient
-                colors={['rgba(0, 255, 136, 0.1)', 'rgba(0, 243, 255, 0.05)']}
-                style={styles.welcomeGradient}
-              >
-                <MaterialCommunityIcons name="hand-wave" size={40} color="#00ff88" />
-                <Text style={styles.welcomeTitle}>¡Paz a ti! Soy Nevin</Text>
-                <Text style={styles.welcomeText}>
-                  Tu asistente bíblico con inteligencia artificial. 
-                  Puedo ayudarte con preguntas sobre la Biblia, 
-                  interpretaciones teológicas y principios adventistas.
+            <Animated.View style={[styles.welcomeContainer, { opacity: fadeAnim }]}>
+              <View style={styles.welcomeContent}>
+                <Text style={styles.welcomeGreeting}>Hola</Text>
+                <Text style={styles.welcomeSubtext}>
+                  Pregúntame sobre la Biblia, profecías o teología
                 </Text>
-                <View style={styles.suggestionsContainer}>
-                  <Text style={styles.suggestionsTitle}>Prueba preguntándome:</Text>
-                  {[
-                    '¿Qué significa Juan 3:16?',
-                    '¿Cuál es el día de reposo bíblico?',
-                    'Explica la parábola del hijo pródigo'
-                  ].map((suggestion, index) => (
+              </View>
+              
+              <View style={styles.intrigueContainer}>
+                <Text style={styles.intrigueLabel}>Explora algo:</Text>
+                <View style={styles.intrigueChips}>
+                  {randomQuestions.map((question, index) => (
                     <TouchableOpacity
                       key={index}
-                      style={styles.suggestionButton}
-                      onPress={() => setInputMessage(suggestion)}
+                      style={styles.intrigueChip}
+                      onPress={() => setInputMessage(question)}
                     >
-                      <Text style={styles.suggestionButtonText}>{suggestion}</Text>
+                      <Text style={styles.intrigueChipText}>{question}</Text>
                     </TouchableOpacity>
                   ))}
                 </View>
-              </LinearGradient>
+              </View>
             </Animated.View>
           )}
           
@@ -322,85 +334,88 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0, 243, 255, 0.1)',
   },
-  chatHeaderInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  nevinAvatar: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(0, 255, 136, 0.15)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-    borderWidth: 1,
-    borderColor: 'rgba(0, 255, 136, 0.4)',
+  headerLeft: {
+    flexDirection: 'column',
   },
   chatHeaderTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
-    color: '#e6f3ff',
+    color: '#00ff88',
+    letterSpacing: 0.5,
   },
-  chatHeaderSubtitle: {
-    fontSize: 12,
+  statusIndicator: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 2,
+  },
+  statusDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: '#00ff88',
+    marginRight: 5,
+  },
+  statusText: {
+    fontSize: 11,
     color: '#6b7c93',
   },
-  chatDivider: {
-    height: 1,
-    backgroundColor: 'rgba(0, 243, 255, 0.2)',
-  },
-  welcomeCard: {
-    borderRadius: 20,
-    overflow: 'hidden',
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(0, 255, 136, 0.3)',
-  },
-  welcomeGradient: {
-    padding: 24,
+  clearButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(107, 124, 147, 0.1)',
+    justifyContent: 'center',
     alignItems: 'center',
   },
-  welcomeTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginTop: 12,
-    color: '#00ff88',
-    textShadowColor: '#00ff88',
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 8,
+  welcomeContainer: {
+    paddingTop: 40,
+    paddingHorizontal: 8,
   },
-  welcomeText: {
-    fontSize: 15,
-    lineHeight: 22,
+  welcomeContent: {
+    alignItems: 'center',
+    marginBottom: 40,
+  },
+  welcomeGreeting: {
+    fontSize: 32,
+    fontWeight: '300',
     color: '#e6f3ff',
-    textAlign: 'center',
-    marginTop: 12,
-  },
-  suggestionsContainer: {
-    marginTop: 20,
-    width: '100%',
-  },
-  suggestionsTitle: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#6b7c93',
-    marginBottom: 10,
-  },
-  suggestionButton: {
-    backgroundColor: 'rgba(0, 255, 136, 0.1)',
-    borderWidth: 1,
-    borderColor: 'rgba(0, 255, 136, 0.3)',
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
     marginBottom: 8,
   },
-  suggestionButtonText: {
-    color: '#00ff88',
+  welcomeSubtext: {
     fontSize: 14,
+    color: '#6b7c93',
+    textAlign: 'center',
+  },
+  intrigueContainer: {
+    marginTop: 10,
+  },
+  intrigueLabel: {
+    fontSize: 11,
+    color: '#6b7c93',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    marginBottom: 12,
+  },
+  intrigueChips: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  intrigueChip: {
+    backgroundColor: 'rgba(0, 243, 255, 0.06)',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 243, 255, 0.15)',
+    borderRadius: 16,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  intrigueChipText: {
+    color: '#a0b8d0',
+    fontSize: 12,
   },
   messagesContainer: {
     flex: 1,
