@@ -6,10 +6,10 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import MainLayout from '../components/MainLayout';
 import { FONTS } from '../config';
 
-const SUPPORT_EMAIL = 'support@tzotzilbible.app';
-const FEEDBACK_EMAIL = 'feedback@tzotzilbible.app';
-const PRIVACY_EMAIL = 'privacy@tzotzilbible.app';
-const WEBSITE = 'https://tzotzilbible.app';
+const SUPPORT_EMAIL = 'gelasio@chyrris.com';
+const FEEDBACK_EMAIL = 'gelasio@chyrris.com';
+const PRIVACY_EMAIL = 'gelasio@chyrris.com';
+const WEBSITE = 'https://bible.chyrris.com';
 const APP_VERSION = '2.1.0';
 
 export default function ContactSupportScreen() {
