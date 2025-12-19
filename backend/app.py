@@ -180,6 +180,82 @@ def chat():
         }), 500
 
 
+@app.route('/api/nevin/generate-moment-title', methods=['POST'])
+def generate_moment_title():
+    try:
+        api_key = get_api_key()
+        if not api_key:
+            return jsonify({
+                'success': False,
+                'error': 'Servicio no configurado'
+            }), 500
+
+        data = request.json
+        if not data:
+            return jsonify({'success': False, 'error': 'No data provided'}), 400
+
+        conversation = data.get('conversation', '')
+        if not conversation:
+            return jsonify({'title': 'Reflexión bíblica', 'themes': []})
+
+        prompt = f"""Analiza esta conversación y genera un título semántico breve y reflexivo que capture la esencia del tema discutido. NO uses "Conversación sobre..." ni formatos genéricos.
+
+CONVERSACIÓN:
+{conversation}
+
+Responde SOLO en JSON con este formato exacto:
+{{
+  "title": "título poético/reflexivo de 2-5 palabras",
+  "themes": ["tema1", "tema2"],
+  "summary": "resumen de una oración del punto clave"
+}}
+
+Ejemplos de buenos títulos:
+- "Sobre el perdón divino"
+- "La fe en tiempos difíciles"
+- "Una duda sobre Génesis"
+- "El propósito del sufrimiento"
+- "Comparando versiones bíblicas"
+"""
+
+        response = requests.post(
+            ANTHROPIC_API_URL,
+            headers={
+                'Content-Type': 'application/json',
+                'x-api-key': api_key,
+                'anthropic-version': '2023-06-01'
+            },
+            json={
+                'model': ANTHROPIC_MODEL,
+                'max_tokens': 200,
+                'messages': [{'role': 'user', 'content': prompt}]
+            },
+            timeout=30
+        )
+
+        if not response.ok:
+            return jsonify({'title': 'Reflexión bíblica', 'themes': []})
+
+        result = response.json()
+        text = result.get('content', [{}])[0].get('text', '{}')
+        
+        import json
+        try:
+            parsed = json.loads(text)
+            return jsonify({
+                'success': True,
+                'title': parsed.get('title', 'Reflexión bíblica'),
+                'themes': parsed.get('themes', []),
+                'summary': parsed.get('summary', '')
+            })
+        except json.JSONDecodeError:
+            return jsonify({'title': 'Reflexión bíblica', 'themes': []})
+
+    except Exception as e:
+        logging.error(f'Error generating moment title: {e}')
+        return jsonify({'title': 'Reflexión bíblica', 'themes': []})
+
+
 @app.route('/api/nevin/verse-commentary', methods=['POST'])
 def verse_commentary():
     try:
