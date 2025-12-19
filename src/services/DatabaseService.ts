@@ -1,8 +1,15 @@
-import * as SQLite from 'expo-sqlite';
-import * as FileSystem from 'expo-file-system/legacy';
-import { Asset } from 'expo-asset';
 import { Platform } from 'react-native';
 import { BibleVerse, Book, Chapter } from '../types/bible';
+
+let SQLite: typeof import('expo-sqlite') | null = null;
+let FileSystem: typeof import('expo-file-system/legacy') | null = null;
+let Asset: typeof import('expo-asset').Asset | null = null;
+
+if (Platform.OS !== 'web') {
+  SQLite = require('expo-sqlite');
+  FileSystem = require('expo-file-system/legacy');
+  Asset = require('expo-asset').Asset;
+}
 
 export interface PromiseEntry {
   id: number;
@@ -14,7 +21,7 @@ export type InitializationStatus = 'pending' | 'initializing' | 'ready' | 'web_f
 
 export class DatabaseService {
   private static instance: DatabaseService;
-  private db: SQLite.SQLiteDatabase | null = null;
+  private db: any = null;
   private static readonly DB_NAME = 'bible.db';
   private initStatus: InitializationStatus = 'pending';
   private initError: Error | null = null;
@@ -65,7 +72,7 @@ export class DatabaseService {
       }
 
       await this.copyDatabaseFromAssets();
-      this.db = await SQLite.openDatabaseAsync(DatabaseService.DB_NAME);
+      this.db = await SQLite!.openDatabaseAsync(DatabaseService.DB_NAME);
       
       const testResult = await this.db.getFirstAsync<{ count: number }>(
         'SELECT COUNT(*) as count FROM books'
@@ -89,22 +96,22 @@ export class DatabaseService {
   private async copyDatabaseFromAssets(): Promise<void> {
     if (Platform.OS === 'web') return;
 
-    const dbDir = `${FileSystem.documentDirectory}SQLite/`;
+    const dbDir = `${FileSystem!.documentDirectory}SQLite/`;
     const dbPath = `${dbDir}${DatabaseService.DB_NAME}`;
     
-    const dirInfo = await FileSystem.getInfoAsync(dbDir);
+    const dirInfo = await FileSystem!.getInfoAsync(dbDir);
     if (!dirInfo.exists) {
-      await FileSystem.makeDirectoryAsync(dbDir, { intermediates: true });
+      await FileSystem!.makeDirectoryAsync(dbDir, { intermediates: true });
     }
 
-    const fileInfo = await FileSystem.getInfoAsync(dbPath);
+    const fileInfo = await FileSystem!.getInfoAsync(dbPath);
     if (!fileInfo.exists) {
       try {
-        const asset = Asset.fromModule(require('../../assets/bible.db'));
+        const asset = Asset!.fromModule(require('../../assets/bible.db'));
         await asset.downloadAsync();
         
         if (asset.localUri) {
-          await FileSystem.copyAsync({
+          await FileSystem!.copyAsync({
             from: asset.localUri,
             to: dbPath
           });

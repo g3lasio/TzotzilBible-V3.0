@@ -4,7 +4,7 @@ run = "cd temp_nevin && npx expo start --web --port=8083"
 modules = ["nodejs-20", "python-3.11"]
 
 [deployment]
-run = ["sh", "-c", "cd temp_nevin && npm run web"]
+run = ["sh", "-c", "npx expo start --web --port 5000"]
 deploymentTarget = "cloudrun"
 
 [[ports]]
