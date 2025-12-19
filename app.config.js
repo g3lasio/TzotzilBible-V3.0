@@ -12,7 +12,7 @@ export default {
       backgroundColor: "#0a0e14"
     },
     assetBundlePatterns: [
-      "assets/**/*"
+      "**/*"
     ],
     ios: {
       supportsTablet: true,
