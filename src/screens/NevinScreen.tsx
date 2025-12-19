@@ -462,18 +462,28 @@ export default function NevinScreen() {
 
         <View style={styles.inputContainer}>
           <View style={styles.inputRow}>
+            <TouchableOpacity 
+              style={styles.newChatButton}
+              onPress={handleNewMoment}
+            >
+              <MaterialCommunityIcons 
+                name="plus" 
+                size={20} 
+                color="#00ff88" 
+              />
+            </TouchableOpacity>
             <TextInput
               value={inputMessage}
               onChangeText={setInputMessage}
-              placeholder="Escribe tu pregunta aquí..."
+              placeholder="Escribe aquí..."
               mode="outlined"
-              multiline
               style={styles.input}
               disabled={loading}
               placeholderTextColor="#6b7c93"
               textColor="#e6f3ff"
               outlineColor="rgba(0, 243, 255, 0.3)"
               activeOutlineColor="#00f3ff"
+              dense
             />
             <TouchableOpacity 
               style={[styles.sendButton, (!inputMessage.trim() || loading) && styles.sendButtonDisabled]}
@@ -482,7 +492,7 @@ export default function NevinScreen() {
             >
               <MaterialCommunityIcons 
                 name="send" 
-                size={22} 
+                size={18} 
                 color={inputMessage.trim() && !loading ? '#0a0e14' : '#6b7c93'} 
               />
             </TouchableOpacity>
@@ -688,25 +698,36 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     backgroundColor: 'rgba(10, 14, 20, 0.95)',
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(0, 243, 255, 0.2)',
+    borderTopColor: 'rgba(0, 243, 255, 0.15)',
   },
   inputRow: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    alignItems: 'center',
+    gap: 8,
+  },
+  newChatButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(0, 255, 136, 0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 255, 136, 0.3)',
   },
   input: {
     flex: 1,
-    maxHeight: 100,
-    backgroundColor: 'rgba(20, 30, 45, 0.8)',
-    marginRight: 8,
+    maxHeight: 80,
+    backgroundColor: 'rgba(20, 30, 45, 0.6)',
+    fontSize: 14,
   },
   sendButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     backgroundColor: '#00f3ff',
     justifyContent: 'center',
     alignItems: 'center',
