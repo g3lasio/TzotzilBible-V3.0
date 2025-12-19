@@ -290,40 +290,40 @@ export default function VersesScreen() {
       >
         <LinearGradient
           colors={initialVerse === verse.verse 
-            ? ['rgba(0, 255, 136, 0.2)', 'rgba(0, 255, 136, 0.1)']
-            : ['rgba(20, 30, 45, 0.8)', 'rgba(15, 25, 40, 0.9)']}
+            ? ['rgba(0, 255, 136, 0.15)', 'rgba(0, 255, 136, 0.08)']
+            : ['rgba(18, 28, 42, 0.95)', 'rgba(12, 22, 36, 0.98)']}
           style={styles.parallelVerseGradient}
         >
-          <View style={styles.parallelVerseHeader}>
-            <View style={styles.verseNumberBadge}>
-              <Text style={styles.verseNumber}>{verse.verse}</Text>
+          <View style={styles.parallelCenteredHeader}>
+            <View style={styles.parallelVerseNumberContainer}>
+              <View style={styles.parallelVerseNumberBadge}>
+                <Text style={styles.parallelVerseNumber}>{verse.verse}</Text>
+              </View>
             </View>
-            <View style={styles.parallelHeaderRight}>
+            <View style={styles.parallelActionsRight}>
               {isFavorite(verse) && (
-                <MaterialCommunityIcons name="heart" size={14} color="#ff6b6b" style={{ marginRight: 8 }} />
+                <MaterialCommunityIcons name="heart" size={12} color="#ff6b6b" style={{ marginRight: 6 }} />
               )}
               <TouchableOpacity
-                style={styles.menuButton}
+                style={styles.parallelMenuButton}
                 onPress={() => openVerseMenu(verse)}
               >
-                <MaterialCommunityIcons name="dots-vertical" size={20} color="#6b7c93" />
+                <MaterialCommunityIcons name="dots-vertical" size={18} color="#6b7c93" />
               </TouchableOpacity>
             </View>
           </View>
           
           <View style={styles.parallelColumns}>
             <View style={[styles.parallelColumn, styles.parallelColumnLeft]}>
-              <View style={[styles.columnHeaderBar, { backgroundColor: TZOTZIL_VERSION.color }]} />
-              <Text style={[styles.columnLabel, { color: TZOTZIL_VERSION.color }]}>
-                {TZOTZIL_VERSION.shortName}
-              </Text>
               <Text style={styles.parallelVerseText}>{verse.text_tzotzil}</Text>
             </View>
+            
+            <LinearGradient
+              colors={['transparent', 'rgba(0, 243, 255, 0.3)', 'rgba(0, 243, 255, 0.4)', 'rgba(0, 243, 255, 0.3)', 'transparent']}
+              style={styles.parallelGradientDivider}
+            />
+            
             <View style={[styles.parallelColumn, styles.parallelColumnRight]}>
-              <View style={[styles.columnHeaderBar, { backgroundColor: secondaryVersion.color }]} />
-              <Text style={[styles.columnLabel, { color: secondaryVersion.color }]}>
-                {secondaryVersion.shortName}
-              </Text>
               <Text style={styles.parallelVerseText}>{getVerseText(verse, secondaryVersion) || '-'}</Text>
             </View>
           </View>
@@ -367,7 +367,7 @@ export default function VersesScreen() {
               >
                 <MaterialCommunityIcons 
                   name="chevron-left" 
-                  size={22} 
+                  size={20} 
                   color={chapter <= 1 ? '#6b7c93' : '#00f3ff'} 
                 />
               </TouchableOpacity>
@@ -375,33 +375,38 @@ export default function VersesScreen() {
                 style={styles.navButton}
                 onPress={() => navigateChapter('next')}
               >
-                <MaterialCommunityIcons name="chevron-right" size={22} color="#00f3ff" />
+                <MaterialCommunityIcons name="chevron-right" size={20} color="#00f3ff" />
               </TouchableOpacity>
             </View>
 
-            <View style={styles.controlsRight}>
-              {parallelEnabled && (
-                <TouchableOpacity
-                  style={styles.versionDropdown}
-                  onPress={() => setDropdownVisible(true)}
-                >
-                  <View style={[styles.versionDot, { backgroundColor: currentSecondaryVersion.color }]} />
-                  <Text style={styles.versionDropdownText}>{currentSecondaryVersion.shortName}</Text>
-                  <MaterialCommunityIcons name="chevron-down" size={16} color="#00f3ff" />
-                </TouchableOpacity>
-              )}
-              
-              <View style={styles.parallelToggle}>
-                <Switch
-                  value={parallelEnabled}
-                  onValueChange={handleParallelToggle}
-                  trackColor={{ false: 'rgba(107, 124, 147, 0.3)', true: 'rgba(0, 243, 255, 0.4)' }}
-                  thumbColor={parallelEnabled ? '#00f3ff' : '#6b7c93'}
-                  ios_backgroundColor="rgba(107, 124, 147, 0.3)"
-                  style={{ transform: [{ scaleX: 0.85 }, { scaleY: 0.85 }] }}
-                />
-              </View>
+            <View style={styles.primaryVersionBadge}>
+              <View style={[styles.versionIndicator, { backgroundColor: TZOTZIL_VERSION.color }]} />
+              <Text style={styles.primaryVersionText}>{TZOTZIL_VERSION.shortName}</Text>
             </View>
+
+            <View style={styles.toggleContainer}>
+              <Switch
+                value={parallelEnabled}
+                onValueChange={handleParallelToggle}
+                trackColor={{ false: 'rgba(107, 124, 147, 0.3)', true: 'rgba(0, 243, 255, 0.4)' }}
+                thumbColor={parallelEnabled ? '#00f3ff' : '#6b7c93'}
+                ios_backgroundColor="rgba(107, 124, 147, 0.3)"
+                style={{ transform: [{ scaleX: 0.9 }, { scaleY: 0.9 }] }}
+              />
+            </View>
+
+            {parallelEnabled ? (
+              <TouchableOpacity
+                style={styles.versionDropdown}
+                onPress={() => setDropdownVisible(true)}
+              >
+                <View style={[styles.versionIndicator, { backgroundColor: currentSecondaryVersion.color }]} />
+                <Text style={styles.versionDropdownText}>{currentSecondaryVersion.shortName}</Text>
+                <MaterialCommunityIcons name="chevron-down" size={14} color="#00f3ff" />
+              </TouchableOpacity>
+            ) : (
+              <View style={styles.versionPlaceholder} />
+            )}
           </View>
         </View>
 
@@ -547,7 +552,7 @@ export default function VersesScreen() {
                     disabled={!version.isAvailable}
                   >
                     <View style={styles.dropdownItemLeft}>
-                      <View style={[styles.versionDot, { backgroundColor: version.color, opacity: version.isAvailable ? 1 : 0.4 }]} />
+                      <View style={[styles.versionIndicator, { backgroundColor: version.color, opacity: version.isAvailable ? 1 : 0.4, marginRight: 10 }]} />
                       <View>
                         <Text style={[
                           styles.dropdownItemText,
@@ -604,63 +609,78 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   controls: {
-    paddingHorizontal: 12,
+    paddingHorizontal: 14,
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0, 243, 255, 0.15)',
-    backgroundColor: 'rgba(10, 14, 20, 0.6)',
+    borderBottomColor: 'rgba(0, 243, 255, 0.12)',
+    backgroundColor: 'rgba(10, 14, 20, 0.7)',
   },
   controlsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  controlsRight: {
+  navButtons: {
+    flexDirection: 'row',
+    gap: 4,
+  },
+  navButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(0, 243, 255, 0.08)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 243, 255, 0.18)',
+  },
+  navButtonDisabled: {
+    opacity: 0.35,
+  },
+  primaryVersionBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    backgroundColor: 'rgba(0, 255, 136, 0.1)',
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 255, 136, 0.25)',
   },
-  versionDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+  versionIndicator: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    marginRight: 6,
+  },
+  primaryVersionText: {
+    color: '#00ff88',
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
+  toggleContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   versionDropdown: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 243, 255, 0.1)',
+    backgroundColor: 'rgba(0, 243, 255, 0.08)',
     paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: 'rgba(0, 243, 255, 0.25)',
-    gap: 6,
-  },
-  versionDropdownText: {
-    color: '#00f3ff',
-    fontSize: 12,
-    fontWeight: '600',
-  },
-  parallelToggle: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  navButtons: {
-    flexDirection: 'row',
-    gap: 6,
-  },
-  navButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: 'rgba(0, 243, 255, 0.1)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    paddingVertical: 5,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: 'rgba(0, 243, 255, 0.2)',
   },
-  navButtonDisabled: {
-    opacity: 0.4,
+  versionDropdownText: {
+    color: '#00f3ff',
+    fontSize: 11,
+    fontWeight: '600',
+    marginRight: 4,
+  },
+  versionPlaceholder: {
+    width: 70,
   },
   scrollView: {
     flex: 1,
@@ -683,62 +703,78 @@ const styles = StyleSheet.create({
   },
   parallelVerseCard: {
     marginBottom: 14,
-    borderRadius: 16,
+    borderRadius: 14,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(0, 243, 255, 0.25)',
+    borderColor: 'rgba(0, 243, 255, 0.18)',
   },
   parallelVerseGradient: {
-    padding: 14,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
   },
-  parallelVerseHeader: {
+  parallelCenteredHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 12,
-    paddingBottom: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0, 243, 255, 0.1)',
+    position: 'relative',
   },
-  parallelHeaderRight: {
+  parallelVerseNumberContainer: {
+    alignItems: 'center',
+  },
+  parallelVerseNumberBadge: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: '#00f3ff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#00f3ff',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.4,
+    shadowRadius: 6,
+    elevation: 4,
+  },
+  parallelVerseNumber: {
+    fontSize: 13,
+    fontWeight: 'bold',
+    color: '#0a0e14',
+  },
+  parallelActionsRight: {
+    position: 'absolute',
+    right: 0,
     flexDirection: 'row',
+    alignItems: 'center',
+  },
+  parallelMenuButton: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    justifyContent: 'center',
     alignItems: 'center',
   },
   parallelColumns: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    width: '100%',
   },
   parallelColumn: {
     flex: 1,
-    width: '50%',
   },
   parallelColumnLeft: {
-    paddingRight: 12,
-    borderRightWidth: 1,
-    borderRightColor: 'rgba(0, 243, 255, 0.15)',
+    paddingRight: 10,
   },
   parallelColumnRight: {
-    paddingLeft: 12,
+    paddingLeft: 10,
   },
-  columnHeaderBar: {
-    height: 2,
-    borderRadius: 1,
-    marginBottom: 8,
-    opacity: 0.8,
-  },
-  columnLabel: {
-    fontSize: 9,
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    letterSpacing: 1.2,
-    marginBottom: 8,
-    opacity: 0.9,
+  parallelGradientDivider: {
+    width: 1,
+    alignSelf: 'stretch',
+    minHeight: 40,
   },
   parallelVerseText: {
     fontSize: 13,
     lineHeight: 21,
-    color: '#e6f3ff',
+    color: '#e0ecf8',
   },
   verseHeader: {
     flexDirection: 'row',
