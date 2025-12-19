@@ -165,7 +165,7 @@ export default function LegalDisclaimerScreen() {
               • Ofensivas o inapropiadas{'\n'}
               • Potencialmente dañinas{'\n\n'}
               Por favor, repórtelas a través de la función de feedback en Ajustes o contactando a:{'\n'}
-              feedback@tzotzilbible.app
+              gelasio@chyrris.com
             </Text>
           </LinearGradient>
         </View>

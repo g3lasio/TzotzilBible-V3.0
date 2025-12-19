@@ -176,8 +176,8 @@ export default function TermsOfServiceScreen() {
             <Text style={styles.sectionTitle}>11. Contacto</Text>
             <Text style={styles.paragraph}>
               Para preguntas sobre estos Términos de Servicio:{'\n\n'}
-              Email: legal@tzotzilbible.app{'\n'}
-              Soporte: feedback@tzotzilbible.app
+              Email: gelasio@chyrris.com{'\n'}
+              Web: https://bible.chyrris.com
             </Text>
           </LinearGradient>
         </View>

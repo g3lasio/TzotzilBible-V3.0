@@ -175,8 +175,8 @@ export default function PrivacyPolicyScreen() {
             <Text style={styles.sectionTitle}>10. Contacto</Text>
             <Text style={styles.paragraph}>
               Si tiene preguntas sobre esta Política de Privacidad o sobre el manejo de sus datos, puede contactarnos en:{'\n\n'}
-              Email: privacy@tzotzilbible.app{'\n'}
-              Soporte: feedback@tzotzilbible.app
+              Email: gelasio@chyrris.com{'\n'}
+              Web: https://bible.chyrris.com
             </Text>
           </LinearGradient>
         </View>
