@@ -384,9 +384,6 @@ export default function NevinScreen() {
               <Text style={styles.momentTitleText} numberOfLines={1}>{momentTitle}</Text>
             </View>
           )}
-          <TouchableOpacity style={styles.newMomentBtn} onPress={handleNewMoment}>
-            <MaterialCommunityIcons name="plus" size={20} color="#00ff88" />
-          </TouchableOpacity>
         </View>
 
         <ScrollView
@@ -564,16 +561,6 @@ const styles = StyleSheet.create({
     color: '#a0b8d0',
     textAlign: 'center',
     fontStyle: 'italic',
-  },
-  newMomentBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: 'rgba(0, 255, 136, 0.15)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(0, 255, 136, 0.3)',
   },
   welcomeContainer: {
     paddingTop: 40,
