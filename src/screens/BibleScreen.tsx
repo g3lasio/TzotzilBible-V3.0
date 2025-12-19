@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList, Dimensions, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, SectionList, Dimensions, TouchableOpacity } from 'react-native';
 import { Text, Searchbar, ActivityIndicator, Chip } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -59,15 +59,16 @@ export default function BibleScreen() {
   const oldTestamentBooks = books.filter(b => b.testament === 'old');
   const newTestamentBooks = books.filter(b => b.testament === 'new');
 
-  const renderSectionHeader = (title: string) => (
+  const renderSectionHeader = ({ section }: { section: { title: string } }) => (
     <View style={styles.sectionHeader}>
-      <Text style={styles.sectionTitle}>{title}</Text>
+      <Text style={styles.sectionTitle}>{section.title}</Text>
       <View style={styles.sectionLine} />
     </View>
   );
 
-  const renderBookItem = ({ item }: { item: BookDisplay }) => (
+  const renderBookCard = (item: BookDisplay) => (
     <TouchableOpacity
+      key={item.id}
       style={styles.bookCard}
       onPress={() => navigation.navigate('Chapter', { book: item.name })}
       activeOpacity={0.7}
@@ -82,6 +83,21 @@ export default function BibleScreen() {
     </TouchableOpacity>
   );
 
+  const chunkArray = (arr: BookDisplay[], size: number): BookDisplay[][] => {
+    const chunks: BookDisplay[][] = [];
+    for (let i = 0; i < arr.length; i += size) {
+      chunks.push(arr.slice(i, i + size));
+    }
+    return chunks;
+  };
+
+  const renderRow = ({ item }: { item: BookDisplay[] }) => (
+    <View style={styles.rowContainer}>
+      {item.map(book => renderBookCard(book))}
+      {item.length === 1 && <View style={styles.bookCardPlaceholder} />}
+    </View>
+  );
+
   if (loading) {
     return (
       <MainLayout title="Leer">
@@ -93,19 +109,34 @@ export default function BibleScreen() {
     );
   }
 
-  const getFilteredByTestament = () => {
-    if (selectedTestament === 'old') return oldTestamentBooks.filter(b => 
+  const getSections = () => {
+    const filteredOld = oldTestamentBooks.filter(b => 
       b.name.toLowerCase().includes(searchQuery.toLowerCase()));
-    if (selectedTestament === 'new') return newTestamentBooks.filter(b => 
+    const filteredNew = newTestamentBooks.filter(b => 
       b.name.toLowerCase().includes(searchQuery.toLowerCase()));
-    return null;
+
+    if (selectedTestament === 'old') {
+      return [{ title: 'ANTIGUO TESTAMENTO', data: chunkArray(filteredOld, 2) }];
+    }
+    if (selectedTestament === 'new') {
+      return [{ title: 'NUEVO TESTAMENTO', data: chunkArray(filteredNew, 2) }];
+    }
+    
+    const sections = [];
+    if (filteredOld.length > 0) {
+      sections.push({ title: 'ANTIGUO TESTAMENTO', data: chunkArray(filteredOld, 2) });
+    }
+    if (filteredNew.length > 0) {
+      sections.push({ title: 'NUEVO TESTAMENTO', data: chunkArray(filteredNew, 2) });
+    }
+    return sections;
   };
 
   return (
     <MainLayout title="Leer">
       <View style={styles.container}>
         <View style={styles.headerSection}>
-          <Text style={styles.pageTitle}>Select a Book</Text>
+          <Text style={styles.pageTitle}>Selecciona un Libro</Text>
           <Text style={styles.pageSubtitle}>{books.length} libros disponibles</Text>
         </View>
 
@@ -148,54 +179,21 @@ export default function BibleScreen() {
           </Chip>
         </View>
 
-        {selectedTestament === 'all' && !searchQuery ? (
-          <FlatList
-            data={[
-              { type: 'header', title: 'OLD TESTAMENT' },
-              ...oldTestamentBooks.map(b => ({ type: 'book', ...b })),
-              { type: 'header', title: 'NEW TESTAMENT' },
-              ...newTestamentBooks.map(b => ({ type: 'book', ...b })),
-            ]}
-            renderItem={({ item }: any) => {
-              if (item.type === 'header') {
-                return renderSectionHeader(item.title);
-              }
-              return renderBookItem({ item });
-            }}
-            keyExtractor={(item: any, index) => item.type === 'header' ? `header-${item.title}` : String(item.id)}
-            contentContainerStyle={styles.listContent}
-            showsVerticalScrollIndicator={false}
-            numColumns={2}
-            columnWrapperStyle={styles.columnWrapper}
-            ListEmptyComponent={
-              <View style={styles.emptyContainer}>
-                <MaterialCommunityIcons name="book-search" size={60} color="#6b7c93" />
-                <Text style={styles.emptyText}>No se encontraron libros</Text>
-              </View>
-            }
-          />
-        ) : (
-          <FlatList
-            data={filteredBooks}
-            renderItem={renderBookItem}
-            keyExtractor={item => String(item.id)}
-            contentContainerStyle={styles.listContent}
-            showsVerticalScrollIndicator={false}
-            numColumns={2}
-            columnWrapperStyle={styles.columnWrapper}
-            ListHeaderComponent={
-              selectedTestament !== 'all' ? 
-                renderSectionHeader(selectedTestament === 'old' ? 'OLD TESTAMENT' : 'NEW TESTAMENT') : 
-                null
-            }
-            ListEmptyComponent={
-              <View style={styles.emptyContainer}>
-                <MaterialCommunityIcons name="book-search" size={60} color="#6b7c93" />
-                <Text style={styles.emptyText}>No se encontraron libros</Text>
-              </View>
-            }
-          />
-        )}
+        <SectionList
+          sections={getSections()}
+          renderItem={renderRow}
+          renderSectionHeader={renderSectionHeader}
+          keyExtractor={(item, index) => `row-${index}-${item.map(b => b.id).join('-')}`}
+          contentContainerStyle={styles.listContent}
+          showsVerticalScrollIndicator={false}
+          stickySectionHeadersEnabled={false}
+          ListEmptyComponent={
+            <View style={styles.emptyContainer}>
+              <MaterialCommunityIcons name="book-search" size={60} color="#6b7c93" />
+              <Text style={styles.emptyText}>No se encontraron libros</Text>
+            </View>
+          }
+        />
       </View>
     </MainLayout>
   );
@@ -298,7 +296,8 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingTop: 8,
   },
-  columnWrapper: {
+  rowContainer: {
+    flexDirection: 'row',
     justifyContent: 'space-between',
     marginBottom: 12,
   },
@@ -308,6 +307,9 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: 'rgba(0, 243, 255, 0.4)',
+  },
+  bookCardPlaceholder: {
+    width: cardWidth,
   },
   bookCardGradient: {
     paddingVertical: 16,
