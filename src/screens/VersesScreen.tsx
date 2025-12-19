@@ -294,16 +294,18 @@ export default function VersesScreen() {
             : ['rgba(18, 28, 42, 0.95)', 'rgba(12, 22, 36, 0.98)']}
           style={styles.parallelVerseGradient}
         >
-          <View style={styles.parallelCenteredHeader}>
-            <View style={styles.parallelVerseNumberContainer}>
-              <View style={styles.parallelVerseNumberBadge}>
-                <Text style={styles.parallelVerseNumber}>{verse.verse}</Text>
-              </View>
-            </View>
-            <View style={styles.parallelActionsRight}>
+          <View style={styles.parallelHeaderRow}>
+            <View style={styles.parallelHeaderSpacer}>
               {isFavorite(verse) && (
-                <MaterialCommunityIcons name="heart" size={12} color="#ff6b6b" style={{ marginRight: 6 }} />
+                <MaterialCommunityIcons name="heart" size={14} color="#ff6b6b" />
               )}
+            </View>
+            
+            <View style={styles.parallelVerseNumberBadge}>
+              <Text style={styles.parallelVerseNumber}>{verse.verse}</Text>
+            </View>
+            
+            <View style={styles.parallelHeaderSpacer}>
               <TouchableOpacity
                 style={styles.parallelMenuButton}
                 onPress={() => openVerseMenu(verse)}
@@ -314,16 +316,19 @@ export default function VersesScreen() {
           </View>
           
           <View style={styles.parallelColumns}>
-            <View style={[styles.parallelColumn, styles.parallelColumnLeft]}>
+            <View style={styles.parallelColumnLeft}>
               <Text style={styles.parallelVerseText}>{verse.text_tzotzil}</Text>
             </View>
             
-            <LinearGradient
-              colors={['transparent', 'rgba(0, 243, 255, 0.3)', 'rgba(0, 243, 255, 0.4)', 'rgba(0, 243, 255, 0.3)', 'transparent']}
-              style={styles.parallelGradientDivider}
-            />
+            <View style={styles.holographicDividerContainer}>
+              <LinearGradient
+                colors={['rgba(0, 243, 255, 0)', 'rgba(0, 243, 255, 0.6)', 'rgba(0, 255, 200, 0.9)', 'rgba(0, 243, 255, 0.6)', 'rgba(0, 243, 255, 0)']}
+                style={styles.holographicDivider}
+              />
+              <View style={styles.holographicGlow} />
+            </View>
             
-            <View style={[styles.parallelColumn, styles.parallelColumnRight]}>
+            <View style={styles.parallelColumnRight}>
               <Text style={styles.parallelVerseText}>{getVerseText(verse, secondaryVersion) || '-'}</Text>
             </View>
           </View>
@@ -712,44 +717,38 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 12,
   },
-  parallelCenteredHeader: {
+  parallelHeaderRow: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
-    position: 'relative',
+    marginBottom: 14,
   },
-  parallelVerseNumberContainer: {
+  parallelHeaderSpacer: {
+    flex: 1,
     alignItems: 'center',
   },
   parallelVerseNumberBadge: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    width: 30,
+    height: 30,
+    borderRadius: 15,
     backgroundColor: '#00f3ff',
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#00f3ff',
     shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.4,
-    shadowRadius: 6,
-    elevation: 4,
+    shadowOpacity: 0.6,
+    shadowRadius: 8,
+    elevation: 6,
   },
   parallelVerseNumber: {
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: 'bold',
     color: '#0a0e14',
   },
-  parallelActionsRight: {
-    position: 'absolute',
-    right: 0,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
   parallelMenuButton: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    width: 30,
+    height: 30,
+    borderRadius: 15,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -757,19 +756,32 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
   },
-  parallelColumn: {
-    flex: 1,
-  },
   parallelColumnLeft: {
-    paddingRight: 10,
+    flex: 1,
+    paddingRight: 12,
   },
   parallelColumnRight: {
-    paddingLeft: 10,
+    flex: 1,
+    paddingLeft: 12,
   },
-  parallelGradientDivider: {
-    width: 1,
+  holographicDividerContainer: {
+    width: 3,
     alignSelf: 'stretch',
-    minHeight: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+  },
+  holographicDivider: {
+    width: 2,
+    height: '100%',
+    borderRadius: 1,
+  },
+  holographicGlow: {
+    position: 'absolute',
+    width: 8,
+    height: '100%',
+    backgroundColor: 'rgba(0, 243, 255, 0.15)',
+    borderRadius: 4,
   },
   parallelVerseText: {
     fontSize: 13,
