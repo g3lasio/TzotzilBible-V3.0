@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, StyleSheet, ScrollView, RefreshControl, Share, TouchableOpacity, Dimensions, Modal, Pressable } from 'react-native';
+import { View, StyleSheet, ScrollView, RefreshControl, Share, TouchableOpacity, Dimensions, Modal, Pressable, Switch } from 'react-native';
 import { Text, ActivityIndicator } from 'react-native-paper';
 import { useRoute, useNavigation, CommonActions } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -11,7 +11,18 @@ import type { BibleStackParamList } from '../types/navigation';
 import type { RouteProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import MainLayout from '../components/MainLayout';
-import { BIBLE_VERSIONS, BibleVersion } from '../constants/bibleVersions';
+import { TZOTZIL_VERSION, SECONDARY_VERSIONS, BibleVersion, getVersionById } from '../constants/bibleVersions';
+
+const DEFAULT_SECONDARY_VERSION = 'rv1960';
+
+const getAvailableSecondaryVersion = (versionId: string): BibleVersion => {
+  const version = getVersionById(versionId);
+  if (version && version.isAvailable && !version.isPrimary) {
+    return version;
+  }
+  const defaultVersion = getVersionById(DEFAULT_SECONDARY_VERSION);
+  return defaultVersion!;
+};
 
 type VersesRouteProp = RouteProp<BibleStackParamList, 'Verses'>;
 type NavigationProp = NativeStackNavigationProp<BibleStackParamList>;
@@ -22,6 +33,8 @@ const isSmallScreen = width < 600;
 type ViewMode = 'stacked' | 'parallel';
 
 const FAVORITES_KEY = 'verse_favorites';
+const SELECTED_VERSION_KEY = 'selected_secondary_version';
+const PARALLEL_MODE_KEY = 'parallel_mode_enabled';
 
 export default function VersesScreen() {
   const route = useRoute<VersesRouteProp>();
@@ -32,8 +45,9 @@ export default function VersesScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [activeVersions, setActiveVersions] = useState<Set<string>>(new Set(['tzotzil', 'rv1960']));
-  const [viewMode, setViewMode] = useState<ViewMode>('stacked');
+  const [parallelEnabled, setParallelEnabled] = useState(true);
+  const [selectedSecondaryVersion, setSelectedSecondaryVersion] = useState('rv1960');
+  const [dropdownVisible, setDropdownVisible] = useState(false);
   const scrollViewRef = useRef<ScrollView>(null);
   const [menuVisible, setMenuVisible] = useState(false);
   const [selectedVerse, setSelectedVerse] = useState<BibleVerse | null>(null);
@@ -53,6 +67,43 @@ export default function VersesScreen() {
     }
   };
 
+  const loadPreferences = async () => {
+    try {
+      const [savedVersion, savedParallel] = await Promise.all([
+        AsyncStorage.getItem(SELECTED_VERSION_KEY),
+        AsyncStorage.getItem(PARALLEL_MODE_KEY),
+      ]);
+      
+      let normalizedVersion = DEFAULT_SECONDARY_VERSION;
+      if (savedVersion) {
+        const version = getVersionById(savedVersion);
+        if (version && version.isAvailable && !version.isPrimary) {
+          normalizedVersion = savedVersion;
+        } else {
+          await AsyncStorage.setItem(SELECTED_VERSION_KEY, DEFAULT_SECONDARY_VERSION);
+        }
+      }
+      setSelectedSecondaryVersion(normalizedVersion);
+      
+      if (savedParallel !== null) {
+        setParallelEnabled(savedParallel === 'true');
+      }
+    } catch (error) {
+      console.error('Error loading preferences:', error);
+    }
+  };
+
+  const savePreferences = async (versionId: string, parallel: boolean) => {
+    try {
+      await Promise.all([
+        AsyncStorage.setItem(SELECTED_VERSION_KEY, versionId),
+        AsyncStorage.setItem(PARALLEL_MODE_KEY, String(parallel)),
+      ]);
+    } catch (error) {
+      console.error('Error saving preferences:', error);
+    }
+  };
+
   const onRefresh = async () => {
     setRefreshing(true);
     await loadVerses();
@@ -62,6 +113,7 @@ export default function VersesScreen() {
   useEffect(() => {
     loadVerses();
     loadFavorites();
+    loadPreferences();
   }, [book, chapter]);
 
   const loadFavorites = async () => {
@@ -127,30 +179,32 @@ export default function VersesScreen() {
     );
   };
 
-  const toggleVersion = (versionId: string) => {
-    const newActiveVersions = new Set(activeVersions);
-    if (newActiveVersions.has(versionId)) {
-      if (newActiveVersions.size > 1) {
-        newActiveVersions.delete(versionId);
-      }
-    } else {
-      newActiveVersions.add(versionId);
-    }
-    setActiveVersions(newActiveVersions);
+  const handleParallelToggle = (value: boolean) => {
+    setParallelEnabled(value);
+    savePreferences(selectedSecondaryVersion, value);
   };
 
-  const handleShare = async (verse: BibleVerse) => {
+  const handleVersionSelect = (versionId: string) => {
+    const version = getVersionById(versionId);
+    if (version && version.isAvailable) {
+      setSelectedSecondaryVersion(versionId);
+      savePreferences(versionId, parallelEnabled);
+    }
+    setDropdownVisible(false);
+  };
+
+  const handleShare = async (verse: BibleVerse, secondaryVersion: BibleVersion) => {
     try {
       let text = `${book} ${chapter}:${verse.verse}\n`;
       
-      BIBLE_VERSIONS.forEach(version => {
-        if (activeVersions.has(version.id)) {
-          const verseText = verse[version.textField];
-          if (verseText) {
-            text += `\n${version.shortName}:\n${verseText}`;
-          }
+      text += `\n${TZOTZIL_VERSION.shortName}:\n${verse.text_tzotzil}`;
+      
+      if (parallelEnabled) {
+        const verseText = verse[secondaryVersion.textField];
+        if (verseText) {
+          text += `\n\n${secondaryVersion.shortName}:\n${verseText}`;
         }
-      });
+      }
       
       await Share.share({
         message: `${text}\n\n- Tzotzil Bible`,
@@ -171,9 +225,9 @@ export default function VersesScreen() {
     return verse[version.textField];
   };
 
-  const renderVerseStacked = (verse: BibleVerse) => {
-    const activeVersionsList = BIBLE_VERSIONS.filter(v => activeVersions.has(v.id));
-    
+  const currentSecondaryVersion = getAvailableSecondaryVersion(selectedSecondaryVersion);
+
+  const renderVerseSingle = (verse: BibleVerse) => {
     return (
       <TouchableOpacity
         key={verse.id || `${verse.chapter}-${verse.verse}`}
@@ -181,7 +235,7 @@ export default function VersesScreen() {
           styles.verseCard,
           initialVerse === verse.verse && styles.highlightedVerse
         ]}
-        onLongPress={() => handleShare(verse)}
+        onLongPress={() => handleShare(verse, currentSecondaryVersion)}
         activeOpacity={0.8}
       >
         <LinearGradient
@@ -207,49 +261,40 @@ export default function VersesScreen() {
             </TouchableOpacity>
           </View>
           
-          {activeVersionsList.map((version, index) => {
-            const verseText = getVerseText(verse, version);
-            if (!verseText) return null;
-            
-            return (
-              <React.Fragment key={version.id}>
-                {index > 0 && <View style={styles.divider} />}
-                <View style={styles.textBlock}>
-                  <View style={styles.languageHeader}>
-                    <MaterialCommunityIcons name="translate" size={14} color={version.color} />
-                    <Text style={[styles.languageLabel, { color: version.color }]}>
-                      {version.shortName}
-                    </Text>
-                  </View>
-                  <Text style={styles.verseText}>{verseText}</Text>
-                </View>
-              </React.Fragment>
-            );
-          })}
+          <View style={styles.textBlock}>
+            <View style={styles.languageHeader}>
+              <MaterialCommunityIcons name="translate" size={14} color={TZOTZIL_VERSION.color} />
+              <Text style={[styles.languageLabel, { color: TZOTZIL_VERSION.color }]}>
+                {TZOTZIL_VERSION.shortName}
+              </Text>
+            </View>
+            <Text style={styles.verseText}>{verse.text_tzotzil}</Text>
+          </View>
         </LinearGradient>
       </TouchableOpacity>
     );
   };
 
   const renderVerseParallel = (verse: BibleVerse) => {
-    const activeVersionsList = BIBLE_VERSIONS.filter(v => activeVersions.has(v.id));
-    const columnWidth = activeVersionsList.length > 0 ? 100 / activeVersionsList.length : 100;
+    const secondaryVersion = currentSecondaryVersion;
     
     return (
-      <View
+      <TouchableOpacity
         key={verse.id || `${verse.chapter}-${verse.verse}`}
         style={[
-          styles.parallelVerseContainer,
+          styles.verseCard,
           initialVerse === verse.verse && styles.highlightedVerse
         ]}
+        onLongPress={() => handleShare(verse, currentSecondaryVersion)}
+        activeOpacity={0.8}
       >
         <LinearGradient
           colors={initialVerse === verse.verse 
             ? ['rgba(0, 255, 136, 0.2)', 'rgba(0, 255, 136, 0.1)']
             : ['rgba(20, 30, 45, 0.8)', 'rgba(15, 25, 40, 0.9)']}
-          style={styles.parallelGradient}
+          style={styles.verseGradient}
         >
-          <View style={styles.parallelHeader}>
+          <View style={styles.verseHeader}>
             <View style={styles.verseHeaderLeft}>
               <View style={styles.verseNumberBadge}>
                 <Text style={styles.verseNumber}>{verse.verse}</Text>
@@ -266,33 +311,32 @@ export default function VersesScreen() {
             </TouchableOpacity>
           </View>
           
-          <View style={styles.parallelColumns}>
-            {activeVersionsList.map((version, index) => {
-              const verseText = getVerseText(verse, version);
-              
-              return (
-                <View 
-                  key={version.id} 
-                  style={[
-                    styles.parallelColumn,
-                    { width: `${columnWidth}%` },
-                    index > 0 && styles.parallelColumnBorder
-                  ]}
-                >
-                  <View style={[styles.columnHeader, { borderBottomColor: version.color }]}>
-                    <Text style={[styles.columnHeaderText, { color: version.color }]}>
-                      {version.shortName}
-                    </Text>
-                  </View>
-                  <Text style={styles.parallelVerseText}>
-                    {verseText || '-'}
+          <View style={styles.textBlock}>
+            <View style={styles.languageHeader}>
+              <MaterialCommunityIcons name="translate" size={14} color={TZOTZIL_VERSION.color} />
+              <Text style={[styles.languageLabel, { color: TZOTZIL_VERSION.color }]}>
+                {TZOTZIL_VERSION.shortName}
+              </Text>
+            </View>
+            <Text style={styles.verseText}>{verse.text_tzotzil}</Text>
+          </View>
+
+          {secondaryVersion && (
+            <>
+              <View style={styles.divider} />
+              <View style={styles.textBlock}>
+                <View style={styles.languageHeader}>
+                  <MaterialCommunityIcons name="translate" size={14} color={secondaryVersion.color} />
+                  <Text style={[styles.languageLabel, { color: secondaryVersion.color }]}>
+                    {secondaryVersion.shortName}
                   </Text>
                 </View>
-              );
-            })}
-          </View>
+                <Text style={styles.verseText}>{getVerseText(verse, secondaryVersion) || '-'}</Text>
+              </View>
+            </>
+          )}
         </LinearGradient>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -322,74 +366,76 @@ export default function VersesScreen() {
     <MainLayout title={`${book} ${chapter}`} showBackButton>
       <View style={styles.container}>
         <View style={styles.controls}>
-          <View style={styles.controlsLeft}>
-            <View style={styles.versionToggles}>
-              {BIBLE_VERSIONS.map(version => (
-                <TouchableOpacity
-                  key={version.id}
-                  style={[
-                    styles.versionChip,
-                    activeVersions.has(version.id) && { 
-                      backgroundColor: `${version.color}20`,
-                      borderColor: version.color 
-                    }
-                  ]}
-                  onPress={() => toggleVersion(version.id)}
-                >
-                  <Text style={[
-                    styles.versionChipText,
-                    activeVersions.has(version.id) && { color: version.color }
-                  ]}>
-                    {version.shortName}
-                  </Text>
-                </TouchableOpacity>
-              ))}
+          <View style={styles.controlsRow}>
+            <View style={styles.tzotzilBadge}>
+              <View style={[styles.versionDot, { backgroundColor: TZOTZIL_VERSION.color }]} />
+              <Text style={styles.tzotzilLabel}>Tzotzil</Text>
+              <Text style={styles.primaryLabel}>Principal</Text>
             </View>
             
-            <TouchableOpacity
-              style={[
-                styles.viewModeButton,
-                viewMode === 'parallel' && styles.viewModeButtonActive
-              ]}
-              onPress={() => setViewMode(viewMode === 'stacked' ? 'parallel' : 'stacked')}
-            >
-              <MaterialCommunityIcons 
-                name={viewMode === 'parallel' ? 'view-parallel' : 'view-sequential'} 
-                size={20} 
-                color={viewMode === 'parallel' ? '#00ff88' : '#6b7c93'} 
+            <View style={styles.parallelControl}>
+              <Text style={[styles.parallelLabel, !parallelEnabled && styles.parallelLabelInactive]}>
+                {parallelEnabled ? 'Paralelo' : 'Solo Tzotzil'}
+              </Text>
+              <Switch
+                value={parallelEnabled}
+                onValueChange={handleParallelToggle}
+                trackColor={{ false: 'rgba(107, 124, 147, 0.4)', true: 'rgba(0, 243, 255, 0.4)' }}
+                thumbColor={parallelEnabled ? '#00f3ff' : '#6b7c93'}
+                ios_backgroundColor="rgba(107, 124, 147, 0.4)"
               />
-            </TouchableOpacity>
+            </View>
           </View>
+
+          {parallelEnabled && (
+            <View style={styles.versionSelectorRow}>
+              <Text style={styles.secondaryLabel}>Versión secundaria:</Text>
+              <TouchableOpacity
+                style={styles.dropdownButton}
+                onPress={() => setDropdownVisible(true)}
+              >
+                <View style={[styles.versionDot, { backgroundColor: currentSecondaryVersion.color }]} />
+                <Text style={styles.dropdownButtonText}>
+                  {currentSecondaryVersion.shortName}
+                </Text>
+                <MaterialCommunityIcons name="chevron-down" size={18} color="#00f3ff" />
+              </TouchableOpacity>
+            </View>
+          )}
           
-          <View style={styles.navButtons}>
-            <TouchableOpacity
-              style={[styles.navButton, chapter <= 1 && styles.navButtonDisabled]}
-              onPress={() => navigateChapter('prev')}
-              disabled={chapter <= 1}
-            >
-              <MaterialCommunityIcons 
-                name="chevron-left" 
-                size={24} 
-                color={chapter <= 1 ? '#6b7c93' : '#00f3ff'} 
-              />
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.navButton}
-              onPress={() => navigateChapter('next')}
-            >
-              <MaterialCommunityIcons name="chevron-right" size={24} color="#00f3ff" />
-            </TouchableOpacity>
+          <View style={styles.navRow}>
+            <View style={styles.navButtons}>
+              <TouchableOpacity
+                style={[styles.navButton, chapter <= 1 && styles.navButtonDisabled]}
+                onPress={() => navigateChapter('prev')}
+                disabled={chapter <= 1}
+              >
+                <MaterialCommunityIcons 
+                  name="chevron-left" 
+                  size={24} 
+                  color={chapter <= 1 ? '#6b7c93' : '#00f3ff'} 
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.navButton}
+                onPress={() => navigateChapter('next')}
+              >
+                <MaterialCommunityIcons name="chevron-right" size={24} color="#00f3ff" />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
 
-        {viewMode === 'parallel' && activeVersions.size >= 2 && (
+        {parallelEnabled && (
           <View style={styles.parallelLegend}>
-            {BIBLE_VERSIONS.filter(v => activeVersions.has(v.id)).map(version => (
-              <View key={version.id} style={styles.legendItem}>
-                <View style={[styles.legendDot, { backgroundColor: version.color }]} />
-                <Text style={styles.legendText}>{version.name}</Text>
-              </View>
-            ))}
+            <View style={styles.legendItem}>
+              <View style={[styles.legendDot, { backgroundColor: TZOTZIL_VERSION.color }]} />
+              <Text style={styles.legendText}>{TZOTZIL_VERSION.name}</Text>
+            </View>
+            <View style={styles.legendItem}>
+              <View style={[styles.legendDot, { backgroundColor: currentSecondaryVersion.color }]} />
+              <Text style={styles.legendText}>{currentSecondaryVersion.name}</Text>
+            </View>
           </View>
         )}
 
@@ -402,24 +448,10 @@ export default function VersesScreen() {
           }
           showsVerticalScrollIndicator={false}
         >
-          {activeVersions.size === 0 && (
-            <View style={styles.warningCard}>
-              <LinearGradient
-                colors={['rgba(255, 107, 107, 0.15)', 'rgba(255, 107, 107, 0.05)']}
-                style={styles.warningGradient}
-              >
-                <MaterialCommunityIcons name="alert" size={24} color="#ff6b6b" />
-                <Text style={styles.warningText}>
-                  Selecciona al menos una versión para ver los versículos
-                </Text>
-              </LinearGradient>
-            </View>
-          )}
-
           {verses.map((verse) => 
-            viewMode === 'parallel' && activeVersions.size >= 2
+            parallelEnabled
               ? renderVerseParallel(verse)
-              : renderVerseStacked(verse)
+              : renderVerseSingle(verse)
           )}
           
           <View style={styles.bottomNav}>
@@ -477,7 +509,7 @@ export default function VersesScreen() {
                 
                 <TouchableOpacity
                   style={styles.menuItem}
-                  onPress={() => selectedVerse && handleShare(selectedVerse)}
+                  onPress={() => selectedVerse && handleShare(selectedVerse, currentSecondaryVersion)}
                 >
                   <MaterialCommunityIcons name="share-variant" size={20} color="#00f3ff" />
                   <Text style={styles.menuItemText}>Compartir</Text>
@@ -519,6 +551,73 @@ export default function VersesScreen() {
             </View>
           </Pressable>
         </Modal>
+
+        <Modal
+          visible={dropdownVisible}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setDropdownVisible(false)}
+        >
+          <Pressable 
+            style={styles.modalOverlay}
+            onPress={() => setDropdownVisible(false)}
+          >
+            <View style={styles.dropdownContainer}>
+              <LinearGradient
+                colors={['rgba(25, 35, 50, 0.98)', 'rgba(15, 25, 40, 0.98)']}
+                style={styles.dropdownGradient}
+              >
+                <Text style={styles.dropdownTitle}>Seleccionar versión</Text>
+                
+                {SECONDARY_VERSIONS.map((version) => (
+                  <TouchableOpacity
+                    key={version.id}
+                    style={[
+                      styles.dropdownItem,
+                      !version.isAvailable && styles.dropdownItemDisabled,
+                      selectedSecondaryVersion === version.id && styles.dropdownItemSelected
+                    ]}
+                    onPress={() => version.isAvailable && handleVersionSelect(version.id)}
+                    disabled={!version.isAvailable}
+                  >
+                    <View style={styles.dropdownItemLeft}>
+                      <View style={[styles.versionDot, { backgroundColor: version.color, opacity: version.isAvailable ? 1 : 0.4 }]} />
+                      <View>
+                        <Text style={[
+                          styles.dropdownItemText,
+                          !version.isAvailable && styles.dropdownItemTextDisabled
+                        ]}>
+                          {version.shortName}
+                        </Text>
+                        <Text style={[
+                          styles.dropdownItemSubtext,
+                          !version.isAvailable && styles.dropdownItemTextDisabled
+                        ]}>
+                          {version.name}
+                        </Text>
+                      </View>
+                    </View>
+                    {!version.isAvailable ? (
+                      <View style={styles.comingSoonBadge}>
+                        <Text style={styles.comingSoonText}>Próximamente</Text>
+                      </View>
+                    ) : selectedSecondaryVersion === version.id ? (
+                      <MaterialCommunityIcons name="check" size={20} color="#00ff88" />
+                    ) : null}
+                  </TouchableOpacity>
+                ))}
+
+                <TouchableOpacity
+                  style={[styles.dropdownItem, styles.dropdownItemLast]}
+                  onPress={() => setDropdownVisible(false)}
+                >
+                  <MaterialCommunityIcons name="close" size={20} color="#6b7c93" />
+                  <Text style={[styles.dropdownItemText, { color: '#6b7c93', marginLeft: 12 }]}>Cerrar</Text>
+                </TouchableOpacity>
+              </LinearGradient>
+            </View>
+          </Pressable>
+        </Modal>
       </View>
     </MainLayout>
   );
@@ -539,49 +638,86 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   controls: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(0, 243, 255, 0.2)',
-  },
-  controlsLeft: {
-    flexDirection: 'row',
-    alignItems: 'center',
     gap: 12,
   },
-  versionToggles: {
+  controlsRow: {
     flexDirection: 'row',
-    gap: 8,
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  versionChip: {
+  tzotzilBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 255, 136, 0.1)',
     paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
     borderWidth: 1,
-    borderColor: 'rgba(0, 243, 255, 0.3)',
-    backgroundColor: 'rgba(20, 30, 45, 0.6)',
+    borderColor: 'rgba(0, 255, 136, 0.3)',
+    gap: 6,
   },
-  versionChipText: {
-    color: '#6b7c93',
-    fontSize: 12,
+  versionDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
+  tzotzilLabel: {
+    color: '#00ff88',
+    fontSize: 13,
     fontWeight: '600',
   },
-  viewModeButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: 'rgba(20, 30, 45, 0.6)',
-    justifyContent: 'center',
+  primaryLabel: {
+    color: 'rgba(0, 255, 136, 0.7)',
+    fontSize: 10,
+    fontWeight: '500',
+  },
+  parallelControl: {
+    flexDirection: 'row',
     alignItems: 'center',
+    gap: 10,
+  },
+  parallelLabel: {
+    color: '#00f3ff',
+    fontSize: 13,
+    fontWeight: '500',
+  },
+  parallelLabelInactive: {
+    color: '#6b7c93',
+  },
+  versionSelectorRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: 4,
+  },
+  secondaryLabel: {
+    color: '#6b7c93',
+    fontSize: 13,
+  },
+  dropdownButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 243, 255, 0.1)',
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 20,
     borderWidth: 1,
     borderColor: 'rgba(0, 243, 255, 0.3)',
+    gap: 8,
   },
-  viewModeButtonActive: {
-    backgroundColor: 'rgba(0, 255, 136, 0.15)',
-    borderColor: '#00ff88',
+  dropdownButtonText: {
+    color: '#00f3ff',
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  navRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingTop: 4,
   },
   navButtons: {
     flexDirection: 'row',
@@ -629,23 +765,6 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 16,
-  },
-  warningCard: {
-    borderRadius: 12,
-    overflow: 'hidden',
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 107, 107, 0.3)',
-  },
-  warningGradient: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 16,
-  },
-  warningText: {
-    marginLeft: 12,
-    color: '#ff6b6b',
-    flex: 1,
   },
   verseCard: {
     marginBottom: 12,
@@ -756,48 +875,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 243, 255, 0.2)',
     marginVertical: 12,
   },
-  parallelVerseContainer: {
-    marginBottom: 16,
-    borderRadius: 16,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: 'rgba(0, 243, 255, 0.2)',
-  },
-  parallelGradient: {
-    padding: 16,
-  },
-  parallelHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  parallelColumns: {
-    flexDirection: 'row',
-  },
-  parallelColumn: {
-    paddingHorizontal: 8,
-  },
-  parallelColumnBorder: {
-    borderLeftWidth: 1,
-    borderLeftColor: 'rgba(0, 243, 255, 0.2)',
-  },
-  columnHeader: {
-    borderBottomWidth: 2,
-    paddingBottom: 6,
-    marginBottom: 10,
-  },
-  columnHeaderText: {
-    fontSize: 11,
-    fontWeight: 'bold',
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-  },
-  parallelVerseText: {
-    fontSize: 14,
-    lineHeight: 22,
-    color: '#e6f3ff',
-  },
   bottomNav: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -831,5 +908,75 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 16,
     fontSize: 16,
+  },
+  dropdownContainer: {
+    width: '85%',
+    maxWidth: 340,
+    borderRadius: 16,
+    overflow: 'hidden',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 243, 255, 0.3)',
+  },
+  dropdownGradient: {
+    padding: 16,
+  },
+  dropdownTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#00f3ff',
+    marginBottom: 16,
+    textAlign: 'center',
+  },
+  dropdownItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 14,
+    paddingHorizontal: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0, 243, 255, 0.15)',
+    borderRadius: 8,
+  },
+  dropdownItemSelected: {
+    backgroundColor: 'rgba(0, 255, 136, 0.1)',
+  },
+  dropdownItemDisabled: {
+    opacity: 0.6,
+  },
+  dropdownItemLast: {
+    borderBottomWidth: 0,
+    marginTop: 8,
+    justifyContent: 'flex-start',
+  },
+  dropdownItemLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  dropdownItemText: {
+    fontSize: 14,
+    color: '#e6f3ff',
+    fontWeight: '600',
+  },
+  dropdownItemSubtext: {
+    fontSize: 11,
+    color: '#6b7c93',
+    marginTop: 2,
+  },
+  dropdownItemTextDisabled: {
+    color: '#6b7c93',
+  },
+  comingSoonBadge: {
+    backgroundColor: 'rgba(155, 89, 182, 0.2)',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'rgba(155, 89, 182, 0.4)',
+  },
+  comingSoonText: {
+    fontSize: 10,
+    color: '#9b59b6',
+    fontWeight: '600',
   },
 });
