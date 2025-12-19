@@ -38,6 +38,118 @@ const getRandomQuestions = () => {
   return shuffled.slice(0, count);
 };
 
+const AI_THINKING_PHRASES = [
+  'Analizando las Escrituras...',
+  'Consultando pasajes bíblicos...',
+  'Reflexionando teológicamente...',
+  'Buscando en la Palabra...',
+  'Procesando tu pregunta...',
+];
+
+const ThinkingAnimation = () => {
+  const dot1 = useRef(new Animated.Value(0.3)).current;
+  const dot2 = useRef(new Animated.Value(0.3)).current;
+  const dot3 = useRef(new Animated.Value(0.3)).current;
+  const pulseAnim = useRef(new Animated.Value(1)).current;
+  const [phrase] = useState(() => AI_THINKING_PHRASES[Math.floor(Math.random() * AI_THINKING_PHRASES.length)]);
+
+  useEffect(() => {
+    const animateDots = () => {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(dot1, { toValue: 1, duration: 300, useNativeDriver: true }),
+          Animated.timing(dot1, { toValue: 0.3, duration: 300, useNativeDriver: true }),
+        ])
+      ).start();
+      
+      setTimeout(() => {
+        Animated.loop(
+          Animated.sequence([
+            Animated.timing(dot2, { toValue: 1, duration: 300, useNativeDriver: true }),
+            Animated.timing(dot2, { toValue: 0.3, duration: 300, useNativeDriver: true }),
+          ])
+        ).start();
+      }, 150);
+      
+      setTimeout(() => {
+        Animated.loop(
+          Animated.sequence([
+            Animated.timing(dot3, { toValue: 1, duration: 300, useNativeDriver: true }),
+            Animated.timing(dot3, { toValue: 0.3, duration: 300, useNativeDriver: true }),
+          ])
+        ).start();
+      }, 300);
+    };
+
+    const animatePulse = () => {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(pulseAnim, { toValue: 1.1, duration: 800, useNativeDriver: true }),
+          Animated.timing(pulseAnim, { toValue: 1, duration: 800, useNativeDriver: true }),
+        ])
+      ).start();
+    };
+
+    animateDots();
+    animatePulse();
+  }, [dot1, dot2, dot3, pulseAnim]);
+
+  return (
+    <View style={thinkingStyles.container}>
+      <Animated.View style={[thinkingStyles.iconContainer, { transform: [{ scale: pulseAnim }] }]}>
+        <MaterialCommunityIcons name="creation" size={20} color="#00ff88" />
+      </Animated.View>
+      <View style={thinkingStyles.textContainer}>
+        <Text style={thinkingStyles.phrase}>{phrase}</Text>
+        <View style={thinkingStyles.dotsContainer}>
+          <Animated.View style={[thinkingStyles.dot, { opacity: dot1, backgroundColor: '#00ff88' }]} />
+          <Animated.View style={[thinkingStyles.dot, { opacity: dot2, backgroundColor: '#00f3ff' }]} />
+          <Animated.View style={[thinkingStyles.dot, { opacity: dot3, backgroundColor: '#00ff88' }]} />
+        </View>
+      </View>
+    </View>
+  );
+};
+
+const thinkingStyles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 255, 136, 0.08)',
+    borderRadius: 16,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 255, 136, 0.2)',
+  },
+  iconContainer: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(0, 255, 136, 0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  textContainer: {
+    flex: 1,
+  },
+  phrase: {
+    color: '#00ff88',
+    fontSize: 13,
+    fontWeight: '500',
+    marginBottom: 6,
+  },
+  dotsContainer: {
+    flexDirection: 'row',
+    gap: 4,
+  },
+  dot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+  },
+});
+
 interface Message {
   id: string;
   content: string;
@@ -200,20 +312,14 @@ export default function NevinScreen() {
         style={styles.keyboardAvoid}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
       >
-        <View style={styles.chatHeader}>
-          <View style={styles.headerLeft}>
-            <Text style={styles.chatHeaderTitle}>Nevin</Text>
-            <View style={styles.statusIndicator}>
-              <View style={styles.statusDot} />
-              <Text style={styles.statusText}>En línea</Text>
-            </View>
-          </View>
-          {messages.length > 0 && (
+        {messages.length > 0 && (
+          <View style={styles.chatHeader}>
+            <View style={{flex: 1}} />
             <TouchableOpacity style={styles.clearButton} onPress={handleClearHistory}>
               <MaterialCommunityIcons name="trash-can-outline" size={18} color="#6b7c93" />
             </TouchableOpacity>
-          )}
-        </View>
+          </View>
+        )}
 
         <ScrollView
           ref={scrollViewRef}
@@ -280,14 +386,8 @@ export default function NevinScreen() {
           ))}
           
           {loading && (
-            <View style={[styles.messageWrapper, styles.nevinMessageWrapper]}>
-              <View style={styles.avatarContainer}>
-                <MaterialCommunityIcons name="creation" size={16} color="#00ff88" />
-              </View>
-              <View style={[styles.messageCard, styles.nevinMessage, styles.typingIndicator]}>
-                <ActivityIndicator size="small" color="#00f3ff" />
-                <Text style={styles.typingText}>Nevin está escribiendo...</Text>
-              </View>
+            <View style={styles.thinkingWrapper}>
+              <ThinkingAnimation />
             </View>
           )}
         </ScrollView>
@@ -434,6 +534,9 @@ const styles = StyleSheet.create({
   },
   nevinMessageWrapper: {
     justifyContent: 'flex-start',
+  },
+  thinkingWrapper: {
+    marginVertical: 10,
   },
   avatarContainer: {
     width: 28,
