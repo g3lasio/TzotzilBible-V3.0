@@ -319,9 +319,6 @@ export default function VersesScreen() {
               </Text>
               <Text style={styles.parallelVerseText}>{verse.text_tzotzil}</Text>
             </View>
-            
-            <View style={styles.parallelDivider} />
-            
             <View style={[styles.parallelColumn, styles.parallelColumnRight]}>
               <View style={[styles.columnHeaderBar, { backgroundColor: secondaryVersion.color }]} />
               <Text style={[styles.columnLabel, { color: secondaryVersion.color }]}>
@@ -685,20 +682,23 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   parallelVerseCard: {
-    marginBottom: 12,
+    marginBottom: 14,
     borderRadius: 16,
     overflow: 'hidden',
     borderWidth: 1,
-    borderColor: 'rgba(0, 243, 255, 0.2)',
+    borderColor: 'rgba(0, 243, 255, 0.25)',
   },
   parallelVerseGradient: {
-    padding: 12,
+    padding: 14,
   },
   parallelVerseHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 12,
+    paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(0, 243, 255, 0.1)',
   },
   parallelHeaderRight: {
     flexDirection: 'row',
@@ -706,36 +706,38 @@ const styles = StyleSheet.create({
   },
   parallelColumns: {
     flexDirection: 'row',
+    alignItems: 'flex-start',
+    width: '100%',
   },
   parallelColumn: {
     flex: 1,
-    paddingTop: 8,
+    width: '50%',
   },
   parallelColumnLeft: {
-    paddingRight: 10,
+    paddingRight: 12,
+    borderRightWidth: 1,
+    borderRightColor: 'rgba(0, 243, 255, 0.15)',
   },
   parallelColumnRight: {
-    paddingLeft: 10,
-  },
-  parallelDivider: {
-    width: 1,
-    backgroundColor: 'rgba(0, 243, 255, 0.2)',
+    paddingLeft: 12,
   },
   columnHeaderBar: {
-    height: 3,
-    borderRadius: 2,
-    marginBottom: 6,
+    height: 2,
+    borderRadius: 1,
+    marginBottom: 8,
+    opacity: 0.8,
   },
   columnLabel: {
-    fontSize: 10,
-    fontWeight: 'bold',
+    fontSize: 9,
+    fontWeight: '700',
     textTransform: 'uppercase',
-    letterSpacing: 1,
-    marginBottom: 6,
+    letterSpacing: 1.2,
+    marginBottom: 8,
+    opacity: 0.9,
   },
   parallelVerseText: {
-    fontSize: 14,
-    lineHeight: 22,
+    fontSize: 13,
+    lineHeight: 21,
     color: '#e6f3ff',
   },
   verseHeader: {
