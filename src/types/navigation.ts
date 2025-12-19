@@ -32,6 +32,7 @@ export type TabParamList = {
 
 export type RootStackParamList = {
   MainTabs: NavigatorScreenParams<TabParamList>;
+  About: undefined;
 };
 
 declare global {

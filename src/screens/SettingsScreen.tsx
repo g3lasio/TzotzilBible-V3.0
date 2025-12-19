@@ -4,14 +4,20 @@ import { Text } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { NevinAIService } from '../services/NevinAIService';
 import MainLayout from '../components/MainLayout';
 import { FONTS } from '../config';
+import type { RootStackParamList } from '../types/navigation';
 
 const APP_VERSION = '2.1.0';
 const FEEDBACK_EMAIL = 'feedback@tzotzilbible.app';
 
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+
 export default function SettingsScreen() {
+  const navigation = useNavigation<NavigationProp>();
   const [fontSize, setFontSize] = useState('medium');
 
   useEffect(() => {
@@ -198,6 +204,27 @@ export default function SettingsScreen() {
                   <View style={styles.settingInfo}>
                     <Text style={styles.settingTitle}>Compartir App</Text>
                     <Text style={styles.settingDesc}>Recomienda Tzotzil Bible</Text>
+                  </View>
+                </View>
+                <MaterialCommunityIcons name="chevron-right" size={24} color="#6b7c93" />
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            style={styles.settingCard}
+            onPress={() => navigation.navigate('About')}
+          >
+            <LinearGradient
+              colors={['rgba(20, 30, 45, 0.8)', 'rgba(15, 25, 40, 0.9)']}
+              style={styles.settingGradient}
+            >
+              <View style={styles.settingRow}>
+                <View style={styles.settingLeft}>
+                  <MaterialCommunityIcons name="information-outline" size={24} color="#00ff88" />
+                  <View style={styles.settingInfo}>
+                    <Text style={styles.settingTitle}>Acerca de Nosotros</Text>
+                    <Text style={styles.settingDesc}>Conoce más sobre la app</Text>
                   </View>
                 </View>
                 <MaterialCommunityIcons name="chevron-right" size={24} color="#6b7c93" />

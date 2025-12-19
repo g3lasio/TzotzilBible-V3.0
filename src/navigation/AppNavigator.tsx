@@ -13,6 +13,7 @@ import VerseCommentaryScreen from '../screens/VerseCommentaryScreen';
 import SearchScreen from '../screens/SearchScreen';
 import NevinScreen from '../screens/NevinScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import AboutScreen from '../screens/AboutScreen';
 import type { RootStackParamList, TabParamList, BibleStackParamList } from '../types/navigation';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -140,6 +141,7 @@ export default function AppNavigator() {
       }}
     >
       <RootStack.Screen name="MainTabs" component={MainTabNavigator} />
+      <RootStack.Screen name="About" component={AboutScreen} />
     </RootStack.Navigator>
   );
 }
