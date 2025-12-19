@@ -231,6 +231,95 @@ export default function SettingsScreen() {
               </View>
             </LinearGradient>
           </TouchableOpacity>
+
+          <TouchableOpacity 
+            style={styles.settingCard}
+            onPress={() => navigation.navigate('ContactSupport')}
+          >
+            <LinearGradient
+              colors={['rgba(20, 30, 45, 0.8)', 'rgba(15, 25, 40, 0.9)']}
+              style={styles.settingGradient}
+            >
+              <View style={styles.settingRow}>
+                <View style={styles.settingLeft}>
+                  <MaterialCommunityIcons name="headset" size={24} color="#00f3ff" />
+                  <View style={styles.settingInfo}>
+                    <Text style={styles.settingTitle}>Contacto y Soporte</Text>
+                    <Text style={styles.settingDesc}>Obtén ayuda o envía sugerencias</Text>
+                  </View>
+                </View>
+                <MaterialCommunityIcons name="chevron-right" size={24} color="#6b7c93" />
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
+
+        {/* Legal */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>LEGAL</Text>
+          
+          <TouchableOpacity 
+            style={styles.settingCard}
+            onPress={() => navigation.navigate('PrivacyPolicy')}
+          >
+            <LinearGradient
+              colors={['rgba(20, 30, 45, 0.8)', 'rgba(15, 25, 40, 0.9)']}
+              style={styles.settingGradient}
+            >
+              <View style={styles.settingRow}>
+                <View style={styles.settingLeft}>
+                  <MaterialCommunityIcons name="shield-lock-outline" size={24} color="#00ff88" />
+                  <View style={styles.settingInfo}>
+                    <Text style={styles.settingTitle}>Política de Privacidad</Text>
+                    <Text style={styles.settingDesc}>Cómo manejamos tus datos</Text>
+                  </View>
+                </View>
+                <MaterialCommunityIcons name="chevron-right" size={24} color="#6b7c93" />
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            style={styles.settingCard}
+            onPress={() => navigation.navigate('TermsOfService')}
+          >
+            <LinearGradient
+              colors={['rgba(20, 30, 45, 0.8)', 'rgba(15, 25, 40, 0.9)']}
+              style={styles.settingGradient}
+            >
+              <View style={styles.settingRow}>
+                <View style={styles.settingLeft}>
+                  <MaterialCommunityIcons name="file-document-outline" size={24} color="#00f3ff" />
+                  <View style={styles.settingInfo}>
+                    <Text style={styles.settingTitle}>Términos de Servicio</Text>
+                    <Text style={styles.settingDesc}>Condiciones de uso de la app</Text>
+                  </View>
+                </View>
+                <MaterialCommunityIcons name="chevron-right" size={24} color="#6b7c93" />
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            style={styles.settingCard}
+            onPress={() => navigation.navigate('LegalDisclaimer')}
+          >
+            <LinearGradient
+              colors={['rgba(20, 30, 45, 0.8)', 'rgba(15, 25, 40, 0.9)']}
+              style={styles.settingGradient}
+            >
+              <View style={styles.settingRow}>
+                <View style={styles.settingLeft}>
+                  <MaterialCommunityIcons name="alert-circle-outline" size={24} color="#ffd700" />
+                  <View style={styles.settingInfo}>
+                    <Text style={styles.settingTitle}>Aviso Legal</Text>
+                    <Text style={styles.settingDesc}>IA, contenido teológico y limitaciones</Text>
+                  </View>
+                </View>
+                <MaterialCommunityIcons name="chevron-right" size={24} color="#6b7c93" />
+              </View>
+            </LinearGradient>
+          </TouchableOpacity>
         </View>
 
         {/* Información */}
