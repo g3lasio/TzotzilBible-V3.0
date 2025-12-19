@@ -26,12 +26,14 @@ export type TabParamList = {
       textTzotzil?: string;
       textSpanish?: string;
     };
+    momentId?: string;
   } | undefined;
   SettingsTab: undefined;
 };
 
 export type RootStackParamList = {
   MainTabs: NavigatorScreenParams<TabParamList>;
+  Moments: undefined;
   About: undefined;
   PrivacyPolicy: undefined;
   TermsOfService: undefined;

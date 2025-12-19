@@ -69,3 +69,24 @@ export interface NevinState {
   chatHistory: ChatMessage[];
   isProcessing: boolean;
 }
+
+export interface Moment {
+  id: string;
+  title: string;
+  summary?: string;
+  themes: string[];
+  messages: ChatMessage[];
+  createdAt: Date;
+  updatedAt: Date;
+  keyInsight?: string;
+}
+
+export interface MomentPreview {
+  id: string;
+  title: string;
+  summary?: string;
+  themes: string[];
+  createdAt: Date;
+  updatedAt: Date;
+  messageCount: number;
+}

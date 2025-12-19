@@ -1,12 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, Alert, Animated, TouchableOpacity, Dimensions } from 'react-native';
 import { Text, TextInput, ActivityIndicator, IconButton } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp, useFocusEffect } from '@react-navigation/native';
 import { NevinAIService } from '../services/NevinAIService';
+import { MomentsService } from '../services/MomentsService';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList, TabParamList } from '../types/navigation';
+import type { Moment, ChatMessage } from '../types/nevin';
 import MainLayout from '../components/MainLayout';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -164,7 +166,9 @@ export default function NevinScreen() {
   const [inputMessage, setInputMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [initialQuestionProcessed, setInitialQuestionProcessed] = useState(false);
-  const [historyLoaded, setHistoryLoaded] = useState(false);
+  const [momentLoaded, setMomentLoaded] = useState(false);
+  const [currentMoment, setCurrentMoment] = useState<Moment | null>(null);
+  const [momentTitle, setMomentTitle] = useState<string>('');
   const [randomQuestions] = useState(() => getRandomQuestions());
   const scrollViewRef = useRef<ScrollView>(null);
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -172,8 +176,13 @@ export default function NevinScreen() {
   const initialQuestion = route.params?.initialQuestion;
   const verseContext = route.params?.verseContext;
 
+  useFocusEffect(
+    useCallback(() => {
+      loadMoment();
+    }, [])
+  );
+
   useEffect(() => {
-    loadHistory();
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 500,
@@ -182,14 +191,39 @@ export default function NevinScreen() {
   }, []);
 
   useEffect(() => {
-    if (initialQuestion && !initialQuestionProcessed && historyLoaded) {
+    if (initialQuestion && !initialQuestionProcessed && momentLoaded) {
       setInitialQuestionProcessed(true);
       handleInitialQuestion();
     }
-  }, [initialQuestion, historyLoaded]);
+  }, [initialQuestion, momentLoaded]);
+
+  const loadMoment = async () => {
+    let moment = await MomentsService.getActiveMoment();
+    
+    if (!moment) {
+      moment = await MomentsService.createMoment();
+    }
+    
+    setCurrentMoment(moment);
+    setMomentTitle(moment.title);
+    
+    const loadedMessages: Message[] = moment.messages.map((msg, index) => ({
+      id: msg.id || index.toString(),
+      content: msg.content,
+      isUser: msg.type === 'user',
+      timestamp: new Date(msg.timestamp)
+    }));
+    
+    setMessages(loadedMessages);
+    setMomentLoaded(true);
+    
+    setTimeout(() => {
+      scrollViewRef.current?.scrollToEnd({ animated: false });
+    }, 100);
+  };
 
   const handleInitialQuestion = async () => {
-    if (!initialQuestion) return;
+    if (!initialQuestion || !currentMoment) return;
     
     const newUserMessage: Message = {
       id: Date.now().toString(),
@@ -204,6 +238,8 @@ export default function NevinScreen() {
     try {
       let response: string;
       
+      const chatHistory: ChatMessage[] = currentMoment.messages;
+      
       if (verseContext) {
         const result = await NevinAIService.askAboutVerse(
           verseContext.book,
@@ -215,7 +251,8 @@ export default function NevinScreen() {
         );
         response = result.response || result.error || 'No pude procesar tu pregunta';
       } else {
-        response = await NevinAIService.sendMessage(initialQuestion);
+        const result = await NevinAIService.processQuery(initialQuestion, '', chatHistory);
+        response = result.response || result.error || 'No pude procesar tu pregunta';
       }
 
       const nevinResponse: Message = {
@@ -226,6 +263,27 @@ export default function NevinScreen() {
       };
 
       setMessages(prev => [...prev, nevinResponse]);
+
+      const userChatMsg: ChatMessage = {
+        id: newUserMessage.id,
+        content: newUserMessage.content,
+        type: 'user',
+        timestamp: newUserMessage.timestamp
+      };
+      const assistantChatMsg: ChatMessage = {
+        id: nevinResponse.id,
+        content: nevinResponse.content,
+        type: 'assistant',
+        timestamp: nevinResponse.timestamp
+      };
+      
+      await MomentsService.addMessageToMoment(currentMoment.id, userChatMsg, assistantChatMsg);
+      
+      const updatedMoment = await MomentsService.getMoment(currentMoment.id);
+      if (updatedMoment) {
+        setCurrentMoment(updatedMoment);
+        setMomentTitle(updatedMoment.title);
+      }
 
       setTimeout(() => {
         scrollViewRef.current?.scrollToEnd({ animated: true });
@@ -238,20 +296,8 @@ export default function NevinScreen() {
     }
   };
 
-  const loadHistory = async () => {
-    const history = await NevinAIService.getChatHistory();
-    const loadedMessages: Message[] = history.map((msg: { role: 'user' | 'assistant'; content: string }, index: number) => ({
-      id: index.toString(),
-      content: msg.content,
-      isUser: msg.role === 'user',
-      timestamp: new Date()
-    }));
-    setMessages(loadedMessages);
-    setHistoryLoaded(true);
-  };
-
   const handleSendMessage = async () => {
-    if (!inputMessage.trim()) return;
+    if (!inputMessage.trim() || !currentMoment) return;
 
     const newUserMessage: Message = {
       id: Date.now().toString(),
@@ -265,7 +311,9 @@ export default function NevinScreen() {
     setLoading(true);
 
     try {
-      const response = await NevinAIService.sendMessage(newUserMessage.content);
+      const chatHistory: ChatMessage[] = currentMoment.messages;
+      const result = await NevinAIService.processQuery(newUserMessage.content, '', chatHistory);
+      const response = result.response || result.error || 'No pude procesar tu mensaje';
 
       const nevinResponse: Message = {
         id: (Date.now() + 1).toString(),
@@ -275,6 +323,27 @@ export default function NevinScreen() {
       };
 
       setMessages(prev => [...prev, nevinResponse]);
+
+      const userChatMsg: ChatMessage = {
+        id: newUserMessage.id,
+        content: newUserMessage.content,
+        type: 'user',
+        timestamp: newUserMessage.timestamp
+      };
+      const assistantChatMsg: ChatMessage = {
+        id: nevinResponse.id,
+        content: nevinResponse.content,
+        type: 'assistant',
+        timestamp: nevinResponse.timestamp
+      };
+      
+      await MomentsService.addMessageToMoment(currentMoment.id, userChatMsg, assistantChatMsg);
+      
+      const updatedMoment = await MomentsService.getMoment(currentMoment.id);
+      if (updatedMoment) {
+        setCurrentMoment(updatedMoment);
+        setMomentTitle(updatedMoment.title);
+      }
 
       setTimeout(() => {
         scrollViewRef.current?.scrollToEnd({ animated: true });
@@ -287,22 +356,15 @@ export default function NevinScreen() {
     }
   };
 
-  const handleClearHistory = () => {
-    Alert.alert(
-      'Limpiar Historial',
-      '¿Estás seguro que deseas eliminar toda la conversación?',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Limpiar',
-          style: 'destructive',
-          onPress: async () => {
-            await NevinAIService.clearChatHistory();
-            setMessages([]);
-          }
-        }
-      ]
-    );
+  const handleNewMoment = async () => {
+    const newMoment = await MomentsService.createMoment();
+    setCurrentMoment(newMoment);
+    setMomentTitle(newMoment.title);
+    setMessages([]);
+  };
+
+  const handleOpenMoments = () => {
+    navigation.navigate('Moments');
   };
 
   return (
@@ -312,14 +374,20 @@ export default function NevinScreen() {
         style={styles.keyboardAvoid}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
       >
-        {messages.length > 0 && (
-          <View style={styles.chatHeader}>
-            <View style={{flex: 1}} />
-            <TouchableOpacity style={styles.clearButton} onPress={handleClearHistory}>
-              <MaterialCommunityIcons name="trash-can-outline" size={18} color="#6b7c93" />
-            </TouchableOpacity>
-          </View>
-        )}
+        <View style={styles.chatHeader}>
+          <TouchableOpacity style={styles.momentsButton} onPress={handleOpenMoments}>
+            <MaterialCommunityIcons name="layers-outline" size={18} color="#00f3ff" />
+            <Text style={styles.momentsButtonText}>Momentos</Text>
+          </TouchableOpacity>
+          {messages.length > 0 && (
+            <View style={styles.momentTitleContainer}>
+              <Text style={styles.momentTitleText} numberOfLines={1}>{momentTitle}</Text>
+            </View>
+          )}
+          <TouchableOpacity style={styles.newMomentBtn} onPress={handleNewMoment}>
+            <MaterialCommunityIcons name="plus" size={20} color="#00ff88" />
+          </TouchableOpacity>
+        </View>
 
         <ScrollView
           ref={scrollViewRef}
@@ -463,13 +531,39 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: '#6b7c93',
   },
-  clearButton: {
+  momentsButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 243, 255, 0.1)',
+    borderRadius: 16,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    gap: 6,
+  },
+  momentsButtonText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#00f3ff',
+  },
+  momentTitleContainer: {
+    flex: 1,
+    marginHorizontal: 12,
+  },
+  momentTitleText: {
+    fontSize: 13,
+    color: '#a0b8d0',
+    textAlign: 'center',
+    fontStyle: 'italic',
+  },
+  newMomentBtn: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: 'rgba(107, 124, 147, 0.1)',
+    backgroundColor: 'rgba(0, 255, 136, 0.15)',
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 255, 136, 0.3)',
   },
   welcomeContainer: {
     paddingTop: 40,
