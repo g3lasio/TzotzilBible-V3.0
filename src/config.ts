@@ -10,7 +10,11 @@ export const getBackendUrl = (): string => {
   if (typeof window !== 'undefined' && window.location) {
     const protocol = window.location.protocol;
     const hostname = window.location.hostname;
-    return `${protocol}//${hostname}:8000`;
+    const port = window.location.port;
+    if (port) {
+      return `${protocol}//${hostname}:${port}`;
+    }
+    return `${protocol}//${hostname}`;
   }
-  return 'http://localhost:8000';
+  return 'https://tzotzil-bible.replit.app';
 };
