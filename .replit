@@ -5,7 +5,7 @@ modules = ["nodejs-20"]
 [deployment]
 run = ["sh", "-c", "node server.js"]
 deploymentTarget = "cloudrun"
-build = ["sh", "-c", "npx expo export --platform web"]
+build = ["sh", "-c", "npm ci && npx expo export --platform web"]
 publicDir = "dist"
 
 [[ports]]
