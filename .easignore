@@ -1,0 +1,45 @@
+# Dependencies & caches
+node_modules
+.expo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+**/*.log
+
+# Git
+.git
+.github
+
+# Build outputs
+dist
+build
+web-build
+coverage
+
+# Native build junk
+android/.gradle
+android/build
+android/app/build
+ios/build
+ios/Pods
+ios/DerivedData
+
+# OS/editor junk
+.DS_Store
+Thumbs.db
+
+# Big stuff that often sneaks in
+**/*.zip
+**/*.7z
+**/*.rar
+**/*.tar
+**/*.gz
+**/*.mp4
+**/*.mov
+**/*.psd
+
+# If you have local databases or large artifacts
+**/*.aab
+**/*.apk
+**/*.ipa

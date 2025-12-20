@@ -18,6 +18,7 @@ externalPort = 80
 
 [nix]
 channel = "stable-24_05"
+packages = ["zulu11"]
 
 [workflows]
 runButton = "Project"
