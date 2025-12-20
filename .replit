@@ -1,5 +1,5 @@
 language = "nodejs"
-run = "cd temp_nevin && npx expo start --web --port 5000 --host 0.0.0.0"
+run = "node server.js"
 modules = ["nodejs-20"]
 
 [deployment]
@@ -11,38 +11,6 @@ publicDir = "dist"
 [[ports]]
 localPort = 5000
 externalPort = 80
-
-[[ports]]
-localPort = 5001
-externalPort = 5000
-
-[[ports]]
-localPort = 8000
-externalPort = 8000
-
-[[ports]]
-localPort = 8080
-externalPort = 8080
-
-[[ports]]
-localPort = 8081
-externalPort = 8081
-
-[[ports]]
-localPort = 8082
-externalPort = 3001
-
-[[ports]]
-localPort = 8083
-externalPort = 3003
-
-[[ports]]
-localPort = 19006
-externalPort = 3000
-
-[[ports]]
-localPort = 19007
-externalPort = 3002
 
 [nix]
 channel = "stable-24_05"
@@ -57,7 +25,8 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd temp_nevin && npx expo start --web --port 5000 --host 0.0.0.0"
+args = "node server.js"
+waitForPort = 5000
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
@@ -69,7 +38,7 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "npx expo start --web --port 5000 --host 0.0.0.0"
+args = "node server.js"
 waitForPort = 5000
 
 [workflows.workflow.metadata]
