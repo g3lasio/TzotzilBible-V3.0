@@ -4,7 +4,7 @@ modules = ["nodejs-20"]
 
 [deployment]
 run = ["sh", "-c", "node server.js"]
-deploymentTarget = "static"
+deploymentTarget = "cloudrun"
 build = ["sh", "-c", "npx expo export --platform web"]
 publicDir = "dist"
 
@@ -20,13 +20,28 @@ runButton = "Project"
 
 [[workflows.workflow]]
 name = "Project"
-mode = "sequential"
+mode = "parallel"
 author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "cd temp_nevin && npx expo start --web --port 5000 --host 0.0.0.0"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Expo Web"
+
+[[workflows.workflow]]
+name = "Expo Web"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npx expo start --web --port 5000 --host 0.0.0.0"
 waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
 
 [agent]
 integrations = ["perplexity_v0:1.0.0", "python_anthropic:1.0.0"]

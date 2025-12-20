@@ -10,7 +10,7 @@ app.use(express.static(DIST_DIR, {
   etag: true
 }));
 
-app.get('*', (req, res) => {
+app.get('/{*path}', (req, res) => {
   res.sendFile(path.join(DIST_DIR, 'index.html'));
 });
 
