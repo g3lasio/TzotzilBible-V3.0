@@ -2,6 +2,7 @@
   "cli": {
     "version": ">= 5.8.0",
     "appVersionSource": "local"
+    "requireCommit": true
   },
   "build": {
     "development": {
@@ -35,8 +36,8 @@
         "track": "internal"
       },
       "ios": {
-        "appleId": "your-apple-id@email.com",
-        "ascAppId": "your-app-store-connect-app-id"
+        "appleId": "gelasio@chyrris.com",
+        "ascAppId": "6740210615"
       }
     }
   }
