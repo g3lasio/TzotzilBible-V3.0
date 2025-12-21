@@ -43,6 +43,7 @@ export default {
     web: {
       favicon: "./assets/favicon.png",
       bundler: "metro",
+      output: "single",
     },
     extra: {
       eas: {
