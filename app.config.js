@@ -64,6 +64,12 @@ export default {
           imageWidth: 200,
         },
       ],
+      [
+        "expo-asset",
+        {
+          assets: ["./assets/bible.db"],
+        },
+      ],
     ],
     updates: {
       fallbackToCacheTimeout: 0,
