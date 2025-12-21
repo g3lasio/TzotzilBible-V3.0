@@ -362,26 +362,6 @@ export default function VersesScreen() {
       <View style={styles.container}>
         <View style={styles.controls}>
           <View style={styles.controlsRow}>
-            <View style={styles.navButtons}>
-              <TouchableOpacity
-                style={[styles.navButton, chapter <= 1 && styles.navButtonDisabled]}
-                onPress={() => navigateChapter('prev')}
-                disabled={chapter <= 1}
-              >
-                <MaterialCommunityIcons 
-                  name="chevron-left" 
-                  size={20} 
-                  color={chapter <= 1 ? '#6b7c93' : '#00f3ff'} 
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.navButton}
-                onPress={() => navigateChapter('next')}
-              >
-                <MaterialCommunityIcons name="chevron-right" size={20} color="#00f3ff" />
-              </TouchableOpacity>
-            </View>
-
             <View style={styles.primaryVersionBadge}>
               <View style={[styles.versionIndicator, { backgroundColor: TZOTZIL_VERSION.color }]} />
               <Text style={styles.primaryVersionText}>{TZOTZIL_VERSION.shortName}</Text>
