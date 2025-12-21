@@ -5,7 +5,6 @@ modules = ["nodejs-20"]
 [deployment]
 deploymentTarget = "cloudrun"
 build = ["sh", "-c", "npm ci && npx expo export --platform web"]
-publicDir = "dist"
 run = ["sh", "-c", "node server.js"]
 
 [[deployment.rewrites]]
