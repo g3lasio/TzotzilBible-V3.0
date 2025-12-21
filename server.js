@@ -8,29 +8,6 @@ const DIST_DIR = path.join(__dirname, 'dist');
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_MODEL = 'claude-sonnet-4-20250514';
 
-// CORS middleware for mobile apps
-app.use((req, res, next) => {
-  const allowedOrigins = [
-    'https://bible.chyrris.com',
-    'http://localhost:5000',
-    'http://localhost:8081',
-    'http://localhost:19006'
-  ];
-  const origin = req.headers.origin;
-  
-  // Allow requests from mobile apps (no origin header) or from allowed origins
-  if (!origin || allowedOrigins.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin || '*');
-  }
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  
-  if (req.method === 'OPTIONS') {
-    return res.sendStatus(200);
-  }
-  next();
-});
-
 const NEVIN_SYSTEM_PROMPT = `Eres Nevin, un asistente bíblico amable, cálido y sabio. Ayudas a entender la Biblia en Tzotzil y Español.
 
 IDENTIDAD (MUY IMPORTANTE):
@@ -102,12 +79,22 @@ EMPATÍA:
 - Ofrece esperanza y consuelo basados en las promesas bíblicas
 - Ora mentalmente por cada persona que interactúa contigo`;
 
+// CORS middleware for mobile apps - MUST be first
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
+// Parse JSON bodies
 app.use(express.json());
 
-app.use(express.static(DIST_DIR, {
-  maxAge: '1y',
-  etag: true
-}));
+// API ROUTES - Must come BEFORE static file serving
 
 app.get('/api/health', (req, res) => {
   const hasKey = !!process.env.ANTHROPIC_API_KEY;
@@ -330,7 +317,14 @@ Incluye:
   }
 });
 
-app.get('/{*path}', (req, res) => {
+// Static files - AFTER API routes
+app.use(express.static(DIST_DIR, {
+  maxAge: '1y',
+  etag: true
+}));
+
+// Catch-all for SPA - LAST
+app.use((req, res) => {
   res.sendFile(path.join(DIST_DIR, 'index.html'));
 });
 
