@@ -79,10 +79,40 @@ EMPATÍA:
 - Ofrece esperanza y consuelo basados en las promesas bíblicas
 - Ora mentalmente por cada persona que interactúa contigo`;
 
-// Request logging middleware
+// Request logging middleware with no-cache headers for development
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
   next();
+});
+
+// Service worker - aggressively clear all caches and unregister
+app.get('/service-worker.js', (req, res) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  res.setHeader('Content-Type', 'application/javascript');
+  res.send(`
+self.addEventListener('install', function(e) { 
+  self.skipWaiting(); 
+});
+self.addEventListener('activate', function(e) {
+  e.waitUntil(
+    caches.keys().then(function(names) {
+      return Promise.all(names.map(function(n) { return caches.delete(n); }));
+    }).then(function() { 
+      return self.clients.claim(); 
+    }).then(function() {
+      return self.registration.unregister();
+    })
+  );
+});
+self.addEventListener('fetch', function(e) {
+  e.respondWith(fetch(e.request));
+});
+  `);
 });
 
 // CORS middleware for mobile apps - MUST be first
@@ -323,14 +353,20 @@ Incluye:
   }
 });
 
-// Static files - AFTER API routes
+// Static files - AFTER API routes (no cache for HTML, cache for assets)
 app.use(express.static(DIST_DIR, {
-  maxAge: '1y',
-  etag: true
+  maxAge: '0',
+  etag: false,
+  setHeaders: (res, path) => {
+    if (path.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    }
+  }
 }));
 
 // Catch-all for SPA - LAST
 app.use((req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.sendFile(path.join(DIST_DIR, 'index.html'));
 });
 
