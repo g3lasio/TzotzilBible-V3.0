@@ -29,7 +29,10 @@ Tzotzil Bible is a bilingual Bible mobile application (Spanish/Tzotzil) with an 
 
 ## DatabaseService (`src/services/DatabaseService.ts`)
 - Manages SQLite database initialization and queries
-- Copies database from assets to device on first launch
+- Copies database from assets to device on first launch using expo-asset
+- Validates database integrity (66 books, 31,000+ verses) before use
+- Auto-recovery: if database is corrupted or incomplete, re-copies from assets
+- Detailed logging for production debugging: [DatabaseService] prefix
 - Provides methods for books, chapters, verses, search, and promises
 - Handles platform differences (native SQLite vs web fallback)
 
@@ -128,7 +131,8 @@ Nevin AI requires internet:
 
 # Changelog
 
-- December 21, 2025. **CLICKABLE VERSES & EGW INTEGRATION**: Bible verse references in Nevin's responses are now clickable and navigate to the exact verse. Added EGW (Elena G. de White) integration with 20 books - relevant quotes automatically included in Nevin's context.
+- December 21, 2025. **IMPROVED OFFLINE DATABASE RELIABILITY**: Added expo-asset plugin for explicit database bundling in APK/AAB. Enhanced DatabaseService with database integrity validation, auto-recovery for corrupted databases, detailed logging for production debugging. Reduced Nevin response length (max 1500 tokens) and limited EGW context to 1 short quote.
+- December 21, 2025. **CLICKABLE VERSES & EGW INTEGRATION**: Bible verse references in Nevin's responses are now clickable and navigate to the exact verse. Added EGW (Elena G. de White) integration with 91 books - relevant quotes automatically included in Nevin's context.
 - December 19, 2025. **MOMENTS FEATURE**: Implemented reflective conversation history called "Momentos". Conversations now stored as thematic moments with AI-generated semantic titles (e.g., "Sobre el perdón", "La fe en tiempos difíciles"). Local-only storage with no authentication required. Includes MomentsScreen for browsing and NevinScreen integration.
 - December 17, 2025. **UPGRADED TO SDK 54**: Updated to Expo SDK 54, React 19.1.0, React Native 0.81.5, and React Navigation v7
 - December 17, 2025. **COMPLETE CONVERSION TO EXPO**: Removed all Flask backend code, converted to pure Expo mobile app, implemented direct Anthropic API integration for Nevin AI, configured EAS for APK/IPA builds
