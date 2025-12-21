@@ -143,7 +143,7 @@ export default function MainLayout({ children, showBackButton = false, title }: 
                   );
                 })}
                 <View style={styles.menuFooter}>
-                  <Text style={styles.menuFooterText}>by <Text style={styles.menuFooterBrand}>Tzotzil Bible</Text></Text>
+                  <Text style={styles.menuFooterText}>by <Text style={styles.menuFooterBrand}>Chyrris Technologies</Text></Text>
                 </View>
               </LinearGradient>
             </View>
