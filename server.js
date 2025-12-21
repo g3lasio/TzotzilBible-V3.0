@@ -1,7 +1,10 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
+
+const EGW_BOOKS_DIR = path.join(__dirname, 'assets/EGW BOOKS JSON');
 const PORT = process.env.PORT || 5000;
 const DIST_DIR = path.join(__dirname, 'dist');
 
@@ -151,9 +154,20 @@ app.post('/api/nevin/chat', async (req, res) => {
       });
     }
 
-    const { message, context, history = [] } = req.body;
+    const { message, context, history = [], includeEGW = true } = req.body;
     if (!message) {
       return res.status(400).json({ success: false, error: 'No message provided' });
+    }
+
+    let egwContext = '';
+    if (includeEGW) {
+      const egwQuotes = searchEGWBooks(message, 2);
+      if (egwQuotes.length > 0) {
+        egwContext = '\n\n[CITAS DE ELENA G. DE WHITE RELEVANTES - Usa estas si aplican al tema]\n';
+        egwQuotes.forEach((q, i) => {
+          egwContext += `\n${i+1}. "${q.content}..." (${q.book}, p. ${q.page})\n`;
+        });
+      }
     }
 
     const messages = history.map(msg => ({
@@ -161,7 +175,9 @@ app.post('/api/nevin/chat', async (req, res) => {
       content: msg.content || ''
     }));
 
-    const userContent = context ? `Contexto: ${context}\n\nPregunta: ${message}` : message;
+    let userContent = message;
+    if (context) userContent = `Contexto: ${context}\n\nPregunta: ${message}`;
+    if (egwContext) userContent += egwContext;
     messages.push({ role: 'user', content: userContent });
 
     const response = await fetch(ANTHROPIC_API_URL, {
@@ -353,6 +369,84 @@ Incluye:
   }
 });
 
+// EGW Books API
+let egwBooksCache = null;
+
+function loadEGWBooks() {
+  if (egwBooksCache) return egwBooksCache;
+  
+  try {
+    const files = fs.readdirSync(EGW_BOOKS_DIR).filter(f => f.endsWith('.json'));
+    egwBooksCache = files.map(file => {
+      const filePath = path.join(EGW_BOOKS_DIR, file);
+      const content = fs.readFileSync(filePath, 'utf8');
+      const pages = JSON.parse(content);
+      return {
+        name: file.replace('.json', ''),
+        pages: pages
+      };
+    });
+    console.log(`Loaded ${egwBooksCache.length} EGW books`);
+    return egwBooksCache;
+  } catch (error) {
+    console.error('Error loading EGW books:', error);
+    return [];
+  }
+}
+
+function searchEGWBooks(query, maxResults = 3) {
+  const books = loadEGWBooks();
+  const results = [];
+  const queryWords = query.toLowerCase().split(/\s+/).filter(w => w.length > 3);
+  
+  for (const book of books) {
+    for (const page of book.pages) {
+      if (!page.content || !Array.isArray(page.content)) continue;
+      
+      const pageText = page.content.join(' ').toLowerCase();
+      let score = 0;
+      
+      for (const word of queryWords) {
+        if (pageText.includes(word)) {
+          score += (pageText.match(new RegExp(word, 'gi')) || []).length;
+        }
+      }
+      
+      if (score > 0) {
+        results.push({
+          book: book.name,
+          page: page.page,
+          content: page.content.slice(0, 5).join(' ').substring(0, 300),
+          relevance: score
+        });
+      }
+    }
+  }
+  
+  return results
+    .sort((a, b) => b.relevance - a.relevance)
+    .slice(0, maxResults);
+}
+
+app.get('/api/egw/books', (req, res) => {
+  const books = loadEGWBooks();
+  res.json({ 
+    success: true, 
+    books: books.map(b => b.name) 
+  });
+});
+
+app.post('/api/egw/search', (req, res) => {
+  const { query, maxResults = 3 } = req.body;
+  
+  if (!query) {
+    return res.json({ success: true, quotes: [] });
+  }
+  
+  const quotes = searchEGWBooks(query, maxResults);
+  res.json({ success: true, quotes });
+});
+
 // Static files - AFTER API routes (no cache for HTML, cache for assets)
 app.use(express.static(DIST_DIR, {
   maxAge: '0',
@@ -369,6 +463,9 @@ app.use((req, res) => {
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.sendFile(path.join(DIST_DIR, 'index.html'));
 });
+
+console.log('Preloading EGW books...');
+loadEGWBooks();
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Production server running at http://0.0.0.0:${PORT}`);
