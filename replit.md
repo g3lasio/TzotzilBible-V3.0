@@ -39,9 +39,21 @@ Tzotzil Bible is a bilingual Bible mobile application (Spanish/Tzotzil) with an 
 - Falls back to API/AsyncStorage cache on web
 
 ## NevinAIService (`src/services/NevinAIService.ts`)
-- Direct integration with Anthropic Claude API via Flask backend
+- Direct integration with Anthropic Claude API via Node.js backend
 - Processes user queries with theological context
 - Verse commentary generation
+- Clickable Bible verse references in responses (navigate to exact verse)
+- Automatic EGW (Elena G. de White) quotes integration
+
+## EGWService (`src/services/EGWService.ts`)
+- Backend search across 20 Ellen G. White books (5.5MB JSON)
+- Keyword-based relevance scoring
+- Quotes automatically included in Nevin's context
+
+## ClickableVerseText (`src/components/ClickableVerseText.tsx`)
+- Parses Bible references in text (Juan 3:16, Génesis 1:1-3)
+- Platform-specific rendering (web uses HTML spans)
+- Navigates to exact verse when clicked
 
 ## MomentsService (`src/services/MomentsService.ts`)
 - Reflective conversation storage system ("Momentos")
@@ -116,6 +128,7 @@ Nevin AI requires internet:
 
 # Changelog
 
+- December 21, 2025. **CLICKABLE VERSES & EGW INTEGRATION**: Bible verse references in Nevin's responses are now clickable and navigate to the exact verse. Added EGW (Elena G. de White) integration with 20 books - relevant quotes automatically included in Nevin's context.
 - December 19, 2025. **MOMENTS FEATURE**: Implemented reflective conversation history called "Momentos". Conversations now stored as thematic moments with AI-generated semantic titles (e.g., "Sobre el perdón", "La fe en tiempos difíciles"). Local-only storage with no authentication required. Includes MomentsScreen for browsing and NevinScreen integration.
 - December 17, 2025. **UPGRADED TO SDK 54**: Updated to Expo SDK 54, React 19.1.0, React Native 0.81.5, and React Navigation v7
 - December 17, 2025. **COMPLETE CONVERSION TO EXPO**: Removed all Flask backend code, converted to pure Expo mobile app, implemented direct Anthropic API integration for Nevin AI, configured EAS for APK/IPA builds
