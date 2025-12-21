@@ -244,30 +244,28 @@ export default function VersesScreen() {
             : ['rgba(20, 30, 45, 0.8)', 'rgba(15, 25, 40, 0.9)']}
           style={styles.verseGradient}
         >
-          <View style={styles.verseHeader}>
-            <View style={styles.verseHeaderLeft}>
-              <View style={styles.verseNumberBadge}>
-                <Text style={styles.verseNumber}>{verse.verse}</Text>
-              </View>
+          <View style={styles.singleVerseHeader}>
+            <View style={styles.singleHeaderSpacer}>
               {isFavorite(verse) && (
-                <MaterialCommunityIcons name="heart" size={14} color="#ff6b6b" style={{ marginLeft: 8 }} />
+                <MaterialCommunityIcons name="heart" size={14} color="#ff6b6b" />
               )}
             </View>
-            <TouchableOpacity
-              style={styles.menuButton}
-              onPress={() => openVerseMenu(verse)}
-            >
-              <MaterialCommunityIcons name="dots-vertical" size={20} color="#6b7c93" />
-            </TouchableOpacity>
+            
+            <View style={styles.verseNumberBadge}>
+              <Text style={styles.verseNumber}>{verse.verse}</Text>
+            </View>
+            
+            <View style={styles.singleHeaderSpacer}>
+              <TouchableOpacity
+                style={styles.menuButton}
+                onPress={() => openVerseMenu(verse)}
+              >
+                <MaterialCommunityIcons name="dots-vertical" size={20} color="#6b7c93" />
+              </TouchableOpacity>
+            </View>
           </View>
           
           <View style={styles.textBlock}>
-            <View style={styles.languageHeader}>
-              <MaterialCommunityIcons name="translate" size={14} color={TZOTZIL_VERSION.color} />
-              <Text style={[styles.languageLabel, { color: TZOTZIL_VERSION.color }]}>
-                {TZOTZIL_VERSION.shortName}
-              </Text>
-            </View>
             <Text style={styles.verseText}>{verse.text_tzotzil}</Text>
           </View>
         </LinearGradient>
@@ -793,6 +791,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 12,
+  },
+  singleVerseHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 14,
+  },
+  singleHeaderSpacer: {
+    flex: 1,
+    alignItems: 'center',
   },
   verseNumberBadge: {
     width: 32,
