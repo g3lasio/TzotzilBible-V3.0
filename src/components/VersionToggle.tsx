@@ -7,6 +7,7 @@ export type TogglePosition = 'left' | 'center' | 'right';
 interface VersionToggleProps {
   value: TogglePosition;
   onChange: (position: TogglePosition) => void;
+  onRightDoubleTap?: () => void;
   leftLabel: string;
   centerLabel: string;
   rightLabel: string;
@@ -19,6 +20,7 @@ const POSITIONS: TogglePosition[] = ['left', 'center', 'right'];
 export default function VersionToggle({
   value,
   onChange,
+  onRightDoubleTap,
   leftLabel,
   centerLabel,
   rightLabel,
@@ -50,7 +52,9 @@ export default function VersionToggle({
   });
 
   const handlePress = (position: TogglePosition) => {
-    if (position !== value) {
+    if (position === 'right' && value === 'right' && onRightDoubleTap) {
+      onRightDoubleTap();
+    } else if (position !== value) {
       onChange(position);
     }
   };
