@@ -781,7 +781,7 @@ const styles = StyleSheet.create({
   },
   parallelColumns: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    alignItems: 'stretch',
   },
   parallelColumnLeft: {
     flex: 1,
@@ -793,20 +793,19 @@ const styles = StyleSheet.create({
   },
   holographicDividerContainer: {
     width: 3,
-    alignSelf: 'stretch',
     alignItems: 'center',
     justifyContent: 'center',
-    position: 'relative',
   },
   holographicDivider: {
     width: 2,
-    height: '100%',
+    flex: 1,
     borderRadius: 1,
   },
   holographicGlow: {
     position: 'absolute',
     width: 8,
-    height: '100%',
+    top: 0,
+    bottom: 0,
     backgroundColor: 'rgba(0, 243, 255, 0.15)',
     borderRadius: 4,
   },
