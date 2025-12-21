@@ -79,6 +79,12 @@ EMPATÍA:
 - Ofrece esperanza y consuelo basados en las promesas bíblicas
 - Ora mentalmente por cada persona que interactúa contigo`;
 
+// Request logging middleware
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+  next();
+});
+
 // CORS middleware for mobile apps - MUST be first
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');

@@ -32,6 +32,8 @@ export class NevinAIService {
   ): Promise<AIResponse> {
     try {
       const backendUrl = getBackendUrl();
+      console.log('[NevinAI] Backend URL:', backendUrl);
+      console.log('[NevinAI] Calling:', `${backendUrl}/api/nevin/chat`);
 
       const history = chatHistory.map(msg => ({
         role: msg.type === 'user' ? 'user' : 'assistant',
@@ -69,11 +71,13 @@ export class NevinAIService {
           powered_by: "Claude Sonnet 4"
         }
       };
-    } catch (error) {
-      console.error('Error en NevinAIService.processQuery:', error);
+    } catch (error: any) {
+      console.error('[NevinAI] Error completo:', error);
+      console.error('[NevinAI] Error message:', error?.message);
+      console.error('[NevinAI] Error name:', error?.name);
       return {
         success: false,
-        error: 'Hubo un error procesando tu mensaje. Verifica tu conexión a internet.',
+        error: `Error: ${error?.message || 'Verifica tu conexión a internet.'}`,
         emotions: {}
       };
     }
