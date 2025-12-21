@@ -7,10 +7,6 @@ deploymentTarget = "cloudrun"
 build = ["sh", "-c", "npm ci && npx expo export --platform web"]
 run = ["sh", "-c", "node server.js"]
 
-[[deployment.rewrites]]
-from = "/*"
-to = "/index.html"
-
 [[ports]]
 localPort = 5000
 externalPort = 80
