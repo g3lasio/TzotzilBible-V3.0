@@ -44,6 +44,7 @@ export class NevinAIService {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
         body: JSON.stringify({
           message,
@@ -51,6 +52,31 @@ export class NevinAIService {
           history
         })
       });
+
+      // Check if response is OK before parsing
+      if (!response.ok) {
+        console.error('[NevinAI] HTTP Error:', response.status, response.statusText);
+        const errorText = await response.text();
+        console.error('[NevinAI] Error response:', errorText.substring(0, 200));
+        return {
+          success: false,
+          error: `Error del servidor (${response.status}). Por favor intenta de nuevo.`,
+          emotions: {}
+        };
+      }
+
+      // Check content-type before parsing JSON
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        console.error('[NevinAI] Invalid content type:', contentType);
+        const responseText = await response.text();
+        console.error('[NevinAI] Response text:', responseText.substring(0, 200));
+        return {
+          success: false,
+          error: 'El servidor no respondió correctamente. Por favor intenta de nuevo.',
+          emotions: {}
+        };
+      }
 
       const data = await response.json();
 
