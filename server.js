@@ -10,6 +10,23 @@ const DIST_DIR = path.join(__dirname, 'dist');
 
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_MODEL = 'claude-sonnet-4-20250514';
+const ANTHROPIC_TIMEOUT_MS = 60000; // 60 second timeout for AI responses
+
+// Helper function for fetch with timeout
+async function fetchWithTimeout(url, options, timeoutMs = ANTHROPIC_TIMEOUT_MS) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal
+    });
+    return response;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
 
 const NEVIN_SYSTEM_PROMPT = `Eres Nevin, un asistente bíblico amable, cálido y sabio. Ayudas a entender la Biblia en Tzotzil y Español.
 
@@ -179,7 +196,8 @@ app.post('/api/nevin/chat', async (req, res) => {
     if (egwContext) userContent += egwContext;
     messages.push({ role: 'user', content: userContent });
 
-    const response = await fetch(ANTHROPIC_API_URL, {
+    console.log('[Nevin Chat] Calling Anthropic API...');
+    const response = await fetchWithTimeout(ANTHROPIC_API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -195,6 +213,7 @@ app.post('/api/nevin/chat', async (req, res) => {
     });
 
     if (response.status === 401) {
+      console.error('[Nevin Chat] Authentication error with Anthropic');
       return res.status(500).json({
         success: false,
         error: 'Error de autenticación con el servicio de IA'
@@ -203,7 +222,7 @@ app.post('/api/nevin/chat', async (req, res) => {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Anthropic API error:', response.status, errorText);
+      console.error('[Nevin Chat] Anthropic API error:', response.status, errorText.substring(0, 200));
       return res.status(500).json({
         success: false,
         error: 'Error al comunicarse con el servicio de IA'
@@ -212,6 +231,7 @@ app.post('/api/nevin/chat', async (req, res) => {
 
     const data = await response.json();
     const assistantMessage = data.content?.[0]?.text || '';
+    console.log('[Nevin Chat] Response received, length:', assistantMessage.length);
 
     res.json({
       success: true,
@@ -219,7 +239,14 @@ app.post('/api/nevin/chat', async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Error in chat endpoint:', error);
+    if (error.name === 'AbortError') {
+      console.error('[Nevin Chat] Request timed out after', ANTHROPIC_TIMEOUT_MS, 'ms');
+      return res.status(504).json({
+        success: false,
+        error: 'La respuesta está tardando demasiado. Por favor intenta de nuevo.'
+      });
+    }
+    console.error('[Nevin Chat] Error:', error.message || error);
     res.status(500).json({
       success: false,
       error: 'Error interno del servidor'
@@ -261,7 +288,7 @@ Ejemplos de buenos títulos:
 - "El propósito del sufrimiento"
 - "Comparando versiones bíblicas"`;
 
-    const response = await fetch(ANTHROPIC_API_URL, {
+    const response = await fetchWithTimeout(ANTHROPIC_API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -273,9 +300,10 @@ Ejemplos de buenos títulos:
         max_tokens: 200,
         messages: [{ role: 'user', content: prompt }]
       })
-    });
+    }, 30000); // 30 second timeout for title generation
 
     if (!response.ok) {
+      console.log('[Moment Title] API returned non-OK status:', response.status);
       return res.json({ title: 'Reflexión bíblica', themes: [] });
     }
 
@@ -295,7 +323,11 @@ Ejemplos de buenos títulos:
     }
 
   } catch (error) {
-    console.error('Error generating moment title:', error);
+    if (error.name === 'AbortError') {
+      console.log('[Moment Title] Request timed out');
+    } else {
+      console.error('[Moment Title] Error:', error.message || error);
+    }
     res.json({ title: 'Reflexión bíblica', themes: [] });
   }
 });
@@ -328,7 +360,8 @@ Incluye:
 3. Significado teológico desde la perspectiva adventista
 4. Aplicación práctica`;
 
-    const response = await fetch(ANTHROPIC_API_URL, {
+    console.log('[Verse Commentary] Calling Anthropic API for', verseRef);
+    const response = await fetchWithTimeout(ANTHROPIC_API_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -341,10 +374,10 @@ Incluye:
         system: NEVIN_SYSTEM_PROMPT,
         messages: [{ role: 'user', content: userMessage }]
       })
-    });
+    }, 90000); // 90 second timeout for longer commentary
 
     if (!response.ok) {
-      console.error('Anthropic API error:', response.status);
+      console.error('[Verse Commentary] Anthropic API error:', response.status);
       return res.status(500).json({
         success: false,
         error: 'Error al obtener el comentario'
@@ -353,6 +386,7 @@ Incluye:
 
     const data = await response.json();
     const commentary = data.content?.[0]?.text || '';
+    console.log('[Verse Commentary] Response received, length:', commentary.length);
 
     res.json({
       success: true,
@@ -360,7 +394,14 @@ Incluye:
     });
 
   } catch (error) {
-    console.error('Error in verse-commentary endpoint:', error);
+    if (error.name === 'AbortError') {
+      console.error('[Verse Commentary] Request timed out');
+      return res.status(504).json({
+        success: false,
+        error: 'La respuesta está tardando demasiado. Por favor intenta de nuevo.'
+      });
+    }
+    console.error('[Verse Commentary] Error:', error.message || error);
     res.status(500).json({
       success: false,
       error: 'Error interno del servidor'
