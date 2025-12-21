@@ -11,6 +11,7 @@ import type { BibleStackParamList } from '../types/navigation';
 import type { RouteProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import MainLayout from '../components/MainLayout';
+import VersionToggle, { TogglePosition } from '../components/VersionToggle';
 import { TZOTZIL_VERSION, SECONDARY_VERSIONS, BibleVersion, getVersionById } from '../constants/bibleVersions';
 
 const DEFAULT_SECONDARY_VERSION = 'rv1960';
@@ -32,6 +33,22 @@ const isSmallScreen = width < 600;
 
 type ViewMode = 'stacked' | 'parallel';
 type DisplayMode = 'tzotzil' | 'both' | 'secondary';
+
+const displayModeToToggle = (mode: DisplayMode): TogglePosition => {
+  switch (mode) {
+    case 'tzotzil': return 'left';
+    case 'both': return 'center';
+    case 'secondary': return 'right';
+  }
+};
+
+const toggleToDisplayMode = (position: TogglePosition): DisplayMode => {
+  switch (position) {
+    case 'left': return 'tzotzil';
+    case 'center': return 'both';
+    case 'right': return 'secondary';
+  }
+};
 
 const FAVORITES_KEY = 'verse_favorites';
 const SELECTED_VERSION_KEY = 'selected_secondary_version';
@@ -373,53 +390,20 @@ export default function VersesScreen() {
       <View style={styles.container}>
         <View style={styles.controls}>
           <View style={styles.controlsRow}>
+            <VersionToggle
+              value={displayModeToToggle(displayMode)}
+              onChange={(position) => handleDisplayModeChange(toggleToDisplayMode(position))}
+              leftLabel={TZOTZIL_VERSION.shortName}
+              centerLabel="Ambos"
+              rightLabel={currentSecondaryVersion.shortName}
+              leftColor={TZOTZIL_VERSION.color}
+              rightColor={currentSecondaryVersion.color}
+            />
             <TouchableOpacity
-              style={[
-                styles.toggleOption,
-                displayMode === 'tzotzil' && styles.toggleOptionActive
-              ]}
-              onPress={() => handleDisplayModeChange('tzotzil')}
+              style={styles.versionSelectButton}
+              onPress={() => setDropdownVisible(true)}
             >
-              <View style={[styles.versionIndicator, { backgroundColor: TZOTZIL_VERSION.color }]} />
-              <Text style={[
-                styles.toggleOptionText,
-                displayMode === 'tzotzil' && styles.toggleOptionTextActive
-              ]}>{TZOTZIL_VERSION.shortName}</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[
-                styles.toggleOption,
-                styles.toggleOptionCenter,
-                displayMode === 'both' && styles.toggleOptionActive
-              ]}
-              onPress={() => handleDisplayModeChange('both')}
-            >
-              <MaterialCommunityIcons 
-                name="format-columns" 
-                size={16} 
-                color={displayMode === 'both' ? '#00f3ff' : '#6b7c93'} 
-              />
-              <Text style={[
-                styles.toggleOptionText,
-                displayMode === 'both' && styles.toggleOptionTextActive
-              ]}>Ambos</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[
-                styles.toggleOption,
-                displayMode === 'secondary' && styles.toggleOptionActive
-              ]}
-              onPress={() => displayMode === 'secondary' ? setDropdownVisible(true) : handleDisplayModeChange('secondary')}
-              onLongPress={() => setDropdownVisible(true)}
-            >
-              <View style={[styles.versionIndicator, { backgroundColor: currentSecondaryVersion.color }]} />
-              <Text style={[
-                styles.toggleOptionText,
-                displayMode === 'secondary' && styles.toggleOptionTextActive
-              ]}>{currentSecondaryVersion.shortName}</Text>
-              <MaterialCommunityIcons name="chevron-down" size={12} color={displayMode === 'secondary' ? '#00f3ff' : '#6b7c93'} />
+              <MaterialCommunityIcons name="tune-variant" size={18} color="#6b7c93" />
             </TouchableOpacity>
           </View>
         </View>
@@ -726,6 +710,14 @@ const styles = StyleSheet.create({
   },
   versionPlaceholder: {
     width: 70,
+  },
+  versionSelectButton: {
+    padding: 8,
+    borderRadius: 12,
+    backgroundColor: 'rgba(107, 124, 147, 0.15)',
+    borderWidth: 1,
+    borderColor: 'rgba(107, 124, 147, 0.25)',
+    marginLeft: 8,
   },
   scrollView: {
     flex: 1,
