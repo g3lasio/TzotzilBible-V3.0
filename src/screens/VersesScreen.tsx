@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, StyleSheet, ScrollView, RefreshControl, Share, TouchableOpacity, Dimensions, Modal, Pressable, Switch } from 'react-native';
+import { View, StyleSheet, ScrollView, RefreshControl, Share, TouchableOpacity, Dimensions, Modal, Pressable } from 'react-native';
 import { Text, ActivityIndicator } from 'react-native-paper';
 import { useRoute, useNavigation, CommonActions } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -31,10 +31,11 @@ const { width } = Dimensions.get('window');
 const isSmallScreen = width < 600;
 
 type ViewMode = 'stacked' | 'parallel';
+type DisplayMode = 'tzotzil' | 'both' | 'secondary';
 
 const FAVORITES_KEY = 'verse_favorites';
 const SELECTED_VERSION_KEY = 'selected_secondary_version';
-const PARALLEL_MODE_KEY = 'parallel_mode_enabled';
+const DISPLAY_MODE_KEY = 'display_mode';
 
 export default function VersesScreen() {
   const route = useRoute<VersesRouteProp>();
@@ -45,7 +46,7 @@ export default function VersesScreen() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [parallelEnabled, setParallelEnabled] = useState(true);
+  const [displayMode, setDisplayMode] = useState<DisplayMode>('both');
   const [selectedSecondaryVersion, setSelectedSecondaryVersion] = useState('rv1960');
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const scrollViewRef = useRef<ScrollView>(null);
@@ -69,9 +70,9 @@ export default function VersesScreen() {
 
   const loadPreferences = async () => {
     try {
-      const [savedVersion, savedParallel] = await Promise.all([
+      const [savedVersion, savedDisplayMode] = await Promise.all([
         AsyncStorage.getItem(SELECTED_VERSION_KEY),
-        AsyncStorage.getItem(PARALLEL_MODE_KEY),
+        AsyncStorage.getItem(DISPLAY_MODE_KEY),
       ]);
       
       let normalizedVersion = DEFAULT_SECONDARY_VERSION;
@@ -85,19 +86,19 @@ export default function VersesScreen() {
       }
       setSelectedSecondaryVersion(normalizedVersion);
       
-      if (savedParallel !== null) {
-        setParallelEnabled(savedParallel === 'true');
+      if (savedDisplayMode !== null && ['tzotzil', 'both', 'secondary'].includes(savedDisplayMode)) {
+        setDisplayMode(savedDisplayMode as DisplayMode);
       }
     } catch (error) {
       console.error('Error loading preferences:', error);
     }
   };
 
-  const savePreferences = async (versionId: string, parallel: boolean) => {
+  const savePreferences = async (versionId: string, mode: DisplayMode) => {
     try {
       await Promise.all([
         AsyncStorage.setItem(SELECTED_VERSION_KEY, versionId),
-        AsyncStorage.setItem(PARALLEL_MODE_KEY, String(parallel)),
+        AsyncStorage.setItem(DISPLAY_MODE_KEY, mode),
       ]);
     } catch (error) {
       console.error('Error saving preferences:', error);
@@ -179,16 +180,16 @@ export default function VersesScreen() {
     );
   };
 
-  const handleParallelToggle = (value: boolean) => {
-    setParallelEnabled(value);
-    savePreferences(selectedSecondaryVersion, value);
+  const handleDisplayModeChange = (mode: DisplayMode) => {
+    setDisplayMode(mode);
+    savePreferences(selectedSecondaryVersion, mode);
   };
 
   const handleVersionSelect = (versionId: string) => {
     const version = getVersionById(versionId);
     if (version && version.isAvailable) {
       setSelectedSecondaryVersion(versionId);
-      savePreferences(versionId, parallelEnabled);
+      savePreferences(versionId, displayMode);
     }
     setDropdownVisible(false);
   };
@@ -197,9 +198,15 @@ export default function VersesScreen() {
     try {
       let text = `${book} ${chapter}:${verse.verse}\n`;
       
-      text += `\n${TZOTZIL_VERSION.shortName}:\n${verse.text_tzotzil}`;
-      
-      if (parallelEnabled) {
+      if (displayMode === 'tzotzil') {
+        text += `\n${TZOTZIL_VERSION.shortName}:\n${verse.text_tzotzil}`;
+      } else if (displayMode === 'secondary') {
+        const verseText = verse[secondaryVersion.textField];
+        if (verseText) {
+          text += `\n${secondaryVersion.shortName}:\n${verseText}`;
+        }
+      } else {
+        text += `\n${TZOTZIL_VERSION.shortName}:\n${verse.text_tzotzil}`;
         const verseText = verse[secondaryVersion.textField];
         if (verseText) {
           text += `\n\n${secondaryVersion.shortName}:\n${verseText}`;
@@ -227,7 +234,11 @@ export default function VersesScreen() {
 
   const currentSecondaryVersion = getAvailableSecondaryVersion(selectedSecondaryVersion);
 
-  const renderVerseSingle = (verse: BibleVerse) => {
+  const renderVerseSingle = (verse: BibleVerse, mode: 'tzotzil' | 'secondary') => {
+    const verseText = mode === 'tzotzil' 
+      ? verse.text_tzotzil 
+      : getVerseText(verse, currentSecondaryVersion) || verse.text_tzotzil;
+    
     return (
       <TouchableOpacity
         key={verse.id || `${verse.chapter}-${verse.verse}`}
@@ -266,7 +277,7 @@ export default function VersesScreen() {
           </View>
           
           <View style={styles.textBlock}>
-            <Text style={styles.verseText}>{verse.text_tzotzil}</Text>
+            <Text style={styles.verseText}>{verseText}</Text>
           </View>
         </LinearGradient>
       </TouchableOpacity>
@@ -362,34 +373,54 @@ export default function VersesScreen() {
       <View style={styles.container}>
         <View style={styles.controls}>
           <View style={styles.controlsRow}>
-            <View style={styles.primaryVersionBadge}>
+            <TouchableOpacity
+              style={[
+                styles.toggleOption,
+                displayMode === 'tzotzil' && styles.toggleOptionActive
+              ]}
+              onPress={() => handleDisplayModeChange('tzotzil')}
+            >
               <View style={[styles.versionIndicator, { backgroundColor: TZOTZIL_VERSION.color }]} />
-              <Text style={styles.primaryVersionText}>{TZOTZIL_VERSION.shortName}</Text>
-            </View>
+              <Text style={[
+                styles.toggleOptionText,
+                displayMode === 'tzotzil' && styles.toggleOptionTextActive
+              ]}>{TZOTZIL_VERSION.shortName}</Text>
+            </TouchableOpacity>
 
-            <View style={styles.toggleContainer}>
-              <Switch
-                value={parallelEnabled}
-                onValueChange={handleParallelToggle}
-                trackColor={{ false: 'rgba(107, 124, 147, 0.3)', true: 'rgba(0, 243, 255, 0.4)' }}
-                thumbColor={parallelEnabled ? '#00f3ff' : '#6b7c93'}
-                ios_backgroundColor="rgba(107, 124, 147, 0.3)"
-                style={{ transform: [{ scaleX: 0.9 }, { scaleY: 0.9 }] }}
+            <TouchableOpacity
+              style={[
+                styles.toggleOption,
+                styles.toggleOptionCenter,
+                displayMode === 'both' && styles.toggleOptionActive
+              ]}
+              onPress={() => handleDisplayModeChange('both')}
+            >
+              <MaterialCommunityIcons 
+                name="format-columns" 
+                size={16} 
+                color={displayMode === 'both' ? '#00f3ff' : '#6b7c93'} 
               />
-            </View>
+              <Text style={[
+                styles.toggleOptionText,
+                displayMode === 'both' && styles.toggleOptionTextActive
+              ]}>Ambos</Text>
+            </TouchableOpacity>
 
-            {parallelEnabled ? (
-              <TouchableOpacity
-                style={styles.versionDropdown}
-                onPress={() => setDropdownVisible(true)}
-              >
-                <View style={[styles.versionIndicator, { backgroundColor: currentSecondaryVersion.color }]} />
-                <Text style={styles.versionDropdownText}>{currentSecondaryVersion.shortName}</Text>
-                <MaterialCommunityIcons name="chevron-down" size={14} color="#00f3ff" />
-              </TouchableOpacity>
-            ) : (
-              <View style={styles.versionPlaceholder} />
-            )}
+            <TouchableOpacity
+              style={[
+                styles.toggleOption,
+                displayMode === 'secondary' && styles.toggleOptionActive
+              ]}
+              onPress={() => displayMode === 'secondary' ? setDropdownVisible(true) : handleDisplayModeChange('secondary')}
+              onLongPress={() => setDropdownVisible(true)}
+            >
+              <View style={[styles.versionIndicator, { backgroundColor: currentSecondaryVersion.color }]} />
+              <Text style={[
+                styles.toggleOptionText,
+                displayMode === 'secondary' && styles.toggleOptionTextActive
+              ]}>{currentSecondaryVersion.shortName}</Text>
+              <MaterialCommunityIcons name="chevron-down" size={12} color={displayMode === 'secondary' ? '#00f3ff' : '#6b7c93'} />
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -402,11 +433,15 @@ export default function VersesScreen() {
           }
           showsVerticalScrollIndicator={false}
         >
-          {verses.map((verse) => 
-            parallelEnabled
-              ? renderVerseParallel(verse)
-              : renderVerseSingle(verse)
-          )}
+          {verses.map((verse) => {
+            if (displayMode === 'both') {
+              return renderVerseParallel(verse);
+            } else if (displayMode === 'tzotzil') {
+              return renderVerseSingle(verse, 'tzotzil');
+            } else {
+              return renderVerseSingle(verse, 'secondary');
+            }
+          })}
           
           <View style={styles.bottomNav}>
             <TouchableOpacity
@@ -645,6 +680,33 @@ const styles = StyleSheet.create({
   toggleContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  toggleOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 12,
+    backgroundColor: 'rgba(107, 124, 147, 0.15)',
+    borderWidth: 1,
+    borderColor: 'rgba(107, 124, 147, 0.25)',
+    gap: 4,
+  },
+  toggleOptionCenter: {
+    marginHorizontal: 6,
+  },
+  toggleOptionActive: {
+    backgroundColor: 'rgba(0, 243, 255, 0.15)',
+    borderColor: 'rgba(0, 243, 255, 0.4)',
+  },
+  toggleOptionText: {
+    color: '#6b7c93',
+    fontSize: 11,
+    fontWeight: '600',
+    letterSpacing: 0.3,
+  },
+  toggleOptionTextActive: {
+    color: '#00f3ff',
   },
   versionDropdown: {
     flexDirection: 'row',
