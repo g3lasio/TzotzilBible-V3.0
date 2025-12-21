@@ -21,6 +21,8 @@ export type InitializationStatus = 'pending' | 'initializing' | 'ready' | 'web_f
 
 const EXPECTED_BOOKS_COUNT = 66;
 const EXPECTED_VERSES_MIN = 31000;
+const MAX_RECOVERY_ATTEMPTS = 3;
+const MIN_DB_SIZE_MB = 15;
 
 export class DatabaseService {
   private static instance: DatabaseService;
@@ -29,6 +31,7 @@ export class DatabaseService {
   private initStatus: InitializationStatus = 'pending';
   private initError: Error | null = null;
   private initPromise: Promise<boolean> | null = null;
+  private recoveryAttempts: number = 0;
 
   private constructor() {}
 
@@ -78,12 +81,26 @@ export class DatabaseService {
       const isValid = await this.validateDatabase();
       if (!isValid) {
         console.log('[DatabaseService] Database validation failed, attempting recovery...');
-        await this.forceRecopyDatabase();
+        
+        if (this.recoveryAttempts >= MAX_RECOVERY_ATTEMPTS) {
+          throw new Error(`Database recovery failed after ${MAX_RECOVERY_ATTEMPTS} attempts. Please reinstall the app.`);
+        }
+        
+        this.recoveryAttempts++;
+        console.log(`[DatabaseService] Recovery attempt ${this.recoveryAttempts}/${MAX_RECOVERY_ATTEMPTS}`);
+        
+        const recopySuccess = await this.forceRecopyDatabase();
+        if (!recopySuccess) {
+          throw new Error('Failed to recopy database during recovery');
+        }
+        
         this.db = await SQLite!.openDatabaseAsync(DatabaseService.DB_NAME);
         const retryValid = await this.validateDatabase();
         if (!retryValid) {
           throw new Error('Database validation failed after recovery attempt');
         }
+        
+        this.recoveryAttempts = 0;
       }
       
       this.initStatus = 'ready';
@@ -198,6 +215,9 @@ export class DatabaseService {
     try {
       const dbDir = `${FileSystem!.documentDirectory}SQLite/`;
       const dbPath = `${dbDir}${DatabaseService.DB_NAME}`;
+      const dbJournalPath = `${dbPath}-journal`;
+      const dbWalPath = `${dbPath}-wal`;
+      const dbShmPath = `${dbPath}-shm`;
       
       if (this.db) {
         console.log('[DatabaseService] Closing database before recopy...');
@@ -209,8 +229,19 @@ export class DatabaseService {
         this.db = null;
       }
       
-      console.log('[DatabaseService] Force recopy - deleting existing database...');
-      await FileSystem!.deleteAsync(dbPath, { idempotent: true });
+      console.log('[DatabaseService] Force recopy - cleaning up all database files...');
+      
+      // Delete main database file and all associated files (journal, WAL, etc.)
+      const filesToDelete = [dbPath, dbJournalPath, dbWalPath, dbShmPath];
+      for (const file of filesToDelete) {
+        try {
+          await FileSystem!.deleteAsync(file, { idempotent: true });
+        } catch (e) {
+          // Ignore errors on cleanup
+        }
+      }
+      
+      console.log('[DatabaseService] All database files cleaned up');
       
       return await this.copyDatabaseFromAssets();
     } catch (error) {
