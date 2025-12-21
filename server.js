@@ -8,6 +8,29 @@ const DIST_DIR = path.join(__dirname, 'dist');
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_MODEL = 'claude-sonnet-4-20250514';
 
+// CORS middleware for mobile apps
+app.use((req, res, next) => {
+  const allowedOrigins = [
+    'https://bible.chyrris.com',
+    'http://localhost:5000',
+    'http://localhost:8081',
+    'http://localhost:19006'
+  ];
+  const origin = req.headers.origin;
+  
+  // Allow requests from mobile apps (no origin header) or from allowed origins
+  if (!origin || allowedOrigins.includes(origin)) {
+    res.header('Access-Control-Allow-Origin', origin || '*');
+  }
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
 const NEVIN_SYSTEM_PROMPT = `Eres Nevin, un asistente bíblico amable, cálido y sabio. Ayudas a entender la Biblia en Tzotzil y Español.
 
 IDENTIDAD (MUY IMPORTANTE):
