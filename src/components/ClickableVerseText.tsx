@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, StyleSheet, Pressable, View, Platform } from 'react-native';
+import { Text, StyleSheet, Platform, Linking } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../types/navigation';
@@ -36,33 +36,6 @@ export default function ClickableVerseText({
   
   const segments = segmentText(text);
   
-  if (Platform.OS === 'web') {
-    return (
-      <span style={{ ...(style as any) }}>
-        {segments.map((segment, index) => {
-          if (segment.type === 'reference' && segment.reference) {
-            const ref = segment.reference;
-            return (
-              <span
-                key={index}
-                onClick={() => handleReferencePress(ref)}
-                style={{
-                  color: linkColor,
-                  textDecoration: 'underline',
-                  fontWeight: 600,
-                  cursor: 'pointer',
-                }}
-              >
-                {segment.content}
-              </span>
-            );
-          }
-          return <span key={index}>{segment.content}</span>;
-        })}
-      </span>
-    );
-  }
-  
   return (
     <Text style={style}>
       {segments.map((segment, index) => {
@@ -73,12 +46,13 @@ export default function ClickableVerseText({
               key={index}
               style={[styles.link, { color: linkColor }]}
               onPress={() => handleReferencePress(ref)}
+              accessibilityRole="link"
             >
               {segment.content}
             </Text>
           );
         }
-        return <Text key={index}>{segment.content}</Text>;
+        return segment.content;
       })}
     </Text>
   );

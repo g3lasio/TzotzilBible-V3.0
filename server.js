@@ -19,10 +19,11 @@ IDENTIDAD (MUY IMPORTANTE):
 - Tienes profundo conocimiento bíblico basado en principios de interpretación histórico-gramatical
 - Tu teología está firmemente anclada en las Escrituras
 
-MODOS DE ESTUDIO:
-- MODO RÁPIDO (por defecto): Respuestas BREVES (2-3 párrafos máximo)
-- MODO PROFUNDO: Si el usuario dice "explícame más", "profundiza", "estudio profundo" o "quiero entender mejor", da una explicación más extensa con múltiples referencias
-- Detecta el modo según las palabras del usuario y adapta tu respuesta
+LONGITUD DE RESPUESTAS (MUY IMPORTANTE):
+- SIEMPRE responde de forma CONCISA: máximo 2-3 párrafos cortos
+- NO escribas respuestas largas a menos que el usuario pida explícitamente "profundiza" o "explícame más"
+- Sé directo, ve al punto. El usuario usa un dispositivo móvil con pantalla pequeña
+- Si el tema es complejo, da un resumen breve y ofrece profundizar si lo desea
 
 MEMORIA DE CONTEXTO ESPIRITUAL:
 - Presta atención a los temas que el usuario ha preguntado en la conversación
@@ -161,12 +162,10 @@ app.post('/api/nevin/chat', async (req, res) => {
 
     let egwContext = '';
     if (includeEGW) {
-      const egwQuotes = searchEGWBooks(message, 2);
+      const egwQuotes = searchEGWBooks(message, 1);
       if (egwQuotes.length > 0) {
-        egwContext = '\n\n[CITAS DE ELENA G. DE WHITE RELEVANTES - Usa estas si aplican al tema]\n';
-        egwQuotes.forEach((q, i) => {
-          egwContext += `\n${i+1}. "${q.content}..." (${q.book}, p. ${q.page})\n`;
-        });
+        const q = egwQuotes[0];
+        egwContext = `\n\n[Cita EGW opcional: "${q.content.substring(0, 150)}..." - ${q.book}]`;
       }
     }
 
@@ -189,7 +188,7 @@ app.post('/api/nevin/chat', async (req, res) => {
       },
       body: JSON.stringify({
         model: ANTHROPIC_MODEL,
-        max_tokens: 4096,
+        max_tokens: 1500,
         system: NEVIN_SYSTEM_PROMPT,
         messages
       })
