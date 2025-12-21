@@ -1,0 +1,108 @@
+Banjol, atención. Este es el plan definitivo y no es negociable.
+
+Tenemos un solo objetivo: que Nevin funcione estable en producción para APK / AAB / IPA, sin romper nada y sin crear productos separados.
+
+Decisiones cerradas (no debatir)
+
+Seguimos usando Node.js.
+
+NO usamos Replit AI Integrations. Usamos nuestra API key propia, solo en backend.
+
+NO migramos a Flask ni Python.
+
+NO creamos otro repo ni otro proyecto. Un solo proyecto en Replit.
+
+El APK ya llama correctamente al backend, no directo a Anthropic. Eso NO se toca.
+
+Problema real identificado
+
+El BACKEND_URL apunta a un dominio que no tiene un backend Node vivo.
+
+El intento previo de deployment falló porque se mezcló:
+
+Expo web export (estáticos)
+
+Node server (Express)
+
+rewrites que interceptaban /api/*
+
+Resultado: /api/nevin/chat nunca existió en producción, por eso falla el APK.
+
+Arquitectura que SÍ vamos a usar (una sola)
+
+Un solo Autoscale Deployment en Replit que haga ambas cosas:
+
+Servir la web exportada de Expo (estáticos)
+
+Servir la API Node (/api/*) que llama a Anthropic
+
+Nada de rewrites en .replit.
+El fallback SPA se maneja en el server.
+
+Lo que necesitas hacer (en orden, sin saltarte pasos)
+
+1) Backend primero
+
+Usa el Express que ya está en dependencies.
+
+Define un servidor Node que:
+
+exponga /api/health
+
+exponga /api/nevin/chat (la lógica existente, no reinventes)
+
+Verifica localmente que /api/health responda JSON.
+
+2) Web Expo
+
+Exporta la web con expo export al directorio estándar (dist).
+
+El server debe servir esos archivos estáticos.
+
+El fallback a index.html NO debe interceptar /api/*.
+
+3) Deployment en Replit (uno solo)
+
+Tipo: Autoscale / Node
+
+Build: export web
+
+Run: levantar el server Node
+
+NO Static Deployment
+
+NO rewrites
+
+4) Validación obligatoria
+Antes de decir “listo”, confirma:
+
+https://<dominio>/api/health → responde JSON
+
+https://<dominio>/api/nevin/chat → recibe request (aunque falle Anthropic)
+
+El APK vuelve a conectarse sin error de red
+
+Límites claros
+
+No cambies la lógica del APK
+
+No muevas endpoints
+
+No cambies el flujo App → Backend → Anthropic
+
+No propongas Flask, proxies de Replit ni servicios externos
+
+No optimices “de más”, solo estabiliza producción
+
+Entregable esperado
+
+Quiero que nos devuelvas:
+
+Confirmación de que /api/health responde JSON en producción
+
+URL final del backend (la que va en BACKEND_URL)
+
+Confirmación de que el APK ya llega al backend en producción
+
+Este plan es para alinear todo, no para experimentar.
+Ejecuta exactamente esto.
