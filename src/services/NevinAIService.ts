@@ -75,9 +75,19 @@ export class NevinAIService {
       console.error('[NevinAI] Error completo:', error);
       console.error('[NevinAI] Error message:', error?.message);
       console.error('[NevinAI] Error name:', error?.name);
+      
+      const isNetworkError = error?.message?.includes('fetch') || 
+                             error?.message?.includes('network') ||
+                             error?.message?.includes('Network') ||
+                             error?.name === 'TypeError';
+      
+      const errorMessage = isNetworkError 
+        ? '📶 Sin conexión a internet\n\nNevin necesita internet para funcionar. Por favor, verifica tu conexión e intenta de nuevo.\n\n💡 Mientras tanto, puedes leer la Biblia offline.'
+        : `Error: ${error?.message || 'No se pudo conectar con Nevin.'}`;
+      
       return {
         success: false,
-        error: `Error: ${error?.message || 'Verifica tu conexión a internet.'}`,
+        error: errorMessage,
         emotions: {}
       };
     }
@@ -114,11 +124,11 @@ export class NevinAIService {
         success: true,
         commentary: data.commentary
       };
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error en getVerseCommentary:', error);
       return {
         success: false,
-        error: 'Error de conexión. Verifica tu internet e intenta nuevamente.'
+        error: '📶 Sin conexión. Nevin necesita internet para generar comentarios.'
       };
     }
   }
