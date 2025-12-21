@@ -6,6 +6,8 @@ export const FONTS = {
   bold: 'Quantico_700Bold',
 };
 
+export const BACKEND_URL = 'https://bible.chyrris.com';
+
 export const getBackendUrl = (): string => {
   if (typeof window !== 'undefined' && window.location) {
     const protocol = window.location.protocol;
@@ -16,5 +18,5 @@ export const getBackendUrl = (): string => {
     }
     return `${protocol}//${hostname}`;
   }
-  return 'https://tzotzil-bible.replit.app';
+  return BACKEND_URL;
 };
