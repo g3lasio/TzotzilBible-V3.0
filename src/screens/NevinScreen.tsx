@@ -10,6 +10,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { RootStackParamList, TabParamList } from '../types/navigation';
 import type { Moment, ChatMessage } from '../types/nevin';
 import MainLayout from '../components/MainLayout';
+import ClickableVerseText from '../components/ClickableVerseText';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 type NevinRouteProp = RouteProp<TabParamList, 'NevinTab'>;
@@ -437,12 +438,17 @@ export default function NevinScreen() {
                   message.isUser ? styles.userMessage : styles.nevinMessage,
                 ]}
               >
-                <Text style={[
-                  styles.messageText,
-                  message.isUser && styles.userMessageText
-                ]}>
-                  {message.content}
-                </Text>
+                {message.isUser ? (
+                  <Text style={[styles.messageText, styles.userMessageText]}>
+                    {message.content}
+                  </Text>
+                ) : (
+                  <ClickableVerseText 
+                    text={message.content} 
+                    style={styles.messageText}
+                    linkColor="#00f3ff"
+                  />
+                )}
                 <Text style={[styles.timestamp, message.isUser && styles.userTimestamp]}>
                   {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </Text>
