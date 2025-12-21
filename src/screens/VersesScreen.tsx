@@ -389,23 +389,16 @@ export default function VersesScreen() {
     <MainLayout title={`${book} ${chapter}`} showBackButton>
       <View style={styles.container}>
         <View style={styles.controls}>
-          <View style={styles.controlsRow}>
-            <VersionToggle
-              value={displayModeToToggle(displayMode)}
-              onChange={(position) => handleDisplayModeChange(toggleToDisplayMode(position))}
-              leftLabel={TZOTZIL_VERSION.shortName}
-              centerLabel="Ambos"
-              rightLabel={currentSecondaryVersion.shortName}
-              leftColor={TZOTZIL_VERSION.color}
-              rightColor={currentSecondaryVersion.color}
-            />
-            <TouchableOpacity
-              style={styles.versionSelectButton}
-              onPress={() => setDropdownVisible(true)}
-            >
-              <MaterialCommunityIcons name="tune-variant" size={18} color="#6b7c93" />
-            </TouchableOpacity>
-          </View>
+          <VersionToggle
+            value={displayModeToToggle(displayMode)}
+            onChange={(position) => handleDisplayModeChange(toggleToDisplayMode(position))}
+            onRightDoubleTap={() => setDropdownVisible(true)}
+            leftLabel={TZOTZIL_VERSION.shortName}
+            centerLabel="Ambos"
+            rightLabel={currentSecondaryVersion.shortName}
+            leftColor={TZOTZIL_VERSION.color}
+            rightColor={currentSecondaryVersion.color}
+          />
         </View>
 
         <ScrollView 
@@ -616,10 +609,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(0, 243, 255, 0.12)',
     backgroundColor: 'rgba(10, 14, 20, 0.7)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   controlsRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
   },
   navButtons: {
