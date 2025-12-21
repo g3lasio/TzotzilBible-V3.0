@@ -55,18 +55,15 @@ export default function HomeScreen() {
         contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.welcomeSection}>
-          <Text style={styles.welcomeText}>Bienvenido</Text>
-          <Text style={styles.appName}>Tzotzil Bible</Text>
-        </View>
-
         <View style={styles.promiseCard}>
           <LinearGradient
-            colors={['rgba(20, 30, 45, 0.8)', 'rgba(15, 25, 40, 0.9)']}
+            colors={['rgba(0, 40, 60, 0.95)', 'rgba(5, 20, 35, 0.98)', 'rgba(0, 30, 50, 0.95)']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
             style={styles.promiseGradient}
           >
             <View style={styles.promiseHeader}>
-              <MaterialCommunityIcons name="star-four-points" size={20} color="#00ff88" />
+              <MaterialCommunityIcons name="star-four-points" size={20} color="#00f3ff" />
               <Text style={styles.promiseTitle}>Promesa del día</Text>
             </View>
             
@@ -136,51 +133,39 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingBottom: 24,
   },
-  welcomeSection: {
-    alignItems: 'center',
-    marginBottom: 24,
-    marginTop: 8,
-  },
-  welcomeText: {
-    fontSize: 16,
-    color: '#6b7c93',
-    textTransform: 'uppercase',
-    letterSpacing: 2,
-  },
-  appName: {
-    fontSize: 28,
-    fontFamily: FONTS.bold,
-    color: '#00ff88',
-    marginTop: 4,
-    letterSpacing: 1,
-    textShadowColor: '#00ff88',
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 10,
-  },
   promiseCard: {
-    borderRadius: 20,
+    borderRadius: 24,
     overflow: 'hidden',
     marginBottom: 20,
-    borderWidth: 1,
-    borderColor: 'rgba(0, 255, 136, 0.4)',
+    marginTop: 12,
+    borderWidth: 2,
+    borderColor: '#00f3ff',
     position: 'relative',
+    shadowColor: '#00f3ff',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.6,
+    shadowRadius: 16,
+    elevation: 12,
   },
   cardGlow: {
     position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    borderRadius: 20,
-    shadowColor: '#00ff88',
+    top: -2,
+    left: -2,
+    right: -2,
+    bottom: -2,
+    borderRadius: 26,
+    borderWidth: 2,
+    borderColor: 'rgba(0, 243, 255, 0.5)',
+    shadowColor: '#00f3ff',
     shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.3,
-    shadowRadius: 20,
+    shadowOpacity: 0.8,
+    shadowRadius: 30,
     pointerEvents: 'none',
   },
   promiseGradient: {
     padding: 24,
     alignItems: 'center',
+    backgroundColor: 'rgba(5, 15, 25, 0.95)',
   },
   promiseHeader: {
     flexDirection: 'row',
@@ -190,13 +175,13 @@ const styles = StyleSheet.create({
   promiseTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#00ff88',
+    color: '#00f3ff',
     marginLeft: 8,
     textTransform: 'uppercase',
     letterSpacing: 1,
-    textShadowColor: '#00ff88',
+    textShadowColor: '#00f3ff',
     textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 8,
+    textShadowRadius: 12,
   },
   referenceBadge: {
     backgroundColor: 'rgba(0, 243, 255, 0.15)',
