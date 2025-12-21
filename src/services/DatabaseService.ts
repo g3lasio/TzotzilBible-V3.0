@@ -101,13 +101,13 @@ export class DatabaseService {
     try {
       if (!this.db) return false;
       
-      const booksResult = await this.db.getFirstAsync<{ count: number }>(
+      const booksResult = await this.db.getFirstAsync(
         'SELECT COUNT(*) as count FROM books'
-      );
+      ) as { count: number } | null;
       
-      const versesResult = await this.db.getFirstAsync<{ count: number }>(
+      const versesResult = await this.db.getFirstAsync(
         'SELECT COUNT(*) as count FROM verses'
-      );
+      ) as { count: number } | null;
       
       const booksCount = booksResult?.count || 0;
       const versesCount = versesResult?.count || 0;
@@ -199,10 +199,8 @@ export class DatabaseService {
       const dbDir = `${FileSystem!.documentDirectory}SQLite/`;
       const dbPath = `${dbDir}${DatabaseService.DB_NAME}`;
       
-      console.log('[DatabaseService] Force recopy - deleting existing database...');
-      await FileSystem!.deleteAsync(dbPath, { idempotent: true });
-      
       if (this.db) {
+        console.log('[DatabaseService] Closing database before recopy...');
         try {
           await this.db.closeAsync();
         } catch (e) {
@@ -210,6 +208,9 @@ export class DatabaseService {
         }
         this.db = null;
       }
+      
+      console.log('[DatabaseService] Force recopy - deleting existing database...');
+      await FileSystem!.deleteAsync(dbPath, { idempotent: true });
       
       return await this.copyDatabaseFromAssets();
     } catch (error) {
@@ -240,9 +241,9 @@ export class DatabaseService {
         console.log('[DatabaseService] getBooks: Database not ready');
         return [];
       }
-      const result = await this.db.getAllAsync<any>(
+      const result = await this.db.getAllAsync(
         'SELECT id, name, book_number, testament, chapters_count FROM books ORDER BY book_number'
-      );
+      ) as any[];
       return result.map((row: any) => ({
         id: row.id,
         name: row.name,
@@ -259,10 +260,10 @@ export class DatabaseService {
   async getChaptersCount(bookName: string): Promise<number[]> {
     try {
       if (!this.db || this.initStatus !== 'ready') return [];
-      const result = await this.db.getFirstAsync<{ chapters_count: number }>(
+      const result = await this.db.getFirstAsync(
         'SELECT chapters_count FROM books WHERE name = ?',
         [bookName]
-      );
+      ) as { chapters_count: number } | null;
       if (result) {
         return Array.from({ length: result.chapters_count }, (_, i) => i + 1);
       }
@@ -282,13 +283,13 @@ export class DatabaseService {
       
       console.log(`[DatabaseService] Loading verses for ${bookName} ${chapter}...`);
       
-      const result = await this.db.getAllAsync<any>(
+      const result = await this.db.getAllAsync(
         `SELECT v.id, v.book_id, v.chapter, v.verse, v.text_spanish as text, v.text_tzotzil, v.book_name
          FROM verses v 
          WHERE v.book_name = ? AND v.chapter = ? 
          ORDER BY v.verse`,
         [bookName, chapter]
-      );
+      ) as any[];
       
       console.log(`[DatabaseService] Loaded ${result.length} verses for ${bookName} ${chapter}`);
       
@@ -311,14 +312,14 @@ export class DatabaseService {
     try {
       if (!this.db || this.initStatus !== 'ready') return [];
       const searchTerm = `%${query}%`;
-      const result = await this.db.getAllAsync<any>(
+      const result = await this.db.getAllAsync(
         `SELECT v.id, v.book_id, v.chapter, v.verse, v.text_spanish as text, v.text_tzotzil, v.book_name
          FROM verses v 
          WHERE v.text_spanish LIKE ? OR v.text_tzotzil LIKE ?
          ORDER BY v.book_id, v.chapter, v.verse
          LIMIT 100`,
         [searchTerm, searchTerm]
-      );
+      ) as any[];
       return result.map((row: any) => ({
         id: row.id,
         book_id: row.book_id,
@@ -337,9 +338,9 @@ export class DatabaseService {
   async getRandomPromise(): Promise<PromiseEntry | null> {
     try {
       if (!this.db || this.initStatus !== 'ready') return null;
-      const result = await this.db.getFirstAsync<PromiseEntry>(
+      const result = await this.db.getFirstAsync(
         'SELECT id, text, image_url FROM promises ORDER BY RANDOM() LIMIT 1'
-      );
+      ) as PromiseEntry | null;
       return result;
     } catch (error) {
       console.error('[DatabaseService] getRandomPromise error:', error);
@@ -350,9 +351,9 @@ export class DatabaseService {
   async getAllPromises(): Promise<PromiseEntry[]> {
     try {
       if (!this.db || this.initStatus !== 'ready') return [];
-      const result = await this.db.getAllAsync<PromiseEntry>(
+      const result = await this.db.getAllAsync(
         'SELECT id, text, image_url FROM promises'
-      );
+      ) as PromiseEntry[];
       return result;
     } catch (error) {
       console.error('[DatabaseService] getAllPromises error:', error);
@@ -363,12 +364,12 @@ export class DatabaseService {
   async getVerse(bookName: string, chapter: number, verse: number): Promise<BibleVerse | null> {
     try {
       if (!this.db || this.initStatus !== 'ready') return null;
-      const result = await this.db.getFirstAsync<any>(
+      const result = await this.db.getFirstAsync(
         `SELECT v.id, v.book_id, v.chapter, v.verse, v.text_spanish as text, v.text_tzotzil, v.book_name
          FROM verses v 
          WHERE v.book_name = ? AND v.chapter = ? AND v.verse = ?`,
         [bookName, chapter, verse]
-      );
+      ) as any | null;
       if (result) {
         return {
           id: result.id,
