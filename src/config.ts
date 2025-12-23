@@ -8,31 +8,9 @@ export const FONTS = {
   bold: 'Quantico_700Bold',
 };
 
-export const BACKEND_URL = 'https://bible.chyrris.com';
+export const BACKEND_URL = 'https://nevin-b.replit.app';
 
 export const getBackendUrl = (): string => {
-  // On native platforms (iOS/Android), always use the production backend URL
-  if (Platform.OS !== 'web') {
-    console.log('[Config] Native platform detected, using:', BACKEND_URL);
-    return BACKEND_URL;
-  }
-  
-  // On web, use the current window location (for development)
-  if (typeof window !== 'undefined' && window.location && window.location.hostname) {
-    const protocol = window.location.protocol;
-    const hostname = window.location.hostname;
-    const port = window.location.port;
-    
-    // If we're on localhost with a port, use that for development
-    if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '0.0.0.0') {
-      if (port) {
-        return `${protocol}//${hostname}:${port}`;
-      }
-    }
-    
-    // Otherwise use the current origin
-    return `${protocol}//${hostname}${port ? ':' + port : ''}`;
-  }
-  
+  console.log('[Config] Using Nevin backend:', BACKEND_URL);
   return BACKEND_URL;
 };
