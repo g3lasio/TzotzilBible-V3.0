@@ -8,6 +8,14 @@ build = ["sh", "-c", "echo 'Using pre-built dist'"]
 run = ["sh", "-c", "npm install --omit=dev && node server.js"]
 
 [[ports]]
+localPort = 3001
+externalPort = 3001
+
+[[ports]]
+localPort = 3002
+externalPort = 3002
+
+[[ports]]
 localPort = 5000
 externalPort = 80
 
@@ -26,11 +34,14 @@ author = "agent"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "node server.js"
-waitForPort = 5000
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
 args = "Expo Web"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Nevin Backend Test"
 
 [[workflows.workflow]]
 name = "Expo Web"
@@ -43,6 +54,18 @@ waitForPort = 5000
 
 [workflows.workflow.metadata]
 outputType = "webview"
+
+[[workflows.workflow]]
+name = "Nevin Backend Test"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd nevin-backend && npm install && node server.js"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "console"
 
 [agent]
 integrations = ["perplexity_v0:1.0.0", "python_anthropic:1.0.0"]
