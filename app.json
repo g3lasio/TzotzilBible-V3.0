@@ -10,7 +10,11 @@
       "resizeMode": "contain",
       "backgroundColor": "#1a1a2e"
     },
-    "platforms": ["web", "ios", "android"],
+    "platforms": [
+      "web",
+      "ios",
+      "android"
+    ],
     "web": {
       "bundler": "metro",
       "output": "single",
@@ -18,7 +22,8 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.chyrris.tzotzilbible"
+      "bundleIdentifier": "com.chyrris.tzotzilbible",
+      "buildNumber": "29"
     },
     "android": {
       "adaptiveIcon": {
@@ -31,7 +36,9 @@
       [
         "expo-asset",
         {
-          "assets": ["./assets/bible.db"]
+          "assets": [
+            "./assets/bible.db"
+          ]
         }
       ]
     ],
