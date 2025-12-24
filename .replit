@@ -21,7 +21,7 @@ externalPort = 80
 
 [nix]
 channel = "stable-24_05"
-packages = ["zulu11"]
+packages = ["zulu11", "imagemagick"]
 
 [workflows]
 runButton = "Project"

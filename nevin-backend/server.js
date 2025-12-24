@@ -112,6 +112,19 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
+// Root route - returns API info for browser access
+app.get('/', (req, res) => {
+  res.json({
+    service: 'Nevin AI Backend',
+    version: '1.0.0',
+    status: 'running',
+    endpoints: [
+      'GET /api/health',
+      'POST /api/nevin/chat'
+    ]
+  });
+});
+
 app.get('/api/health', (req, res) => {
   res.json({ ok: true });
 });

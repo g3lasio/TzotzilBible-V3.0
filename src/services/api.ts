@@ -1,11 +1,15 @@
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
+import { BACKEND_URL } from '../config';
 
 // Configuración base de la API según la plataforma
+// En producción web, usar el backend URL configurado
+// En desarrollo local, usar localhost
+const isProduction = typeof window !== 'undefined' && window.location?.hostname !== 'localhost';
 const BASE_URL = Platform.select({
-  web: 'http://localhost:5000',
-  default: 'http://10.0.2.2:5000', // Para emulador Android
+  web: isProduction ? BACKEND_URL : '',  // Empty string = relative URLs for same-origin
+  default: BACKEND_URL,  // Mobile apps use production backend
 });
 
 // Crear instancia de axios con configuración base
