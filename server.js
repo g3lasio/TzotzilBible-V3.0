@@ -1,12 +1,25 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const { execSync } = require('child_process');
 
 const app = express();
 
 const EGW_BOOKS_DIR = path.join(__dirname, 'assets/EGW BOOKS JSON');
 const PORT = process.env.PORT || 5000;
 const DIST_DIR = path.join(__dirname, 'dist');
+
+const indexPath = path.join(DIST_DIR, 'index.html');
+if (!fs.existsSync(indexPath)) {
+  console.log('dist/index.html not found. Building web bundle...');
+  try {
+    execSync('npx expo export --platform web', { stdio: 'inherit', cwd: __dirname });
+    console.log('Web bundle built successfully.');
+  } catch (err) {
+    console.error('Failed to build web bundle:', err.message);
+    process.exit(1);
+  }
+}
 
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_MODEL = 'claude-sonnet-4-20250514';
