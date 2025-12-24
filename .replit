@@ -4,8 +4,8 @@ modules = ["nodejs-20"]
 
 [deployment]
 deploymentTarget = "cloudrun"
-build = ["sh", "-c", "echo 'Using pre-built dist'"]
-run = ["sh", "-c", "npm install --omit=dev && node server.js"]
+build = ["sh", "-c", "npm install --omit=dev"]
+run = ["sh", "-c", "node server.js"]
 
 [[ports]]
 localPort = 3001
