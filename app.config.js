@@ -29,7 +29,7 @@ export default {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#0a0e14",
       },
-      package: "com.chyrris.tzotzilbible",
+      package: "com.g3lasio.TzotzilBible",
       versionCode: 24,
       permissions: ["android.permission.INTERNET"],
       compileSdkVersion: 34,
