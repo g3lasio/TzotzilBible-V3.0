@@ -1,0 +1,71 @@
+language = "nodejs"
+run = "node server.js"
+modules = ["nodejs-20"]
+
+[deployment]
+deploymentTarget = "cloudrun"
+build = ["sh", "-c", "npm install express --no-save"]
+run = ["sh", "-c", "node server.js"]
+
+[[ports]]
+localPort = 3001
+externalPort = 3001
+
+[[ports]]
+localPort = 3002
+externalPort = 3002
+
+[[ports]]
+localPort = 5000
+externalPort = 80
+
+[nix]
+channel = "stable-24_05"
+packages = ["zulu11", "imagemagick"]
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node server.js"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Expo Web"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Nevin Backend Test"
+
+[[workflows.workflow]]
+name = "Expo Web"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "node server.js"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[workflows.workflow]]
+name = "Nevin Backend Test"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd nevin-backend && npm install && node server.js"
+waitForPort = 5000
+
+[workflows.workflow.metadata]
+outputType = "console"
+
+[agent]
+integrations = ["perplexity_v0:1.0.0", "python_anthropic:1.0.0"]

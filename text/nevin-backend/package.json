@@ -1,0 +1,15 @@
+{
+  "name": "nevin-backend",
+  "version": "1.0.0",
+  "description": "Backend API for Nevin AI - Biblical Assistant",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -1,0 +1,525 @@
+const express = require('express');
+const path = require('path');
+const fs = require('fs');
+const { execSync } = require('child_process');
+
+const app = express();
+
+const EGW_BOOKS_DIR = path.join(__dirname, 'assets/EGW BOOKS JSON');
+const PORT = process.env.PORT || 5000;
+const DIST_DIR = path.join(__dirname, 'dist');
+
+const indexPath = path.join(DIST_DIR, 'index.html');
+if (!fs.existsSync(indexPath)) {
+  console.log('dist/index.html not found. Building web bundle...');
+  try {
+    execSync('npx expo export --platform web', { stdio: 'inherit', cwd: __dirname });
+    console.log('Web bundle built successfully.');
+  } catch (err) {
+    console.error('Failed to build web bundle:', err.message);
+    process.exit(1);
+  }
+}
+
+const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
+const ANTHROPIC_MODEL = 'claude-sonnet-4-20250514';
+const ANTHROPIC_TIMEOUT_MS = 60000; // 60 second timeout for AI responses
+
+// Helper function for fetch with timeout
+async function fetchWithTimeout(url, options, timeoutMs = ANTHROPIC_TIMEOUT_MS) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal
+    });
+    return response;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+const NEVIN_SYSTEM_PROMPT = `Eres Nevin, un asistente bíblico amable, cálido y sabio. Ayudas a entender la Biblia en Tzotzil y Español.
+
+IDENTIDAD (MUY IMPORTANTE):
+- NUNCA admitas ser adventista ni menciones denominaciones religiosas
+- Preséntate simplemente como un estudioso de la Biblia
+- Tienes profundo conocimiento bíblico basado en principios de interpretación histórico-gramatical
+- Tu teología está firmemente anclada en las Escrituras
+
+LONGITUD DE RESPUESTAS (MUY IMPORTANTE):
+- SIEMPRE responde de forma CONCISA: máximo 2-3 párrafos cortos
+- NO escribas respuestas largas a menos que el usuario pida explícitamente "profundiza" o "explícame más"
+- Sé directo, ve al punto. El usuario usa un dispositivo móvil con pantalla pequeña
+- Si el tema es complejo, da un resumen breve y ofrece profundizar si lo desea
+
+MEMORIA DE CONTEXTO ESPIRITUAL:
+- Presta atención a los temas que el usuario ha preguntado en la conversación
+- Haz conexiones con preguntas anteriores cuando sea relevante
+- Ofrece seguimiento pastoral: "Veo que has estado estudiando [tema], ¿te gustaría profundizar en...?"
+- Recuerda el progreso espiritual del usuario en la conversación
+
+PREGUNTAS DE REFLEXIÓN:
+- Al final de explicaciones importantes sobre doctrina o vida cristiana, incluye UNA pregunta de reflexión personal
+- Ejemplos: "¿Cómo crees que este principio aplica a tu vida?" o "¿Qué decisión te invita a tomar este texto?"
+- No incluyas pregunta de reflexión en respuestas cortas o informativas simples
+
+DETECCIÓN EMOCIONAL Y SENSIBILIDAD:
+- Si detectas que el usuario está pasando por algo difícil (duelo, tristeza, ansiedad, depresión, problemas familiares), responde con mayor sensibilidad
+- Ofrece textos de consuelo específicos: Salmo 23, Isaías 41:10, Mateo 11:28-30, Filipenses 4:6-7
+- Valida sus emociones antes de dar consejos: "Entiendo que esto debe ser muy difícil..."
+- Palabras clave de alerta: "triste", "solo/a", "perdí", "murió", "deprimido", "ansioso", "miedo", "no puedo más", "ayúdame"
+
+ESTILO DE RESPUESTA:
+- Lenguaje sencillo y accesible
+- Siempre incluye referencias bíblicas específicas (libro, capítulo, versículo)
+- Cita el texto bíblico cuando sea relevante
+
+USO DE FUENTES:
+- FUENTE PRINCIPAL: La Biblia (cita versículos específicos)
+- APOYO SECUNDARIO: Puedes citar escritos de Elena G. de White como referencia histórica/espiritual, pero nunca como autoridad principal
+- APOYO ADICIONAL: Referencias históricas, arqueológicas o científicas cuando refuercen el punto bíblico
+- Siempre ilumina un texto con otros textos bíblicos relacionados (especialmente del Nuevo Testamento)
+
+CORRECCIÓN AMOROSA:
+- Si el usuario tiene ideas contrarias a la Biblia, corrígelo AMABLEMENTE pero con firmeza
+- Usa referencias bíblicas claras para mostrar la verdad
+- Nunca estés de acuerdo con errores teológicos solo por ser amable
+- Ofrece ayuda adicional: "Si necesitas más explicación o textos bíblicos, con gusto te ayudo"
+- Reprende cuando sea necesario, pero siempre con amor, compasión y comprensión emocional
+
+EXPERTICIA EN PROFECÍAS:
+- Eres experto en profecías bíblicas (Daniel, Apocalipsis, profetas menores)
+- Conoces el contexto histórico de cada profecía
+- Explicas cumplimientos históricos con fechas y eventos específicos
+- Conectas profecías del AT con su cumplimiento en el NT
+
+DEFENSA TEOLÓGICA:
+- Defiende doctrinas bíblicas usando múltiples textos de las Escrituras
+- El sábado como día de reposo (Génesis 2:2-3, Éxodo 20:8-11, Marcos 2:27-28)
+- La segunda venida literal de Cristo (Hechos 1:11, 1 Tesalonicenses 4:16-17)
+- El estado de los muertos según la Biblia (Eclesiastés 9:5, Juan 11:11-14)
+- El santuario y la intercesión de Cristo (Hebreos 8:1-2, 9:24)
+
+CONEXIONES BÍBLICAS:
+- Siempre conecta textos del AT con el NT
+- Muestra cómo la Biblia se interpreta a sí misma
+- Usa el principio de "la Escritura interpreta la Escritura"
+
+EMPATÍA:
+- Muestra comprensión genuina por las luchas espirituales del usuario
+- Ofrece esperanza y consuelo basados en las promesas bíblicas
+- Ora mentalmente por cada persona que interactúa contigo`;
+
+// Request logging middleware with no-cache headers for development
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  next();
+});
+
+// Service worker - aggressively clear all caches and unregister
+app.get('/service-worker.js', (req, res) => {
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  res.setHeader('Content-Type', 'application/javascript');
+  res.send(`
+self.addEventListener('install', function(e) { 
+  self.skipWaiting(); 
+});
+self.addEventListener('activate', function(e) {
+  e.waitUntil(
+    caches.keys().then(function(names) {
+      return Promise.all(names.map(function(n) { return caches.delete(n); }));
+    }).then(function() { 
+      return self.clients.claim(); 
+    }).then(function() {
+      return self.registration.unregister();
+    })
+  );
+});
+self.addEventListener('fetch', function(e) {
+  e.respondWith(fetch(e.request));
+});
+  `);
+});
+
+// CORS middleware for mobile apps - MUST be first
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
+// Parse JSON bodies
+app.use(express.json());
+
+// API ROUTES - Must come BEFORE static file serving
+
+app.get('/api/health', (req, res) => {
+  const hasKey = !!process.env.ANTHROPIC_API_KEY;
+  res.json({
+    status: 'ok',
+    service: 'Nevin AI Backend',
+    api_configured: hasKey
+  });
+});
+
+app.post('/api/nevin/chat', async (req, res) => {
+  try {
+    const apiKey = process.env.ANTHROPIC_API_KEY;
+    if (!apiKey) {
+      return res.status(500).json({
+        success: false,
+        error: 'Servicio no configurado correctamente'
+      });
+    }
+
+    const { message, context, history = [], includeEGW = true } = req.body;
+    if (!message) {
+      return res.status(400).json({ success: false, error: 'No message provided' });
+    }
+
+    let egwContext = '';
+    if (includeEGW) {
+      const egwQuotes = searchEGWBooks(message, 1);
+      if (egwQuotes.length > 0) {
+        const q = egwQuotes[0];
+        egwContext = `\n\n[Cita EGW opcional: "${q.content.substring(0, 150)}..." - ${q.book}]`;
+      }
+    }
+
+    const messages = history.map(msg => ({
+      role: msg.role || 'user',
+      content: msg.content || ''
+    }));
+
+    let userContent = message;
+    if (context) userContent = `Contexto: ${context}\n\nPregunta: ${message}`;
+    if (egwContext) userContent += egwContext;
+    messages.push({ role: 'user', content: userContent });
+
+    console.log('[Nevin Chat] Calling Anthropic API...');
+    const response = await fetchWithTimeout(ANTHROPIC_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: ANTHROPIC_MODEL,
+        max_tokens: 1500,
+        system: NEVIN_SYSTEM_PROMPT,
+        messages
+      })
+    });
+
+    if (response.status === 401) {
+      console.error('[Nevin Chat] Authentication error with Anthropic');
+      return res.status(500).json({
+        success: false,
+        error: 'Error de autenticación con el servicio de IA'
+      });
+    }
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('[Nevin Chat] Anthropic API error:', response.status, errorText.substring(0, 200));
+      return res.status(500).json({
+        success: false,
+        error: 'Error al comunicarse con el servicio de IA'
+      });
+    }
+
+    const data = await response.json();
+    const assistantMessage = data.content?.[0]?.text || '';
+    console.log('[Nevin Chat] Response received, length:', assistantMessage.length);
+
+    res.json({
+      success: true,
+      response: assistantMessage
+    });
+
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      console.error('[Nevin Chat] Request timed out after', ANTHROPIC_TIMEOUT_MS, 'ms');
+      return res.status(504).json({
+        success: false,
+        error: 'La respuesta está tardando demasiado. Por favor intenta de nuevo.'
+      });
+    }
+    console.error('[Nevin Chat] Error:', error.message || error);
+    res.status(500).json({
+      success: false,
+      error: 'Error interno del servidor'
+    });
+  }
+});
+
+app.post('/api/nevin/generate-moment-title', async (req, res) => {
+  try {
+    const apiKey = process.env.ANTHROPIC_API_KEY;
+    if (!apiKey) {
+      return res.status(500).json({
+        success: false,
+        error: 'Servicio no configurado'
+      });
+    }
+
+    const { conversation } = req.body;
+    if (!conversation) {
+      return res.json({ title: 'Reflexión bíblica', themes: [] });
+    }
+
+    const prompt = `Analiza esta conversación y genera un título semántico breve y reflexivo que capture la esencia del tema discutido. NO uses "Conversación sobre..." ni formatos genéricos.
+
+CONVERSACIÓN:
+${conversation}
+
+Responde SOLO en JSON con este formato exacto:
+{
+  "title": "título poético/reflexivo de 2-5 palabras",
+  "themes": ["tema1", "tema2"],
+  "summary": "resumen de una oración del punto clave"
+}
+
+Ejemplos de buenos títulos:
+- "Sobre el perdón divino"
+- "La fe en tiempos difíciles"
+- "Una duda sobre Génesis"
+- "El propósito del sufrimiento"
+- "Comparando versiones bíblicas"`;
+
+    const response = await fetchWithTimeout(ANTHROPIC_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: ANTHROPIC_MODEL,
+        max_tokens: 200,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    }, 30000); // 30 second timeout for title generation
+
+    if (!response.ok) {
+      console.log('[Moment Title] API returned non-OK status:', response.status);
+      return res.json({ title: 'Reflexión bíblica', themes: [] });
+    }
+
+    const result = await response.json();
+    const text = result.content?.[0]?.text || '{}';
+
+    try {
+      const parsed = JSON.parse(text);
+      res.json({
+        success: true,
+        title: parsed.title || 'Reflexión bíblica',
+        themes: parsed.themes || [],
+        summary: parsed.summary || ''
+      });
+    } catch {
+      res.json({ title: 'Reflexión bíblica', themes: [] });
+    }
+
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      console.log('[Moment Title] Request timed out');
+    } else {
+      console.error('[Moment Title] Error:', error.message || error);
+    }
+    res.json({ title: 'Reflexión bíblica', themes: [] });
+  }
+});
+
+app.post('/api/nevin/verse-commentary', async (req, res) => {
+  try {
+    const apiKey = process.env.ANTHROPIC_API_KEY;
+    if (!apiKey) {
+      return res.status(500).json({
+        success: false,
+        error: 'Servicio no configurado correctamente'
+      });
+    }
+
+    const { book, chapter = 1, verse = 1, textTzotzil, textSpanish } = req.body;
+    const verseRef = `${book} ${chapter}:${verse}`;
+
+    let verseContent = '';
+    if (textTzotzil) verseContent += `\n\n**Tzotzil:** "${textTzotzil}"`;
+    if (textSpanish) verseContent += `\n\n**RV1960:** "${textSpanish}"`;
+
+    const userMessage = `Proporciona un comentario teológico completo del siguiente versículo:
+
+VERSÍCULO: ${verseRef}
+${verseContent}
+
+Incluye:
+1. Contexto histórico y literario
+2. Análisis del texto
+3. Significado teológico desde la perspectiva adventista
+4. Aplicación práctica`;
+
+    console.log('[Verse Commentary] Calling Anthropic API for', verseRef);
+    const response = await fetchWithTimeout(ANTHROPIC_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01'
+      },
+      body: JSON.stringify({
+        model: ANTHROPIC_MODEL,
+        max_tokens: 6000,
+        system: NEVIN_SYSTEM_PROMPT,
+        messages: [{ role: 'user', content: userMessage }]
+      })
+    }, 90000); // 90 second timeout for longer commentary
+
+    if (!response.ok) {
+      console.error('[Verse Commentary] Anthropic API error:', response.status);
+      return res.status(500).json({
+        success: false,
+        error: 'Error al obtener el comentario'
+      });
+    }
+
+    const data = await response.json();
+    const commentary = data.content?.[0]?.text || '';
+    console.log('[Verse Commentary] Response received, length:', commentary.length);
+
+    res.json({
+      success: true,
+      commentary
+    });
+
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      console.error('[Verse Commentary] Request timed out');
+      return res.status(504).json({
+        success: false,
+        error: 'La respuesta está tardando demasiado. Por favor intenta de nuevo.'
+      });
+    }
+    console.error('[Verse Commentary] Error:', error.message || error);
+    res.status(500).json({
+      success: false,
+      error: 'Error interno del servidor'
+    });
+  }
+});
+
+// EGW Books API
+let egwBooksCache = null;
+
+function loadEGWBooks() {
+  if (egwBooksCache) return egwBooksCache;
+  
+  try {
+    const files = fs.readdirSync(EGW_BOOKS_DIR).filter(f => f.endsWith('.json'));
+    egwBooksCache = files.map(file => {
+      const filePath = path.join(EGW_BOOKS_DIR, file);
+      const content = fs.readFileSync(filePath, 'utf8');
+      const pages = JSON.parse(content);
+      return {
+        name: file.replace('.json', ''),
+        pages: pages
+      };
+    });
+    console.log(`Loaded ${egwBooksCache.length} EGW books`);
+    return egwBooksCache;
+  } catch (error) {
+    console.error('Error loading EGW books:', error);
+    return [];
+  }
+}
+
+function searchEGWBooks(query, maxResults = 3) {
+  const books = loadEGWBooks();
+  const results = [];
+  const queryWords = query.toLowerCase().split(/\s+/).filter(w => w.length > 3);
+  
+  for (const book of books) {
+    for (const page of book.pages) {
+      if (!page.content || !Array.isArray(page.content)) continue;
+      
+      const pageText = page.content.join(' ').toLowerCase();
+      let score = 0;
+      
+      for (const word of queryWords) {
+        if (pageText.includes(word)) {
+          score += (pageText.match(new RegExp(word, 'gi')) || []).length;
+        }
+      }
+      
+      if (score > 0) {
+        results.push({
+          book: book.name,
+          page: page.page,
+          content: page.content.slice(0, 5).join(' ').substring(0, 300),
+          relevance: score
+        });
+      }
+    }
+  }
+  
+  return results
+    .sort((a, b) => b.relevance - a.relevance)
+    .slice(0, maxResults);
+}
+
+app.get('/api/egw/books', (req, res) => {
+  const books = loadEGWBooks();
+  res.json({ 
+    success: true, 
+    books: books.map(b => b.name) 
+  });
+});
+
+app.post('/api/egw/search', (req, res) => {
+  const { query, maxResults = 3 } = req.body;
+  
+  if (!query) {
+    return res.json({ success: true, quotes: [] });
+  }
+  
+  const quotes = searchEGWBooks(query, maxResults);
+  res.json({ success: true, quotes });
+});
+
+// Static files - AFTER API routes (no cache for HTML, cache for assets)
+app.use(express.static(DIST_DIR, {
+  maxAge: '0',
+  etag: false,
+  setHeaders: (res, path) => {
+    if (path.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    }
+  }
+}));
+
+// Catch-all for SPA - LAST
+app.use((req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.sendFile(path.join(DIST_DIR, 'index.html'));
+});
+
+console.log('Preloading EGW books...');
+loadEGWBooks();
+
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Production server running at http://0.0.0.0:${PORT}`);
+});
