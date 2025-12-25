@@ -1041,9 +1041,13 @@ app.use((req, res) => {
   res.sendFile(path.join(DIST_DIR, 'index.html'));
 });
 
-console.log('Preloading EGW books...');
-loadEGWBooks();
-
+// Start server immediately for health checks
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Production server running at http://0.0.0.0:${PORT}`);
+  
+  // Load EGW books in background AFTER server is ready to respond to health checks
+  setImmediate(() => {
+    console.log('Loading EGW books in background...');
+    loadEGWBooks();
+  });
 });
