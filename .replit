@@ -4,7 +4,7 @@ modules = ["nodejs-20"]
 
 [deployment]
 deploymentTarget = "cloudrun"
-build = ["sh", "-c", "npm install express --no-save"]
+build = ["sh", "-c", "npm install"]
 run = ["sh", "-c", "node server.js"]
 
 [[ports]]
