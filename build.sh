@@ -1,4 +1,4 @@
 #!/bin/bash
-# Build script for deployment - installs only server dependencies
-npm install express --no-save
-echo "Server dependencies installed"
+echo "Installing Express for production server..."
+npm install express --save
+echo "Express installation complete"
