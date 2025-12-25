@@ -608,6 +608,12 @@ app.get('/privacy-policy', (req, res) => {
 </head>
 <body>
   <div class="container">
+    <nav style="margin-bottom: 20px;">
+      <a href="/" style="display: inline-flex; align-items: center; gap: 8px; color: #00f3ff; text-decoration: none; font-size: 14px; padding: 10px 16px; background: rgba(0, 243, 255, 0.1); border: 1px solid rgba(0, 243, 255, 0.3); border-radius: 8px;">
+        ← Volver al inicio
+      </a>
+    </nav>
+
     <header>
       <div class="logo">🛡️</div>
       <h1>Política de Privacidad</h1>
