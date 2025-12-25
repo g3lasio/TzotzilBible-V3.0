@@ -260,7 +260,7 @@ export default function SettingsScreen() {
           
           <TouchableOpacity 
             style={styles.settingCard}
-            onPress={() => navigation.navigate('PrivacyPolicy')}
+            onPress={() => Linking.openURL('https://bible.chyrris.com/privacy-policy')}
           >
             <LinearGradient
               colors={['rgba(20, 30, 45, 0.8)', 'rgba(15, 25, 40, 0.9)']}
