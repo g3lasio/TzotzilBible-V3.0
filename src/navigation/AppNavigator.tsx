@@ -16,8 +16,6 @@ import NevinScreen from '../screens/NevinScreen';
 import MomentsScreen from '../screens/MomentsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import AboutScreen from '../screens/AboutScreen';
-import TermsOfServiceScreen from '../screens/TermsOfServiceScreen';
-import LegalDisclaimerScreen from '../screens/LegalDisclaimerScreen';
 import ContactSupportScreen from '../screens/ContactSupportScreen';
 import type { RootStackParamList, TabParamList, BibleStackParamList } from '../types/navigation';
 
@@ -157,8 +155,6 @@ export default function AppNavigator() {
       <RootStack.Screen name="MainTabs" component={MainTabNavigator} />
       <RootStack.Screen name="Moments" component={MomentsScreen} />
       <RootStack.Screen name="About" component={AboutScreen} />
-      <RootStack.Screen name="TermsOfService" component={TermsOfServiceScreen} />
-      <RootStack.Screen name="LegalDisclaimer" component={LegalDisclaimerScreen} />
       <RootStack.Screen name="ContactSupport" component={ContactSupportScreen} />
     </RootStack.Navigator>
   );

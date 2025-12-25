@@ -281,7 +281,7 @@ export default function SettingsScreen() {
 
           <TouchableOpacity 
             style={styles.settingCard}
-            onPress={() => navigation.navigate('TermsOfService')}
+            onPress={() => Linking.openURL('https://bible.chyrris.com/terms-of-service')}
           >
             <LinearGradient
               colors={['rgba(20, 30, 45, 0.8)', 'rgba(15, 25, 40, 0.9)']}
@@ -302,7 +302,7 @@ export default function SettingsScreen() {
 
           <TouchableOpacity 
             style={styles.settingCard}
-            onPress={() => navigation.navigate('LegalDisclaimer')}
+            onPress={() => Linking.openURL('https://bible.chyrris.com/legal-disclaimer')}
           >
             <LinearGradient
               colors={['rgba(20, 30, 45, 0.8)', 'rgba(15, 25, 40, 0.9)']}
