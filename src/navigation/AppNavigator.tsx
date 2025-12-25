@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import { Text } from 'react-native-paper';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useSafeAreaInsets, SafeAreaView } from 'react-native-safe-area-context';
 
 import HomeScreen from '../screens/HomeScreen';
 import BibleScreen from '../screens/BibleScreen';
@@ -43,10 +44,19 @@ function BibleStackNavigator() {
 }
 
 function CustomTabBar({ state, descriptors, navigation }: any) {
+  const insets = useSafeAreaInsets();
+  const minAndroidPadding = 8;
+  const bottomPadding = Platform.OS === 'android' 
+    ? Math.max(insets.bottom + minAndroidPadding, minAndroidPadding)
+    : Math.max(insets.bottom, 20);
+
   return (
-    <View style={styles.tabBarContainer}>
+    <SafeAreaView 
+      edges={['bottom']} 
+      style={[styles.tabBarContainer, { paddingBottom: Platform.OS === 'android' ? bottomPadding : 0 }]}
+    >
       <View style={styles.tabBarLine} />
-      <View style={styles.tabBar}>
+      <View style={[styles.tabBar, Platform.OS !== 'android' && { paddingBottom: bottomPadding }]}>
         {state.routes.map((route: any, index: number) => {
           const { options } = descriptors[route.key];
           const label = options.tabBarLabel ?? options.title ?? route.name;
@@ -94,7 +104,7 @@ function CustomTabBar({ state, descriptors, navigation }: any) {
           );
         })}
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -172,8 +182,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    paddingVertical: 10,
-    paddingBottom: 20,
+    paddingTop: 10,
   },
   tabItem: {
     alignItems: 'center',
