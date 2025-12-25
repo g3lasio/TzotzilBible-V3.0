@@ -35,8 +35,6 @@ export type RootStackParamList = {
   MainTabs: NavigatorScreenParams<TabParamList>;
   Moments: undefined;
   About: undefined;
-  TermsOfService: undefined;
-  LegalDisclaimer: undefined;
   ContactSupport: undefined;
 };
 

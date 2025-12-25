@@ -729,6 +729,301 @@ app.get('/privacy-policy', (req, res) => {
 </html>`);
 });
 
+// Terms of Service page - dedicated URL for Google Play Store compliance
+app.get('/terms-of-service', (req, res) => {
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.send(`<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Términos de Servicio de Tzotzil Bible - Aplicación de estudio bíblico">
+  <title>Términos de Servicio - Tzotzil Bible</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: linear-gradient(135deg, #0a0e14 0%, #1a1f2e 100%);
+      color: #e6f3ff;
+      min-height: 100vh;
+      line-height: 1.7;
+    }
+    .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+    header { text-align: center; margin-bottom: 40px; padding-bottom: 30px; border-bottom: 2px solid rgba(0, 243, 255, 0.3); }
+    .logo { width: 80px; height: 80px; background: rgba(0, 243, 255, 0.1); border: 2px solid rgba(0, 243, 255, 0.3); border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 36px; }
+    h1 { color: #00f3ff; font-size: 28px; margin-bottom: 10px; }
+    .app-name { color: #00ff88; font-size: 16px; margin-bottom: 10px; }
+    .last-updated { color: #6b7c93; font-size: 14px; font-style: italic; }
+    section { background: rgba(20, 30, 45, 0.8); border: 1px solid rgba(0, 243, 255, 0.2); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    h2 { color: #00f3ff; font-size: 18px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid rgba(0, 243, 255, 0.2); }
+    p { color: #b8c5d4; margin-bottom: 12px; text-align: justify; }
+    ul { color: #b8c5d4; margin-left: 20px; margin-bottom: 12px; }
+    li { margin-bottom: 6px; }
+    .highlight { color: #00ff88; font-weight: 600; }
+    footer { text-align: center; margin-top: 40px; padding-top: 30px; border-top: 2px solid rgba(0, 243, 255, 0.3); }
+    .footer-text { color: #6b7c93; font-style: italic; font-size: 14px; }
+    a { color: #00f3ff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    nav { margin-bottom: 20px; }
+    .back-btn { display: inline-flex; align-items: center; gap: 8px; color: #00f3ff; font-size: 14px; padding: 10px 16px; background: rgba(0, 243, 255, 0.1); border: 1px solid rgba(0, 243, 255, 0.3); border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav><a href="/" class="back-btn">← Volver al inicio</a></nav>
+    <header>
+      <div class="logo">📄</div>
+      <h1>Términos de Servicio</h1>
+      <p class="app-name">Tzotzil Bible</p>
+      <p class="last-updated">Última actualización: 19 de Diciembre, 2025</p>
+    </header>
+
+    <section>
+      <h2>1. Aceptación de los Términos</h2>
+      <p>Al descargar, instalar o utilizar la aplicación Tzotzil Bible, usted acepta estar sujeto a estos Términos de Servicio. Si no está de acuerdo con alguna parte de estos términos, no debe utilizar la aplicación.</p>
+    </section>
+
+    <section>
+      <h2>2. Descripción del Servicio</h2>
+      <p>Tzotzil Bible es una aplicación de estudio bíblico que ofrece:</p>
+      <ul>
+        <li>Textos bíblicos en idioma Tzotzil y Español</li>
+        <li>Sistema de lectura bilingüe y paralela</li>
+        <li>Nevin AI: Asistente de inteligencia artificial para consultas teológicas y bíblicas</li>
+        <li>Herramientas de estudio, búsqueda y navegación bíblica</li>
+        <li>Funcionalidad offline para textos bíblicos</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>3. Uso Aceptable</h2>
+      <p>Al utilizar Tzotzil Bible, usted acepta:</p>
+      <ul>
+        <li>Usar la aplicación únicamente para fines legales y apropiados</li>
+        <li>No intentar manipular, hackear o interferir con el funcionamiento de la aplicación</li>
+        <li>No utilizar la aplicación para difundir contenido ofensivo, odioso o contrario a los valores bíblicos</li>
+        <li>No usar Nevin AI para generar contenido falso, engañoso o dañino</li>
+        <li>Respetar los derechos de propiedad intelectual</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>4. Propiedad Intelectual</h2>
+      <p><span class="highlight">Contenido de la Aplicación:</span> El diseño, código, gráficos, logotipos y estructura de la aplicación son propiedad de Tzotzil Bible y están protegidos por leyes de propiedad intelectual.</p>
+      <p><span class="highlight">Textos Bíblicos:</span> La traducción al Tzotzil ha sido desarrollada con cuidado doctrinal y respeto cultural. Los textos en español corresponden a versiones de dominio público o debidamente licenciadas.</p>
+      <p><span class="highlight">Contenido de Usuario:</span> Las notas y marcadores que usted cree permanecen bajo su propiedad.</p>
+    </section>
+
+    <section>
+      <h2>5. Nevin AI - Asistente Bíblico</h2>
+      <p>El uso del asistente Nevin AI está sujeto a las siguientes condiciones:</p>
+      <ul>
+        <li>Nevin es una herramienta de apoyo al estudio, no un sustituto de líderes espirituales, pastores o consejeros</li>
+        <li>Las respuestas son generadas por inteligencia artificial y pueden contener imprecisiones</li>
+        <li>Se recomienda verificar la información con fuentes bíblicas primarias</li>
+        <li>Nevin requiere conexión a internet para funcionar</li>
+        <li>El servicio puede experimentar interrupciones temporales</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>6. Disponibilidad del Servicio</h2>
+      <ul>
+        <li>La lectura bíblica funciona sin conexión a internet</li>
+        <li>Las funciones de IA requieren conexión activa</li>
+        <li>Nos reservamos el derecho de modificar, suspender o descontinuar cualquier aspecto del servicio</li>
+        <li>No garantizamos disponibilidad ininterrumpida del servicio de IA</li>
+        <li>Las actualizaciones pueden incluir cambios en funcionalidades</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>7. Limitación de Responsabilidad</h2>
+      <p>Tzotzil Bible se proporciona "tal cual" sin garantías de ningún tipo. No somos responsables de:</p>
+      <ul>
+        <li>Decisiones tomadas basándose en el contenido de la aplicación</li>
+        <li>Interpretaciones teológicas derivadas de respuestas de IA</li>
+        <li>Pérdida de datos locales por mal funcionamiento del dispositivo</li>
+        <li>Interrupciones en el servicio de IA</li>
+        <li>Daños indirectos, incidentales o consecuentes</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>8. Terminación</h2>
+      <ul>
+        <li>Usted puede dejar de usar la aplicación en cualquier momento desinstalándola</li>
+        <li>Nos reservamos el derecho de restringir el acceso en caso de violación de estos términos</li>
+        <li>La terminación no afecta los datos almacenados localmente en su dispositivo</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>9. Modificaciones a los Términos</h2>
+      <p>Podemos modificar estos Términos de Servicio en cualquier momento. Los cambios significativos serán notificados a través de la aplicación. El uso continuado después de las modificaciones constituye aceptación de los nuevos términos.</p>
+    </section>
+
+    <section>
+      <h2>10. Ley Aplicable</h2>
+      <p>Estos términos se rigen por las leyes aplicables en la jurisdicción donde opera el desarrollador. Cualquier disputa será resuelta mediante arbitraje o en los tribunales competentes.</p>
+    </section>
+
+    <section>
+      <h2>11. Contacto</h2>
+      <p>Para preguntas sobre estos Términos de Servicio:</p>
+      <p><strong>Email:</strong> <a href="mailto:gelasio@chyrris.com">gelasio@chyrris.com</a></p>
+      <p><strong>Web:</strong> <a href="https://bible.chyrris.com">https://bible.chyrris.com</a></p>
+    </section>
+
+    <footer>
+      <p class="footer-text">Gracias por usar Tzotzil Bible</p>
+      <p class="footer-text" style="margin-top: 10px;">© 2025 Tzotzil Bible. Todos los derechos reservados.</p>
+    </footer>
+  </div>
+</body>
+</html>`);
+});
+
+// Legal Disclaimer page - dedicated URL for Google Play Store compliance
+app.get('/legal-disclaimer', (req, res) => {
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.send(`<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Aviso Legal de Tzotzil Bible - IA, contenido teológico y limitaciones">
+  <title>Aviso Legal - Tzotzil Bible</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: linear-gradient(135deg, #0a0e14 0%, #1a1f2e 100%);
+      color: #e6f3ff;
+      min-height: 100vh;
+      line-height: 1.7;
+    }
+    .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+    header { text-align: center; margin-bottom: 40px; padding-bottom: 30px; border-bottom: 2px solid rgba(255, 215, 0, 0.3); }
+    .logo { width: 80px; height: 80px; background: rgba(255, 215, 0, 0.1); border: 2px solid rgba(255, 215, 0, 0.3); border-radius: 50%; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 36px; }
+    h1 { color: #ffd700; font-size: 28px; margin-bottom: 10px; }
+    .subtitle { color: #ffd700; font-size: 14px; margin-bottom: 10px; }
+    .app-name { color: #00ff88; font-size: 16px; margin-bottom: 10px; }
+    .last-updated { color: #6b7c93; font-size: 14px; font-style: italic; }
+    .important-box { background: rgba(255, 215, 0, 0.15); border: 1px solid rgba(255, 215, 0, 0.4); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    .important-title { color: #ffd700; font-size: 18px; font-weight: 700; margin-bottom: 12px; }
+    .important-text { color: #e6d5a8; }
+    section { background: rgba(20, 30, 45, 0.8); border: 1px solid rgba(0, 243, 255, 0.2); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    h2 { color: #00f3ff; font-size: 18px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid rgba(0, 243, 255, 0.2); }
+    p { color: #b8c5d4; margin-bottom: 12px; text-align: justify; }
+    ul { color: #b8c5d4; margin-left: 20px; margin-bottom: 12px; }
+    li { margin-bottom: 6px; }
+    .highlight { color: #00ff88; font-weight: 600; }
+    .scripture-box { margin-top: 16px; padding: 16px; background: rgba(0, 255, 136, 0.08); border-radius: 12px; border-left: 3px solid #00ff88; text-align: center; }
+    .scripture-text { font-size: 15px; font-style: italic; color: #e6f3ff; line-height: 24px; }
+    .scripture-ref { font-size: 13px; color: #00ff88; margin-top: 8px; font-weight: 600; }
+    footer { text-align: center; margin-top: 40px; padding-top: 30px; border-top: 2px solid rgba(255, 215, 0, 0.3); }
+    .footer-text { color: #ffd700; font-style: italic; font-size: 14px; }
+    a { color: #00f3ff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    nav { margin-bottom: 20px; }
+    .back-btn { display: inline-flex; align-items: center; gap: 8px; color: #00f3ff; font-size: 14px; padding: 10px 16px; background: rgba(0, 243, 255, 0.1); border: 1px solid rgba(0, 243, 255, 0.3); border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <nav><a href="/" class="back-btn">← Volver al inicio</a></nav>
+    <header>
+      <div class="logo">⚠️</div>
+      <h1>Aviso Legal</h1>
+      <p class="subtitle">Uso de Inteligencia Artificial y Contenido Teológico</p>
+      <p class="app-name">Tzotzil Bible</p>
+      <p class="last-updated">Última actualización: 19 de Diciembre, 2025</p>
+    </header>
+
+    <div class="important-box">
+      <p class="important-title">⚠️ Aviso Importante</p>
+      <p class="important-text">Este documento contiene información crítica sobre las limitaciones y el uso apropiado de la inteligencia artificial (Nevin AI) y el contenido teológico de esta aplicación. Por favor, léalo cuidadosamente.</p>
+    </div>
+
+    <section>
+      <h2>🤖 Sobre Nevin AI</h2>
+      <p>Nevin es un asistente de inteligencia artificial diseñado para apoyar el estudio bíblico y responder consultas teológicas. Está basado en tecnología de procesamiento de lenguaje natural proporcionada por Anthropic (Claude AI).</p>
+    </section>
+
+    <section>
+      <h2>⚠️ Limitaciones de la IA</h2>
+      <p>Es fundamental comprender que Nevin AI:</p>
+      <ul>
+        <li><span class="highlight">No es infalible:</span> Las respuestas son generadas por algoritmos y pueden contener errores, imprecisiones o malentendidos.</li>
+        <li><span class="highlight">No sustituye autoridad espiritual:</span> Las respuestas de Nevin no reemplazan la guía de pastores, líderes espirituales, teólogos entrenados o la comunidad de fe.</li>
+        <li><span class="highlight">No es inspiración divina:</span> El contenido generado por IA es producto de procesamiento computacional, no de revelación espiritual.</li>
+        <li><span class="highlight">Puede tener sesgos:</span> Como toda IA, puede reflejar sesgos presentes en sus datos de entrenamiento.</li>
+        <li><span class="highlight">Tiene limitaciones contextuales:</span> Puede no comprender completamente el contexto histórico, cultural o personal de cada consulta.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>📖 Contenido Teológico</h2>
+      <p><span class="highlight">Traducción Tzotzil:</span> La traducción bíblica al idioma Tzotzil ha sido desarrollada con respeto por la fidelidad doctrinal, el contexto bíblico y las particularidades lingüísticas y culturales de la lengua Tzotzil.</p>
+      <p><span class="highlight">Perspectiva Doctrinal:</span> Las respuestas de Nevin están orientadas hacia una perspectiva bíblica conservadora, pero esto no garantiza alineación perfecta con todas las tradiciones denominacionales.</p>
+      <p><span class="highlight">Interpretación:</span> Diferentes tradiciones cristianas pueden tener interpretaciones variadas de ciertos pasajes. La aplicación no pretende ser la autoridad final en disputas teológicas.</p>
+    </section>
+
+    <section>
+      <h2>✅ Uso Recomendado</h2>
+      <p>Recomendamos usar Tzotzil Bible y Nevin AI de la siguiente manera:</p>
+      <ul>
+        <li>Como herramienta de apoyo y punto de partida para el estudio</li>
+        <li>Verificando siempre las respuestas con las Escrituras directamente</li>
+        <li>Consultando con líderes espirituales en temas sensibles o importantes</li>
+        <li>Combinando el uso de la IA con estudio personal y oración</li>
+        <li>Usando discernimiento espiritual en la evaluación de respuestas</li>
+        <li>No dependiendo exclusivamente de la IA para decisiones de vida importantes</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>🛡️ Exención de Responsabilidad</h2>
+      <p><span class="highlight">El desarrollador y Tzotzil Bible no se hacen responsables de:</span></p>
+      <ul>
+        <li>Decisiones personales, espirituales, financieras o de salud tomadas basándose en respuestas de Nevin AI</li>
+        <li>Interpretaciones teológicas que resulten en conflicto con denominaciones o tradiciones específicas</li>
+        <li>Daños emocionales, espirituales o de cualquier tipo derivados del uso de la aplicación</li>
+        <li>La precisión absoluta de cualquier información proporcionada por la IA</li>
+        <li>El uso inapropiado de la aplicación por parte de los usuarios</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>⚖️ Principio Rector</h2>
+      <p>Creemos firmemente que la tecnología debe servir para acercar a las personas a la Palabra de Dios, nunca para reemplazarla. Nevin AI es una herramienta diseñada para facilitar el acceso y comprensión de las Escrituras, no para sustituir la relación personal con Dios, la comunión con la iglesia, ni el consejo pastoral.</p>
+      <div class="scripture-box">
+        <p class="scripture-text">"Lámpara es a mis pies tu palabra, y lumbrera a mi camino."</p>
+        <p class="scripture-ref">— Salmos 119:105</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>🚩 Reportar Contenido</h2>
+      <p>Si encuentra respuestas de Nevin AI que considere:</p>
+      <ul>
+        <li>Teológicamente incorrectas o preocupantes</li>
+        <li>Ofensivas o inapropiadas</li>
+        <li>Potencialmente dañinas</li>
+      </ul>
+      <p>Por favor, repórtelas a través de la función de feedback en Ajustes o contactando a: <a href="mailto:gelasio@chyrris.com">gelasio@chyrris.com</a></p>
+    </section>
+
+    <footer>
+      <p class="footer-text">Sola Scriptura</p>
+      <p class="footer-text" style="margin-top: 10px;">© 2025 Tzotzil Bible. Todos los derechos reservados.</p>
+    </footer>
+  </div>
+</body>
+</html>`);
+});
+
 // Static files - AFTER API routes (no cache for HTML, cache for assets)
 app.use(express.static(DIST_DIR, {
   maxAge: '0',
