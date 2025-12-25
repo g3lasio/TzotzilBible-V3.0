@@ -580,9 +580,13 @@ app.get('/', (req, res) => {
 </html>`);
 });
 
-console.log('Preloading EGW books...');
-loadEGWBooks();
-
+// Start server immediately for health checks
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running at http://0.0.0.0:${PORT}`);
+  
+  // Load EGW books in background AFTER server is ready
+  setImmediate(() => {
+    console.log('Loading EGW books in background...');
+    loadEGWBooks();
+  });
 });
