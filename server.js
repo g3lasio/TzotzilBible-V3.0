@@ -500,6 +500,229 @@ app.post('/api/egw/search', (req, res) => {
   res.json({ success: true, quotes });
 });
 
+// Privacy Policy page - dedicated URL for Google Play Store compliance
+app.get('/privacy-policy', (req, res) => {
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  res.send(`<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Política de Privacidad de Tzotzil Bible - Aplicación de estudio bíblico">
+  <title>Política de Privacidad - Tzotzil Bible</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: linear-gradient(135deg, #0a0e14 0%, #1a1f2e 100%);
+      color: #e6f3ff;
+      min-height: 100vh;
+      line-height: 1.7;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding-bottom: 30px;
+      border-bottom: 2px solid rgba(0, 243, 255, 0.3);
+    }
+    .logo {
+      width: 80px;
+      height: 80px;
+      background: rgba(0, 255, 136, 0.1);
+      border: 2px solid rgba(0, 255, 136, 0.3);
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+    }
+    h1 {
+      color: #00f3ff;
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+    .app-name {
+      color: #00ff88;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+    .last-updated {
+      color: #6b7c93;
+      font-size: 14px;
+      font-style: italic;
+    }
+    section {
+      background: rgba(20, 30, 45, 0.8);
+      border: 1px solid rgba(0, 243, 255, 0.2);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    h2 {
+      color: #00f3ff;
+      font-size: 18px;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(0, 243, 255, 0.2);
+    }
+    h3 {
+      color: #00ff88;
+      font-size: 15px;
+      margin: 16px 0 8px;
+    }
+    p {
+      color: #b8c5d4;
+      margin-bottom: 12px;
+      text-align: justify;
+    }
+    ul {
+      color: #b8c5d4;
+      margin-left: 20px;
+      margin-bottom: 12px;
+    }
+    li { margin-bottom: 6px; }
+    .highlight {
+      color: #00ff88;
+      font-weight: 600;
+    }
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 2px solid rgba(0, 243, 255, 0.3);
+    }
+    .footer-text {
+      color: #6b7c93;
+      font-style: italic;
+      font-size: 14px;
+    }
+    a { color: #00f3ff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">🛡️</div>
+      <h1>Política de Privacidad</h1>
+      <p class="app-name">Tzotzil Bible</p>
+      <p class="last-updated">Última actualización: 19 de Diciembre, 2025</p>
+    </header>
+
+    <section>
+      <h2>1. Introducción</h2>
+      <p>Tzotzil Bible ("nosotros", "nuestra aplicación") se compromete a proteger la privacidad de nuestros usuarios. Esta Política de Privacidad explica cómo recopilamos, usamos, almacenamos y protegemos su información cuando utiliza nuestra aplicación de estudio bíblico.</p>
+      <p>Al utilizar Tzotzil Bible, usted acepta las prácticas descritas en esta política. Le recomendamos leer este documento completo para comprender nuestro compromiso con su privacidad.</p>
+    </section>
+
+    <section>
+      <h2>2. Información que Recopilamos</h2>
+      <h3>2.1 Datos de Uso Local</h3>
+      <p>Almacenamos localmente en su dispositivo:</p>
+      <ul>
+        <li>Preferencias de la aplicación (tamaño de fuente, configuraciones)</li>
+        <li>Historial de conversaciones con Nevin AI</li>
+        <li>Marcadores y notas personales</li>
+        <li>Progreso de lectura bíblica</li>
+      </ul>
+      <h3>2.2 Datos Procesados por IA</h3>
+      <p>Cuando utiliza el asistente Nevin AI:</p>
+      <ul>
+        <li>Sus preguntas y consultas teológicas son enviadas a servicios externos de inteligencia artificial (Anthropic Claude) para generar respuestas.</li>
+        <li>No almacenamos sus conversaciones en servidores externos de forma permanente.</li>
+        <li>Las consultas se procesan en tiempo real y no se utilizan para entrenar modelos de IA.</li>
+      </ul>
+      <h3>2.3 Datos Técnicos</h3>
+      <p>Podemos recopilar automáticamente:</p>
+      <ul>
+        <li>Información básica del dispositivo (modelo, sistema operativo)</li>
+        <li>Reportes de errores anónimos para mejorar la estabilidad</li>
+        <li>Estadísticas agregadas de uso (sin identificación personal)</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>3. Uso de la Información</h2>
+      <p>Utilizamos la información recopilada para:</p>
+      <ul>
+        <li>Proporcionar y mejorar la funcionalidad de la aplicación</li>
+        <li>Generar respuestas teológicas personalizadas a través de Nevin AI</li>
+        <li>Guardar sus preferencias y configuraciones</li>
+        <li>Diagnosticar problemas técnicos y mejorar la estabilidad</li>
+        <li>Desarrollar nuevas funcionalidades</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>4. Compartir Información con Terceros</h2>
+      <p>Compartimos información limitada con los siguientes terceros:</p>
+      <p><span class="highlight">Anthropic (Claude AI):</span> Las consultas realizadas a Nevin AI son procesadas por la API de Anthropic Claude. Anthropic tiene su propia política de privacidad y no utiliza las consultas de API para entrenar sus modelos.</p>
+      <p>No vendemos, alquilamos ni compartimos su información personal con terceros para fines de marketing.</p>
+    </section>
+
+    <section>
+      <h2>5. Almacenamiento y Seguridad</h2>
+      <ul>
+        <li>Los datos locales se almacenan de forma segura en el almacenamiento interno de su dispositivo.</li>
+        <li>Utilizamos conexiones cifradas (HTTPS) para todas las comunicaciones con servidores externos.</li>
+        <li>No almacenamos contraseñas ni información financiera.</li>
+        <li>Implementamos medidas de seguridad estándar de la industria para proteger sus datos durante la transmisión.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>6. Retención de Datos</h2>
+      <ul>
+        <li>Los datos locales permanecen en su dispositivo hasta que desinstale la aplicación o los elimine manualmente.</li>
+        <li>Puede eliminar su historial de conversaciones con Nevin desde la sección de Ajustes.</li>
+        <li>Los datos de sesión con servicios de IA no se retienen más allá de la sesión activa.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>7. Sus Derechos</h2>
+      <p>Usted tiene derecho a:</p>
+      <ul>
+        <li>Acceder a los datos almacenados localmente en su dispositivo</li>
+        <li>Eliminar su historial de conversaciones con Nevin</li>
+        <li>Desinstalar la aplicación para eliminar todos los datos locales</li>
+        <li>Contactarnos para solicitar información sobre sus datos</li>
+        <li>Usar la aplicación sin la función de IA si lo prefiere</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>8. Menores de Edad</h2>
+      <p>Tzotzil Bible está diseñada para uso general y familiar. No recopilamos intencionalmente información personal de menores de 13 años. El contenido de la aplicación es apropiado para todas las edades y promueve valores espirituales positivos.</p>
+    </section>
+
+    <section>
+      <h2>9. Cambios a esta Política</h2>
+      <p>Podemos actualizar esta política ocasionalmente. Le notificaremos de cambios significativos a través de la aplicación. La fecha de "Última actualización" al inicio de este documento indica cuándo se realizó la última modificación.</p>
+    </section>
+
+    <section>
+      <h2>10. Contacto</h2>
+      <p>Si tiene preguntas sobre esta Política de Privacidad o sobre el manejo de sus datos, puede contactarnos en:</p>
+      <p><strong>Email:</strong> <a href="mailto:gelasio@chyrris.com">gelasio@chyrris.com</a></p>
+      <p><strong>Web:</strong> <a href="https://bible.chyrris.com">https://bible.chyrris.com</a></p>
+    </section>
+
+    <footer>
+      <p class="footer-text">Su privacidad es nuestra prioridad</p>
+      <p class="footer-text" style="margin-top: 10px;">© 2025 Tzotzil Bible. Todos los derechos reservados.</p>
+    </footer>
+  </div>
+</body>
+</html>`);
+});
+
 // Static files - AFTER API routes (no cache for HTML, cache for assets)
 app.use(express.static(DIST_DIR, {
   maxAge: '0',
