@@ -1,26 +1,51 @@
 language = "nodejs"
-run = "node server.js"
+run = "cd temp_nevin && npx expo start --web --port 5000 --host 0.0.0.0"
 modules = ["nodejs-20"]
 
 [deployment]
-build = ["sh", "-c", "cd server && npm install"]
-run = ["sh", "-c", "cd server && node server.js"]
+run = ["sh", "-c", "node server.js"]
+deploymentTarget = "cloudrun"
+build = ["sh", "-c", "npx expo export --platform web"]
+publicDir = "dist"
 
-[[ports]]
-localPort = 3001
-externalPort = 3001
-
-[[ports]]
-localPort = 3002
-externalPort = 3002
-Vrftg454gttl54
 [[ports]]
 localPort = 5000
 externalPort = 80
 
+[[ports]]
+localPort = 5001
+externalPort = 5000
+
+[[ports]]
+localPort = 8000
+externalPort = 8000
+
+[[ports]]
+localPort = 8080
+externalPort = 8080
+
+[[ports]]
+localPort = 8081
+externalPort = 8081
+
+[[ports]]
+localPort = 8082
+externalPort = 3001
+
+[[ports]]
+localPort = 8083
+externalPort = 3003
+
+[[ports]]
+localPort = 19006
+externalPort = 3000
+
+[[ports]]
+localPort = 19007
+externalPort = 3002
+
 [nix]
 channel = "stable-24_05"
-packages = ["zulu11", "imagemagick"]
 
 [workflows]
 runButton = "Project"
@@ -32,15 +57,11 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "node server.js"
+args = "cd temp_nevin && npx expo start --web --port 5000 --host 0.0.0.0"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
 args = "Expo Web"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
-args = "Nevin Backend Test"
 
 [[workflows.workflow]]
 name = "Expo Web"
@@ -48,23 +69,11 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "node server.js"
+args = "npx expo start --web --port 5000 --host 0.0.0.0"
 waitForPort = 5000
 
 [workflows.workflow.metadata]
 outputType = "webview"
-
-[[workflows.workflow]]
-name = "Nevin Backend Test"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "cd nevin-backend && npm install && node server.js"
-waitForPort = 5000
-
-[workflows.workflow.metadata]
-outputType = "console"
 
 [agent]
 integrations = ["perplexity_v0:1.0.0", "python_anthropic:1.0.0"]
