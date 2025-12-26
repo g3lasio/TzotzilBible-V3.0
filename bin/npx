@@ -1,0 +1,7 @@
+#!/bin/bash
+# Shim to intercept npx expo start and run our server instead
+if [[ "$*" == *"expo start"* ]]; then
+  exec node server.js
+else
+  exec /nix/store/*/bin/npx "$@"
+fi
