@@ -11,7 +11,9 @@
     "export:web": "expo export:web",
     "serve:web": "npx serve@14 dist -l 0.0.0.0:5000 -s",
     "prod:web": "npm run export:web && npm run serve:web",
-    "dev": "expo start --web --port 5000 --host 0.0.0.0"
+    "dev": "expo start --web --port 5000 --host 0.0.0.0",
+    "build:deploy": "npm install --production && npx expo export --platform web",
+    "serve:production": "node server.js"
   },
   "dependencies": {
     "@babel/core": "^7.28.5",
