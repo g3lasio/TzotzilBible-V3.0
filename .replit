@@ -1,11 +1,11 @@
 language = "nodejs"
-run = "cd temp_nevin && npx expo start --web --port 5000 --host 0.0.0.0"
+run = "npx expo start --web --port 5000 --host 0.0.0.0"
 modules = ["nodejs-20"]
 
 [deployment]
 run = ["sh", "-c", "node server.js"]
 deploymentTarget = "cloudrun"
-build = ["sh", "-c", "npx expo export --platform web"]
+build = ["sh", "-c", "npm install --production && npx expo export --platform web"]
 publicDir = "dist"
 
 [[ports]]
@@ -57,7 +57,7 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd temp_nevin && npx expo start --web --port 5000 --host 0.0.0.0"
+args = "npx expo start --web --port 5000 --host 0.0.0.0"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"

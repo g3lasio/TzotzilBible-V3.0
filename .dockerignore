@@ -1,43 +1,48 @@
-# React Native / Expo - EXCLUDE completamente temp_nevin para Cloud Run deployment
-# Cloud Run solo necesita el backend Flask, no la app móvil React Native
-temp_nevin/
+# Development files
+.git
+.github
+.replit
+.replitignore
+*.md
+BUILD_INSTRUCTIONS.md
+build-instructions.md
+replit.md
 
 # Android builds
 *.apk
 *.aab
-android/
-**/android/build/
-**/android/.gradle/
-**/android/app/build/
+android/build
+android/.gradle
+android/app/build
 
-# iOS builds (si existen)
-ios/
-**/ios/build/
-**/ios/Pods/
+# iOS builds
+ios/build
+ios/Pods
 
 # Node modules - se reinstalarán en deployment
-node_modules/
-**/node_modules/
+node_modules
+
+# Expo development
+.expo
+.expo-shared
 
 # Build artifacts
-build/
-dist/
+build
 *.log
-*.lock
 
-# Development files
-.expo/
-.expo-shared/
-*.jks
-*.keystore
+# Development scripts
+build-apk.sh
+build.sh
+start-dev.sh
+start-server.sh
 
 # Testing
-coverage/
-.nyc_output/
+coverage
+.nyc_output
 
 # IDE
-.vscode/
-.idea/
+.vscode
+.idea
 *.swp
 *.swo
 *~
@@ -46,72 +51,31 @@ coverage/
 .DS_Store
 Thumbs.db
 
-# Git
-.git/
-.gitignore
-
-# IMPORTANTE: NO excluir archivos FAISS - Nevin AI los necesita en runtime
-# Nevin_AI/nevin_knowledge/*.faiss
-# Nevin_AI/nevin_knowledge/*.pkl
-# other_authors/*.faiss
-# other_authors/*.pkl
-
 # Temporary files
-tmp/
-temp/
+tmp
+temp
 *.tmp
 
-# Logs
-*.log
-logs/
-app.log
-
-# Database files (no necesarias para deployment inicial)
-instance/*.db
-*.db
-bible_app.db
-biblia_egw.db
-
-# Python cache
-__pycache__/
+# Python cache (si existe)
+__pycache__
 *.py[cod]
 *$py.class
-.pytest_cache/
+.pytest_cache
 
-# Migrations (optional - comentar si se necesitan)
-# migrations/
+# Environment files
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Backend separado (no necesario si usamos el de la raíz)
+nevin-backend
 
 # Attached assets que no son necesarios para producción
-attached_assets/
-
-# IMPORTANTE: NO excluir nevin_knowledge/ - contiene FAISS indexes necesarios para Nevin AI
-# nevin_knowledge/
-
-# Environment files y secrets
-.env
-.env.*
-.python-version
-
-# Test directories
-tests/
-test/
-
-# Python caches adicionales
-.mypy_cache/
-.ruff_cache/
-.cache/
-
-# Static seminars si no son necesarios
-# static/seminars/
+attached_assets
 
 # Virtual environments
-.venv/
-venv/
-env/
-ENV/
-env.bak/
-venv.bak/
-
-# Large CSV files (comentar si son necesarios)
-# Tzotzil_database.csv
-# *.csv
+.venv
+venv
+env
+ENV

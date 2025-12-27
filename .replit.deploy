@@ -1,0 +1,39 @@
+# Replit Deployment Configuration for TzotzilBible
+
+## Deployment Strategy
+
+This project uses a **monolithic deployment** approach where:
+- The Express server (server.js) serves both the static web app and API endpoints
+- The build process installs dependencies and exports the Expo web bundle
+- Cloud Run hosts the complete application
+
+## Build Process
+
+1. `npm install --production` - Installs production dependencies (including Express)
+2. `npx expo export --platform web` - Builds the web bundle to dist/
+3. The dist/ folder is set as publicDir for static file serving
+
+## Runtime Process
+
+1. `node server.js` starts the Express server
+2. Server checks if dist/index.html exists, builds if missing
+3. Server loads EGW books in background
+4. Server serves static files from dist/ and API endpoints
+
+## Environment Variables Required
+
+- `PORT` - Port for the server (default: 5000)
+- `ANTHROPIC_API_KEY` - API key for Claude AI (optional, can be provided by client)
+
+## Health Check
+
+The server responds to health checks immediately on startup at:
+- GET / - Serves the web app
+- GET /health - Health check endpoint (if implemented)
+
+## Important Notes
+
+- The server.js file MUST be included in deployment
+- Express dependency MUST be installed during build
+- EGW books are loaded asynchronously after server starts
+- The dist/ folder is generated during build and served at runtime
