@@ -56,18 +56,30 @@ export class MomentsService {
   }
 
   static async createMoment(): Promise<Moment> {
-    const newMoment: Moment = {
-      id: Date.now().toString(),
-      title: 'Nueva reflexión',
-      themes: [],
-      messages: [],
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
+    try {
+      const newMoment: Moment = {
+        id: Date.now().toString(),
+        title: 'Nueva reflexión',
+        themes: [],
+        messages: [],
+        createdAt: new Date(),
+        updatedAt: new Date()
+      };
 
-    await this.saveMoment(newMoment);
-    await this.setActiveMoment(newMoment.id);
-    return newMoment;
+      await this.saveMoment(newMoment);
+      await this.setActiveMoment(newMoment.id);
+      
+      // Verificar que se guardó correctamente
+      const savedMoment = await this.getMoment(newMoment.id);
+      if (!savedMoment) {
+        throw new Error('Failed to verify saved moment');
+      }
+      
+      return newMoment;
+    } catch (error) {
+      console.error('Error in createMoment:', error);
+      throw new Error('No se pudo crear el momento: ' + (error as Error).message);
+    }
   }
 
   static async saveMoment(moment: Moment): Promise<void> {
