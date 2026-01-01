@@ -358,10 +358,40 @@ export default function NevinScreen() {
   };
 
   const handleNewMoment = async () => {
-    const newMoment = await MomentsService.createMoment();
-    setCurrentMoment(newMoment);
-    setMomentTitle(newMoment.title);
-    setMessages([]);
+    // Prevenir múltiples ejecuciones
+    if (loading) return;
+    
+    try {
+      setLoading(true);
+      
+      // Validar que el servicio esté disponible
+      if (!MomentsService) {
+        throw new Error('Servicio de momentos no disponible');
+      }
+      
+      // Crear nuevo momento
+      const newMoment = await MomentsService.createMoment();
+      
+      // Validar que se creó correctamente
+      if (!newMoment || !newMoment.id) {
+        throw new Error('No se pudo crear el momento');
+      }
+      
+      // Actualizar estado
+      setCurrentMoment(newMoment);
+      setMomentTitle(newMoment.title);
+      setMessages([]);
+      
+    } catch (error: any) {
+      console.error('Error creating new moment:', error);
+      Alert.alert(
+        'Error',
+        'No se pudo crear una nueva conversación. Por favor, intenta de nuevo.',
+        [{ text: 'OK' }]
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleOpenMoments = () => {
@@ -466,14 +496,19 @@ export default function NevinScreen() {
         <View style={styles.inputContainer}>
           <View style={styles.inputRow}>
             <TouchableOpacity 
-              style={styles.newChatButton}
+              style={[styles.newChatButton, loading && styles.newChatButtonDisabled]}
               onPress={handleNewMoment}
+              disabled={loading}
             >
-              <MaterialCommunityIcons 
-                name="plus" 
-                size={20} 
-                color="#00ff88" 
-              />
+              {loading ? (
+                <ActivityIndicator size="small" color="#00ff88" />
+              ) : (
+                <MaterialCommunityIcons 
+                  name="plus" 
+                  size={20} 
+                  color="#00ff88" 
+                />
+              )}
             </TouchableOpacity>
             <TextInput
               value={inputMessage}
@@ -710,6 +745,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderColor: 'rgba(0, 255, 136, 0.3)',
+  },
+  newChatButtonDisabled: {
+    opacity: 0.5,
   },
   input: {
     flex: 1,
