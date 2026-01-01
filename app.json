@@ -2,7 +2,7 @@
   "expo": {
     "name": "TzotzilBible",
     "slug": "tzotzil-bible",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -23,14 +23,15 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.chyrris.tzotzilbible",
-      "buildNumber": "29"
+      "buildNumber": "30"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#1a1a2e"
       },
-      "package": "com.chyrris.tzotzilbible"
+      "package": "com.chyrris.tzotzilbible",
+      "versionCode": 2
     },
     "plugins": [
       [
