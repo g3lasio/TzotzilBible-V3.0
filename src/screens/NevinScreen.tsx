@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, Alert, Animated, TouchableOpacity, Dimensions, Clipboard, Share } from 'react-native';
+import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, Alert, Animated, TouchableOpacity, Dimensions } from 'react-native';
+import * as Clipboard from 'expo-clipboard';
 import { Text, TextInput, ActivityIndicator, IconButton } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -520,8 +521,8 @@ export default function NevinScreen() {
                     <View style={styles.messageActions}>
                       <TouchableOpacity
                         style={styles.messageActionButton}
-                        onPress={() => {
-                          Clipboard.setString(message.content);
+                        onPress={async () => {
+                          await Clipboard.setStringAsync(message.content);
                           Alert.alert('✓ Copiado', 'Mensaje copiado al portapapeles');
                         }}
                       >
@@ -531,10 +532,26 @@ export default function NevinScreen() {
                         style={styles.messageActionButton}
                         onPress={async () => {
                           try {
-                            await Share.share({
-                              message: `Nevin responde:\n\n${message.content}\n\n— Tzotzil Bible App`,
-                              title: 'Respuesta de Nevin'
-                            });
+                            const shareText = `Nevin responde:\n\n${message.content}\n\n— Tzotzil Bible App`;
+                            
+                            // Web: usar Navigator.share si está disponible
+                            if (Platform.OS === 'web' && typeof navigator !== 'undefined' && navigator.share) {
+                              await navigator.share({
+                                title: 'Respuesta de Nevin',
+                                text: shareText
+                              });
+                            } else if (Platform.OS === 'web') {
+                              // Fallback para web: copiar al portapapeles
+                              await Clipboard.setStringAsync(shareText);
+                              Alert.alert('✓ Copiado', 'Texto copiado al portapapeles para compartir');
+                            } else {
+                              // Móvil: usar Share API nativa (sin importar)
+                              const { Share } = await import('react-native');
+                              await Share.share({
+                                message: shareText,
+                                title: 'Respuesta de Nevin'
+                              });
+                            }
                           } catch (error) {
                             console.error('Error sharing:', error);
                           }
