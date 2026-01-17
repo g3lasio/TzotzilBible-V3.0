@@ -57,6 +57,13 @@ export class MomentsService {
 
   static async createMoment(): Promise<Moment> {
     try {
+      console.log('MomentsService.createMoment: Starting');
+      
+      // Verificar que AsyncStorage está disponible
+      if (!AsyncStorage) {
+        throw new Error('AsyncStorage no está disponible');
+      }
+      
       const newMoment: Moment = {
         id: Date.now().toString(),
         title: 'Nueva reflexión',
@@ -65,19 +72,40 @@ export class MomentsService {
         createdAt: new Date(),
         updatedAt: new Date()
       };
+      
+      console.log('MomentsService.createMoment: Created moment object', newMoment.id);
 
-      await this.saveMoment(newMoment);
-      await this.setActiveMoment(newMoment.id);
+      // Guardar con timeout
+      await Promise.race([
+        this.saveMoment(newMoment),
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Timeout guardando momento')), 5000)
+        )
+      ]);
+      
+      console.log('MomentsService.createMoment: Moment saved');
+      
+      await Promise.race([
+        this.setActiveMoment(newMoment.id),
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Timeout activando momento')), 5000)
+        )
+      ]);
+      
+      console.log('MomentsService.createMoment: Active moment set');
       
       // Verificar que se guardó correctamente
       const savedMoment = await this.getMoment(newMoment.id);
       if (!savedMoment) {
-        throw new Error('Failed to verify saved moment');
+        throw new Error('No se pudo verificar el momento guardado');
       }
+      
+      console.log('MomentsService.createMoment: Verification successful');
       
       return newMoment;
     } catch (error) {
-      console.error('Error in createMoment:', error);
+      console.error('MomentsService.createMoment: Error:', error);
+      console.error('MomentsService.createMoment: Error details:', (error as Error).stack);
       throw new Error('No se pudo crear el momento: ' + (error as Error).message);
     }
   }

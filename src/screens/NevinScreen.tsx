@@ -359,21 +359,37 @@ export default function NevinScreen() {
 
   const handleNewMoment = async () => {
     // Prevenir múltiples ejecuciones
-    if (loading) return;
+    if (loading) {
+      console.log('handleNewMoment: Already loading, ignoring tap');
+      return;
+    }
+    
+    console.log('handleNewMoment: Starting new moment creation');
     
     try {
       setLoading(true);
       
       // Validar que el servicio esté disponible
       if (!MomentsService) {
+        console.error('handleNewMoment: MomentsService not available');
         throw new Error('Servicio de momentos no disponible');
       }
       
-      // Crear nuevo momento
-      const newMoment = await MomentsService.createMoment();
+      console.log('handleNewMoment: Creating moment...');
+      
+      // Crear nuevo momento con timeout para evitar cuelgues
+      const createPromise = MomentsService.createMoment();
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Timeout creating moment')), 10000)
+      );
+      
+      const newMoment = await Promise.race([createPromise, timeoutPromise]) as Moment;
+      
+      console.log('handleNewMoment: Moment created successfully', newMoment.id);
       
       // Validar que se creó correctamente
       if (!newMoment || !newMoment.id) {
+        console.error('handleNewMoment: Invalid moment returned');
         throw new Error('No se pudo crear el momento');
       }
       
@@ -382,14 +398,31 @@ export default function NevinScreen() {
       setMomentTitle(newMoment.title);
       setMessages([]);
       
-    } catch (error: any) {
-      console.error('Error creating new moment:', error);
+      console.log('handleNewMoment: State updated successfully');
+      
+      // Mostrar feedback visual de éxito
       Alert.alert(
-        'Error',
-        'No se pudo crear una nueva conversación. Por favor, intenta de nuevo.',
+        'Nueva conversación',
+        'Se creó una nueva conversación exitosamente',
         [{ text: 'OK' }]
       );
+      
+    } catch (error: any) {
+      console.error('handleNewMoment: Error creating new moment:', error);
+      console.error('handleNewMoment: Error stack:', error.stack);
+      
+      // Mensaje de error más descriptivo
+      const errorMessage = error.message || 'Error desconocido';
+      Alert.alert(
+        'Error al crear conversación',
+        `No se pudo crear una nueva conversación: ${errorMessage}. Por favor, verifica que tienes espacio de almacenamiento disponible e intenta de nuevo.`,
+        [
+          { text: 'Cancelar', style: 'cancel' },
+          { text: 'Reintentar', onPress: () => handleNewMoment() }
+        ]
+      );
     } finally {
+      console.log('handleNewMoment: Cleaning up, setting loading to false');
       setLoading(false);
     }
   };
@@ -499,6 +532,11 @@ export default function NevinScreen() {
               style={[styles.newChatButton, loading && styles.newChatButtonDisabled]}
               onPress={handleNewMoment}
               disabled={loading}
+              activeOpacity={0.7}
+              accessible={true}
+              accessibilityLabel="Crear nueva conversación"
+              accessibilityHint="Toca para iniciar una nueva conversación con Nevin"
+              accessibilityRole="button"
             >
               {loading ? (
                 <ActivityIndicator size="small" color="#00ff88" />
