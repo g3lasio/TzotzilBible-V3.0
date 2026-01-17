@@ -16,7 +16,7 @@ export default {
     ios: {
       supportsTablet: true,
       bundleIdentifier: "com.chyrris.tzotzilbible",
-      buildNumber: "31",
+      buildNumber: "32",
       infoPlist: {
         CFBundleDisplayName: "Tzotzil Bible",
         UIBackgroundModes: [],
