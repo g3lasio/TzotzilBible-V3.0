@@ -3,9 +3,8 @@ run = "npx expo start --web --port 5000 --host 0.0.0.0"
 modules = ["nodejs-20"]
 
 [deployment]
-run = ["sh", "-c", "npm run production"]
+run = ["sh", "-c", "npm install --omit=dev && node server.js"]
 deploymentTarget = "cloudrun"
-build = ["sh", "-c", "npm install && npx expo export --platform web"]
 publicDir = "dist"
 
 [[ports]]
