@@ -2,10 +2,10 @@ language = "nodejs"
 run = "npx expo start --web --port 5000 --host 0.0.0.0"
 modules = ["nodejs-20"]
 
-[deployment]
-run = ["sh", "-c", "npm install --omit=dev && node server.js"]
-deploymentTarget = "cloudrun"
-publicDir = "dist"
+# Deployment deshabilitado
+# Este proyecto usa EAS para builds móviles (iOS/Android)
+# Replit se usa solo para desarrollo y testing
+# Para builds de producción: eas build --platform ios/android
 
 [[ports]]
 localPort = 5000
