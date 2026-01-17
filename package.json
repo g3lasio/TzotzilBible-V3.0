@@ -13,7 +13,9 @@
     "prod:web": "npm run export:web && npm run serve:web",
     "dev": "expo start --web --port 5000 --host 0.0.0.0",
     "build:deploy": "npm install && npx expo export --platform web",
-    "serve:production": "node server.js"
+    "prebuild": "node prebuild.js",
+    "serve:production": "node server.js",
+    "production": "node prebuild.js && node server.js"
   },
   "dependencies": {
     "@babel/core": "^7.28.5",
