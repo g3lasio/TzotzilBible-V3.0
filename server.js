@@ -25,6 +25,49 @@ const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
 const ANTHROPIC_MODEL = 'claude-sonnet-4-20250514';
 const ANTHROPIC_TIMEOUT_MS = 60000; // 60 second timeout for AI responses
 
+// Mapeo de abreviaturas estándar de libros de Elena G. White
+const EGW_BOOK_ABBREVIATIONS = {
+  'El Conflicto de los Siglos': 'CS',
+  'El Deseado de Todas las Gentes': 'DTG',
+  'El Camino a Cristo': 'CC',
+  'Patriarcas y Profetas': 'PP',
+  'Profetas y Reyes': 'PR',
+  'Los Hechos de los Apóstoles': 'HA',
+  'El Discurso Maestro de Jesucristo': 'DMJ',
+  'Mensajes para los Jóvenes': 'MJ',
+  'La Educación': 'Ed',
+  'El Ministerio de Curación': 'MC',
+  'Consejos sobre la Salud': 'CSa',
+  'Consejos Sobre el Régimen Alimenticio': 'CRA',
+  'Joyas de los Testimonios': 'JT',
+  'El Hogar Cristiano': 'HC',
+  'Obreros Evangélicos': 'OE',
+  'Servicio Cristiano': 'SC',
+  'Maranatha': 'Mar',
+  'Eventos de los Últimos Días': 'EUD',
+  'Consejos para la Iglesia': 'CI',
+  'Consejos para los Maestros': 'CM',
+  'Consejos sobre Mayoréa Cristiana': 'CMC',
+  'Cristo Nuestro Salvador': 'CNS',
+  'Cristo en Su Santuario': 'CSS',
+  'A Fin de Conocerle': 'AFC',
+  'Alza tus Ojos': 'ATO',
+  'Cada Día con Dios': 'CDC',
+  'Cartas a Jóvenes Enamorados': 'CJE',
+  'Conducción del Niño': 'CN',
+  'Conflicto y Valor': 'CV',
+  'Consejos Sobre la Obra de la Escuela Sabatica': 'COES',
+  'Dios nos Cuida': 'DNC',
+  'De la Cuidad al Campo': 'DCC',
+  'El Colportor Evangélico': 'CE',
+  'El Conflicto Inminente': 'CI'
+};
+
+// Función para obtener la abreviatura de un libro
+function getBookAbbreviation(bookName) {
+  return EGW_BOOK_ABBREVIATIONS[bookName] || bookName;
+}
+
 // Helper function for fetch with timeout
 async function fetchWithTimeout(url, options, timeoutMs = ANTHROPIC_TIMEOUT_MS) {
   const controller = new AbortController();
@@ -82,6 +125,15 @@ USO DE FUENTES:
 - APOYO SECUNDARIO: Puedes citar escritos de Elena G. de White como referencia histórica/espiritual, pero nunca como autoridad principal
 - APOYO ADICIONAL: Referencias históricas, arqueológicas o científicas cuando refuercen el punto bíblico
 - Siempre ilumina un texto con otros textos bíblicos relacionados (especialmente del Nuevo Testamento)
+
+CITACIÓN DE ELENA G. WHITE (MUY IMPORTANTE):
+- SIEMPRE cita con el formato estándar: [Abreviatura] p. [número]
+- Ejemplos correctos: "CS p. 657", "DTG p. 19", "PP p. 52"
+- NUNCA uses el nombre completo del libro en la citación
+- Cuando cites textualmente, usa comillas y la referencia completa
+- Ejemplo: "La oración es la llave en la mano de la fe" (CC p. 94)
+- Las citas de EGW son SOLO comentarios adicionales, NO autoridad doctrinal
+- Si recibes una cita EGW en el contexto, úsala para enriquecer tu respuesta pero SIEMPRE prioriza la Biblia
 
 CORRECCIÓN AMOROSA:
 - Si el usuario tiene ideas contrarias a la Biblia, corrígelo AMABLEMENTE pero con firmeza
@@ -195,7 +247,8 @@ app.post('/api/nevin/chat', async (req, res) => {
       const egwQuotes = searchEGWBooks(message, 1);
       if (egwQuotes.length > 0) {
         const q = egwQuotes[0];
-        egwContext = `\n\n[Cita EGW opcional: "${q.content.substring(0, 150)}..." - ${q.book}]`;
+        // Formato correcto de citación: [Abreviatura] p. [número]
+        egwContext = `\n\n[Referencia EGW disponible para enriquecer tu respuesta]:\n"${q.content}"\n(${q.bookAbbr} p. ${q.page})\n\nRecuerda: Usa esta cita SOLO como comentario adicional, NO como autoridad doctrinal. La Biblia es siempre la fuente principal.`;
       }
     }
 
@@ -466,10 +519,15 @@ function searchEGWBooks(query, maxResults = 3) {
       }
       
       if (score > 0) {
+        // Obtener contenido completo de la página (máximo 1000 caracteres para no saturar)
+        const fullContent = page.content.join(' ').substring(0, 1000);
+        const abbreviation = getBookAbbreviation(book.name);
+        
         results.push({
           book: book.name,
+          bookAbbr: abbreviation,
           page: page.page,
-          content: page.content.slice(0, 5).join(' ').substring(0, 300),
+          content: fullContent,
           relevance: score
         });
       }
