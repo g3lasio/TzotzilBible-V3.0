@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, Alert, Animated, TouchableOpacity, Dimensions } from 'react-native';
+import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, Alert, Animated, TouchableOpacity, Dimensions, Clipboard, Share } from 'react-native';
 import { Text, TextInput, ActivityIndicator, IconButton } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -512,9 +512,39 @@ export default function NevinScreen() {
                     linkColor="#00f3ff"
                   />
                 )}
-                <Text style={[styles.timestamp, message.isUser && styles.userTimestamp]}>
-                  {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                </Text>
+                <View style={styles.messageFooter}>
+                  <Text style={[styles.timestamp, message.isUser && styles.userTimestamp]}>
+                    {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </Text>
+                  {!message.isUser && (
+                    <View style={styles.messageActions}>
+                      <TouchableOpacity
+                        style={styles.messageActionButton}
+                        onPress={() => {
+                          Clipboard.setString(message.content);
+                          Alert.alert('✓ Copiado', 'Mensaje copiado al portapapeles');
+                        }}
+                      >
+                        <MaterialCommunityIcons name="content-copy" size={14} color="#6b7c93" />
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={styles.messageActionButton}
+                        onPress={async () => {
+                          try {
+                            await Share.share({
+                              message: `Nevin responde:\n\n${message.content}\n\n— Tzotzil Bible App`,
+                              title: 'Respuesta de Nevin'
+                            });
+                          } catch (error) {
+                            console.error('Error sharing:', error);
+                          }
+                        }}
+                      >
+                        <MaterialCommunityIcons name="share-variant" size={14} color="#6b7c93" />
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                </View>
               </View>
             </View>
           ))}
@@ -750,6 +780,21 @@ const styles = StyleSheet.create({
   },
   userTimestamp: {
     color: 'rgba(10, 14, 20, 0.6)',
+  },
+  messageFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 6,
+  },
+  messageActions: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  messageActionButton: {
+    padding: 4,
+    borderRadius: 4,
+    backgroundColor: 'rgba(107, 124, 147, 0.1)',
   },
   typingIndicator: {
     flexDirection: 'row',

@@ -99,46 +99,7 @@ export default function SettingsScreen() {
     <MainLayout title="Ajustes">
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         
-        {/* Apariencia */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>APARIENCIA</Text>
-          <View style={styles.settingCard}>
-            <LinearGradient
-              colors={['rgba(20, 30, 45, 0.8)', 'rgba(15, 25, 40, 0.9)']}
-              style={styles.settingGradient}
-            >
-              <View style={styles.settingRow}>
-                <View style={styles.settingLeft}>
-                  <MaterialCommunityIcons name="format-size" size={24} color="#00f3ff" />
-                  <View style={styles.settingInfo}>
-                    <Text style={styles.settingTitle}>Tamaño de Fuente</Text>
-                    <Text style={styles.settingDesc}>{getFontSizeLabel()}</Text>
-                  </View>
-                </View>
-                <View style={styles.fontSizeControl}>
-                  <TouchableOpacity 
-                    style={[styles.fontButton, fontSize === 'small' && styles.fontButtonActive]}
-                    onPress={() => handleFontSizeChange('small')}
-                  >
-                    <Text style={[styles.fontButtonText, fontSize === 'small' && styles.fontButtonTextActive]}>A</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity 
-                    style={[styles.fontButton, fontSize === 'medium' && styles.fontButtonActive]}
-                    onPress={() => handleFontSizeChange('medium')}
-                  >
-                    <Text style={[styles.fontButtonTextMedium, fontSize === 'medium' && styles.fontButtonTextActive]}>A</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity 
-                    style={[styles.fontButton, fontSize === 'large' && styles.fontButtonActive]}
-                    onPress={() => handleFontSizeChange('large')}
-                  >
-                    <Text style={[styles.fontButtonTextLarge, fontSize === 'large' && styles.fontButtonTextActive]}>A</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </LinearGradient>
-          </View>
-        </View>
+        {/* Nota: El ajustador de tamaño de fuente se ha movido al menú de opciones de versículos */}
 
         {/* Datos */}
         <View style={styles.section}>

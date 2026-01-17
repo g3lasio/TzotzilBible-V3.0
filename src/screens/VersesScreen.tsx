@@ -53,6 +53,7 @@ const toggleToDisplayMode = (position: TogglePosition): DisplayMode => {
 const FAVORITES_KEY = 'verse_favorites';
 const SELECTED_VERSION_KEY = 'selected_secondary_version';
 const DISPLAY_MODE_KEY = 'display_mode';
+const FONT_SIZE_KEY = 'verse_font_size';
 
 export default function VersesScreen() {
   const route = useRoute<VersesRouteProp>();
@@ -70,6 +71,7 @@ export default function VersesScreen() {
   const [menuVisible, setMenuVisible] = useState(false);
   const [selectedVerse, setSelectedVerse] = useState<BibleVerse | null>(null);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const [fontSize, setFontSize] = useState<'small' | 'medium' | 'large'>('medium');
 
   const loadVerses = async () => {
     try {
@@ -87,9 +89,10 @@ export default function VersesScreen() {
 
   const loadPreferences = async () => {
     try {
-      const [savedVersion, savedDisplayMode] = await Promise.all([
+      const [savedVersion, savedDisplayMode, savedFontSize] = await Promise.all([
         AsyncStorage.getItem(SELECTED_VERSION_KEY),
         AsyncStorage.getItem(DISPLAY_MODE_KEY),
+        AsyncStorage.getItem(FONT_SIZE_KEY),
       ]);
       
       let normalizedVersion = DEFAULT_SECONDARY_VERSION;
@@ -105,6 +108,10 @@ export default function VersesScreen() {
       
       if (savedDisplayMode !== null && ['tzotzil', 'both', 'secondary'].includes(savedDisplayMode)) {
         setDisplayMode(savedDisplayMode as DisplayMode);
+      }
+      
+      if (savedFontSize !== null && ['small', 'medium', 'large'].includes(savedFontSize)) {
+        setFontSize(savedFontSize as 'small' | 'medium' | 'large');
       }
     } catch (error) {
       console.error('Error loading preferences:', error);
@@ -251,6 +258,22 @@ export default function VersesScreen() {
 
   const currentSecondaryVersion = getAvailableSecondaryVersion(selectedSecondaryVersion);
 
+  const getFontSizeValue = () => {
+    switch (fontSize) {
+      case 'small': return { normal: 14, parallel: 11 };
+      case 'large': return { normal: 18, parallel: 15 };
+      default: return { normal: 16, parallel: 13 };
+    }
+  };
+
+  const getLineHeightValue = () => {
+    switch (fontSize) {
+      case 'small': return { normal: 22, parallel: 18 };
+      case 'large': return { normal: 30, parallel: 24 };
+      default: return { normal: 26, parallel: 21 };
+    }
+  };
+
   const renderVerseSingle = (verse: BibleVerse, mode: 'tzotzil' | 'secondary') => {
     const verseText = mode === 'tzotzil' 
       ? verse.text_tzotzil 
@@ -294,7 +317,7 @@ export default function VersesScreen() {
           </View>
           
           <View style={styles.textBlock}>
-            <Text style={styles.verseText}>{verseText}</Text>
+            <Text style={[styles.verseText, { fontSize: getFontSizeValue().normal, lineHeight: getLineHeightValue().normal }]}>{verseText}</Text>
           </View>
         </LinearGradient>
       </TouchableOpacity>
@@ -343,7 +366,7 @@ export default function VersesScreen() {
           
           <View style={styles.parallelColumns}>
             <View style={styles.parallelColumnLeft}>
-              <Text style={styles.parallelVerseText}>{verse.text_tzotzil}</Text>
+              <Text style={[styles.parallelVerseText, { fontSize: getFontSizeValue().parallel, lineHeight: getLineHeightValue().parallel }]}>{verse.text_tzotzil}</Text>
             </View>
             
             <View style={styles.holographicDividerContainer}>
@@ -355,7 +378,7 @@ export default function VersesScreen() {
             </View>
             
             <View style={styles.parallelColumnRight}>
-              <Text style={styles.parallelVerseText}>{getVerseText(verse, secondaryVersion) || '-'}</Text>
+              <Text style={[styles.parallelVerseText, { fontSize: getFontSizeValue().parallel, lineHeight: getLineHeightValue().parallel }]}>{getVerseText(verse, secondaryVersion) || '-'}</Text>
             </View>
           </View>
         </LinearGradient>
@@ -502,6 +525,40 @@ export default function VersesScreen() {
                     {selectedVerse && isFavorite(selectedVerse) ? 'Quitar de favoritos' : 'Marcar como favorito'}
                   </Text>
                 </TouchableOpacity>
+
+                <View style={styles.menuItem}>
+                  <MaterialCommunityIcons name="format-size" size={20} color="#00f3ff" />
+                  <Text style={styles.menuItemText}>Tamaño de fuente</Text>
+                  <View style={styles.fontSizeControl}>
+                    <TouchableOpacity 
+                      style={[styles.fontButton, fontSize === 'small' && styles.fontButtonActive]}
+                      onPress={async () => {
+                        setFontSize('small');
+                        await AsyncStorage.setItem(FONT_SIZE_KEY, 'small');
+                      }}
+                    >
+                      <Text style={[styles.fontButtonText, fontSize === 'small' && styles.fontButtonTextActive]}>A</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                      style={[styles.fontButton, fontSize === 'medium' && styles.fontButtonActive]}
+                      onPress={async () => {
+                        setFontSize('medium');
+                        await AsyncStorage.setItem(FONT_SIZE_KEY, 'medium');
+                      }}
+                    >
+                      <Text style={[styles.fontButtonTextMedium, fontSize === 'medium' && styles.fontButtonTextActive]}>A</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                      style={[styles.fontButton, fontSize === 'large' && styles.fontButtonActive]}
+                      onPress={async () => {
+                        setFontSize('large');
+                        await AsyncStorage.setItem(FONT_SIZE_KEY, 'large');
+                      }}
+                    >
+                      <Text style={[styles.fontButtonTextLarge, fontSize === 'large' && styles.fontButtonTextActive]}>A</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
 
                 <TouchableOpacity
                   style={[styles.menuItem, styles.menuItemLast]}
@@ -1023,5 +1080,43 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: '#9b59b6',
     fontWeight: '600',
+  },
+  fontSizeControl: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginLeft: 'auto',
+  },
+  fontButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 6,
+    backgroundColor: 'rgba(0, 243, 255, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 243, 255, 0.2)',
+  },
+  fontButtonActive: {
+    backgroundColor: 'rgba(0, 255, 136, 0.2)',
+    borderColor: '#00ff88',
+  },
+  fontButtonText: {
+    fontSize: 10,
+    color: '#6b7c93',
+    fontWeight: 'bold',
+  },
+  fontButtonTextMedium: {
+    fontSize: 14,
+    color: '#6b7c93',
+    fontWeight: 'bold',
+  },
+  fontButtonTextLarge: {
+    fontSize: 18,
+    color: '#6b7c93',
+    fontWeight: 'bold',
+  },
+  fontButtonTextActive: {
+    color: '#00ff88',
   },
 });
