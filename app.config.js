@@ -12,10 +12,11 @@ export default {
       backgroundColor: "#0a0e14",
     },
     assetBundlePatterns: ["**/*"],
+    platforms: ["ios", "android", "web"],
     ios: {
       supportsTablet: true,
       bundleIdentifier: "com.chyrris.tzotzilbible",
-      buildNumber: "28",
+      buildNumber: "31",
       infoPlist: {
         CFBundleDisplayName: "Tzotzil Bible",
         UIBackgroundModes: [],
@@ -29,8 +30,8 @@ export default {
         foregroundImage: "./assets/adaptive-icon.png",
         backgroundColor: "#0a0e14",
       },
-      package: "com.g3lasio.TzotzilBible",
-      versionCode: 24,
+      package: "com.chyrris.tzotzilbible",
+      versionCode: 26,
       permissions: ["android.permission.INTERNET"],
       compileSdkVersion: 34,
       targetSdkVersion: 34,

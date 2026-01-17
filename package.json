@@ -1,6 +1,6 @@
 {
-  "name": "temp_nevin",
-  "version": "1.0.0",
+  "name": "tzotzil-bible",
+  "version": "2.1.0",
   "main": "index.ts",
   "scripts": {
     "start": "expo start",
@@ -51,6 +51,10 @@
   "devDependencies": {
     "@types/react": "~19.1.10",
     "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=20.19.4",
+    "npm": ">=10.0.0"
   },
   "private": true
 }

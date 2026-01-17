@@ -1,1 +1,45 @@
+# Expo
 .expo/
+.expo-shared/
+dist/
+web-build/
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Native
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+
+# Metro
+.metro-health-check*
+
+# Debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# macOS
+.DS_Store
+*.pem
+
+# Local env files
+.env*.local
+.env
+
+# Typescript
+*.tsbuildinfo
+
+# Credentials & Keys (IMPORTANT - DO NOT COMMIT)
+service-account-key.json
+upload_certificate.pem
+@g3lasio__tzotzil-bible.jks
+
+# Backups
+*.backup
