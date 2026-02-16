@@ -13,11 +13,6 @@ interface VersionPickerModalProps {
 }
 
 export default function VersionPickerModal({ visible, selectedVersion, onSelect, onClose }: VersionPickerModalProps) {
-  // Only render modal for native platforms (iOS/Android)
-  if (Platform.OS === 'web') {
-    return null;
-  }
-
   const handleSelect = (versionId: string) => {
     onSelect(versionId);
     onClose();
