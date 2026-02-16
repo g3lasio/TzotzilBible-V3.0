@@ -8,14 +8,15 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation, useRoute, useFocusEffect } from '@react-navigation/native';
+import { useNavigation, useRoute, useFocusEffect, NavigationProp, RouteProp } from '@react-navigation/native';
 import ReadingPlanService from '../services/ReadingPlanService';
 import { DayReading } from '../types/readingPlan';
+import { RootStackParamList } from '../types/navigation';
 
 const ReadingPlanDayScreen = () => {
-  const navigation = useNavigation();
-  const route = useRoute();
-  const { day } = route.params as { day: number };
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const route = useRoute<RouteProp<RootStackParamList, 'ReadingPlanDay'>>();
+  const { day } = route.params;
 
   const [loading, setLoading] = useState(true);
   const [dayReading, setDayReading] = useState<DayReading | null>(null);
@@ -67,14 +68,20 @@ const ReadingPlanDayScreen = () => {
     // Navigate to Bible with the first reading
     const firstReading = dayReading.readings[0];
     
-    // Navigate to Verses screen directly with the reading
-    navigation.navigate('Verses' as never, {
-      book: firstReading.book,
-      chapter: firstReading.startChapter,
-      fromReadingPlan: true,
-      planDay: day,
-      totalChapters: firstReading.endChapter - firstReading.startChapter + 1,
-    } as never);
+    // Navigate to Bible tab, then to Verses screen
+    navigation.navigate('MainTabs', {
+      screen: 'BibleTab',
+      params: {
+        screen: 'Verses',
+        params: {
+          book: firstReading.book,
+          chapter: firstReading.startChapter,
+          fromReadingPlan: true,
+          planDay: day,
+          totalChapters: firstReading.endChapter - firstReading.startChapter + 1,
+        },
+      },
+    });
   };
 
   const handleMarkCompleted = async () => {
@@ -270,6 +277,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: 20,
+    paddingBottom: 120, // Extra padding for bottom tabs
   },
   title: {
     fontSize: 24,

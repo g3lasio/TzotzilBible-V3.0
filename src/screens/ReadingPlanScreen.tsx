@@ -9,12 +9,13 @@ import {
   ScrollView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useNavigation, useFocusEffect, NavigationProp } from '@react-navigation/native';
 import ReadingPlanService from '../services/ReadingPlanService';
 import { DayProgress, ReadingPlanStats, PlanType } from '../types/readingPlan';
+import { RootStackParamList } from '../types/navigation';
 
 const ReadingPlanScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const [loading, setLoading] = useState(true);
   const [hasActivePlan, setHasActivePlan] = useState(false);
   const [daysProgress, setDaysProgress] = useState<DayProgress[]>([]);
@@ -61,16 +62,24 @@ const ReadingPlanScreen = () => {
 
   const handleDayPress = (day: DayProgress) => {
     if (day.isCompleted) {
-      // Already completed, do nothing or show message
+      // Already completed, allow review but show message
+      alert('¡Este día ya fue completado! Puedes revisarlo si deseas.');
+      navigation.navigate('ReadingPlanDay', { day: day.day });
+      return;
+    }
+    
+    // Check if this day is locked (future day)
+    if (stats && day.day > stats.currentDay) {
+      alert(`Este día está bloqueado. Completa el Día ${stats.currentDay} primero.`);
       return;
     }
     
     // Navigate to reading screen for this day
-    navigation.navigate('ReadingPlanDay' as never, { day: day.day } as never);
+    navigation.navigate('ReadingPlanDay', { day: day.day });
   };
 
   const handleSettingsPress = () => {
-    navigation.navigate('ReadingPlanSettings' as never);
+    navigation.navigate('ReadingPlanSettings');
   };
 
   if (loading) {
@@ -177,13 +186,18 @@ const ReadingPlanScreen = () => {
             style={[
               styles.dayItem,
               item.day === stats?.currentDay && !item.isCompleted && styles.dayItemCurrent,
+              stats && item.day > stats.currentDay && styles.dayItemLocked,
             ]}
             onPress={() => handleDayPress(item)}
-            disabled={item.isCompleted}
+            disabled={false} // Allow press to show lock message
           >
             {/* Checkbox */}
             <View style={[styles.checkbox, item.isCompleted && styles.checkboxCompleted]}>
-              {item.isCompleted && <Ionicons name="checkmark" size={18} color="#0A1628" />}
+              {item.isCompleted ? (
+                <Ionicons name="checkmark" size={18} color="#0A1628" />
+              ) : stats && item.day > stats.currentDay ? (
+                <Ionicons name="lock-closed" size={16} color="#666666" />
+              ) : null}
             </View>
 
             {/* Day Info */}
@@ -341,6 +355,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 12,
     marginVertical: 4,
+  },
+  dayItemLocked: {
+    opacity: 0.4,
   },
   checkbox: {
     width: 24,
