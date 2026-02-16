@@ -3,7 +3,7 @@ run = "npx expo start --web --port 5000 --host 0.0.0.0"
 modules = ["nodejs-20"]
 
 [deployment]
-run = ["sh", "-c", "npx serve@14 dist -l 0.0.0.0:5000 -s"]
+run = ["sh", "-c", "npx serve@14 dist --listen 5000 --single"]
 build = ["sh", "-c", "npm install && npx expo export --platform web"]
 deploymentTarget = "cloudrun"
 ignoredPaths = [".git", "node_modules", ".expo", ".expo-shared"]
