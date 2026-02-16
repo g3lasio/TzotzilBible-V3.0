@@ -12,6 +12,7 @@ import { useNavigation, useRoute, useFocusEffect, NavigationProp, RouteProp } fr
 import ReadingPlanService from '../services/ReadingPlanService';
 import { DayReading } from '../types/readingPlan';
 import { RootStackParamList } from '../types/navigation';
+import { translateBookName } from '../constants/bookNameMapping';
 
 const ReadingPlanDayScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -68,13 +69,16 @@ const ReadingPlanDayScreen = () => {
     // Navigate to Bible with the first reading
     const firstReading = dayReading.readings[0];
     
+    // Translate book name from English to Spanish
+    const bookNameSpanish = translateBookName(firstReading.book);
+    
     // Navigate to Bible tab, then to Verses screen
     navigation.navigate('MainTabs', {
       screen: 'BibleTab',
       params: {
         screen: 'Verses',
         params: {
-          book: firstReading.book,
+          book: bookNameSpanish,
           chapter: firstReading.startChapter,
           fromReadingPlan: true,
           planDay: day,

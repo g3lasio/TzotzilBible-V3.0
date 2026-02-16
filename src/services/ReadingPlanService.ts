@@ -8,6 +8,7 @@ import {
   DayReading,
 } from '../types/readingPlan';
 import NotificationService from './NotificationService';
+import { translateBookName } from '../constants/bookNameMapping';
 
 // Storage keys
 const STORAGE_KEY_USER_PLAN = 'user_reading_plan';
@@ -154,8 +155,9 @@ class ReadingPlanService {
       // Build list of required chapters
       const requiredChapters: string[] = [];
       dayReading.readings.forEach(reading => {
+        const bookNameSpanish = translateBookName(reading.book);
         for (let ch = reading.startChapter; ch <= reading.endChapter; ch++) {
-          requiredChapters.push(`${reading.book}:${ch}`);
+          requiredChapters.push(`${bookNameSpanish}:${ch}`);
         }
       });
 
@@ -182,8 +184,9 @@ class ReadingPlanService {
       // Build list of required chapters
       const requiredChapters: string[] = [];
       dayReading.readings.forEach(reading => {
+        const bookNameSpanish = translateBookName(reading.book);
         for (let ch = reading.startChapter; ch <= reading.endChapter; ch++) {
-          requiredChapters.push(`${reading.book}:${ch}`);
+          requiredChapters.push(`${bookNameSpanish}:${ch}`);
         }
       });
 
