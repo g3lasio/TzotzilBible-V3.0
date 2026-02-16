@@ -36,7 +36,7 @@ const TimelineEventDetailScreen: React.FC<TimelineEventDetailScreenProps> = ({
     return (
       <View style={styles.container}>
         <View style={styles.errorContainer}>
-          <Ionicons name="alert-circle-outline" size={64} color="#D4C4B0" />
+          <Ionicons name="alert-circle-outline" size={64} color="#2A3648" />
           <Text style={styles.errorText}>Evento no encontrado</Text>
           <TouchableOpacity
             style={styles.backButton}
@@ -93,13 +93,13 @@ const TimelineEventDetailScreen: React.FC<TimelineEventDetailScreenProps> = ({
           style={styles.headerButton}
           onPress={() => navigation.goBack()}
         >
-          <Ionicons name="arrow-back" size={24} color="#5D4E37" />
+          <Ionicons name="arrow-back" size={24} color="#E0E6ED" />
         </TouchableOpacity>
         <Text style={styles.headerTitle} numberOfLines={1}>
           Evento Bíblico
         </Text>
         <TouchableOpacity style={styles.headerButton} onPress={handleShare}>
-          <Ionicons name="share-outline" size={24} color="#5D4E37" />
+          <Ionicons name="share-outline" size={24} color="#E0E6ED" />
         </TouchableOpacity>
       </View>
 
@@ -115,11 +115,11 @@ const TimelineEventDetailScreen: React.FC<TimelineEventDetailScreenProps> = ({
         {/* Era and Testament */}
         <View style={styles.metaRow}>
           <View style={styles.metaItem}>
-            <Ionicons name="time-outline" size={16} color="#8B7355" />
+            <Ionicons name="time-outline" size={16} color="#A0A8B0" />
             <Text style={styles.metaText}>{event.era}</Text>
           </View>
           <View style={styles.metaItem}>
-            <Ionicons name="book-outline" size={16} color="#8B7355" />
+            <Ionicons name="book-outline" size={16} color="#A0A8B0" />
             <Text style={styles.metaText}>
               {event.testament === 'OT' ? 'Antiguo Testamento' : 'Nuevo Testamento'}
             </Text>
@@ -143,7 +143,7 @@ const TimelineEventDetailScreen: React.FC<TimelineEventDetailScreenProps> = ({
               <View style={styles.personsList}>
                 {event.keyPersons.map((person, idx) => (
                   <View key={idx} style={styles.personChip}>
-                    <Ionicons name="person" size={12} color="#8B4513" />
+                    <Ionicons name="person" size={12} color="#00F3FF" />
                     <Text style={styles.personChipText}>{person}</Text>
                   </View>
                 ))}
@@ -156,7 +156,7 @@ const TimelineEventDetailScreen: React.FC<TimelineEventDetailScreenProps> = ({
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>Ubicación:</Text>
               <View style={styles.locationChip}>
-                <Ionicons name="location" size={14} color="#8B4513" />
+                <Ionicons name="location" size={14} color="#00F3FF" />
                 <Text style={styles.locationText}>{event.location}</Text>
               </View>
             </View>
@@ -196,9 +196,9 @@ const TimelineEventDetailScreen: React.FC<TimelineEventDetailScreenProps> = ({
                 style={styles.verseItem}
                 onPress={() => handleVersePress(verse)}
               >
-                <Ionicons name="book" size={16} color="#8B4513" />
+                <Ionicons name="book" size={16} color="#00F3FF" />
                 <Text style={styles.verseText}>{verse}</Text>
-                <Ionicons name="chevron-forward" size={16} color="#C4A57B" />
+                <Ionicons name="chevron-forward" size={16} color="#2A3648" />
               </TouchableOpacity>
             ))}
           </View>
@@ -227,7 +227,7 @@ const TimelineEventDetailScreen: React.FC<TimelineEventDetailScreenProps> = ({
                   </Text>
                   <Text style={styles.relatedEventEra}>{relatedEvent.era}</Text>
                 </View>
-                <Ionicons name="chevron-forward" size={20} color="#C4A57B" />
+                <Ionicons name="chevron-forward" size={20} color="#2A3648" />
               </TouchableOpacity>
             ))}
           </View>
@@ -242,7 +242,7 @@ const TimelineEventDetailScreen: React.FC<TimelineEventDetailScreenProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5EFE7',
+    backgroundColor: '#0A1628',
   },
   header: {
     flexDirection: 'row',
@@ -251,9 +251,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 60,
     paddingBottom: 16,
-    backgroundColor: '#E8DCC4',
+    backgroundColor: '#1A2638',
     borderBottomWidth: 2,
-    borderBottomColor: '#C4A57B',
+    borderBottomColor: '#2A3648',
   },
   headerButton: {
     width: 40,
@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#5D4E37',
+    color: '#E0E6ED',
     textAlign: 'center',
     fontFamily: 'serif',
   },
@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
   },
   dateBadge: {
     alignSelf: 'center',
-    backgroundColor: '#8B4513',
+    backgroundColor: '#00F3FF',
     paddingHorizontal: 20,
     paddingVertical: 8,
     borderRadius: 20,
@@ -284,12 +284,12 @@ const styles = StyleSheet.create({
   dateBadgeText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#FFF',
+    color: '#1A2638',
   },
   eventTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#5D4E37',
+    color: '#E0E6ED',
     textAlign: 'center',
     paddingHorizontal: 20,
     marginBottom: 16,
@@ -310,27 +310,27 @@ const styles = StyleSheet.create({
   },
   metaText: {
     fontSize: 13,
-    color: '#8B7355',
+    color: '#A0A8B0',
   },
   section: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#1A2638',
     marginHorizontal: 16,
     marginBottom: 16,
     padding: 16,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#D4C4B0',
+    borderColor: '#2A3648',
   },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#5D4E37',
+    color: '#E0E6ED',
     marginBottom: 12,
     fontFamily: 'serif',
   },
   description: {
     fontSize: 15,
-    color: '#5D4E37',
+    color: '#E0E6ED',
     lineHeight: 24,
   },
   infoRow: {
@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
   infoLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#8B7355',
+    color: '#A0A8B0',
     marginBottom: 6,
   },
   personsList: {
@@ -350,7 +350,7 @@ const styles = StyleSheet.create({
   personChip: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#E8DCC4',
+    backgroundColor: '#1A2638',
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 16,
@@ -358,7 +358,7 @@ const styles = StyleSheet.create({
   },
   personChipText: {
     fontSize: 13,
-    color: '#8B4513',
+    color: '#00F3FF',
   },
   locationChip: {
     flexDirection: 'row',
@@ -367,7 +367,7 @@ const styles = StyleSheet.create({
   },
   locationText: {
     fontSize: 14,
-    color: '#5D4E37',
+    color: '#E0E6ED',
   },
   certaintyBadge: {
     paddingHorizontal: 12,
@@ -377,12 +377,12 @@ const styles = StyleSheet.create({
   },
   certaintyText: {
     fontSize: 13,
-    color: '#FFF',
+    color: '#1A2638',
     fontWeight: '600',
   },
   significance: {
     fontSize: 15,
-    color: '#5D4E37',
+    color: '#E0E6ED',
     lineHeight: 24,
     fontStyle: 'italic',
   },
@@ -391,7 +391,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
     paddingHorizontal: 12,
-    backgroundColor: '#FFF9F0',
+    backgroundColor: '#1A2638',
     borderRadius: 8,
     marginBottom: 8,
     gap: 10,
@@ -399,7 +399,7 @@ const styles = StyleSheet.create({
   verseText: {
     flex: 1,
     fontSize: 14,
-    color: '#8B4513',
+    color: '#00F3FF',
     fontWeight: '500',
   },
   relatedEventItem: {
@@ -407,20 +407,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     paddingHorizontal: 12,
-    backgroundColor: '#FFF9F0',
+    backgroundColor: '#1A2638',
     borderRadius: 8,
     marginBottom: 8,
     gap: 12,
   },
   relatedEventDate: {
-    backgroundColor: '#E8DCC4',
+    backgroundColor: '#1A2638',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
   },
   relatedEventDateText: {
     fontSize: 11,
-    color: '#8B4513',
+    color: '#00F3FF',
     fontWeight: '600',
   },
   relatedEventContent: {
@@ -429,12 +429,12 @@ const styles = StyleSheet.create({
   relatedEventTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#5D4E37',
+    color: '#E0E6ED',
     marginBottom: 2,
   },
   relatedEventEra: {
     fontSize: 12,
-    color: '#8B7355',
+    color: '#A0A8B0',
   },
   errorContainer: {
     flex: 1,
@@ -449,14 +449,14 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   backButton: {
-    backgroundColor: '#8B4513',
+    backgroundColor: '#00F3FF',
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 8,
   },
   backButtonText: {
     fontSize: 16,
-    color: '#FFF',
+    color: '#1A2638',
     fontWeight: '600',
   },
 });

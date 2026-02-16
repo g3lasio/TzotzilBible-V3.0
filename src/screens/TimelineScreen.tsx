@@ -88,7 +88,7 @@ const TimelineScreen: React.FC<TimelineScreenProps> = ({ navigation }) => {
       prophecy: '#9B59B6',
       death: '#95A5A6',
       revelation: '#F39C12',
-      default: '#8B7355',
+      default: '#A0A8B0',
     };
     return colorMap[category] || colorMap.default;
   };
@@ -107,7 +107,7 @@ const TimelineScreen: React.FC<TimelineScreenProps> = ({ navigation }) => {
           activeOpacity={0.7}
         >
           <View style={styles.eraHeaderLeft}>
-            <Ionicons name="book-outline" size={24} color="#8B4513" />
+            <Ionicons name="book-outline" size={24} color="#00F3FF" />
             <View style={styles.eraHeaderText}>
               <Text style={styles.eraName}>{era.name}</Text>
               <Text style={styles.eraDate}>{dateRange}</Text>
@@ -120,7 +120,7 @@ const TimelineScreen: React.FC<TimelineScreenProps> = ({ navigation }) => {
             <Ionicons
               name={isExpanded ? 'chevron-up' : 'chevron-down'}
               size={24}
-              color="#8B4513"
+              color="#00F3FF"
             />
           </View>
         </TouchableOpacity>
@@ -177,9 +177,9 @@ const TimelineScreen: React.FC<TimelineScreenProps> = ({ navigation }) => {
                     onPress={() => navigateToBibleReference(event.reference)}
                     activeOpacity={0.7}
                   >
-                    <Ionicons name="book" size={14} color="#8B7355" />
+                    <Ionicons name="book" size={14} color="#A0A8B0" />
                     <Text style={[styles.eventReferenceText, styles.clickableReference]}>{event.reference}</Text>
-                    <Ionicons name="chevron-forward" size={14} color="#8B7355" style={{ marginLeft: 4 }} />
+                    <Ionicons name="chevron-forward" size={14} color="#A0A8B0" style={{ marginLeft: 4 }} />
                   </TouchableOpacity>
                 </View>
               </TouchableOpacity>
@@ -199,7 +199,7 @@ const TimelineScreen: React.FC<TimelineScreenProps> = ({ navigation }) => {
           onPress={() => navigation.goBack()}
           activeOpacity={0.7}
         >
-          <Ionicons name="arrow-back" size={24} color="#5D4E37" />
+          <Ionicons name="arrow-back" size={24} color="#E0E6ED" />
         </TouchableOpacity>
         <View style={styles.headerContent}>
           <Text style={styles.headerTitle}>Cronología Bíblica</Text>
@@ -211,7 +211,7 @@ const TimelineScreen: React.FC<TimelineScreenProps> = ({ navigation }) => {
 
       {/* Search Bar */}
       <View style={styles.searchContainer}>
-        <Ionicons name="search" size={20} color="#8B7355" style={styles.searchIcon} />
+        <Ionicons name="search" size={20} color="#A0A8B0" style={styles.searchIcon} />
         <TextInput
           style={styles.searchInput}
           placeholder="Buscar eventos, personas..."
@@ -221,7 +221,7 @@ const TimelineScreen: React.FC<TimelineScreenProps> = ({ navigation }) => {
         />
         {searchQuery.length > 0 && (
           <TouchableOpacity onPress={() => setSearchQuery('')}>
-            <Ionicons name="close-circle" size={20} color="#8B7355" />
+            <Ionicons name="close-circle" size={20} color="#A0A8B0" />
           </TouchableOpacity>
         )}
       </View>
@@ -284,7 +284,7 @@ const TimelineScreen: React.FC<TimelineScreenProps> = ({ navigation }) => {
           filteredEras.map(era => renderEra(era))
         ) : (
           <View style={styles.emptyState}>
-            <Ionicons name="search-outline" size={64} color="#D4C4B0" />
+            <Ionicons name="search-outline" size={64} color="#2A3648" />
             <Text style={styles.emptyStateText}>No se encontraron eventos</Text>
           </View>
         )}
@@ -297,7 +297,7 @@ const TimelineScreen: React.FC<TimelineScreenProps> = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5EFE7',
+    backgroundColor: '#0A1628',
   },
   header: {
     flexDirection: 'row',
@@ -305,9 +305,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 50,
     paddingBottom: 12,
-    backgroundColor: '#E8DCC4',
+    backgroundColor: '#1A2638',
     borderBottomWidth: 2,
-    borderBottomColor: '#C4A57B',
+    borderBottomColor: '#2A3648',
   },
   backButton: {
     padding: 8,
@@ -320,20 +320,20 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#5D4E37',
+    color: '#E0E6ED',
     fontFamily: 'serif',
     textAlign: 'center',
   },
   headerSubtitle: {
     fontSize: 12,
-    color: '#8B7355',
+    color: '#A0A8B0',
     textAlign: 'center',
     marginTop: 2,
   },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFF',
+    backgroundColor: '#1A2638',
     marginHorizontal: 16,
     marginTop: 12,
     marginBottom: 8,
@@ -341,7 +341,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#D4C4B0',
+    borderColor: '#2A3648',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -354,7 +354,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 16,
-    color: '#5D4E37',
+    color: '#E0E6ED',
   },
   filterContainer: {
     flexDirection: 'row',
@@ -368,32 +368,32 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#C4A57B',
-    backgroundColor: '#FFF',
+    borderColor: '#2A3648',
+    backgroundColor: '#1A2638',
   },
   filterButtonActive: {
-    backgroundColor: '#8B4513',
-    borderColor: '#8B4513',
+    backgroundColor: '#00F3FF',
+    borderColor: '#00F3FF',
   },
   filterButtonText: {
     fontSize: 12,
-    color: '#8B7355',
+    color: '#A0A8B0',
     textAlign: 'center',
     fontWeight: '600',
   },
   filterButtonTextActive: {
-    color: '#FFF',
+    color: '#1A2638',
   },
   scrollView: {
     flex: 1,
   },
   eraCard: {
-    backgroundColor: '#FFF9F0',
+    backgroundColor: '#1A2638',
     marginHorizontal: 16,
     marginBottom: 16,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#D4C4B0',
+    borderColor: '#2A3648',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -406,7 +406,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 16,
-    backgroundColor: '#FFF',
+    backgroundColor: '#1A2638',
   },
   eraHeaderLeft: {
     flexDirection: 'row',
@@ -420,12 +420,12 @@ const styles = StyleSheet.create({
   eraName: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#5D4E37',
+    color: '#E0E6ED',
     fontFamily: 'serif',
   },
   eraDate: {
     fontSize: 13,
-    color: '#8B7355',
+    color: '#A0A8B0',
     marginTop: 2,
   },
   eraHeaderRight: {
@@ -434,26 +434,26 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   eventBadge: {
-    backgroundColor: '#E8DCC4',
+    backgroundColor: '#1A2638',
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 12,
   },
   eventBadgeText: {
     fontSize: 12,
-    color: '#8B4513',
+    color: '#00F3FF',
     fontWeight: '600',
   },
   eventsContainer: {
     padding: 16,
     paddingTop: 8,
-    backgroundColor: '#FFF9F0',
+    backgroundColor: '#1A2638',
   },
   eventItem: {
     flexDirection: 'row',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#E8DCC4',
+    borderBottomColor: '#1A2638',
   },
   eventItemLast: {
     borderBottomWidth: 0,
@@ -463,8 +463,8 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 30,
     borderWidth: 2,
-    borderColor: '#C4A57B',
-    backgroundColor: '#FFF',
+    borderColor: '#2A3648',
+    backgroundColor: '#1A2638',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 12,
@@ -472,11 +472,11 @@ const styles = StyleSheet.create({
   eventDateYear: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#5D4E37',
+    color: '#E0E6ED',
   },
   eventDateEra: {
     fontSize: 11,
-    color: '#8B7355',
+    color: '#A0A8B0',
   },
   eventContent: {
     flex: 1,
@@ -490,7 +490,7 @@ const styles = StyleSheet.create({
   eventTitle: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#5D4E37',
+    color: '#E0E6ED',
     flex: 1,
     marginRight: 8,
   },
@@ -507,18 +507,18 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   personChip: {
-    backgroundColor: '#E8DCC4',
+    backgroundColor: '#1A2638',
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 10,
   },
   personChipText: {
     fontSize: 11,
-    color: '#8B4513',
+    color: '#00F3FF',
   },
   morePersons: {
     fontSize: 11,
-    color: '#8B7355',
+    color: '#A0A8B0',
     alignSelf: 'center',
   },
   eventReference: {
@@ -528,12 +528,12 @@ const styles = StyleSheet.create({
   },
   eventReferenceText: {
     fontSize: 12,
-    color: '#8B7355',
+    color: '#A0A8B0',
     fontStyle: 'italic',
   },
   clickableReference: {
     textDecorationLine: 'underline',
-    color: '#8B4513',
+    color: '#00F3FF',
   },
   emptyState: {
     alignItems: 'center',
