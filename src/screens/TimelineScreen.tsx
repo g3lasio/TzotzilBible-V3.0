@@ -130,10 +130,7 @@ const TimelineScreen: React.FC<TimelineScreenProps> = ({ navigation }) => {
             {era.events.map((event, index) => (
               <TouchableOpacity
                 key={event.id}
-                style={[
-                  styles.eventItem,
-                  index === era.events.length - 1 && styles.eventItemLast,
-                ]}
+                style={styles.eventItem}
                 onPress={() => navigateToEventDetail(event.id)}
                 activeOpacity={0.7}
               >
@@ -279,7 +276,11 @@ const TimelineScreen: React.FC<TimelineScreenProps> = ({ navigation }) => {
       </View>
 
       {/* Eras List */}
-      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+      <ScrollView 
+        style={styles.scrollView} 
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
         {filteredEras.length > 0 ? (
           filteredEras.map(era => renderEra(era))
         ) : (
@@ -387,6 +388,9 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
   },
+  scrollContent: {
+    paddingBottom: 100, // Add padding to prevent bottom tabs from hiding content
+  },
   eraCard: {
     backgroundColor: '#1A2638',
     marginHorizontal: 16,
@@ -452,12 +456,19 @@ const styles = StyleSheet.create({
   eventItem: {
     flexDirection: 'row',
     paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#1A2638',
+    paddingHorizontal: 12,
+    marginBottom: 12,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: '#00F3FF',
+    backgroundColor: 'rgba(0, 243, 255, 0.05)',
+    shadowColor: '#00F3FF',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 5,
   },
-  eventItemLast: {
-    borderBottomWidth: 0,
-  },
+
   eventDateCircle: {
     width: 60,
     height: 60,

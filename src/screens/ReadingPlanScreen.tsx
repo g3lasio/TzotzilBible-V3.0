@@ -201,6 +201,7 @@ const ReadingPlanScreen = () => {
           </TouchableOpacity>
         )}
         contentContainerStyle={styles.listContent}
+        style={styles.flatList}
       />
     </View>
   );
@@ -364,6 +365,12 @@ const styles = StyleSheet.create({
   dayTextCompleted: {
     color: '#6B7280',
     textDecorationLine: 'line-through',
+  },
+  flatList: {
+    flex: 1,
+  },
+  listContent: {
+    paddingBottom: 100, // Add padding to prevent bottom tabs from hiding content
   },
 });
 

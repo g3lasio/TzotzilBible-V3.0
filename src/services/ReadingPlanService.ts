@@ -12,6 +12,7 @@ import NotificationService from './NotificationService';
 // Storage keys
 const STORAGE_KEY_USER_PLAN = 'user_reading_plan';
 const STORAGE_KEY_COMPLETED_DAYS = 'reading_plan_completed_days';
+const STORAGE_KEY_READING_STATUS = 'reading_plan_reading_status';
 
 class ReadingPlanService {
   private chronologicalPlan: ReadingPlan | null = null;
@@ -83,6 +84,136 @@ class ReadingPlanService {
     await AsyncStorage.setItem(STORAGE_KEY_COMPLETED_DAYS, JSON.stringify([]));
 
     return userPlan;
+  }
+
+  /**
+   * Mark that user has started reading for a specific day
+   */
+  async markReadingStarted(day: number): Promise<void> {
+    try {
+      const statusJson = await AsyncStorage.getItem(STORAGE_KEY_READING_STATUS);
+      const status = statusJson ? JSON.parse(statusJson) : {};
+      status[day] = { 
+        hasVisitedBible: true, 
+        timestamp: new Date().toISOString(),
+        chaptersRead: [] // Track which chapters have been read
+      };
+      await AsyncStorage.setItem(STORAGE_KEY_READING_STATUS, JSON.stringify(status));
+    } catch (error) {
+      console.error('Error marking reading started:', error);
+    }
+  }
+
+  /**
+   * Mark a specific chapter as read for a day
+   */
+  async markChapterRead(day: number, book: string, chapter: number): Promise<void> {
+    try {
+      const statusJson = await AsyncStorage.getItem(STORAGE_KEY_READING_STATUS);
+      const status = statusJson ? JSON.parse(statusJson) : {};
+      
+      if (!status[day]) {
+        status[day] = { 
+          hasVisitedBible: true, 
+          timestamp: new Date().toISOString(),
+          chaptersRead: []
+        };
+      }
+      
+      const chapterKey = `${book}:${chapter}`;
+      if (!status[day].chaptersRead) {
+        status[day].chaptersRead = [];
+      }
+      
+      if (!status[day].chaptersRead.includes(chapterKey)) {
+        status[day].chaptersRead.push(chapterKey);
+      }
+      
+      await AsyncStorage.setItem(STORAGE_KEY_READING_STATUS, JSON.stringify(status));
+    } catch (error) {
+      console.error('Error marking chapter read:', error);
+    }
+  }
+
+  /**
+   * Check if all required chapters for a day have been read
+   */
+  async hasCompletedAllChapters(day: number): Promise<boolean> {
+    try {
+      const dayReading = await this.getDayReading(day);
+      if (!dayReading) return false;
+
+      const statusJson = await AsyncStorage.getItem(STORAGE_KEY_READING_STATUS);
+      if (!statusJson) return false;
+      
+      const status = JSON.parse(statusJson);
+      const dayStatus = status[day];
+      
+      if (!dayStatus || !dayStatus.chaptersRead) return false;
+
+      // Build list of required chapters
+      const requiredChapters: string[] = [];
+      dayReading.readings.forEach(reading => {
+        for (let ch = reading.startChapter; ch <= reading.endChapter; ch++) {
+          requiredChapters.push(`${reading.book}:${ch}`);
+        }
+      });
+
+      // Check if all required chapters have been read
+      return requiredChapters.every(chapter => dayStatus.chaptersRead.includes(chapter));
+    } catch (error) {
+      console.error('Error checking chapters completion:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Get reading progress for a specific day (how many chapters read vs required)
+   */
+  async getReadingProgress(day: number): Promise<{ read: number; total: number; chapters: string[] }> {
+    try {
+      const dayReading = await this.getDayReading(day);
+      if (!dayReading) return { read: 0, total: 0, chapters: [] };
+
+      const statusJson = await AsyncStorage.getItem(STORAGE_KEY_READING_STATUS);
+      const status = statusJson ? JSON.parse(statusJson) : {};
+      const dayStatus = status[day];
+
+      // Build list of required chapters
+      const requiredChapters: string[] = [];
+      dayReading.readings.forEach(reading => {
+        for (let ch = reading.startChapter; ch <= reading.endChapter; ch++) {
+          requiredChapters.push(`${reading.book}:${ch}`);
+        }
+      });
+
+      const chaptersRead = dayStatus?.chaptersRead || [];
+      const readCount = requiredChapters.filter(ch => chaptersRead.includes(ch)).length;
+
+      return {
+        read: readCount,
+        total: requiredChapters.length,
+        chapters: requiredChapters
+      };
+    } catch (error) {
+      console.error('Error getting reading progress:', error);
+      return { read: 0, total: 0, chapters: [] };
+    }
+  }
+
+  /**
+   * Get reading status for a specific day
+   */
+  async getReadingStatus(day: number): Promise<{ hasVisitedBible: boolean; timestamp?: string } | null> {
+    try {
+      const statusJson = await AsyncStorage.getItem(STORAGE_KEY_READING_STATUS);
+      if (!statusJson) return null;
+      const status = JSON.parse(statusJson);
+      return status[day] || null;
+    } catch (error) {
+      console.error('Error getting reading status:', error);
+      return null;
+    }
   }
 
   /**

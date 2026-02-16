@@ -58,7 +58,7 @@ const FONT_SIZE_KEY = 'verse_font_size';
 export default function VersesScreen() {
   const route = useRoute<VersesRouteProp>();
   const navigation = useNavigation<NavigationProp>();
-  const { book, chapter, initialVerse } = route.params;
+  const { book, chapter, initialVerse, fromReadingPlan, planDay, totalChapters } = route.params;
   
   const [verses, setVerses] = useState<BibleVerse[]>([]);
   const [loading, setLoading] = useState(true);
@@ -79,6 +79,12 @@ export default function VersesScreen() {
       const verseData = await BibleService.getVerses(book, chapter);
       setVerses(verseData);
       setError(null);
+      
+      // Track chapter read for reading plan
+      if (fromReadingPlan && planDay) {
+        const ReadingPlanService = (await import('../services/ReadingPlanService')).default;
+        await ReadingPlanService.markChapterRead(planDay, book, chapter);
+      }
     } catch (err) {
       console.error('Error loading verses:', err);
       setError('Error cargando versículos');

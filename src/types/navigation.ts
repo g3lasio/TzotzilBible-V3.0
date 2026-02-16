@@ -3,7 +3,14 @@ import { NavigatorScreenParams } from '@react-navigation/native';
 export type BibleStackParamList = {
   BibleList: undefined;
   Chapter: { book: string };
-  Verses: { book: string; chapter: number; initialVerse?: number };
+  Verses: { 
+    book: string; 
+    chapter: number; 
+    initialVerse?: number;
+    fromReadingPlan?: boolean;
+    planDay?: number;
+    totalChapters?: number;
+  };
   VerseCommentary: { 
     book: string; 
     chapter: number; 

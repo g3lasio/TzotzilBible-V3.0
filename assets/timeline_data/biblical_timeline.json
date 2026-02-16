@@ -2998,16 +2998,19 @@
       "yearBC": 400,
       "yearAD": null,
       "dateDisplay": "400 a.C.",
-      "reference": null,
+      "reference": "Malaqías 4:5-6",
       "testament": "OT",
       "era": "Silencio",
       "category": "transition",
       "description": "Inicia período de 400 años sin profeta ni revelación divina hasta Juan el Bautista",
-      "keyPersons": null,
+      "keyPersons": [],
       "location": "Judea",
       "certaintyLevel": "histórico",
       "significance": "400 años de silencio antes de Cristo",
-      "relatedVerses": null,
+      "relatedVerses": [
+        "Malaqías 4:5-6",
+        "Lucas 1:17"
+      ],
       "yearStart": 400,
       "yearEnd": null
     },
