@@ -325,6 +325,7 @@ const styles = StyleSheet.create({
   listContent: {
     paddingHorizontal: 20,
     paddingVertical: 8,
+    paddingBottom: 100, // Add padding to prevent bottom tabs from hiding content
   },
   dayItem: {
     flexDirection: 'row',
@@ -368,9 +369,6 @@ const styles = StyleSheet.create({
   },
   flatList: {
     flex: 1,
-  },
-  listContent: {
-    paddingBottom: 100, // Add padding to prevent bottom tabs from hiding content
   },
 });
 
