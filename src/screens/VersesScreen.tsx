@@ -73,6 +73,8 @@ export default function VersesScreen() {
   const [selectedVerse, setSelectedVerse] = useState<BibleVerse | null>(null);
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [fontSize, setFontSize] = useState<'small' | 'medium' | 'large'>('medium');
+  const [chaptersRead, setChaptersRead] = useState(0);
+  const [canComplete, setCanComplete] = useState(false);
 
   const loadVerses = async () => {
     try {
@@ -144,9 +146,24 @@ export default function VersesScreen() {
 
   useEffect(() => {
     loadVerses();
-    loadFavorites();
     loadPreferences();
+    loadFavorites();
   }, [book, chapter]);
+
+  // Check reading progress for reading plan
+  useEffect(() => {
+    if (fromReadingPlan && planDay && totalChapters) {
+      const checkProgress = async () => {
+        const ReadingPlanService = (await import('../services/ReadingPlanService')).default;
+        const completed = await ReadingPlanService.hasCompletedAllChapters(planDay);
+        setCanComplete(completed);
+        // Get chapters read count
+        const progress = await ReadingPlanService.getChaptersReadForDay(planDay);
+        setChaptersRead(progress.length);
+      };
+      checkProgress();
+    }
+  }, [fromReadingPlan, planDay, totalChapters, verses]);
 
   const loadFavorites = async () => {
     try {
@@ -455,8 +472,17 @@ export default function VersesScreen() {
     );
   }
 
+  // Custom back handler for reading plan
+  const handleBackPress = () => {
+    if (fromReadingPlan && planDay) {
+      navigation.navigate('ReadingPlanDay', { planId: 'canonical', day: planDay });
+    } else {
+      navigation.goBack();
+    }
+  };
+
   return (
-    <MainLayout title={`${book} ${chapter}`} showBackButton>
+    <MainLayout title={`${book} ${chapter}`} showBackButton onBackPress={handleBackPress}>
       <View style={styles.container}>
         <View style={styles.controls}>
           <VersionToggle
@@ -628,6 +654,46 @@ export default function VersesScreen() {
           onSelect={handleVersionSelect}
           onClose={() => setDropdownVisible(false)}
         />
+
+        {/* Floating Mark Complete button for Reading Plan */}
+        {fromReadingPlan && planDay && totalChapters && (
+          <View style={styles.floatingButtonContainer}>
+            {/* Progress indicator */}
+            <View style={styles.progressBadge}>
+              <MaterialCommunityIcons 
+                name={canComplete ? "check-circle" : "book-open-page-variant"} 
+                size={16} 
+                color={canComplete ? "#00ff88" : "#ffa500"} 
+              />
+              <Text style={styles.progressText}>
+                {chaptersRead}/{totalChapters} capítulos
+              </Text>
+            </View>
+            
+            {/* Mark Complete button */}
+            <TouchableOpacity
+              style={[
+                styles.floatingButton,
+                !canComplete && styles.floatingButtonDisabled
+              ]}
+              onPress={async () => {
+                if (canComplete) {
+                  const ReadingPlanService = (await import('../services/ReadingPlanService')).default;
+                  await ReadingPlanService.markDayCompleted(planDay);
+                  navigation.navigate('ReadingPlanDay', { planId: 'canonical', day: planDay });
+                }
+              }}
+              disabled={!canComplete}
+            >
+              <MaterialCommunityIcons 
+                name="check-bold" 
+                size={20} 
+                color="#ffffff" 
+              />
+              <Text style={styles.floatingButtonText}>Marcar Completado</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     </MainLayout>
   );
@@ -1130,5 +1196,51 @@ const styles = StyleSheet.create({
     fontSize: 9,
     color: '#ffa500',
     fontStyle: 'italic',
+  },
+  floatingButtonContainer: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    alignItems: 'flex-end',
+    gap: 10,
+  },
+  progressBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(10, 14, 20, 0.95)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 243, 255, 0.3)',
+    gap: 6,
+  },
+  progressText: {
+    color: '#ffffff',
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  floatingButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#00ff88',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    borderRadius: 25,
+    gap: 8,
+    shadowColor: '#00ff88',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  floatingButtonDisabled: {
+    backgroundColor: '#6b7c93',
+    opacity: 0.5,
+  },
+  floatingButtonText: {
+    color: '#ffffff',
+    fontSize: 14,
+    fontWeight: 'bold',
   },
 });

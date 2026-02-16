@@ -137,6 +137,26 @@ class ReadingPlanService {
   }
 
   /**
+   * Get chapters read for a specific day
+   */
+  async getChaptersReadForDay(day: number): Promise<string[]> {
+    try {
+      const statusJson = await AsyncStorage.getItem(STORAGE_KEY_READING_STATUS);
+      if (!statusJson) return [];
+      
+      const status = JSON.parse(statusJson);
+      const dayStatus = status[day];
+      
+      if (!dayStatus || !dayStatus.chaptersRead) return [];
+      
+      return dayStatus.chaptersRead;
+    } catch (error) {
+      console.error('Error getting chapters read:', error);
+      return [];
+    }
+  }
+
+  /**
    * Check if all required chapters for a day have been read
    */
   async hasCompletedAllChapters(day: number): Promise<boolean> {

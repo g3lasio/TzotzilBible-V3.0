@@ -17,6 +17,7 @@ interface MainLayoutProps {
   children: React.ReactNode;
   showBackButton?: boolean;
   title?: string;
+  onBackPress?: () => void;
 }
 
 type MenuItem = {
@@ -37,7 +38,7 @@ const menuItems: MenuItem[] = [
   { name: 'Settings', icon: 'cog', label: 'Ajustes', route: 'SettingsTab', isTab: true },
 ];
 
-export default function MainLayout({ children, showBackButton = false, title }: MainLayoutProps) {
+export default function MainLayout({ children, showBackButton = false, title, onBackPress }: MainLayoutProps) {
   const navigation = useNavigation<NavigationProp>();
   const route = useRoute();
   const [menuVisible, setMenuVisible] = useState(false);
@@ -80,7 +81,7 @@ export default function MainLayout({ children, showBackButton = false, title }: 
                   icon="arrow-left"
                   iconColor="#00f3ff"
                   size={24}
-                  onPress={() => navigation.goBack()}
+                  onPress={onBackPress || (() => navigation.goBack())}
                 />
               ) : (
                 <View style={styles.logoContainer}>
