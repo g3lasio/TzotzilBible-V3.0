@@ -6,6 +6,8 @@
     "totalEvents": 223,
     "timeSpan": "4004 a.C. - 100 d.C.",
     "sources": [
+      "Profecía de las 2300 tardes y mañanas - Daniel 8:14, 9:24-27",
+      "Cronología Adventista Oficial (Amazing Discoveries, It Is Written)",
       "James Ussher - Annals of the World (1650)",
       "Edwin Thiele - The Mysterious Numbers of the Hebrew Kings",
       "Rick Aschmann - Bible Chronology Database",
@@ -3287,7 +3289,8 @@
         "Lucas 3:21-22"
       ],
       "yearStart": 27,
-      "yearEnd": null
+      "yearEnd": null,
+      "adventistSource": "Cronología Adventista Oficial - Profecía de las 2300 tardes y mañanas (Daniel 8:14, 9:24-27)"
     },
     {
       "id": "NT012",
@@ -3824,8 +3827,8 @@
       "id": "NT032",
       "event": "La Última Cena",
       "yearBC": null,
-      "yearAD": 30,
-      "dateDisplay": "30 d.C. (abril 6, Jueves por la noche)",
+      "yearAD": 31,
+      "dateDisplay": "31 d.C. (abril 26, Jueves por la noche)",
       "reference": "Mateo 26:17-30",
       "testament": "NT",
       "era": "Vida de Cristo",
@@ -3844,7 +3847,7 @@
         "Lucas 22:7-38",
         "Juan 13-17"
       ],
-      "yearStart": 30,
+      "yearStart": 31,
       "yearEnd": null
     },
     {
@@ -3876,8 +3879,8 @@
       "id": "NT034",
       "event": "Getsemaní",
       "yearBC": null,
-      "yearAD": 30,
-      "dateDisplay": "30 d.C. (abril 7, Viernes madrugada)",
+      "yearAD": 31,
+      "dateDisplay": "31 d.C. (abril 27, Viernes madrugada)",
       "reference": "Mateo 26:36-46",
       "testament": "NT",
       "era": "Vida de Cristo",
@@ -3897,7 +3900,7 @@
         "Marcos 14:32-42",
         "Lucas 22:39-46"
       ],
-      "yearStart": 30,
+      "yearStart": 31,
       "yearEnd": null
     },
     {
@@ -3960,8 +3963,8 @@
       "id": "NT037",
       "event": "Juicio ante el Sanedrín",
       "yearBC": null,
-      "yearAD": 30,
-      "dateDisplay": "30 d.C. (abril 7, Viernes madrugada)",
+      "yearAD": 31,
+      "dateDisplay": "31 d.C. (abril 27, Viernes madrugada)",
       "reference": "Mateo 26:57-68",
       "testament": "NT",
       "era": "Vida de Cristo",
@@ -3981,15 +3984,15 @@
         "Lucas 22:63-71",
         "Juan 18:12-24"
       ],
-      "yearStart": 30,
+      "yearStart": 31,
       "yearEnd": null
     },
     {
       "id": "NT038",
       "event": "Juicio ante Pilato",
       "yearBC": null,
-      "yearAD": 30,
-      "dateDisplay": "30 d.C. (abril 7, Viernes mañana)",
+      "yearAD": 31,
+      "dateDisplay": "31 d.C. (abril 27, Viernes)",
       "reference": "Mateo 27:11-26",
       "testament": "NT",
       "era": "Vida de Cristo",
@@ -4009,20 +4012,20 @@
         "Lucas 23:1-25",
         "Juan 18:28-19:16"
       ],
-      "yearStart": 30,
+      "yearStart": 31,
       "yearEnd": null
     },
     {
       "id": "NT039",
       "event": "Crucifixión de Jesucristo",
       "yearBC": null,
-      "yearAD": 30,
-      "dateDisplay": "30 d.C. (abril 7, Viernes 9:00 AM - 3:00 PM)",
+      "yearAD": 31,
+      "dateDisplay": "31 d.C. (abril 27, Viernes)",
       "reference": "Mateo 27:32-56",
       "testament": "NT",
       "era": "Vida de Cristo",
       "category": "crucifixion",
-      "description": "Jesús es crucificado en el Gólgota. Muere a las 3:00 PM diciendo 'Consumado es'",
+      "description": "Jesús es crucificado en el Gólgota el viernes 27 de abril del 31 d.C. Muere a las 3:00 PM diciendo \"Consumado es\". Esta fecha es fundamental para la profecía de las 2300 tardes y mañanas.",
       "keyPersons": [
         "Jesús",
         "Dos ladrones",
@@ -4039,15 +4042,16 @@
         "Lucas 23:26-49",
         "Juan 19:17-37"
       ],
-      "yearStart": 30,
-      "yearEnd": null
+      "yearStart": 31,
+      "yearEnd": null,
+      "adventistSource": "Cronología Adventista Oficial - Profecía de las 2300 tardes y mañanas (Daniel 8:14, 9:24-27)"
     },
     {
       "id": "NT040",
       "event": "Muerte de Jesús",
       "yearBC": null,
-      "yearAD": 30,
-      "dateDisplay": "30 d.C. (abril 7, Viernes 3:00 PM)",
+      "yearAD": 31,
+      "dateDisplay": "31 d.C. (abril 27, Viernes 3:00 PM)",
       "reference": "Mateo 27:50",
       "testament": "NT",
       "era": "Vida de Cristo",
@@ -4065,15 +4069,16 @@
         "Lucas 23:44-47",
         "Juan 19:30"
       ],
-      "yearStart": 30,
-      "yearEnd": null
+      "yearStart": 31,
+      "yearEnd": null,
+      "adventistSource": "Cronología Adventista Oficial - Profecía de las 2300 tardes y mañanas (Daniel 8:14, 9:24-27)"
     },
     {
       "id": "NT041",
       "event": "Sepultura de Jesús",
       "yearBC": null,
-      "yearAD": 30,
-      "dateDisplay": "30 d.C. (abril 7, Viernes tarde)",
+      "yearAD": 31,
+      "dateDisplay": "31 d.C. (abril 27, Viernes tarde)",
       "reference": "Mateo 27:57-61",
       "testament": "NT",
       "era": "Vida de Cristo",
@@ -4094,15 +4099,15 @@
         "Lucas 23:50-56",
         "Juan 19:38-42"
       ],
-      "yearStart": 30,
+      "yearStart": 31,
       "yearEnd": null
     },
     {
       "id": "NT042",
       "event": "Resurrección de Jesucristo",
       "yearBC": null,
-      "yearAD": 30,
-      "dateDisplay": "30 d.C. (abril 9, Domingo al amanecer)",
+      "yearAD": 31,
+      "dateDisplay": "31 d.C. (abril 29, Domingo)",
       "reference": "Mateo 28:1-10",
       "testament": "NT",
       "era": "Vida de Cristo",
@@ -4123,15 +4128,15 @@
         "Lucas 24:1-12",
         "Juan 20:1-10"
       ],
-      "yearStart": 30,
+      "yearStart": 31,
       "yearEnd": null
     },
     {
       "id": "NT043",
       "event": "Jesús se Aparece a María Magdalena",
       "yearBC": null,
-      "yearAD": 30,
-      "dateDisplay": "30 d.C. (abril 9, Domingo mañana)",
+      "yearAD": 31,
+      "dateDisplay": "31 d.C. (abril 29, Domingo)",
       "reference": "Juan 20:11-18",
       "testament": "NT",
       "era": "Resurrección",
@@ -4148,15 +4153,15 @@
         "Juan 20:11-18",
         "Marcos 16:9-11"
       ],
-      "yearStart": 30,
+      "yearStart": 31,
       "yearEnd": null
     },
     {
       "id": "NT044",
       "event": "Jesús se Aparece a los Discípulos",
       "yearBC": null,
-      "yearAD": 30,
-      "dateDisplay": "30 d.C. (abril 9, Domingo noche)",
+      "yearAD": 31,
+      "dateDisplay": "31 d.C. (abril 29, Domingo)",
       "reference": "Juan 20:19-23",
       "testament": "NT",
       "era": "Resurrección",
@@ -4173,7 +4178,7 @@
         "Juan 20:19-23",
         "Lucas 24:36-49"
       ],
-      "yearStart": 30,
+      "yearStart": 31,
       "yearEnd": null
     },
     {
@@ -4256,8 +4261,8 @@
       "id": "NT048",
       "event": "Ascensión de Jesucristo",
       "yearBC": null,
-      "yearAD": 30,
-      "dateDisplay": "30 d.C. (mayo 18, 40 días después de resurrección)",
+      "yearAD": 31,
+      "dateDisplay": "31 d.C. (junio 8, 40 días después de la resurrección)",
       "reference": "Hechos 1:9-11",
       "testament": "NT",
       "era": "Resurrección",
@@ -4276,7 +4281,7 @@
         "Lucas 24:50-53",
         "Marcos 16:19"
       ],
-      "yearStart": 30,
+      "yearStart": 31,
       "yearEnd": null
     },
     {
@@ -4308,8 +4313,8 @@
       "id": "NT050",
       "event": "Pentecostés",
       "yearBC": null,
-      "yearAD": 30,
-      "dateDisplay": "30 d.C. (mayo 28, 50 días después de resurrección)",
+      "yearAD": 31,
+      "dateDisplay": "31 d.C. (junio 18, 50 días después de la resurrección)",
       "reference": "Hechos 2:1-47",
       "testament": "NT",
       "era": "Iglesia Primitiva",
@@ -4326,7 +4331,7 @@
       "relatedVerses": [
         "Hechos 2:1-47"
       ],
-      "yearStart": 30,
+      "yearStart": 31,
       "yearEnd": null
     },
     {

@@ -56,6 +56,29 @@ const TimelineScreen: React.FC<TimelineScreenProps> = ({ navigation }) => {
     navigation.navigate('TimelineEventDetail', { eventId });
   };
 
+  const navigateToBibleReference = (reference: string) => {
+    // Parse reference like "Génesis 1:1" or "Éxodo 12:1-14"
+    try {
+      const parts = reference.split(/[:\-]/);
+      const bookAndChapter = parts[0].trim();
+      const lastSpace = bookAndChapter.lastIndexOf(' ');
+      const bookName = bookAndChapter.substring(0, lastSpace).trim();
+      const chapter = parseInt(bookAndChapter.substring(lastSpace + 1));
+      const verse = parts[1] ? parseInt(parts[1].trim()) : 1;
+
+      // Navigate to Bible screen with the parsed reference
+      navigation.navigate('BibleReader', {
+        bookName,
+        chapter,
+        verse,
+      });
+    } catch (error) {
+      console.error('Error parsing Bible reference:', reference, error);
+      // Fallback: just navigate to Bible screen
+      navigation.navigate('BibleReader');
+    }
+  };
+
   const getCategoryColor = (category: string): string => {
     const colorMap: { [key: string]: string } = {
       covenant: '#FFD700',
@@ -149,10 +172,15 @@ const TimelineScreen: React.FC<TimelineScreenProps> = ({ navigation }) => {
                     )}
                   </View>
 
-                  <View style={styles.eventReference}>
+                  <TouchableOpacity 
+                    style={styles.eventReference}
+                    onPress={() => navigateToBibleReference(event.reference)}
+                    activeOpacity={0.7}
+                  >
                     <Ionicons name="book" size={14} color="#8B7355" />
-                    <Text style={styles.eventReferenceText}>{event.reference}</Text>
-                  </View>
+                    <Text style={[styles.eventReferenceText, styles.clickableReference]}>{event.reference}</Text>
+                    <Ionicons name="chevron-forward" size={14} color="#8B7355" style={{ marginLeft: 4 }} />
+                  </TouchableOpacity>
                 </View>
               </TouchableOpacity>
             ))}
@@ -164,12 +192,21 @@ const TimelineScreen: React.FC<TimelineScreenProps> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
+      {/* Header with Back Button */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Cronología Bíblica</Text>
-        <Text style={styles.headerSubtitle}>
-          {TimelineService.getMetadata().timeSpan}
-        </Text>
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+          activeOpacity={0.7}
+        >
+          <Ionicons name="arrow-back" size={24} color="#5D4E37" />
+        </TouchableOpacity>
+        <View style={styles.headerContent}>
+          <Text style={styles.headerTitle}>Cronología Bíblica</Text>
+          <Text style={styles.headerSubtitle}>
+            {TimelineService.getMetadata().timeSpan}
+          </Text>
+        </View>
       </View>
 
       {/* Search Bar */}
@@ -263,30 +300,42 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5EFE7',
   },
   header: {
-    padding: 20,
-    paddingTop: 60,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingTop: 50,
+    paddingBottom: 12,
     backgroundColor: '#E8DCC4',
     borderBottomWidth: 2,
     borderBottomColor: '#C4A57B',
   },
+  backButton: {
+    padding: 8,
+    marginRight: 8,
+  },
+  headerContent: {
+    flex: 1,
+    alignItems: 'center',
+  },
   headerTitle: {
-    fontSize: 28,
+    fontSize: 22,
     fontWeight: 'bold',
     color: '#5D4E37',
     fontFamily: 'serif',
     textAlign: 'center',
   },
   headerSubtitle: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#8B7355',
     textAlign: 'center',
-    marginTop: 4,
+    marginTop: 2,
   },
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFF',
-    margin: 16,
+    marginHorizontal: 16,
+    marginTop: 12,
     marginBottom: 8,
     paddingHorizontal: 12,
     paddingVertical: 10,
@@ -310,7 +359,7 @@ const styles = StyleSheet.create({
   filterContainer: {
     flexDirection: 'row',
     paddingHorizontal: 16,
-    marginBottom: 16,
+    marginBottom: 12,
     gap: 8,
   },
   filterButton: {
@@ -481,6 +530,10 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#8B7355',
     fontStyle: 'italic',
+  },
+  clickableReference: {
+    textDecorationLine: 'underline',
+    color: '#8B4513',
   },
   emptyState: {
     alignItems: 'center',
