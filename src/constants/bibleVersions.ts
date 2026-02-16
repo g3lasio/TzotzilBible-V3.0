@@ -4,9 +4,10 @@ export type BibleVersion = {
   shortName: string;
   language: string;
   color: string;
-  textField: 'text_tzotzil' | 'text';
+  textField: 'text_tzotzil' | 'text' | 'text_spanish_rv1960' | 'text_spanish_nvi' | 'text_spanish_tla' | 'text_spanish_dhh';
   isAvailable: boolean;
   isPrimary?: boolean;
+  coverage?: number; // Percentage of verses available (0-100)
 };
 
 export const TZOTZIL_VERSION: BibleVersion = {
@@ -27,8 +28,9 @@ export const SECONDARY_VERSIONS: BibleVersion[] = [
     shortName: 'RV1960',
     language: 'es',
     color: '#00f3ff',
-    textField: 'text',
+    textField: 'text_spanish_rv1960',
     isAvailable: true,
+    coverage: 100,
   },
   {
     id: 'nvi',
@@ -36,26 +38,29 @@ export const SECONDARY_VERSIONS: BibleVersion[] = [
     shortName: 'NVI',
     language: 'es',
     color: '#9b59b6',
-    textField: 'text',
-    isAvailable: false,
+    textField: 'text_spanish_nvi',
+    isAvailable: true,
+    coverage: 99.94,
   },
   {
-    id: 'lbla',
-    name: 'La Biblia de las Américas',
-    shortName: 'LBLA',
-    language: 'es',
-    color: '#e67e22',
-    textField: 'text',
-    isAvailable: false,
-  },
-  {
-    id: 'ntv',
-    name: 'Nueva Traducción Viviente',
-    shortName: 'NTV',
+    id: 'tla',
+    name: 'Traducción en Lenguaje Actual',
+    shortName: 'TLA',
     language: 'es',
     color: '#1abc9c',
-    textField: 'text',
-    isAvailable: false,
+    textField: 'text_spanish_tla',
+    isAvailable: true,
+    coverage: 92.08,
+  },
+  {
+    id: 'dhh',
+    name: 'Dios Habla Hoy',
+    shortName: 'DHH',
+    language: 'es',
+    color: '#e67e22',
+    textField: 'text_spanish_dhh',
+    isAvailable: true,
+    coverage: 79.91,
   },
 ];
 

@@ -87,9 +87,14 @@ export class WebBibleService {
         book_id: v.book_id,
         chapter: v.chapter,
         verse: v.verse,
-        text: v.text_spanish,
+        text: v.text_spanish_rv1960 || v.text_spanish || '', // Default to RV1960
         text_tzotzil: v.text_tzotzil,
-        book_name: v.book_name
+        book_name: v.book_name,
+        // Include all Spanish version fields
+        text_spanish_rv1960: v.text_spanish_rv1960,
+        text_spanish_nvi: v.text_spanish_nvi,
+        text_spanish_tla: v.text_spanish_tla,
+        text_spanish_dhh: v.text_spanish_dhh,
       }))
       .sort((a, b) => a.verse - b.verse);
     
@@ -103,7 +108,10 @@ export class WebBibleService {
     const lowerQuery = query.toLowerCase();
     const results = allVerses
       .filter(v => 
-        v.text_spanish?.toLowerCase().includes(lowerQuery) ||
+        v.text_spanish_rv1960?.toLowerCase().includes(lowerQuery) ||
+        v.text_spanish_nvi?.toLowerCase().includes(lowerQuery) ||
+        v.text_spanish_tla?.toLowerCase().includes(lowerQuery) ||
+        v.text_spanish_dhh?.toLowerCase().includes(lowerQuery) ||
         v.text_tzotzil?.toLowerCase().includes(lowerQuery)
       )
       .slice(0, 100)
@@ -112,9 +120,13 @@ export class WebBibleService {
         book_id: v.book_id,
         chapter: v.chapter,
         verse: v.verse,
-        text: v.text_spanish,
+        text: v.text_spanish_rv1960 || v.text_spanish || '',
         text_tzotzil: v.text_tzotzil,
-        book_name: v.book_name
+        book_name: v.book_name,
+        text_spanish_rv1960: v.text_spanish_rv1960,
+        text_spanish_nvi: v.text_spanish_nvi,
+        text_spanish_tla: v.text_spanish_tla,
+        text_spanish_dhh: v.text_spanish_dhh,
       }));
     
     return results;
@@ -136,9 +148,13 @@ export class WebBibleService {
         book_id: found.book_id,
         chapter: found.chapter,
         verse: found.verse,
-        text: found.text_spanish,
+        text: found.text_spanish_rv1960 || found.text_spanish || '',
         text_tzotzil: found.text_tzotzil,
-        book_name: found.book_name
+        book_name: found.book_name,
+        text_spanish_rv1960: found.text_spanish_rv1960,
+        text_spanish_nvi: found.text_spanish_nvi,
+        text_spanish_tla: found.text_spanish_tla,
+        text_spanish_dhh: found.text_spanish_dhh,
       };
     }
     

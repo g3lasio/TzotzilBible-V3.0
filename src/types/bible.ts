@@ -19,9 +19,14 @@ export interface BibleVerse {
   book_id: number;
   chapter: number;
   verse: number;
-  text: string;
+  text: string; // Current selected Spanish version text
   text_tzotzil?: string;
   book_name?: string;
+  // Multi-version Spanish fields (from JSON)
+  text_spanish_rv1960?: string;
+  text_spanish_nvi?: string;
+  text_spanish_tla?: string;
+  text_spanish_dhh?: string;
 }
 
 export interface SearchResult {

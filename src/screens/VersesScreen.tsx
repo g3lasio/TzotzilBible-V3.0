@@ -12,6 +12,7 @@ import type { RouteProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import MainLayout from '../components/MainLayout';
 import VersionToggle, { TogglePosition } from '../components/VersionToggle';
+import VersionPickerModal from '../components/VersionPickerModal';
 import { TZOTZIL_VERSION, SECONDARY_VERSIONS, BibleVersion, getVersionById } from '../constants/bibleVersions';
 
 const DEFAULT_SECONDARY_VERSION = 'rv1960';
@@ -231,15 +232,17 @@ export default function VersesScreen() {
       if (displayMode === 'tzotzil') {
         text += `\n${TZOTZIL_VERSION.shortName}:\n${verse.text_tzotzil}`;
       } else if (displayMode === 'secondary') {
-        const verseText = verse[secondaryVersion.textField];
+        const { text: verseText, isFallback } = getVerseText(verse, secondaryVersion);
         if (verseText) {
-          text += `\n${secondaryVersion.shortName}:\n${verseText}`;
+          const versionLabel = isFallback ? `${secondaryVersion.shortName} (RV1960)` : secondaryVersion.shortName;
+          text += `\n${versionLabel}:\n${verseText}`;
         }
       } else {
         text += `\n${TZOTZIL_VERSION.shortName}:\n${verse.text_tzotzil}`;
-        const verseText = verse[secondaryVersion.textField];
+        const { text: verseText, isFallback } = getVerseText(verse, secondaryVersion);
         if (verseText) {
-          text += `\n\n${secondaryVersion.shortName}:\n${verseText}`;
+          const versionLabel = isFallback ? `${secondaryVersion.shortName} (RV1960)` : secondaryVersion.shortName;
+          text += `\n\n${versionLabel}:\n${verseText}`;
         }
       }
       
@@ -258,8 +261,24 @@ export default function VersesScreen() {
     }
   };
 
-  const getVerseText = (verse: BibleVerse, version: BibleVersion): string | undefined => {
-    return verse[version.textField];
+  /**
+   * Get verse text for a specific version with fallback to RV1960
+   * Returns object with text and whether fallback was used
+   */
+  const getVerseText = (verse: BibleVerse, version: BibleVersion): { text: string | undefined; isFallback: boolean } => {
+    const text = verse[version.textField];
+    
+    // If text exists and is not empty, return it
+    if (text && text.trim()) {
+      return { text, isFallback: false };
+    }
+    
+    // Fallback to RV1960 if available
+    const fallbackText = verse.text_spanish_rv1960 || verse.text;
+    return { 
+      text: fallbackText, 
+      isFallback: true 
+    };
   };
 
   const currentSecondaryVersion = getAvailableSecondaryVersion(selectedSecondaryVersion);
@@ -281,9 +300,16 @@ export default function VersesScreen() {
   };
 
   const renderVerseSingle = (verse: BibleVerse, mode: 'tzotzil' | 'secondary') => {
-    const verseText = mode === 'tzotzil' 
-      ? verse.text_tzotzil 
-      : getVerseText(verse, currentSecondaryVersion) || verse.text_tzotzil;
+    let verseText: string | undefined;
+    let isFallback = false;
+    
+    if (mode === 'tzotzil') {
+      verseText = verse.text_tzotzil;
+    } else {
+      const result = getVerseText(verse, currentSecondaryVersion);
+      verseText = result.text;
+      isFallback = result.isFallback;
+    }
     
     return (
       <TouchableOpacity
@@ -324,6 +350,14 @@ export default function VersesScreen() {
           
           <View style={styles.textBlock}>
             <Text style={[styles.verseText, { fontSize: getFontSizeValue().normal, lineHeight: getLineHeightValue().normal }]}>{verseText}</Text>
+            {isFallback && mode === 'secondary' && (
+              <View style={styles.fallbackIndicator}>
+                <MaterialCommunityIcons name="information-outline" size={12} color="#ffa500" />
+                <Text style={styles.fallbackText}>
+                  Texto de RV1960 (no disponible en {currentSecondaryVersion.shortName})
+                </Text>
+              </View>
+            )}
           </View>
         </LinearGradient>
       </TouchableOpacity>
@@ -332,6 +366,7 @@ export default function VersesScreen() {
 
   const renderVerseParallel = (verse: BibleVerse) => {
     const secondaryVersion = currentSecondaryVersion;
+    const { text: secondaryText, isFallback } = getVerseText(verse, secondaryVersion);
     
     return (
       <TouchableOpacity
@@ -384,7 +419,13 @@ export default function VersesScreen() {
             </View>
             
             <View style={styles.parallelColumnRight}>
-              <Text style={[styles.parallelVerseText, { fontSize: getFontSizeValue().parallel, lineHeight: getLineHeightValue().parallel }]}>{getVerseText(verse, secondaryVersion) || '-'}</Text>
+              <Text style={[styles.parallelVerseText, { fontSize: getFontSizeValue().parallel, lineHeight: getLineHeightValue().parallel }]}>{secondaryText || '-'}</Text>
+              {isFallback && (
+                <View style={styles.fallbackIndicatorSmall}>
+                  <MaterialCommunityIcons name="information-outline" size={10} color="#ffa500" />
+                  <Text style={styles.fallbackTextSmall}>RV1960</Text>
+                </View>
+              )}
             </View>
           </View>
         </LinearGradient>
@@ -581,72 +622,12 @@ export default function VersesScreen() {
           </Pressable>
         </Modal>
 
-        <Modal
+        <VersionPickerModal
           visible={dropdownVisible}
-          transparent
-          animationType="fade"
-          onRequestClose={() => setDropdownVisible(false)}
-        >
-          <Pressable 
-            style={styles.modalOverlay}
-            onPress={() => setDropdownVisible(false)}
-          >
-            <View style={styles.dropdownContainer}>
-              <LinearGradient
-                colors={['rgba(25, 35, 50, 0.98)', 'rgba(15, 25, 40, 0.98)']}
-                style={styles.dropdownGradient}
-              >
-                <Text style={styles.dropdownTitle}>Seleccionar versión</Text>
-                
-                {SECONDARY_VERSIONS.map((version) => (
-                  <TouchableOpacity
-                    key={version.id}
-                    style={[
-                      styles.dropdownItem,
-                      !version.isAvailable && styles.dropdownItemDisabled,
-                      selectedSecondaryVersion === version.id && styles.dropdownItemSelected
-                    ]}
-                    onPress={() => version.isAvailable && handleVersionSelect(version.id)}
-                    disabled={!version.isAvailable}
-                  >
-                    <View style={styles.dropdownItemLeft}>
-                      <View style={[styles.versionIndicator, { backgroundColor: version.color, opacity: version.isAvailable ? 1 : 0.4, marginRight: 10 }]} />
-                      <View>
-                        <Text style={[
-                          styles.dropdownItemText,
-                          !version.isAvailable && styles.dropdownItemTextDisabled
-                        ]}>
-                          {version.shortName}
-                        </Text>
-                        <Text style={[
-                          styles.dropdownItemSubtext,
-                          !version.isAvailable && styles.dropdownItemTextDisabled
-                        ]}>
-                          {version.name}
-                        </Text>
-                      </View>
-                    </View>
-                    {!version.isAvailable ? (
-                      <View style={styles.comingSoonBadge}>
-                        <Text style={styles.comingSoonText}>Próximamente</Text>
-                      </View>
-                    ) : selectedSecondaryVersion === version.id ? (
-                      <MaterialCommunityIcons name="check" size={20} color="#00ff88" />
-                    ) : null}
-                  </TouchableOpacity>
-                ))}
-
-                <TouchableOpacity
-                  style={[styles.dropdownItem, styles.dropdownItemLast]}
-                  onPress={() => setDropdownVisible(false)}
-                >
-                  <MaterialCommunityIcons name="close" size={20} color="#6b7c93" />
-                  <Text style={[styles.dropdownItemText, { color: '#6b7c93', marginLeft: 12 }]}>Cerrar</Text>
-                </TouchableOpacity>
-              </LinearGradient>
-            </View>
-          </Pressable>
-        </Modal>
+          selectedVersion={selectedSecondaryVersion}
+          onSelect={handleVersionSelect}
+          onClose={() => setDropdownVisible(false)}
+        />
       </View>
     </MainLayout>
   );
@@ -1124,5 +1105,30 @@ const styles = StyleSheet.create({
   },
   fontButtonTextActive: {
     color: '#00ff88',
+  },
+  fallbackIndicator: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8,
+    paddingTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(255, 165, 0, 0.2)',
+    gap: 6,
+  },
+  fallbackText: {
+    fontSize: 11,
+    color: '#ffa500',
+    fontStyle: 'italic',
+  },
+  fallbackIndicatorSmall: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 4,
+    gap: 4,
+  },
+  fallbackTextSmall: {
+    fontSize: 9,
+    color: '#ffa500',
+    fontStyle: 'italic',
   },
 });
