@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, Alert, Animated, TouchableOpacity, Dimensions } from 'react-native';
+import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, Alert, Animated, TouchableOpacity, Dimensions, Share } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import { Text, TextInput, ActivityIndicator, IconButton } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -545,8 +545,7 @@ export default function NevinScreen() {
                               await Clipboard.setStringAsync(shareText);
                               Alert.alert('✓ Copiado', 'Texto copiado al portapapeles para compartir');
                             } else {
-                              // Móvil: usar Share API nativa (sin importar)
-                              const { Share } = await import('react-native');
+                              // Móvil: usar Share API nativa
                               await Share.share({
                                 message: shareText,
                                 title: 'Respuesta de Nevin'
