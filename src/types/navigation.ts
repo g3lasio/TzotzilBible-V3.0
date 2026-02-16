@@ -38,6 +38,9 @@ export type RootStackParamList = {
   ContactSupport: undefined;
   Timeline: undefined;
   TimelineEventDetail: { eventId: string };
+  ReadingPlan: undefined;
+  ReadingPlanDay: { day: number };
+  ReadingPlanSettings: undefined;
 };
 
 declare global {

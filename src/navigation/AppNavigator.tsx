@@ -19,6 +19,9 @@ import AboutScreen from '../screens/AboutScreen';
 import ContactSupportScreen from '../screens/ContactSupportScreen';
 import TimelineScreen from '../screens/TimelineScreen';
 import TimelineEventDetailScreen from '../screens/TimelineEventDetailScreen';
+import ReadingPlanScreen from '../screens/ReadingPlanScreen';
+import ReadingPlanDayScreen from '../screens/ReadingPlanDayScreen';
+import ReadingPlanSettingsScreen from '../screens/ReadingPlanSettingsScreen';
 import type { RootStackParamList, TabParamList, BibleStackParamList } from '../types/navigation';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -160,6 +163,9 @@ export default function AppNavigator() {
       <RootStack.Screen name="ContactSupport" component={ContactSupportScreen} />
       <RootStack.Screen name="Timeline" component={TimelineScreen} />
       <RootStack.Screen name="TimelineEventDetail" component={TimelineEventDetailScreen} />
+      <RootStack.Screen name="ReadingPlan" component={ReadingPlanScreen} />
+      <RootStack.Screen name="ReadingPlanDay" component={ReadingPlanDayScreen} />
+      <RootStack.Screen name="ReadingPlanSettings" component={ReadingPlanSettingsScreen} />
     </RootStack.Navigator>
   );
 }

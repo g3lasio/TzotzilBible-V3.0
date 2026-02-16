@@ -32,6 +32,7 @@ const menuItems: MenuItem[] = [
   { name: 'Bible', icon: 'book-open-page-variant', label: 'Explorar la Biblia', route: 'BibleTab', isTab: true },
   { name: 'Search', icon: 'magnify', label: 'Buscar', route: 'SearchTab', isTab: true },
   { name: 'Nevin', icon: 'creation', label: 'Nevin AI', route: 'NevinTab', isTab: true },
+  { name: 'ReadingPlan', icon: 'book-clock', label: 'Plan de Estudio', route: 'ReadingPlan', isTab: false },
   { name: 'Timeline', icon: 'timeline-text', label: 'Cronología Bíblica', route: 'Timeline', isTab: false },
   { name: 'Settings', icon: 'cog', label: 'Ajustes', route: 'SettingsTab', isTab: true },
 ];
@@ -58,6 +59,7 @@ export default function MainLayout({ children, showBackButton = false, title }: 
       'BibleTab': ['BibleList', 'Bible', 'Chapter', 'Verses', 'BibleTab'],
       'SearchTab': ['Search', 'SearchTab'],
       'NevinTab': ['Nevin', 'NevinTab'],
+      'ReadingPlan': ['ReadingPlan', 'ReadingPlanDay', 'ReadingPlanSettings'],
       'Timeline': ['Timeline', 'TimelineEventDetail'],
       'SettingsTab': ['Settings', 'SettingsTab'],
     };
