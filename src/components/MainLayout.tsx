@@ -23,7 +23,7 @@ type MenuItem = {
   name: string;
   icon: string;
   label: string;
-  route: keyof TabParamList;
+  route: keyof TabParamList | keyof RootStackParamList;
   isTab: boolean;
 };
 
@@ -32,6 +32,7 @@ const menuItems: MenuItem[] = [
   { name: 'Bible', icon: 'book-open-page-variant', label: 'Explorar la Biblia', route: 'BibleTab', isTab: true },
   { name: 'Search', icon: 'magnify', label: 'Buscar', route: 'SearchTab', isTab: true },
   { name: 'Nevin', icon: 'creation', label: 'Nevin AI', route: 'NevinTab', isTab: true },
+  { name: 'Timeline', icon: 'timeline-text', label: 'Cronología Bíblica', route: 'Timeline', isTab: false },
   { name: 'Settings', icon: 'cog', label: 'Ajustes', route: 'SettingsTab', isTab: true },
 ];
 
@@ -44,7 +45,11 @@ export default function MainLayout({ children, showBackButton = false, title }: 
 
   const handleNavigate = (item: MenuItem) => {
     setMenuVisible(false);
-    navigation.navigate('MainTabs', { screen: item.route } as any);
+    if (item.isTab) {
+      navigation.navigate('MainTabs', { screen: item.route } as any);
+    } else {
+      navigation.navigate(item.route as keyof RootStackParamList);
+    }
   };
 
   const isActive = (item: MenuItem) => {
@@ -53,6 +58,7 @@ export default function MainLayout({ children, showBackButton = false, title }: 
       'BibleTab': ['BibleList', 'Bible', 'Chapter', 'Verses', 'BibleTab'],
       'SearchTab': ['Search', 'SearchTab'],
       'NevinTab': ['Nevin', 'NevinTab'],
+      'Timeline': ['Timeline', 'TimelineEventDetail'],
       'SettingsTab': ['Settings', 'SettingsTab'],
     };
     return tabRouteMap[item.route]?.includes(currentRoute) || false;

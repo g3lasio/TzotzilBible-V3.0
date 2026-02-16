@@ -36,6 +36,8 @@ export type RootStackParamList = {
   Moments: undefined;
   About: undefined;
   ContactSupport: undefined;
+  Timeline: undefined;
+  TimelineEventDetail: { eventId: string };
 };
 
 declare global {

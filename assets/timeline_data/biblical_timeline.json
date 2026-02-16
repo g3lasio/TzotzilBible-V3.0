@@ -1,0 +1,5596 @@
+{
+  "metadata": {
+    "title": "Cronología Bíblica Completa",
+    "version": "1.0",
+    "description": "Cronología bíblica completa desde la Creación hasta el fin de la era apostólica",
+    "totalEvents": 223,
+    "timeSpan": "4004 a.C. - 100 d.C.",
+    "sources": [
+      "James Ussher - Annals of the World (1650)",
+      "Edwin Thiele - The Mysterious Numbers of the Hebrew Kings",
+      "Rick Aschmann - Bible Chronology Database",
+      "BibleStudy.org Timeline Research",
+      "Archaeological and Historical Records",
+      "Harold Hoehner - Chronological Aspects of the Life of Christ",
+      "John Piper - Chronology of the New Testament (Desiring God)",
+      "Berean Bible Society - Timeline of Paul's Ministry",
+      "Inscripción de Galión (Delphi) - 51-52 d.C.",
+      "Josefo - Antigüedades Judías"
+    ],
+    "created": "2026-02-16",
+    "language": "es"
+  },
+  "events": [
+    {
+      "id": "OT001",
+      "event": "Creación del Mundo",
+      "yearBC": 4004,
+      "yearAD": null,
+      "dateDisplay": "4004 a.C.",
+      "reference": "Génesis 1-2",
+      "testament": "OT",
+      "era": "Prehistoria Bíblica",
+      "category": "creation",
+      "description": "Dios crea los cielos, la tierra, y todas las formas de vida en seis días. El séptimo día, Dios descansa.",
+      "keyPersons": [
+        "Dios",
+        "Adán",
+        "Eva"
+      ],
+      "location": "Edén",
+      "certaintyLevel": "tradicional",
+      "significance": "Origen del universo y la humanidad según el relato bíblico",
+      "relatedVerses": [
+        "Génesis 1:1-31",
+        "Génesis 2:1-25"
+      ],
+      "yearStart": 4004,
+      "yearEnd": null
+    },
+    {
+      "id": "OT002",
+      "event": "Creación de Adán",
+      "yearBC": 4004,
+      "yearAD": null,
+      "dateDisplay": "4004 a.C.",
+      "reference": "Génesis 2:7",
+      "testament": "OT",
+      "era": "Prehistoria Bíblica",
+      "category": "creation",
+      "description": "Dios forma al hombre del polvo de la tierra y sopla en su nariz aliento de vida.",
+      "keyPersons": [
+        "Adán"
+      ],
+      "location": "Edén",
+      "certaintyLevel": "tradicional",
+      "significance": "Primera criatura humana creada a imagen de Dios",
+      "relatedVerses": [
+        "Génesis 2:7",
+        "Génesis 5:1-2"
+      ],
+      "yearStart": 4004,
+      "yearEnd": null
+    },
+    {
+      "id": "OT003",
+      "event": "Creación de Eva",
+      "yearBC": 4004,
+      "yearAD": null,
+      "dateDisplay": "4004 a.C.",
+      "reference": "Génesis 2:21-22",
+      "testament": "OT",
+      "era": "Prehistoria Bíblica",
+      "category": "creation",
+      "description": "Dios crea a Eva de una costilla de Adán para ser su compañera.",
+      "keyPersons": [
+        "Adán",
+        "Eva"
+      ],
+      "location": "Edén",
+      "certaintyLevel": "tradicional",
+      "significance": "Primera mujer y madre de toda la humanidad",
+      "relatedVerses": [
+        "Génesis 2:21-23"
+      ],
+      "yearStart": 4004,
+      "yearEnd": null
+    },
+    {
+      "id": "OT004",
+      "event": "La Caída del Hombre",
+      "yearBC": 4004,
+      "yearAD": null,
+      "dateDisplay": "4004 a.C.",
+      "reference": "Génesis 3",
+      "testament": "OT",
+      "era": "Prehistoria Bíblica",
+      "category": "fall",
+      "description": "Adán y Eva desobedecen a Dios al comer del árbol prohibido, introduciendo el pecado al mundo.",
+      "keyPersons": [
+        "Adán",
+        "Eva",
+        "Serpiente"
+      ],
+      "location": "Edén",
+      "certaintyLevel": "tradicional",
+      "significance": "Entrada del pecado y la muerte a la humanidad",
+      "relatedVerses": [
+        "Génesis 3:1-24",
+        "Romanos 5:12"
+      ],
+      "yearStart": 4004,
+      "yearEnd": null
+    },
+    {
+      "id": "OT005",
+      "event": "Nacimiento de Caín",
+      "yearBC": 3874,
+      "yearAD": null,
+      "dateDisplay": "3874 a.C.",
+      "reference": "Génesis 4:1",
+      "testament": "OT",
+      "era": "Prehistoria Bíblica",
+      "category": "genealogy",
+      "description": "Primer hijo de Adán y Eva",
+      "keyPersons": [
+        "Caín",
+        "Adán",
+        "Eva"
+      ],
+      "location": "Fuera del Edén",
+      "certaintyLevel": "tradicional",
+      "significance": "Primer nacimiento humano registrado",
+      "relatedVerses": [
+        "Génesis 4:1"
+      ],
+      "yearStart": 3874,
+      "yearEnd": null
+    },
+    {
+      "id": "OT006",
+      "event": "Nacimiento de Abel",
+      "yearBC": 3873,
+      "yearAD": null,
+      "dateDisplay": "3873 a.C.",
+      "reference": "Génesis 4:2",
+      "testament": "OT",
+      "era": "Prehistoria Bíblica",
+      "category": "genealogy",
+      "description": "Segundo hijo de Adán y Eva, pastor de ovejas",
+      "keyPersons": [
+        "Abel",
+        "Adán",
+        "Eva"
+      ],
+      "location": "Fuera del Edén",
+      "certaintyLevel": "tradicional",
+      "significance": "Primer mártir, su sacrificio fue aceptado por Dios",
+      "relatedVerses": [
+        "Génesis 4:2",
+        "Hebreos 11:4"
+      ],
+      "yearStart": 3873,
+      "yearEnd": null
+    },
+    {
+      "id": "OT007",
+      "event": "Asesinato de Abel",
+      "yearBC": 3850,
+      "yearAD": null,
+      "dateDisplay": "3850 a.C.",
+      "reference": "Génesis 4:8",
+      "testament": "OT",
+      "era": "Prehistoria Bíblica",
+      "category": "tragedy",
+      "description": "Caín mata a su hermano Abel por envidia, cometiendo el primer homicidio",
+      "keyPersons": [
+        "Caín",
+        "Abel"
+      ],
+      "location": "Campo",
+      "certaintyLevel": "tradicional",
+      "significance": "Primer asesinato en la historia humana",
+      "relatedVerses": [
+        "Génesis 4:8-16",
+        "1 Juan 3:12"
+      ],
+      "yearStart": 3850,
+      "yearEnd": null
+    },
+    {
+      "id": "OT008",
+      "event": "Nacimiento de Set",
+      "yearBC": 3874,
+      "yearAD": null,
+      "dateDisplay": "3874 a.C.",
+      "reference": "Génesis 4:25",
+      "testament": "OT",
+      "era": "Prehistoria Bíblica",
+      "category": "genealogy",
+      "description": "Tercer hijo de Adán y Eva, nacido después de la muerte de Abel",
+      "keyPersons": [
+        "Set",
+        "Adán",
+        "Eva"
+      ],
+      "location": null,
+      "certaintyLevel": "tradicional",
+      "significance": "Ancestro de la línea mesiánica",
+      "relatedVerses": [
+        "Génesis 4:25-26",
+        "Génesis 5:3"
+      ],
+      "yearStart": 3874,
+      "yearEnd": null
+    },
+    {
+      "id": "OT009",
+      "event": "Muerte de Adán",
+      "yearBC": 3074,
+      "yearAD": null,
+      "dateDisplay": "3074 a.C.",
+      "reference": "Génesis 5:5",
+      "testament": "OT",
+      "era": "Prehistoria Bíblica",
+      "category": "death",
+      "description": "Adán muere a la edad de 930 años",
+      "keyPersons": [
+        "Adán"
+      ],
+      "location": null,
+      "certaintyLevel": "tradicional",
+      "significance": "Fin de la vida del primer hombre",
+      "relatedVerses": [
+        "Génesis 5:5"
+      ],
+      "yearStart": 3074,
+      "yearEnd": null
+    },
+    {
+      "id": "OT010",
+      "event": "Nacimiento de Enoc",
+      "yearBC": 3382,
+      "yearAD": null,
+      "dateDisplay": "3382 a.C.",
+      "reference": "Génesis 5:18",
+      "testament": "OT",
+      "era": "Prehistoria Bíblica",
+      "category": "genealogy",
+      "description": "Enoc nace, séptima generación desde Adán",
+      "keyPersons": [
+        "Enoc",
+        "Jared"
+      ],
+      "location": null,
+      "certaintyLevel": "tradicional",
+      "significance": "Hombre que caminó con Dios",
+      "relatedVerses": [
+        "Génesis 5:18-24"
+      ],
+      "yearStart": 3382,
+      "yearEnd": null
+    },
+    {
+      "id": "OT011",
+      "event": "Traslación de Enoc",
+      "yearBC": 3017,
+      "yearAD": null,
+      "dateDisplay": "3017 a.C.",
+      "reference": "Génesis 5:24",
+      "testament": "OT",
+      "era": "Prehistoria Bíblica",
+      "category": "miracle",
+      "description": "Enoc caminó con Dios y fue llevado al cielo sin experimentar la muerte",
+      "keyPersons": [
+        "Enoc",
+        "Dios"
+      ],
+      "location": null,
+      "certaintyLevel": "tradicional",
+      "significance": "Uno de los dos hombres que no murieron (junto con Elías)",
+      "relatedVerses": [
+        "Génesis 5:24",
+        "Hebreos 11:5"
+      ],
+      "yearStart": 3017,
+      "yearEnd": null
+    },
+    {
+      "id": "OT012",
+      "event": "Nacimiento de Matusalén",
+      "yearBC": 3317,
+      "yearAD": null,
+      "dateDisplay": "3317 a.C.",
+      "reference": "Génesis 5:21",
+      "testament": "OT",
+      "era": "Prehistoria Bíblica",
+      "category": "genealogy",
+      "description": "Hijo de Enoc, el hombre de mayor longevidad registrado",
+      "keyPersons": [
+        "Matusalén",
+        "Enoc"
+      ],
+      "location": null,
+      "certaintyLevel": "tradicional",
+      "significance": "Vivió 969 años, más que cualquier otro ser humano",
+      "relatedVerses": [
+        "Génesis 5:21-27"
+      ],
+      "yearStart": 3317,
+      "yearEnd": null
+    },
+    {
+      "id": "OT013",
+      "event": "Nacimiento de Noé",
+      "yearBC": 2948,
+      "yearAD": null,
+      "dateDisplay": "2948 a.C.",
+      "reference": "Génesis 5:28-29",
+      "testament": "OT",
+      "era": "Era Antediluviana",
+      "category": "genealogy",
+      "description": "Lamec engendra a Noé, quien traería alivio del trabajo",
+      "keyPersons": [
+        "Noé",
+        "Lamec"
+      ],
+      "location": null,
+      "certaintyLevel": "tradicional",
+      "significance": "Constructor del arca, preservador de la humanidad",
+      "relatedVerses": [
+        "Génesis 5:28-32"
+      ],
+      "yearStart": 2948,
+      "yearEnd": null
+    },
+    {
+      "id": "OT014",
+      "event": "El Diluvio Universal",
+      "yearBC": 2348,
+      "yearAD": null,
+      "dateDisplay": "2348 a.C.",
+      "reference": "Génesis 6-9",
+      "testament": "OT",
+      "era": "Era Antediluviana",
+      "category": "judgment",
+      "description": "Dios juzga la maldad del mundo con un diluvio que cubre toda la tierra. Noé, su familia y los animales del arca se salvan.",
+      "keyPersons": [
+        "Noé",
+        "Sem",
+        "Cam",
+        "Jafet"
+      ],
+      "location": "Tierra entera",
+      "certaintyLevel": "tradicional",
+      "significance": "Juicio divino global, renovación de la humanidad",
+      "relatedVerses": [
+        "Génesis 6:5-9:17",
+        "2 Pedro 2:5"
+      ],
+      "yearStart": 2348,
+      "yearEnd": null
+    },
+    {
+      "id": "OT015",
+      "event": "Pacto del Arcoíris",
+      "yearBC": 2347,
+      "yearAD": null,
+      "dateDisplay": "2347 a.C.",
+      "reference": "Génesis 9:8-17",
+      "testament": "OT",
+      "era": "Era Postdiluviana",
+      "category": "covenant",
+      "description": "Dios establece un pacto con Noé prometiendo nunca más destruir la tierra con un diluvio",
+      "keyPersons": [
+        "Dios",
+        "Noé"
+      ],
+      "location": "Monte Ararat",
+      "certaintyLevel": "tradicional",
+      "significance": "Primer pacto universal de Dios con la humanidad",
+      "relatedVerses": [
+        "Génesis 9:8-17"
+      ],
+      "yearStart": 2347,
+      "yearEnd": null
+    },
+    {
+      "id": "OT016",
+      "event": "Torre de Babel",
+      "yearBC": 2242,
+      "yearAD": null,
+      "dateDisplay": "2242 a.C.",
+      "reference": "Génesis 11:1-9",
+      "testament": "OT",
+      "era": "Era Postdiluviana",
+      "category": "judgment",
+      "description": "La humanidad intenta construir una torre hasta el cielo. Dios confunde sus lenguas y los dispersa por toda la tierra.",
+      "keyPersons": [
+        "Nimrod (posiblemente)"
+      ],
+      "location": "Sinar (Babilonia)",
+      "certaintyLevel": "tradicional",
+      "significance": "Origen de las diferentes lenguas y naciones",
+      "relatedVerses": [
+        "Génesis 11:1-9"
+      ],
+      "yearStart": 2242,
+      "yearEnd": null
+    },
+    {
+      "id": "OT017",
+      "event": "Nacimiento de Abraham (Abram)",
+      "yearBC": 2166,
+      "yearAD": null,
+      "dateDisplay": "2166 a.C.",
+      "reference": "Génesis 11:26",
+      "testament": "OT",
+      "era": "Era Patriarcal",
+      "category": "genealogy",
+      "description": "Nace Abram en Ur de los Caldeos, futuro padre de la nación de Israel",
+      "keyPersons": [
+        "Abraham",
+        "Taré"
+      ],
+      "location": "Ur de los Caldeos",
+      "certaintyLevel": "estimado",
+      "significance": "Padre de la fe, ancestro del pueblo judío",
+      "relatedVerses": [
+        "Génesis 11:26-27"
+      ],
+      "yearStart": 2166,
+      "yearEnd": null
+    },
+    {
+      "id": "OT018",
+      "event": "Llamado de Abraham",
+      "yearBC": 2091,
+      "yearAD": null,
+      "dateDisplay": "2091 a.C.",
+      "reference": "Génesis 12:1-3",
+      "testament": "OT",
+      "era": "Era Patriarcal",
+      "category": "covenant",
+      "description": "Dios llama a Abram a salir de su tierra y le promete hacerlo una gran nación",
+      "keyPersons": [
+        "Abraham",
+        "Dios",
+        "Sara"
+      ],
+      "location": "Harán → Canaán",
+      "certaintyLevel": "estimado",
+      "significance": "Pacto abrahámi co, inicio del pueblo elegido",
+      "relatedVerses": [
+        "Génesis 12:1-9",
+        "Hebreos 11:8"
+      ],
+      "yearStart": 2091,
+      "yearEnd": null
+    },
+    {
+      "id": "OT019",
+      "event": "Pacto con Abraham",
+      "yearBC": 2081,
+      "yearAD": null,
+      "dateDisplay": "2081 a.C.",
+      "reference": "Génesis 15",
+      "testament": "OT",
+      "era": "Era Patriarcal",
+      "category": "covenant",
+      "description": "Dios hace un pacto formal con Abraham, prometiéndole descendencia y tierra",
+      "keyPersons": [
+        "Abraham",
+        "Dios"
+      ],
+      "location": "Canaán",
+      "certaintyLevel": "estimado",
+      "significance": "Fundamento del pacto de Dios con Israel",
+      "relatedVerses": [
+        "Génesis 15:1-21"
+      ],
+      "yearStart": 2081,
+      "yearEnd": null
+    },
+    {
+      "id": "OT020",
+      "event": "Nacimiento de Ismael",
+      "yearBC": 2080,
+      "yearAD": null,
+      "dateDisplay": "2080 a.C.",
+      "reference": "Génesis 16:15",
+      "testament": "OT",
+      "era": "Era Patriarcal",
+      "category": "genealogy",
+      "description": "Agar da a luz a Ismael, hijo de Abraham",
+      "keyPersons": [
+        "Abraham",
+        "Agar",
+        "Ismael"
+      ],
+      "location": "Canaán",
+      "certaintyLevel": "estimado",
+      "significance": "Ancestro de las naciones árabes",
+      "relatedVerses": [
+        "Génesis 16:1-16"
+      ],
+      "yearStart": 2080,
+      "yearEnd": null
+    },
+    {
+      "id": "OT021",
+      "event": "Circuncisión como Señal del Pacto",
+      "yearBC": 2067,
+      "yearAD": null,
+      "dateDisplay": "2067 a.C.",
+      "reference": "Génesis 17:10-14",
+      "testament": "OT",
+      "era": "Era Patriarcal",
+      "category": "covenant",
+      "description": "Dios establece la circuncisión como señal del pacto eterno",
+      "keyPersons": [
+        "Abraham",
+        "Dios"
+      ],
+      "location": "Canaán",
+      "certaintyLevel": "estimado",
+      "significance": "Señal distintiva del pueblo de Dios",
+      "relatedVerses": [
+        "Génesis 17:1-27"
+      ],
+      "yearStart": 2067,
+      "yearEnd": null
+    },
+    {
+      "id": "OT022",
+      "event": "Destrucción de Sodoma y Gomorra",
+      "yearBC": 2067,
+      "yearAD": null,
+      "dateDisplay": "2067 a.C.",
+      "reference": "Génesis 19",
+      "testament": "OT",
+      "era": "Era Patriarcal",
+      "category": "judgment",
+      "description": "Dios destruye Sodoma, Gomorra y las ciudades vecinas por su extrema maldad",
+      "keyPersons": [
+        "Lot",
+        "Abraham",
+        "Ángeles"
+      ],
+      "location": "Valle del Jordán",
+      "certaintyLevel": "estimado",
+      "significance": "Ejemplo del juicio divino contra el pecado",
+      "relatedVerses": [
+        "Génesis 18:16-19:29",
+        "Judas 1:7"
+      ],
+      "yearStart": 2067,
+      "yearEnd": null
+    },
+    {
+      "id": "OT023",
+      "event": "Nacimiento de Isaac",
+      "yearBC": 2066,
+      "yearAD": null,
+      "dateDisplay": "2066 a.C.",
+      "reference": "Génesis 21:1-3",
+      "testament": "OT",
+      "era": "Era Patriarcal",
+      "category": "genealogy",
+      "description": "Sara da a luz a Isaac, el hijo prometido, cuando Abraham tiene 100 años",
+      "keyPersons": [
+        "Isaac",
+        "Abraham",
+        "Sara"
+      ],
+      "location": "Canaán",
+      "certaintyLevel": "estimado",
+      "significance": "Hijo de la promesa, continuador del pacto",
+      "relatedVerses": [
+        "Génesis 21:1-7",
+        "Gálatas 4:28"
+      ],
+      "yearStart": 2066,
+      "yearEnd": null
+    },
+    {
+      "id": "OT024",
+      "event": "Sacrificio de Isaac",
+      "yearBC": 2050,
+      "yearAD": null,
+      "dateDisplay": "2050 a.C.",
+      "reference": "Génesis 22",
+      "testament": "OT",
+      "era": "Era Patriarcal",
+      "category": "test",
+      "description": "Dios prueba la fe de Abraham pidiéndole que sacrifique a Isaac. Abraham obedece, pero Dios provee un carnero.",
+      "keyPersons": [
+        "Abraham",
+        "Isaac",
+        "Dios"
+      ],
+      "location": "Monte Moriah",
+      "certaintyLevel": "estimado",
+      "significance": "Prueba suprema de fe, tipo del sacrificio de Cristo",
+      "relatedVerses": [
+        "Génesis 22:1-19",
+        "Hebreos 11:17-19"
+      ],
+      "yearStart": 2050,
+      "yearEnd": null
+    },
+    {
+      "id": "OT025",
+      "event": "Muerte de Sara",
+      "yearBC": 2029,
+      "yearAD": null,
+      "dateDisplay": "2029 a.C.",
+      "reference": "Génesis 23:1-2",
+      "testament": "OT",
+      "era": "Era Patriarcal",
+      "category": "death",
+      "description": "Sara muere a la edad de 127 años en Hebrón",
+      "keyPersons": [
+        "Sara",
+        "Abraham"
+      ],
+      "location": "Hebrón",
+      "certaintyLevel": "estimado",
+      "significance": "Primera matriarca de Israel",
+      "relatedVerses": [
+        "Génesis 23:1-20"
+      ],
+      "yearStart": 2029,
+      "yearEnd": null
+    },
+    {
+      "id": "OT026",
+      "event": "Nacimiento de Jacob y Esaú",
+      "yearBC": 2006,
+      "yearAD": null,
+      "dateDisplay": "2006 a.C.",
+      "reference": "Génesis 25:24-26",
+      "testament": "OT",
+      "era": "Era Patriarcal",
+      "category": "genealogy",
+      "description": "Rebeca da a luz gemelos: Esaú y Jacob. Jacob nace agarrando el talón de Esaú.",
+      "keyPersons": [
+        "Jacob",
+        "Esaú",
+        "Isaac",
+        "Rebeca"
+      ],
+      "location": "Canaán",
+      "certaintyLevel": "estimado",
+      "significance": "Jacob (Israel) continuará la línea del pacto",
+      "relatedVerses": [
+        "Génesis 25:19-26"
+      ],
+      "yearStart": 2006,
+      "yearEnd": null
+    },
+    {
+      "id": "OT027",
+      "event": "Muerte de Abraham",
+      "yearBC": 1991,
+      "yearAD": null,
+      "dateDisplay": "1991 a.C.",
+      "reference": "Génesis 25:7-8",
+      "testament": "OT",
+      "era": "Era Patriarcal",
+      "category": "death",
+      "description": "Abraham muere a la edad de 175 años, siendo sepultado por Isaac e Ismael",
+      "keyPersons": [
+        "Abraham",
+        "Isaac",
+        "Ismael"
+      ],
+      "location": "Hebrón",
+      "certaintyLevel": "estimado",
+      "significance": "Fin de la vida del padre de la fe",
+      "relatedVerses": [
+        "Génesis 25:7-11"
+      ],
+      "yearStart": 1991,
+      "yearEnd": null
+    },
+    {
+      "id": "OT028",
+      "event": "Esaú Vende su Primogenitura",
+      "yearBC": 1986,
+      "yearAD": null,
+      "dateDisplay": "1986 a.C.",
+      "reference": "Génesis 25:29-34",
+      "testament": "OT",
+      "era": "Era Patriarcal",
+      "category": "conflict",
+      "description": "Esaú vende su primogenitura a Jacob por un plato de lentejas",
+      "keyPersons": [
+        "Esaú",
+        "Jacob"
+      ],
+      "location": "Canaán",
+      "certaintyLevel": "estimado",
+      "significance": "Jacob obtiene los derechos del primogénito",
+      "relatedVerses": [
+        "Génesis 25:29-34",
+        "Hebreos 12:16"
+      ],
+      "yearStart": 1986,
+      "yearEnd": null
+    },
+    {
+      "id": "OT029",
+      "event": "Jacob Engaña a Isaac",
+      "yearBC": 1929,
+      "yearAD": null,
+      "dateDisplay": "1929 a.C.",
+      "reference": "Génesis 27",
+      "testament": "OT",
+      "era": "Era Patriarcal",
+      "category": "conflict",
+      "description": "Jacob, ayudado por Rebeca, engaña a Isaac para recibir la bendición del primogénito",
+      "keyPersons": [
+        "Jacob",
+        "Isaac",
+        "Rebeca",
+        "Esaú"
+      ],
+      "location": "Canaán",
+      "certaintyLevel": "estimado",
+      "significance": "Jacob recibe la bendición patriarcal",
+      "relatedVerses": [
+        "Génesis 27:1-40"
+      ],
+      "yearStart": 1929,
+      "yearEnd": null
+    },
+    {
+      "id": "OT030",
+      "event": "Sueño de Jacob en Betel",
+      "yearBC": 1929,
+      "yearAD": null,
+      "dateDisplay": "1929 a.C.",
+      "reference": "Génesis 28:10-22",
+      "testament": "OT",
+      "era": "Era Patriarcal",
+      "category": "vision",
+      "description": "Jacob huye de Esaú y tiene un sueño de una escalera al cielo con ángeles",
+      "keyPersons": [
+        "Jacob",
+        "Dios"
+      ],
+      "location": "Betel",
+      "certaintyLevel": "estimado",
+      "significance": "Dios confirma el pacto con Jacob",
+      "relatedVerses": [
+        "Génesis 28:10-22",
+        "Juan 1:51"
+      ],
+      "yearStart": 1929,
+      "yearEnd": null
+    },
+    {
+      "id": "OT031",
+      "event": "Jacob Sirve por Raquel",
+      "yearBC": 1929,
+      "yearAD": null,
+      "dateDisplay": "1929 a.C.",
+      "reference": "Génesis 29",
+      "testament": "OT",
+      "era": "Era Patriarcal",
+      "category": "personal",
+      "description": "Jacob llega a Harán y sirve a Labán durante 7 años por Raquel, pero recibe a Lea primero",
+      "keyPersons": [
+        "Jacob",
+        "Raquel",
+        "Lea",
+        "Labán"
+      ],
+      "location": "Harán (Mesopotamia)",
+      "certaintyLevel": "estimado",
+      "significance": "Formación de la familia de las 12 tribus",
+      "relatedVerses": [
+        "Génesis 29:1-30"
+      ],
+      "yearStart": 1929,
+      "yearEnd": null
+    },
+    {
+      "id": "OT032",
+      "event": "Nacimiento de José",
+      "yearBC": 1915,
+      "yearAD": null,
+      "dateDisplay": "1915 a.C.",
+      "reference": "Génesis 30:22-24",
+      "testament": "OT",
+      "era": "Era Patriarcal",
+      "category": "genealogy",
+      "description": "Raquel da a luz a José, el hijo favorito de Jacob",
+      "keyPersons": [
+        "José",
+        "Jacob",
+        "Raquel"
+      ],
+      "location": "Harán",
+      "certaintyLevel": "estimado",
+      "significance": "Futuro salvador de su familia y Egipto",
+      "relatedVerses": [
+        "Génesis 30:22-24"
+      ],
+      "yearStart": 1915,
+      "yearEnd": null
+    },
+    {
+      "id": "OT033",
+      "event": "Jacob Lucha con Dios",
+      "yearBC": 1909,
+      "yearAD": null,
+      "dateDisplay": "1909 a.C.",
+      "reference": "Génesis 32:22-32",
+      "testament": "OT",
+      "era": "Era Patriarcal",
+      "category": "encounter",
+      "description": "Jacob lucha con un ángel toda la noche. Dios le cambia el nombre a Israel.",
+      "keyPersons": [
+        "Jacob/Israel",
+        "Ángel de Dios"
+      ],
+      "location": "Vado de Jaboc",
+      "certaintyLevel": "estimado",
+      "significance": "Jacob se convierte en Israel, padre de las 12 tribus",
+      "relatedVerses": [
+        "Génesis 32:22-32"
+      ],
+      "yearStart": 1909,
+      "yearEnd": null
+    },
+    {
+      "id": "OT034",
+      "event": "José Vendido como Esclavo",
+      "yearBC": 1898,
+      "yearAD": null,
+      "dateDisplay": "1898 a.C.",
+      "reference": "Génesis 37",
+      "testament": "OT",
+      "era": "Era Patriarcal",
+      "category": "tragedy",
+      "description": "Los hermanos de José, celosos de él, lo venden a mercaderes ismaelitas que lo llevan a Egipto",
+      "keyPersons": [
+        "José",
+        "Hermanos de José",
+        "Judá"
+      ],
+      "location": "Canaán → Egipto",
+      "certaintyLevel": "estimado",
+      "significance": "Inicio de la providencia de Dios para salvar a Israel",
+      "relatedVerses": [
+        "Génesis 37:1-36"
+      ],
+      "yearStart": 1898,
+      "yearEnd": null
+    },
+    {
+      "id": "OT035",
+      "event": "José Interpreta Sueños del Faraón",
+      "yearBC": 1885,
+      "yearAD": null,
+      "dateDisplay": "1885 a.C.",
+      "reference": "Génesis 41",
+      "testament": "OT",
+      "era": "Era Patriarcal",
+      "category": "elevation",
+      "description": "José interpreta los sueños de Faraón sobre siete años de abundancia seguidos de siete de hambre",
+      "keyPersons": [
+        "José",
+        "Faraón"
+      ],
+      "location": "Egipto",
+      "certaintyLevel": "estimado",
+      "significance": "José se convierte en segundo al mando en Egipto",
+      "relatedVerses": [
+        "Génesis 41:1-57"
+      ],
+      "yearStart": 1885,
+      "yearEnd": null
+    },
+    {
+      "id": "OT036",
+      "event": "Jacob y su Familia se Mudan a Egipto",
+      "yearBC": 1876,
+      "yearAD": null,
+      "dateDisplay": "1876 a.C.",
+      "reference": "Génesis 46",
+      "testament": "OT",
+      "era": "Era Patriarcal",
+      "category": "migration",
+      "description": "Durante el hambre, Jacob y sus 70 descendientes se mudan a Egipto invitados por José",
+      "keyPersons": [
+        "Jacob/Israel",
+        "José",
+        "Familia de Jacob"
+      ],
+      "location": "Canaán → Gosén (Egipto)",
+      "certaintyLevel": "estimado",
+      "significance": "Inicio del período de Israel en Egipto",
+      "relatedVerses": [
+        "Génesis 46:1-47:12"
+      ],
+      "yearStart": 1876,
+      "yearEnd": null
+    },
+    {
+      "id": "OT037",
+      "event": "Muerte de Jacob",
+      "yearBC": 1859,
+      "yearAD": null,
+      "dateDisplay": "1859 a.C.",
+      "reference": "Génesis 49-50",
+      "testament": "OT",
+      "era": "Esclavitud en Egipto",
+      "category": "death",
+      "description": "Jacob bendice a sus 12 hijos antes de morir a los 147 años. Es sepultado en Canaán.",
+      "keyPersons": [
+        "Jacob/Israel",
+        "José",
+        "Hermanos"
+      ],
+      "location": "Egipto → Hebrón",
+      "certaintyLevel": "estimado",
+      "significance": "Fin de la era patriarcal",
+      "relatedVerses": [
+        "Génesis 49:1-50:14"
+      ],
+      "yearStart": 1859,
+      "yearEnd": null
+    },
+    {
+      "id": "OT038",
+      "event": "Muerte de José",
+      "yearBC": 1805,
+      "yearAD": null,
+      "dateDisplay": "1805 a.C.",
+      "reference": "Génesis 50:22-26",
+      "testament": "OT",
+      "era": "Esclavitud en Egipto",
+      "category": "death",
+      "description": "José muere a los 110 años, habiendo visto a los bisnietos de Efraín",
+      "keyPersons": [
+        "José"
+      ],
+      "location": "Egipto",
+      "certaintyLevel": "estimado",
+      "significance": "Fin de la generación de José",
+      "relatedVerses": [
+        "Génesis 50:22-26",
+        "Éxodo 13:19"
+      ],
+      "yearStart": 1805,
+      "yearEnd": null
+    },
+    {
+      "id": "OT039",
+      "event": "Israel Esclavizado en Egipto",
+      "yearBC": 1730,
+      "yearAD": null,
+      "dateDisplay": "1730 a.C.",
+      "reference": "Éxodo 1:8-14",
+      "testament": "OT",
+      "era": "Esclavitud en Egipto",
+      "category": "oppression",
+      "description": "Un nuevo faraón que no conoció a José esclaviza a los israelitas",
+      "keyPersons": [
+        "Faraón",
+        "Pueblo de Israel"
+      ],
+      "location": "Egipto",
+      "certaintyLevel": "estimado",
+      "significance": "Inicio de 400 años de esclavitud predichos a Abraham",
+      "relatedVerses": [
+        "Éxodo 1:8-22",
+        "Génesis 15:13"
+      ],
+      "yearStart": 1730,
+      "yearEnd": null
+    },
+    {
+      "id": "OT040",
+      "event": "Nacimiento de Moisés",
+      "yearBC": 1526,
+      "yearAD": null,
+      "dateDisplay": "1526 a.C.",
+      "reference": "Éxodo 2:1-10",
+      "testament": "OT",
+      "era": "Esclavitud en Egipto",
+      "category": "genealogy",
+      "description": "Moisés nace de padres levitas. Su madre lo esconde en una canasta en el Nilo. La hija de Faraón lo adopta.",
+      "keyPersons": [
+        "Moisés",
+        "Jocabed",
+        "Hija de Faraón"
+      ],
+      "location": "Egipto",
+      "certaintyLevel": "estimado",
+      "significance": "Nacimiento del futuro libertador de Israel",
+      "relatedVerses": [
+        "Éxodo 2:1-10",
+        "Hebreos 11:23"
+      ],
+      "yearStart": 1526,
+      "yearEnd": null
+    },
+    {
+      "id": "OT041",
+      "event": "Moisés Huye a Madián",
+      "yearBC": 1486,
+      "yearAD": null,
+      "dateDisplay": "1486 a.C.",
+      "reference": "Éxodo 2:11-15",
+      "testament": "OT",
+      "era": "Preparación de Moisés",
+      "category": "exile",
+      "description": "Moisés mata a un egipcio que golpeaba a un hebreo y huye a Madián donde se casa con Séfora",
+      "keyPersons": [
+        "Moisés",
+        "Jetro",
+        "Séfora"
+      ],
+      "location": "Egipto → Madián",
+      "certaintyLevel": "estimado",
+      "significance": "Período de preparación de Moisés",
+      "relatedVerses": [
+        "Éxodo 2:11-25"
+      ],
+      "yearStart": 1486,
+      "yearEnd": null
+    },
+    {
+      "id": "OT042",
+      "event": "La Zarza Ardiente",
+      "yearBC": 1446,
+      "yearAD": null,
+      "dateDisplay": "1446 a.C.",
+      "reference": "Éxodo 3",
+      "testament": "OT",
+      "era": "Preparación del Éxodo",
+      "category": "revelation",
+      "description": "Dios se aparece a Moisés en una zarza que arde pero no se consume, y lo llama a liberar a Israel",
+      "keyPersons": [
+        "Moisés",
+        "Dios (YHWH)"
+      ],
+      "location": "Monte Horeb (Sinaí)",
+      "certaintyLevel": "estimado",
+      "significance": "Dios revela su nombre YO SOY y comisiona a Moisés",
+      "relatedVerses": [
+        "Éxodo 3:1-4:17"
+      ],
+      "yearStart": 1446,
+      "yearEnd": null
+    },
+    {
+      "id": "OT043",
+      "event": "Las Diez Plagas",
+      "yearBC": 1446,
+      "yearAD": null,
+      "dateDisplay": "1446 a.C.",
+      "reference": "Éxodo 7-12",
+      "testament": "OT",
+      "era": "Preparación del Éxodo",
+      "category": "judgment",
+      "description": "Dios envía diez plagas sobre Egipto para quebrantar el corazón de Faraón",
+      "keyPersons": [
+        "Moisés",
+        "Aarón",
+        "Faraón"
+      ],
+      "location": "Egipto",
+      "certaintyLevel": "estimado",
+      "significance": "Demostración del poder de Dios sobre los dioses egipcios",
+      "relatedVerses": [
+        "Éxodo 7:14-12:36"
+      ],
+      "yearStart": 1446,
+      "yearEnd": null
+    },
+    {
+      "id": "OT044",
+      "event": "La Pascua",
+      "yearBC": 1446,
+      "yearAD": null,
+      "dateDisplay": "1446 a.C.",
+      "reference": "Éxodo 12",
+      "testament": "OT",
+      "era": "El Éxodo",
+      "category": "deliverance",
+      "description": "Décima plaga: muerte de los primogénitos. Los israelitas marcan sus puertas con sangre de cordero y son salvados.",
+      "keyPersons": [
+        "Moisés",
+        "Pueblo de Israel"
+      ],
+      "location": "Egipto",
+      "certaintyLevel": "estimado",
+      "significance": "Institución de la Pascua, tipo de Cristo el Cordero de Dios",
+      "relatedVerses": [
+        "Éxodo 12:1-30",
+        "1 Corintios 5:7"
+      ],
+      "yearStart": 1446,
+      "yearEnd": null
+    },
+    {
+      "id": "OT045",
+      "event": "Éxodo de Egipto",
+      "yearBC": 1446,
+      "yearAD": null,
+      "dateDisplay": "1446 a.C.",
+      "reference": "Éxodo 12:31-42",
+      "testament": "OT",
+      "era": "El Éxodo",
+      "category": "deliverance",
+      "description": "Los israelitas salen de Egipto después de 430 años. Aproximadamente 600,000 hombres más mujeres y niños.",
+      "keyPersons": [
+        "Moisés",
+        "Pueblo de Israel"
+      ],
+      "location": "Egipto → Mar Rojo",
+      "certaintyLevel": "histórico",
+      "significance": "Liberación de Israel de la esclavitud",
+      "relatedVerses": [
+        "Éxodo 12:31-51",
+        "Números 33:3-5"
+      ],
+      "yearStart": 1446,
+      "yearEnd": null
+    },
+    {
+      "id": "OT046",
+      "event": "Cruce del Mar Rojo",
+      "yearBC": 1446,
+      "yearAD": null,
+      "dateDisplay": "1446 a.C.",
+      "reference": "Éxodo 14",
+      "testament": "OT",
+      "era": "El Éxodo",
+      "category": "miracle",
+      "description": "Dios abre el Mar Rojo. Israel cruza en seco. El ejército egipcio es destruido.",
+      "keyPersons": [
+        "Moisés",
+        "Faraón",
+        "Pueblo de Israel"
+      ],
+      "location": "Mar Rojo",
+      "certaintyLevel": "histórico",
+      "significance": "Milagro definitivo de liberación",
+      "relatedVerses": [
+        "Éxodo 14:1-31",
+        "Hebreos 11:29"
+      ],
+      "yearStart": 1446,
+      "yearEnd": null
+    },
+    {
+      "id": "OT047",
+      "event": "Dios Provee Maná",
+      "yearBC": 1446,
+      "yearAD": null,
+      "dateDisplay": "1446 a.C.",
+      "reference": "Éxodo 16",
+      "testament": "OT",
+      "era": "Peregrinación",
+      "category": "provision",
+      "description": "Dios provee pan del cielo (maná) cada mañana durante 40 años",
+      "keyPersons": [
+        "Moisés",
+        "Pueblo de Israel"
+      ],
+      "location": "Desierto de Sin",
+      "certaintyLevel": "histórico",
+      "significance": "Provisión diaria de Dios, tipo de Cristo el Pan de Vida",
+      "relatedVerses": [
+        "Éxodo 16:1-36",
+        "Juan 6:31-35"
+      ],
+      "yearStart": 1446,
+      "yearEnd": null
+    },
+    {
+      "id": "OT048",
+      "event": "Los Diez Mandamientos",
+      "yearBC": 1446,
+      "yearAD": null,
+      "dateDisplay": "1446 a.C.",
+      "reference": "Éxodo 20",
+      "testament": "OT",
+      "era": "Peregrinación",
+      "category": "law",
+      "description": "Dios da los Diez Mandamientos a Moisés en el Monte Sinaí",
+      "keyPersons": [
+        "Moisés",
+        "Dios"
+      ],
+      "location": "Monte Sinaí",
+      "certaintyLevel": "histórico",
+      "significance": "Fundamento de la ley moral de Dios",
+      "relatedVerses": [
+        "Éxodo 20:1-17",
+        "Deuteronomio 5:6-21"
+      ],
+      "yearStart": 1446,
+      "yearEnd": null
+    },
+    {
+      "id": "OT049",
+      "event": "Pacto del Sinaí",
+      "yearBC": 1446,
+      "yearAD": null,
+      "dateDisplay": "1446 a.C.",
+      "reference": "Éxodo 24",
+      "testament": "OT",
+      "era": "Peregrinación",
+      "category": "covenant",
+      "description": "Dios establece el pacto mosaico con Israel. El pueblo acepta obedecer todas las palabras de Dios.",
+      "keyPersons": [
+        "Moisés",
+        "Pueblo de Israel",
+        "Dios"
+      ],
+      "location": "Monte Sinaí",
+      "certaintyLevel": "histórico",
+      "significance": "Pacto nacional entre Dios e Israel",
+      "relatedVerses": [
+        "Éxodo 19:3-24:18"
+      ],
+      "yearStart": 1446,
+      "yearEnd": null
+    },
+    {
+      "id": "OT050",
+      "event": "El Becerro de Oro",
+      "yearBC": 1445,
+      "yearAD": null,
+      "dateDisplay": "1445 a.C.",
+      "reference": "Éxodo 32",
+      "testament": "OT",
+      "era": "Peregrinación",
+      "category": "apostasy",
+      "description": "Mientras Moisés está en el monte, el pueblo hace un becerro de oro y lo adora",
+      "keyPersons": [
+        "Aarón",
+        "Moisés",
+        "Pueblo de Israel"
+      ],
+      "location": "Monte Sinaí",
+      "certaintyLevel": "histórico",
+      "significance": "Primera apostasía mayor de Israel",
+      "relatedVerses": [
+        "Éxodo 32:1-35"
+      ],
+      "yearStart": 1445,
+      "yearEnd": null
+    },
+    {
+      "id": "OT051",
+      "event": "Construcción del Tabernáculo",
+      "yearBC": 1445,
+      "yearAD": null,
+      "dateDisplay": "1445 a.C.",
+      "reference": "Éxodo 35-40",
+      "testament": "OT",
+      "era": "Peregrinación",
+      "category": "worship",
+      "description": "Israel construye el tabernáculo según el diseño que Dios mostró a Moisés",
+      "keyPersons": [
+        "Moisés",
+        "Bezaleel",
+        "Aholiab"
+      ],
+      "location": "Desierto del Sinaí",
+      "certaintyLevel": "histórico",
+      "significance": "Centro de adoración portátil, tipo de Cristo",
+      "relatedVerses": [
+        "Éxodo 25:1-40:38"
+      ],
+      "yearStart": 1445,
+      "yearEnd": null
+    },
+    {
+      "id": "OT052",
+      "event": "Los Espías Exploran Canaán",
+      "yearBC": 1445,
+      "yearAD": null,
+      "dateDisplay": "1445 a.C.",
+      "reference": "Números 13-14",
+      "testament": "OT",
+      "era": "Peregrinación",
+      "category": "rebellion",
+      "description": "12 espías exploran Canaán. 10 dan informe negativo. Solo Josué y Caleb confían en Dios.",
+      "keyPersons": [
+        "Moisés",
+        "Josué",
+        "Caleb",
+        "Doce espías"
+      ],
+      "location": "Cades-barnea → Canaán",
+      "certaintyLevel": "histórico",
+      "significance": "Incredulidad resulta en 40 años de peregrinación",
+      "relatedVerses": [
+        "Números 13:1-14:45"
+      ],
+      "yearStart": 1445,
+      "yearEnd": null
+    },
+    {
+      "id": "OT053",
+      "event": "Peregrinación de 40 Años",
+      "yearStart": 1445,
+      "yearEnd": 1406,
+      "yearBC": 1445,
+      "yearAD": null,
+      "dateDisplay": "1445-1406 a.C.",
+      "reference": "Números 14:33-34",
+      "testament": "OT",
+      "era": "Peregrinación",
+      "category": "wandering",
+      "description": "Por su incredulidad, Israel vaga por el desierto 40 años hasta que muere la generación rebelde",
+      "keyPersons": [
+        "Moisés",
+        "Pueblo de Israel"
+      ],
+      "location": "Desierto",
+      "certaintyLevel": "histórico",
+      "significance": "Consecuencias de la desobediencia",
+      "relatedVerses": [
+        "Números 14:26-35",
+        "Deuteronomio 2:14"
+      ]
+    },
+    {
+      "id": "OT054",
+      "event": "Muerte de Aarón",
+      "yearBC": 1407,
+      "yearAD": null,
+      "dateDisplay": "1407 a.C.",
+      "reference": "Números 20:22-29",
+      "testament": "OT",
+      "era": "Peregrinación",
+      "category": "death",
+      "description": "Aarón muere en el Monte Hor a los 123 años. Eleazar se convierte en sumo sacerdote.",
+      "keyPersons": [
+        "Aarón",
+        "Moisés",
+        "Eleazar"
+      ],
+      "location": "Monte Hor",
+      "certaintyLevel": "histórico",
+      "significance": "Fin del primer sumo sacerdote",
+      "relatedVerses": [
+        "Números 20:22-29",
+        "Números 33:38-39"
+      ],
+      "yearStart": 1407,
+      "yearEnd": null
+    },
+    {
+      "id": "OT055",
+      "event": "La Serpiente de Bronce",
+      "yearBC": 1407,
+      "yearAD": null,
+      "dateDisplay": "1407 a.C.",
+      "reference": "Números 21:4-9",
+      "testament": "OT",
+      "era": "Peregrinación",
+      "category": "provision",
+      "description": "Dios envía serpientes ardientes. Moisés levanta una serpiente de bronce; quien la mira vive.",
+      "keyPersons": [
+        "Moisés",
+        "Pueblo de Israel"
+      ],
+      "location": "Desierto",
+      "certaintyLevel": "histórico",
+      "significance": "Tipo de Cristo levantado en la cruz",
+      "relatedVerses": [
+        "Números 21:4-9",
+        "Juan 3:14-15"
+      ],
+      "yearStart": 1407,
+      "yearEnd": null
+    },
+    {
+      "id": "OT056",
+      "event": "Muerte de Moisés",
+      "yearBC": 1406,
+      "yearAD": null,
+      "dateDisplay": "1406 a.C.",
+      "reference": "Deuteronomio 34",
+      "testament": "OT",
+      "era": "Peregrinación",
+      "category": "death",
+      "description": "Moisés ve la Tierra Prometida desde el Monte Nebo pero no entra. Muere a los 120 años.",
+      "keyPersons": [
+        "Moisés",
+        "Dios"
+      ],
+      "location": "Monte Nebo (Moab)",
+      "certaintyLevel": "histórico",
+      "significance": "Fin del liderazgo de Moisés, el gran legislador",
+      "relatedVerses": [
+        "Deuteronomio 34:1-12"
+      ],
+      "yearStart": 1406,
+      "yearEnd": null
+    },
+    {
+      "id": "OT057",
+      "event": "Josué Cruza el Jordán",
+      "yearBC": 1406,
+      "yearAD": null,
+      "dateDisplay": "1406 a.C.",
+      "reference": "Josué 3-4",
+      "testament": "OT",
+      "era": "Conquista",
+      "category": "miracle",
+      "description": "Israel cruza el río Jordán en seco. Josué levanta 12 piedras como memorial.",
+      "keyPersons": [
+        "Josué",
+        "Pueblo de Israel"
+      ],
+      "location": "Río Jordán",
+      "certaintyLevel": "histórico",
+      "significance": "Entrada milagrosa a la Tierra Prometida",
+      "relatedVerses": [
+        "Josué 3:1-4:24"
+      ],
+      "yearStart": 1406,
+      "yearEnd": null
+    },
+    {
+      "id": "OT058",
+      "event": "Caída de Jericó",
+      "yearBC": 1406,
+      "yearAD": null,
+      "dateDisplay": "1406 a.C.",
+      "reference": "Josué 6",
+      "testament": "OT",
+      "era": "Conquista",
+      "category": "victory",
+      "description": "Los muros de Jericó caen después que Israel marcha alrededor durante 7 días",
+      "keyPersons": [
+        "Josué",
+        "Rahab"
+      ],
+      "location": "Jericó",
+      "certaintyLevel": "histórico",
+      "significance": "Primera victoria en Canaán",
+      "relatedVerses": [
+        "Josué 6:1-27",
+        "Hebreos 11:30"
+      ],
+      "yearStart": 1406,
+      "yearEnd": null
+    },
+    {
+      "id": "OT059",
+      "event": "Conquista de Canaán",
+      "yearStart": 1406,
+      "yearEnd": 1399,
+      "yearBC": 1406,
+      "yearAD": null,
+      "dateDisplay": "1406-1399 a.C.",
+      "reference": "Josué 1-12",
+      "testament": "OT",
+      "era": "Conquista",
+      "category": "victory",
+      "description": "Israel conquista la mayor parte de Canaán bajo el liderazgo de Josué",
+      "keyPersons": [
+        "Josué",
+        "Pueblo de Israel"
+      ],
+      "location": "Canaán",
+      "certaintyLevel": "histórico",
+      "significance": "Cumplimiento de la promesa de Dios a Abraham",
+      "relatedVerses": [
+        "Josué 11:23",
+        "Josué 21:43-45"
+      ]
+    },
+    {
+      "id": "OT060",
+      "event": "División de la Tierra",
+      "yearBC": 1399,
+      "yearAD": null,
+      "dateDisplay": "1399 a.C.",
+      "reference": "Josué 13-22",
+      "testament": "OT",
+      "era": "Conquista",
+      "category": "distribution",
+      "description": "La tierra de Canaán es dividida entre las 12 tribus de Israel",
+      "keyPersons": [
+        "Josué",
+        "Eleazar"
+      ],
+      "location": "Silo, Canaán",
+      "certaintyLevel": "histórico",
+      "significance": "Herencia tribal establecida",
+      "relatedVerses": [
+        "Josué 13:1-22:34"
+      ],
+      "yearStart": 1399,
+      "yearEnd": null
+    },
+    {
+      "id": "OT061",
+      "event": "Muerte de Josué",
+      "yearBC": 1383,
+      "yearAD": null,
+      "dateDisplay": "1383 a.C.",
+      "reference": "Josué 24:29",
+      "testament": "OT",
+      "era": "Conquista",
+      "category": "death",
+      "description": "Josué muere a los 110 años después de liderar a Israel en la conquista",
+      "keyPersons": [
+        "Josué"
+      ],
+      "location": "Timnat-sera",
+      "certaintyLevel": "histórico",
+      "significance": "Fin del liderazgo de Josué",
+      "relatedVerses": [
+        "Josué 24:29-31"
+      ],
+      "yearStart": 1383,
+      "yearEnd": null
+    },
+    {
+      "id": "OT062",
+      "event": "Período de los Jueces",
+      "yearStart": 1383,
+      "yearEnd": 1043,
+      "yearBC": 1383,
+      "yearAD": null,
+      "dateDisplay": "1383-1043 a.C.",
+      "reference": "Jueces 2:16",
+      "testament": "OT",
+      "era": "Jueces",
+      "category": "governance",
+      "description": "Israel es gobernado por jueces durante ciclos de apostasía, opresión, arrepentimiento y liberación",
+      "keyPersons": [
+        "Varios jueces"
+      ],
+      "location": "Canaán",
+      "certaintyLevel": "histórico",
+      "significance": "Período de inestabilidad antes de la monarquía",
+      "relatedVerses": [
+        "Jueces 2:11-19"
+      ]
+    },
+    {
+      "id": "OT063",
+      "event": "Ministerio de Débora",
+      "yearBC": 1209,
+      "yearAD": null,
+      "dateDisplay": "1209 a.C.",
+      "reference": "Jueces 4-5",
+      "testament": "OT",
+      "era": "Jueces",
+      "category": "deliverance",
+      "description": "Débora, profetisa y jueza, lidera a Israel junto con Barac contra Sísara",
+      "keyPersons": [
+        "Débora",
+        "Barac",
+        "Jael"
+      ],
+      "location": "Israel",
+      "certaintyLevel": "histórico",
+      "significance": "Única mujer jueza de Israel",
+      "relatedVerses": [
+        "Jueces 4:1-5:31"
+      ],
+      "yearStart": 1209,
+      "yearEnd": null
+    },
+    {
+      "id": "OT064",
+      "event": "Gedeón Derrota a Madián",
+      "yearBC": 1162,
+      "yearAD": null,
+      "dateDisplay": "1162 a.C.",
+      "reference": "Jueces 6-8",
+      "testament": "OT",
+      "era": "Jueces",
+      "category": "deliverance",
+      "description": "Gedeón con 300 hombres derrota al ejército madianita con trompetas y cántaros",
+      "keyPersons": [
+        "Gedeón"
+      ],
+      "location": "Valle de Jezreel",
+      "certaintyLevel": "histórico",
+      "significance": "Victoria por fe, no por números",
+      "relatedVerses": [
+        "Jueces 6:1-8:35",
+        "Hebreos 11:32"
+      ],
+      "yearStart": 1162,
+      "yearEnd": null
+    },
+    {
+      "id": "OT065",
+      "event": "Sansón Juzga a Israel",
+      "yearStart": 1075,
+      "yearEnd": 1055,
+      "yearBC": 1075,
+      "yearAD": null,
+      "dateDisplay": "1075-1055 a.C.",
+      "reference": "Jueces 13-16",
+      "testament": "OT",
+      "era": "Jueces",
+      "category": "deliverance",
+      "description": "Sansón, el hombre más fuerte, juzga a Israel por 20 años",
+      "keyPersons": [
+        "Sansón",
+        "Dalila"
+      ],
+      "location": "Israel",
+      "certaintyLevel": "histórico",
+      "significance": "Juez con fuerza sobrenatural contra los filisteos",
+      "relatedVerses": [
+        "Jueces 13:1-16:31"
+      ]
+    },
+    {
+      "id": "OT066",
+      "event": "Rut y Booz",
+      "yearBC": 1150,
+      "yearAD": null,
+      "dateDisplay": "1150 a.C.",
+      "reference": "Rut 1-4",
+      "testament": "OT",
+      "era": "Jueces",
+      "category": "redemption",
+      "description": "Rut la moabita se casa con Booz. Son bisabuelos del rey David.",
+      "keyPersons": [
+        "Rut",
+        "Booz",
+        "Noemí"
+      ],
+      "location": "Belén",
+      "certaintyLevel": "histórico",
+      "significance": "Ancestros de David y Jesús, historia de redención",
+      "relatedVerses": [
+        "Rut 1:1-4:22",
+        "Mateo 1:5"
+      ],
+      "yearStart": 1150,
+      "yearEnd": null
+    },
+    {
+      "id": "OT067",
+      "event": "Nacimiento de Samuel",
+      "yearBC": 1105,
+      "yearAD": null,
+      "dateDisplay": "1105 a.C.",
+      "reference": "1 Samuel 1",
+      "testament": "OT",
+      "era": "Transición",
+      "category": "genealogy",
+      "description": "Ana ora por un hijo y Dios le da a Samuel, quien será profeta y último juez",
+      "keyPersons": [
+        "Samuel",
+        "Ana",
+        "Elcana"
+      ],
+      "location": "Ramá",
+      "certaintyLevel": "histórico",
+      "significance": "Último juez y primer profeta de la monarquía",
+      "relatedVerses": [
+        "1 Samuel 1:1-28"
+      ],
+      "yearStart": 1105,
+      "yearEnd": null
+    },
+    {
+      "id": "OT068",
+      "event": "Captura y Retorno del Arca",
+      "yearBC": 1075,
+      "yearAD": null,
+      "dateDisplay": "1075 a.C.",
+      "reference": "1 Samuel 4-6",
+      "testament": "OT",
+      "era": "Transición",
+      "category": "judgment",
+      "description": "Los filisteos capturan el arca. Dios los castiga y la devuelven.",
+      "keyPersons": [
+        "Elí",
+        "Filisteos"
+      ],
+      "location": "Silo → Filistea → Quiriat-jearim",
+      "certaintyLevel": "histórico",
+      "significance": "Derrota de Israel por apostasía",
+      "relatedVerses": [
+        "1 Samuel 4:1-6:21"
+      ],
+      "yearStart": 1075,
+      "yearEnd": null
+    },
+    {
+      "id": "OT069",
+      "event": "Israel Pide un Rey",
+      "yearBC": 1052,
+      "yearAD": null,
+      "dateDisplay": "1052 a.C.",
+      "reference": "1 Samuel 8",
+      "testament": "OT",
+      "era": "Transición",
+      "category": "monarchy",
+      "description": "Israel rechaza el gobierno teocrático y pide un rey como las demás naciones",
+      "keyPersons": [
+        "Samuel",
+        "Ancianos de Israel"
+      ],
+      "location": "Israel",
+      "certaintyLevel": "histórico",
+      "significance": "Inicio de la monarquía israelita",
+      "relatedVerses": [
+        "1 Samuel 8:1-22"
+      ],
+      "yearStart": 1052,
+      "yearEnd": null
+    },
+    {
+      "id": "OT070",
+      "event": "Saúl Ungido como Primer Rey",
+      "yearBC": 1050,
+      "yearAD": null,
+      "dateDisplay": "1050 a.C.",
+      "reference": "1 Samuel 10",
+      "testament": "OT",
+      "era": "Reino Unido",
+      "category": "monarchy",
+      "description": "Samuel unge a Saúl de la tribu de Benjamín como primer rey de Israel",
+      "keyPersons": [
+        "Saúl",
+        "Samuel"
+      ],
+      "location": "Ramá",
+      "certaintyLevel": "histórico",
+      "significance": "Primer rey de Israel",
+      "relatedVerses": [
+        "1 Samuel 9:1-10:27"
+      ],
+      "yearStart": 1050,
+      "yearEnd": null
+    },
+    {
+      "id": "OT071",
+      "event": "Saúl Desobedece a Dios",
+      "yearBC": 1025,
+      "yearAD": null,
+      "dateDisplay": "1025 a.C.",
+      "reference": "1 Samuel 15",
+      "testament": "OT",
+      "era": "Reino Unido",
+      "category": "rebellion",
+      "description": "Saúl desobedece el mandato de Dios de destruir totalmente a Amalec. Dios lo rechaza como rey.",
+      "keyPersons": [
+        "Saúl",
+        "Samuel"
+      ],
+      "location": "Israel",
+      "certaintyLevel": "histórico",
+      "significance": "Rechazo de Saúl como rey",
+      "relatedVerses": [
+        "1 Samuel 15:1-35"
+      ],
+      "yearStart": 1025,
+      "yearEnd": null
+    },
+    {
+      "id": "OT072",
+      "event": "David Ungido Rey",
+      "yearBC": 1025,
+      "yearAD": null,
+      "dateDisplay": "1025 a.C.",
+      "reference": "1 Samuel 16",
+      "testament": "OT",
+      "era": "Reino Unido",
+      "category": "monarchy",
+      "description": "Samuel unge a David, el menor de los hijos de Isaí, como futuro rey",
+      "keyPersons": [
+        "David",
+        "Samuel",
+        "Isaí"
+      ],
+      "location": "Belén",
+      "certaintyLevel": "histórico",
+      "significance": "David elegido como rey según el corazón de Dios",
+      "relatedVerses": [
+        "1 Samuel 16:1-13"
+      ],
+      "yearStart": 1025,
+      "yearEnd": null
+    },
+    {
+      "id": "OT073",
+      "event": "David Derrota a Goliat",
+      "yearBC": 1025,
+      "yearAD": null,
+      "dateDisplay": "1025 a.C.",
+      "reference": "1 Samuel 17",
+      "testament": "OT",
+      "era": "Reino Unido",
+      "category": "victory",
+      "description": "David, un joven pastor, mata al gigante filisteo Goliat con una honda",
+      "keyPersons": [
+        "David",
+        "Goliat",
+        "Saúl"
+      ],
+      "location": "Valle de Ela",
+      "certaintyLevel": "histórico",
+      "significance": "Victoria de fe sobre el enemigo de Dios",
+      "relatedVerses": [
+        "1 Samuel 17:1-58"
+      ],
+      "yearStart": 1025,
+      "yearEnd": null
+    },
+    {
+      "id": "OT074",
+      "event": "Amistad entre David y Jonatán",
+      "yearBC": 1025,
+      "yearAD": null,
+      "dateDisplay": "1025 a.C.",
+      "reference": "1 Samuel 18:1-4",
+      "testament": "OT",
+      "era": "Reino Unido",
+      "category": "relationship",
+      "description": "Jonatán, hijo de Saúl, hace pacto de amistad con David",
+      "keyPersons": [
+        "David",
+        "Jonatán"
+      ],
+      "location": "Corte de Saúl",
+      "certaintyLevel": "histórico",
+      "significance": "Ejemplo bíblico de amistad verdadera",
+      "relatedVerses": [
+        "1 Samuel 18:1-4",
+        "1 Samuel 20"
+      ],
+      "yearStart": 1025,
+      "yearEnd": null
+    },
+    {
+      "id": "OT075",
+      "event": "Saúl Persigue a David",
+      "yearStart": 1020,
+      "yearEnd": 1010,
+      "yearBC": 1020,
+      "yearAD": null,
+      "dateDisplay": "1020-1010 a.C.",
+      "reference": "1 Samuel 19-30",
+      "testament": "OT",
+      "era": "Reino Unido",
+      "category": "persecution",
+      "description": "Saúl, celoso de David, intenta matarlo repetidamente. David huye por años.",
+      "keyPersons": [
+        "David",
+        "Saúl"
+      ],
+      "location": "Desiertos de Israel",
+      "certaintyLevel": "histórico",
+      "significance": "Preparación de David para ser rey",
+      "relatedVerses": [
+        "1 Samuel 19:1-30:31"
+      ]
+    },
+    {
+      "id": "OT076",
+      "event": "Muerte de Saúl y Jonatán",
+      "yearBC": 1010,
+      "yearAD": null,
+      "dateDisplay": "1010 a.C.",
+      "reference": "1 Samuel 31",
+      "testament": "OT",
+      "era": "Reino Unido",
+      "category": "death",
+      "description": "Saúl y Jonatán mueren en batalla contra los filisteos en el Monte Gilboa",
+      "keyPersons": [
+        "Saúl",
+        "Jonatán"
+      ],
+      "location": "Monte Gilboa",
+      "certaintyLevel": "histórico",
+      "significance": "Fin del reinado de Saúl",
+      "relatedVerses": [
+        "1 Samuel 31:1-13",
+        "2 Samuel 1"
+      ],
+      "yearStart": 1010,
+      "yearEnd": null
+    },
+    {
+      "id": "OT077",
+      "event": "David Rey de Judá",
+      "yearBC": 1010,
+      "yearAD": null,
+      "dateDisplay": "1010 a.C.",
+      "reference": "2 Samuel 2:4",
+      "testament": "OT",
+      "era": "Reino Unido",
+      "category": "monarchy",
+      "description": "David es ungido rey sobre Judá en Hebrón",
+      "keyPersons": [
+        "David"
+      ],
+      "location": "Hebrón",
+      "certaintyLevel": "histórico",
+      "significance": "David reina sobre una tribu primero",
+      "relatedVerses": [
+        "2 Samuel 2:1-7"
+      ],
+      "yearStart": 1010,
+      "yearEnd": null
+    },
+    {
+      "id": "OT078",
+      "event": "David Rey de Todo Israel",
+      "yearBC": 1003,
+      "yearAD": null,
+      "dateDisplay": "1003 a.C.",
+      "reference": "2 Samuel 5:3",
+      "testament": "OT",
+      "era": "Reino Unido",
+      "category": "monarchy",
+      "description": "David es ungido rey sobre todo Israel. Reina 40 años en total.",
+      "keyPersons": [
+        "David"
+      ],
+      "location": "Hebrón",
+      "certaintyLevel": "histórico",
+      "significance": "Unificación del reino bajo David",
+      "relatedVerses": [
+        "2 Samuel 5:1-5",
+        "1 Crónicas 11:1-3"
+      ],
+      "yearStart": 1003,
+      "yearEnd": null
+    },
+    {
+      "id": "OT079",
+      "event": "David Conquista Jerusalén",
+      "yearBC": 1003,
+      "yearAD": null,
+      "dateDisplay": "1003 a.C.",
+      "reference": "2 Samuel 5:6-10",
+      "testament": "OT",
+      "era": "Reino Unido",
+      "category": "victory",
+      "description": "David conquista Jerusalén de los jebuseos y la hace su capital",
+      "keyPersons": [
+        "David"
+      ],
+      "location": "Jerusalén (Sion)",
+      "certaintyLevel": "histórico",
+      "significance": "Jerusalén se convierte en la capital de Israel",
+      "relatedVerses": [
+        "2 Samuel 5:6-10",
+        "1 Crónicas 11:4-9"
+      ],
+      "yearStart": 1003,
+      "yearEnd": null
+    },
+    {
+      "id": "OT080",
+      "event": "El Arca Llevada a Jerusalén",
+      "yearBC": 1002,
+      "yearAD": null,
+      "dateDisplay": "1002 a.C.",
+      "reference": "2 Samuel 6",
+      "testament": "OT",
+      "era": "Reino Unido",
+      "category": "worship",
+      "description": "David trae el arca del pacto a Jerusalén con gran celebración",
+      "keyPersons": [
+        "David"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Jerusalén se convierte en centro religioso",
+      "relatedVerses": [
+        "2 Samuel 6:1-23",
+        "1 Crónicas 15-16"
+      ],
+      "yearStart": 1002,
+      "yearEnd": null
+    },
+    {
+      "id": "OT081",
+      "event": "Pacto Davídico",
+      "yearBC": 1000,
+      "yearAD": null,
+      "dateDisplay": "1000 a.C.",
+      "reference": "2 Samuel 7",
+      "testament": "OT",
+      "era": "Reino Unido",
+      "category": "covenant",
+      "description": "Dios promete a David que su trono será establecido para siempre",
+      "keyPersons": [
+        "David",
+        "Natán",
+        "Dios"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Fundamento del reino mesiánico eterno",
+      "relatedVerses": [
+        "2 Samuel 7:1-29",
+        "Lucas 1:32-33"
+      ],
+      "yearStart": 1000,
+      "yearEnd": null
+    },
+    {
+      "id": "OT082",
+      "event": "Pecado de David con Betsabé",
+      "yearBC": 995,
+      "yearAD": null,
+      "dateDisplay": "995 a.C.",
+      "reference": "2 Samuel 11-12",
+      "testament": "OT",
+      "era": "Reino Unido",
+      "category": "sin",
+      "description": "David comete adulterio con Betsabé y manda matar a Urías. El profeta Natán lo confronta.",
+      "keyPersons": [
+        "David",
+        "Betsabé",
+        "Urías",
+        "Natán"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Consecuencias del pecado aun para los ungidos de Dios",
+      "relatedVerses": [
+        "2 Samuel 11:1-12:25",
+        "Salmo 51"
+      ],
+      "yearStart": 995,
+      "yearEnd": null
+    },
+    {
+      "id": "OT083",
+      "event": "Rebelión de Absalón",
+      "yearBC": 980,
+      "yearAD": null,
+      "dateDisplay": "980 a.C.",
+      "reference": "2 Samuel 15-18",
+      "testament": "OT",
+      "era": "Reino Unido",
+      "category": "rebellion",
+      "description": "Absalón, hijo de David, lidera una rebelión contra su padre",
+      "keyPersons": [
+        "Absalón",
+        "David"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Consecuencias familiares del pecado de David",
+      "relatedVerses": [
+        "2 Samuel 15:1-18:33"
+      ],
+      "yearStart": 980,
+      "yearEnd": null
+    },
+    {
+      "id": "OT084",
+      "event": "Censo de David",
+      "yearBC": 971,
+      "yearAD": null,
+      "dateDisplay": "971 a.C.",
+      "reference": "2 Samuel 24",
+      "testament": "OT",
+      "era": "Reino Unido",
+      "category": "sin",
+      "description": "David cuenta al pueblo confiando en números en lugar de Dios. Dios envía plaga.",
+      "keyPersons": [
+        "David",
+        "Joab"
+      ],
+      "location": "Israel",
+      "certaintyLevel": "histórico",
+      "significance": "Sitio del futuro templo determinado",
+      "relatedVerses": [
+        "2 Samuel 24:1-25",
+        "1 Crónicas 21"
+      ],
+      "yearStart": 971,
+      "yearEnd": null
+    },
+    {
+      "id": "OT085",
+      "event": "Salomón Ungido Rey",
+      "yearBC": 970,
+      "yearAD": null,
+      "dateDisplay": "970 a.C.",
+      "reference": "1 Reyes 1",
+      "testament": "OT",
+      "era": "Reino Unido",
+      "category": "monarchy",
+      "description": "Salomón es ungido rey mientras David aún vive, frustando la conspiración de Adonías",
+      "keyPersons": [
+        "Salomón",
+        "David",
+        "Natán",
+        "Betsabé"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Tercero y más glorioso rey del reino unido",
+      "relatedVerses": [
+        "1 Reyes 1:1-53"
+      ],
+      "yearStart": 970,
+      "yearEnd": null
+    },
+    {
+      "id": "OT086",
+      "event": "Muerte de David",
+      "yearBC": 970,
+      "yearAD": null,
+      "dateDisplay": "970 a.C.",
+      "reference": "1 Reyes 2:10",
+      "testament": "OT",
+      "era": "Reino Unido",
+      "category": "death",
+      "description": "David muere después de reinar 40 años (7 en Hebrón, 33 en Jerusalén)",
+      "keyPersons": [
+        "David",
+        "Salomón"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Fin del reinado del rey según el corazón de Dios",
+      "relatedVerses": [
+        "1 Reyes 2:10-12",
+        "1 Crónicas 29:26-30"
+      ],
+      "yearStart": 970,
+      "yearEnd": null
+    },
+    {
+      "id": "OT087",
+      "event": "Sabiduría de Salomón",
+      "yearBC": 970,
+      "yearAD": null,
+      "dateDisplay": "970 a.C.",
+      "reference": "1 Reyes 3",
+      "testament": "OT",
+      "era": "Reino Unido",
+      "category": "wisdom",
+      "description": "Dios aparece a Salomón en sueño. Salomón pide sabiduría y Dios se la concede.",
+      "keyPersons": [
+        "Salomón",
+        "Dios"
+      ],
+      "location": "Gabaón",
+      "certaintyLevel": "histórico",
+      "significance": "Salomón se convierte en el hombre más sabio",
+      "relatedVerses": [
+        "1 Reyes 3:1-28",
+        "2 Crónicas 1:7-12"
+      ],
+      "yearStart": 970,
+      "yearEnd": null
+    },
+    {
+      "id": "OT088",
+      "event": "Construcción del Templo",
+      "yearStart": 967,
+      "yearEnd": 960,
+      "yearBC": 967,
+      "yearAD": null,
+      "dateDisplay": "967-960 a.C.",
+      "reference": "1 Reyes 6",
+      "testament": "OT",
+      "era": "Reino Unido",
+      "category": "worship",
+      "description": "Salomón construye el templo de Jerusalén, casa permanente para el arca",
+      "keyPersons": [
+        "Salomón",
+        "Hiram de Tiro"
+      ],
+      "location": "Jerusalén (Monte Moriah)",
+      "certaintyLevel": "histórico",
+      "significance": "Centro de adoración permanente para Israel",
+      "relatedVerses": [
+        "1 Reyes 6:1-38",
+        "2 Crónicas 3-4"
+      ]
+    },
+    {
+      "id": "OT089",
+      "event": "Dedicación del Templo",
+      "yearBC": 960,
+      "yearAD": null,
+      "dateDisplay": "960 a.C.",
+      "reference": "1 Reyes 8",
+      "testament": "OT",
+      "era": "Reino Unido",
+      "category": "worship",
+      "description": "Salomón dedica el templo. La gloria de Dios llena el templo.",
+      "keyPersons": [
+        "Salomón"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Dios habita entre su pueblo",
+      "relatedVerses": [
+        "1 Reyes 8:1-66",
+        "2 Crónicas 5-7"
+      ],
+      "yearStart": 960,
+      "yearEnd": null
+    },
+    {
+      "id": "OT090",
+      "event": "Visita de la Reina de Sabá",
+      "yearBC": 950,
+      "yearAD": null,
+      "dateDisplay": "950 a.C.",
+      "reference": "1 Reyes 10:1-13",
+      "testament": "OT",
+      "era": "Reino Unido",
+      "category": "diplomacy",
+      "description": "La reina de Sabá visita a Salomón y queda asombrada de su sabiduría y riqueza",
+      "keyPersons": [
+        "Salomón",
+        "Reina de Sabá"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Fama internacional de Salomón",
+      "relatedVerses": [
+        "1 Reyes 10:1-13",
+        "Mateo 12:42"
+      ],
+      "yearStart": 950,
+      "yearEnd": null
+    },
+    {
+      "id": "OT091",
+      "event": "Apostasía de Salomón",
+      "yearBC": 940,
+      "yearAD": null,
+      "dateDisplay": "940 a.C.",
+      "reference": "1 Reyes 11",
+      "testament": "OT",
+      "era": "Reino Unido",
+      "category": "apostasy",
+      "description": "Las esposas extranjeras de Salomón lo apartan del Señor. Construye altares paganos.",
+      "keyPersons": [
+        "Salomón"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Causa de la división del reino",
+      "relatedVerses": [
+        "1 Reyes 11:1-13"
+      ],
+      "yearStart": 940,
+      "yearEnd": null
+    },
+    {
+      "id": "OT092",
+      "event": "Muerte de Salomón",
+      "yearBC": 931,
+      "yearAD": null,
+      "dateDisplay": "931 a.C.",
+      "reference": "1 Reyes 11:43",
+      "testament": "OT",
+      "era": "Reino Unido",
+      "category": "death",
+      "description": "Salomón muere después de reinar 40 años. Su hijo Roboam le sucede.",
+      "keyPersons": [
+        "Salomón",
+        "Roboam"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Fin del reino unido",
+      "relatedVerses": [
+        "1 Reyes 11:41-43",
+        "2 Crónicas 9:29-31"
+      ],
+      "yearStart": 931,
+      "yearEnd": null
+    },
+    {
+      "id": "OT093",
+      "event": "División del Reino",
+      "yearBC": 931,
+      "yearAD": null,
+      "dateDisplay": "931 a.C.",
+      "reference": "1 Reyes 12",
+      "testament": "OT",
+      "era": "Reinos Divididos",
+      "category": "division",
+      "description": "Israel se divide en dos reinos: Israel (Norte) con 10 tribus bajo Jeroboam, y Judá (Sur) con 2 tribus bajo Roboam",
+      "keyPersons": [
+        "Roboam",
+        "Jeroboam"
+      ],
+      "location": "Siquem",
+      "certaintyLevel": "histórico",
+      "significance": "Cumplimiento de la profecía por el pecado de Salomón",
+      "relatedVerses": [
+        "1 Reyes 12:1-24",
+        "2 Crónicas 10"
+      ],
+      "yearStart": 931,
+      "yearEnd": null
+    },
+    {
+      "id": "OT094",
+      "event": "Jeroboam Establece Becerros de Oro",
+      "yearBC": 931,
+      "yearAD": null,
+      "dateDisplay": "931 a.C.",
+      "reference": "1 Reyes 12:25-33",
+      "testament": "OT",
+      "era": "Reinos Divididos",
+      "category": "apostasy",
+      "description": "Jeroboam establece lugares de adoración con becerros de oro en Betel y Dan para evitar que el pueblo vaya a Jerusalén",
+      "keyPersons": [
+        "Jeroboam I"
+      ],
+      "location": "Reino del Norte (Israel)",
+      "certaintyLevel": "histórico",
+      "significance": "Inicio de la idolatría sistemática en el norte",
+      "relatedVerses": [
+        "1 Reyes 12:25-33"
+      ],
+      "yearStart": 931,
+      "yearEnd": null
+    },
+    {
+      "id": "OT095",
+      "event": "Ministerio del Profeta Elías",
+      "yearStart": 875,
+      "yearEnd": 848,
+      "yearBC": 875,
+      "yearAD": null,
+      "dateDisplay": "875-848 a.C.",
+      "reference": "1 Reyes 17-2 Reyes 2",
+      "testament": "OT",
+      "era": "Reinos Divididos",
+      "category": "prophecy",
+      "description": "Elías profetiza en Israel durante los reinados de Acab y Ocozías",
+      "keyPersons": [
+        "Elías",
+        "Acab",
+        "Jezabel"
+      ],
+      "location": "Reino del Norte",
+      "certaintyLevel": "histórico",
+      "significance": "Uno de los profetas más grandes, confrontó la idolatría",
+      "relatedVerses": [
+        "1 Reyes 17:1-2 Reyes 2:11"
+      ]
+    },
+    {
+      "id": "OT096",
+      "event": "Sequía de Tres Años",
+      "yearStart": 863,
+      "yearEnd": 860,
+      "yearBC": 863,
+      "yearAD": null,
+      "dateDisplay": "863-860 a.C.",
+      "reference": "1 Reyes 17-18",
+      "testament": "OT",
+      "era": "Reinos Divididos",
+      "category": "judgment",
+      "description": "Por palabra de Elías, no llueve en Israel por tres años y medio",
+      "keyPersons": [
+        "Elías",
+        "Acab"
+      ],
+      "location": "Reino del Norte",
+      "certaintyLevel": "histórico",
+      "significance": "Juicio de Dios por adoración a Baal",
+      "relatedVerses": [
+        "1 Reyes 17:1",
+        "Santiago 5:17"
+      ]
+    },
+    {
+      "id": "OT097",
+      "event": "Enfrentamiento en el Monte Carmelo",
+      "yearBC": 860,
+      "yearAD": null,
+      "dateDisplay": "860 a.C.",
+      "reference": "1 Reyes 18:20-40",
+      "testament": "OT",
+      "era": "Reinos Divididos",
+      "category": "victory",
+      "description": "Elías desafía a 450 profetas de Baal. Fuego de Dios consume el sacrificio de Elías.",
+      "keyPersons": [
+        "Elías",
+        "Profetas de Baal",
+        "Acab"
+      ],
+      "location": "Monte Carmelo",
+      "certaintyLevel": "histórico",
+      "significance": "Victoria de YHWH sobre Baal",
+      "relatedVerses": [
+        "1 Reyes 18:20-40"
+      ],
+      "yearStart": 860,
+      "yearEnd": null
+    },
+    {
+      "id": "OT098",
+      "event": "Elías Arrebatado al Cielo",
+      "yearBC": 848,
+      "yearAD": null,
+      "dateDisplay": "848 a.C.",
+      "reference": "2 Reyes 2:11",
+      "testament": "OT",
+      "era": "Reinos Divididos",
+      "category": "translation",
+      "description": "Elías es llevado al cielo en un carro de fuego. Eliseo recibe doble porción del espíritu.",
+      "keyPersons": [
+        "Elías",
+        "Eliseo"
+      ],
+      "location": "Jordán",
+      "certaintyLevel": "histórico",
+      "significance": "Segundo hombre que no murió, precursor de Cristo",
+      "relatedVerses": [
+        "2 Reyes 2:1-12",
+        "Malaquías 4:5"
+      ],
+      "yearStart": 848,
+      "yearEnd": null
+    },
+    {
+      "id": "OT099",
+      "event": "Ministerio del Profeta Eliseo",
+      "yearStart": 848,
+      "yearEnd": 797,
+      "yearBC": 848,
+      "yearAD": null,
+      "dateDisplay": "848-797 a.C.",
+      "reference": "2 Reyes 2-13",
+      "testament": "OT",
+      "era": "Reinos Divididos",
+      "category": "prophecy",
+      "description": "Eliseo sucede a Elías y realiza muchos milagros",
+      "keyPersons": [
+        "Eliseo"
+      ],
+      "location": "Reino del Norte",
+      "certaintyLevel": "histórico",
+      "significance": "Profeta de milagros, el doble que Elías",
+      "relatedVerses": [
+        "2 Reyes 2:12-13:21"
+      ]
+    },
+    {
+      "id": "OT100",
+      "event": "Ministerio del Profeta Isaías",
+      "yearStart": 740,
+      "yearEnd": 681,
+      "yearBC": 740,
+      "yearAD": null,
+      "dateDisplay": "740-681 a.C.",
+      "reference": "Isaías 1:1",
+      "testament": "OT",
+      "era": "Reinos Divididos",
+      "category": "prophecy",
+      "description": "Isaías profetiza en Judá durante reinados de Uzías, Jotam, Acaz y Ezequías",
+      "keyPersons": [
+        "Isaías",
+        "Ezequías"
+      ],
+      "location": "Reino del Sur (Judá)",
+      "certaintyLevel": "histórico",
+      "significance": "Profeta mesiánico por excelencia",
+      "relatedVerses": [
+        "Isaías 1:1",
+        "Isaías 53"
+      ]
+    },
+    {
+      "id": "OT101",
+      "event": "Caída del Reino del Norte",
+      "yearBC": 722,
+      "yearAD": null,
+      "dateDisplay": "722 a.C.",
+      "reference": "2 Reyes 17",
+      "testament": "OT",
+      "era": "Reinos Divididos",
+      "category": "judgment",
+      "description": "Asiria conquista Samaria y deporta a las 10 tribus del norte. Fin del Reino de Israel.",
+      "keyPersons": [
+        "Oseas (rey)",
+        "Salmanasar V"
+      ],
+      "location": "Samaria",
+      "certaintyLevel": "histórico",
+      "significance": "Juicio final sobre el reino del norte por idolatría persistente",
+      "relatedVerses": [
+        "2 Reyes 17:1-23",
+        "2 Reyes 18:9-12"
+      ],
+      "yearStart": 722,
+      "yearEnd": null
+    },
+    {
+      "id": "OT102",
+      "event": "Ezequías Reforma Judá",
+      "yearBC": 715,
+      "yearAD": null,
+      "dateDisplay": "715 a.C.",
+      "reference": "2 Reyes 18:1-7",
+      "testament": "OT",
+      "era": "Reino del Sur Solo",
+      "category": "reform",
+      "description": "Ezequías destruye los altares paganos y restaura la adoración en el templo",
+      "keyPersons": [
+        "Ezequías"
+      ],
+      "location": "Judá",
+      "certaintyLevel": "histórico",
+      "significance": "Gran avivamiento en Judá",
+      "relatedVerses": [
+        "2 Reyes 18:1-7",
+        "2 Crónicas 29-31"
+      ],
+      "yearStart": 715,
+      "yearEnd": null
+    },
+    {
+      "id": "OT103",
+      "event": "Asiria Sitia Jerusalén",
+      "yearBC": 701,
+      "yearAD": null,
+      "dateDisplay": "701 a.C.",
+      "reference": "2 Reyes 18-19",
+      "testament": "OT",
+      "era": "Reino del Sur Solo",
+      "category": "deliverance",
+      "description": "Senaquerib de Asiria sitia Jerusalén. Dios envía ángel que mata a 185,000 soldados asirios.",
+      "keyPersons": [
+        "Ezequías",
+        "Isaías",
+        "Senaquerib"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Liberación milagrosa de Jerusalén",
+      "relatedVerses": [
+        "2 Reyes 18:13-19:37",
+        "Isaías 36-37"
+      ],
+      "yearStart": 701,
+      "yearEnd": null
+    },
+    {
+      "id": "OT104",
+      "event": "Josías Descubre el Libro de la Ley",
+      "yearBC": 622,
+      "yearAD": null,
+      "dateDisplay": "622 a.C.",
+      "reference": "2 Reyes 22",
+      "testament": "OT",
+      "era": "Reino del Sur Solo",
+      "category": "reform",
+      "description": "Durante reparaciones del templo se encuentra el libro de la ley. Josías lidera reforma.",
+      "keyPersons": [
+        "Josías",
+        "Hilcías"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Última gran reforma antes del exilio",
+      "relatedVerses": [
+        "2 Reyes 22:1-23:30",
+        "2 Crónicas 34-35"
+      ],
+      "yearStart": 622,
+      "yearEnd": null
+    },
+    {
+      "id": "OT105",
+      "event": "Ministerio del Profeta Jeremías",
+      "yearStart": 627,
+      "yearEnd": 586,
+      "yearBC": 627,
+      "yearAD": null,
+      "dateDisplay": "627-586 a.C.",
+      "reference": "Jeremías 1:1-3",
+      "testament": "OT",
+      "era": "Reino del Sur Solo",
+      "category": "prophecy",
+      "description": "Jeremías profetiza durante 40 años antes y durante el exilio",
+      "keyPersons": [
+        "Jeremías"
+      ],
+      "location": "Judá → Egipto",
+      "certaintyLevel": "histórico",
+      "significance": "Profeta llorón, advirtió sobre el juicio venidero",
+      "relatedVerses": [
+        "Jeremías 1:1-19"
+      ]
+    },
+    {
+      "id": "OT106",
+      "event": "Primera Deportación a Babilonia",
+      "yearBC": 605,
+      "yearAD": null,
+      "dateDisplay": "605 a.C.",
+      "reference": "Daniel 1:1-6",
+      "testament": "OT",
+      "era": "Exilio Babilónico",
+      "category": "exile",
+      "description": "Nabucodonosor lleva cautivos de Judá, incluyendo a Daniel y sus amigos",
+      "keyPersons": [
+        "Daniel",
+        "Nabucodonosor",
+        "Joacim"
+      ],
+      "location": "Jerusalén → Babilonia",
+      "certaintyLevel": "histórico",
+      "significance": "Primer grupo de exiliados",
+      "relatedVerses": [
+        "Daniel 1:1-7",
+        "2 Reyes 24:1"
+      ],
+      "yearStart": 605,
+      "yearEnd": null
+    },
+    {
+      "id": "OT107",
+      "event": "Segunda Deportación",
+      "yearBC": 597,
+      "yearAD": null,
+      "dateDisplay": "597 a.C.",
+      "reference": "2 Reyes 24:10-16",
+      "testament": "OT",
+      "era": "Exilio Babilónico",
+      "category": "exile",
+      "description": "10,000 judíos deportados, incluyendo al rey Joaquín y al profeta Ezequiel",
+      "keyPersons": [
+        "Joaquín",
+        "Ezequiel",
+        "Nabucodonosor"
+      ],
+      "location": "Jerusalén → Babilonia",
+      "certaintyLevel": "histórico",
+      "significance": "Segunda ola de exiliados",
+      "relatedVerses": [
+        "2 Reyes 24:10-16",
+        "Ezequiel 1:1-3"
+      ],
+      "yearStart": 597,
+      "yearEnd": null
+    },
+    {
+      "id": "OT108",
+      "event": "Ministerio de Ezequiel en Babilonia",
+      "yearStart": 593,
+      "yearEnd": 571,
+      "yearBC": 593,
+      "yearAD": null,
+      "dateDisplay": "593-571 a.C.",
+      "reference": "Ezequiel 1:1",
+      "testament": "OT",
+      "era": "Exilio Babilónico",
+      "category": "prophecy",
+      "description": "Ezequiel profetiza entre los exiliados en Babilonia",
+      "keyPersons": [
+        "Ezequiel"
+      ],
+      "location": "Babilonia (río Quebar)",
+      "certaintyLevel": "histórico",
+      "significance": "Profeta de visiones apocalípticas y restauración",
+      "relatedVerses": [
+        "Ezequiel 1:1-3"
+      ]
+    },
+    {
+      "id": "OT109",
+      "event": "Caída de Jerusalén",
+      "yearBC": 586,
+      "yearAD": null,
+      "dateDisplay": "586 a.C.",
+      "reference": "2 Reyes 25",
+      "testament": "OT",
+      "era": "Exilio Babilónico",
+      "category": "judgment",
+      "description": "Nabucodonosor destruye Jerusalén y el templo. Tercera deportación. Judá deja de existir como nación.",
+      "keyPersons": [
+        "Nabucodonosor",
+        "Sedequías"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Fin del reino de Judá, destrucción del primer templo",
+      "relatedVerses": [
+        "2 Reyes 25:1-21",
+        "Jeremías 52",
+        "2 Crónicas 36:15-21"
+      ],
+      "yearStart": 586,
+      "yearEnd": null
+    },
+    {
+      "id": "OT110",
+      "event": "Daniel en el Foso de los Leones",
+      "yearBC": 539,
+      "yearAD": null,
+      "dateDisplay": "539 a.C.",
+      "reference": "Daniel 6",
+      "testament": "OT",
+      "era": "Exilio Babilónico",
+      "category": "deliverance",
+      "description": "Daniel es echado al foso de leones por orar a Dios. Dios lo protege.",
+      "keyPersons": [
+        "Daniel",
+        "Darío"
+      ],
+      "location": "Babilonia",
+      "certaintyLevel": "histórico",
+      "significance": "Fidelidad de Daniel recompensada",
+      "relatedVerses": [
+        "Daniel 6:1-28"
+      ],
+      "yearStart": 539,
+      "yearEnd": null
+    },
+    {
+      "id": "OT111",
+      "event": "Decreto de Ciro",
+      "yearBC": 538,
+      "yearAD": null,
+      "dateDisplay": "538 a.C.",
+      "reference": "Esdras 1",
+      "testament": "OT",
+      "era": "Restauración",
+      "category": "decree",
+      "description": "Ciro de Persia conquista Babilonia y permite a los judíos regresar a Jerusalén",
+      "keyPersons": [
+        "Ciro",
+        "Zorobabel"
+      ],
+      "location": "Babilonia",
+      "certaintyLevel": "histórico",
+      "significance": "Cumplimiento de profecías, inicio del retorno",
+      "relatedVerses": [
+        "Esdras 1:1-4",
+        "Isaías 44:28-45:1"
+      ],
+      "yearStart": 538,
+      "yearEnd": null
+    },
+    {
+      "id": "OT112",
+      "event": "Primer Retorno de Exiliados",
+      "yearBC": 536,
+      "yearAD": null,
+      "dateDisplay": "536 a.C.",
+      "reference": "Esdras 2",
+      "testament": "OT",
+      "era": "Restauración",
+      "category": "return",
+      "description": "Zorobabel lidera a 50,000 judíos de regreso a Jerusalén",
+      "keyPersons": [
+        "Zorobabel",
+        "Jesúa (sumo sacerdote)"
+      ],
+      "location": "Babilonia → Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Primera ola de retorno del exilio",
+      "relatedVerses": [
+        "Esdras 2:1-70"
+      ],
+      "yearStart": 536,
+      "yearEnd": null
+    },
+    {
+      "id": "OT113",
+      "event": "Reconstrucción del Templo Comienza",
+      "yearBC": 536,
+      "yearAD": null,
+      "dateDisplay": "536 a.C.",
+      "reference": "Esdras 3",
+      "testament": "OT",
+      "era": "Restauración",
+      "category": "building",
+      "description": "Se ponen los cimientos del segundo templo con alabanza y llanto",
+      "keyPersons": [
+        "Zorobabel",
+        "Jesúa"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Inicio de la reconstrucción del templo",
+      "relatedVerses": [
+        "Esdras 3:1-13"
+      ],
+      "yearStart": 536,
+      "yearEnd": null
+    },
+    {
+      "id": "OT114",
+      "event": "Oposición a la Reconstrucción",
+      "yearStart": 536,
+      "yearEnd": 530,
+      "yearBC": 536,
+      "yearAD": null,
+      "dateDisplay": "536-530 a.C.",
+      "reference": "Esdras 4",
+      "testament": "OT",
+      "era": "Restauración",
+      "category": "opposition",
+      "description": "Los enemigos de Judá detienen el trabajo del templo por engaño",
+      "keyPersons": [
+        "Enemigos de Judá"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Obstáculos en la obra de Dios",
+      "relatedVerses": [
+        "Esdras 4:1-24"
+      ]
+    },
+    {
+      "id": "OT115",
+      "event": "Ministerio de Hageo y Zacarías",
+      "yearBC": 520,
+      "yearAD": null,
+      "dateDisplay": "520 a.C.",
+      "reference": "Esdras 5:1-2",
+      "testament": "OT",
+      "era": "Restauración",
+      "category": "prophecy",
+      "description": "Los profetas Hageo y Zacarías animan al pueblo a reanudar la construcción del templo",
+      "keyPersons": [
+        "Hageo",
+        "Zacarías",
+        "Zorobabel"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Renovación de la obra del templo",
+      "relatedVerses": [
+        "Esdras 5:1-2",
+        "Hageo 1:1",
+        "Zacarías 1:1"
+      ],
+      "yearStart": 520,
+      "yearEnd": null
+    },
+    {
+      "id": "OT116",
+      "event": "Templo Completado",
+      "yearBC": 516,
+      "yearAD": null,
+      "dateDisplay": "516 a.C.",
+      "reference": "Esdras 6:15",
+      "testament": "OT",
+      "era": "Restauración",
+      "category": "completion",
+      "description": "El segundo templo es completado y dedicado con gran gozo",
+      "keyPersons": [
+        "Zorobabel",
+        "Jesúa"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Restauración del centro de adoración",
+      "relatedVerses": [
+        "Esdras 6:13-18"
+      ],
+      "yearStart": 516,
+      "yearEnd": null
+    },
+    {
+      "id": "OT117",
+      "event": "Ester Salva a los Judíos",
+      "yearBC": 473,
+      "yearAD": null,
+      "dateDisplay": "473 a.C.",
+      "reference": "Ester 1-10",
+      "testament": "OT",
+      "era": "Restauración",
+      "category": "deliverance",
+      "description": "Ester, reina de Persia, frustra el complot de Amán para exterminar a los judíos",
+      "keyPersons": [
+        "Ester",
+        "Mardoqueo",
+        "Asuero",
+        "Amán"
+      ],
+      "location": "Susa (Persia)",
+      "certaintyLevel": "histórico",
+      "significance": "Preservación providencial del pueblo judío",
+      "relatedVerses": [
+        "Ester 1:1-10:3"
+      ],
+      "yearStart": 473,
+      "yearEnd": null
+    },
+    {
+      "id": "OT118",
+      "event": "Esdras Regresa a Jerusalén",
+      "yearBC": 458,
+      "yearAD": null,
+      "dateDisplay": "458 a.C.",
+      "reference": "Esdras 7",
+      "testament": "OT",
+      "era": "Restauración",
+      "category": "return",
+      "description": "Esdras el escriba lidera segundo grupo de exiliados a Jerusalén para enseñar la ley",
+      "keyPersons": [
+        "Esdras",
+        "Artajerjes"
+      ],
+      "location": "Babilonia → Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Reforma espiritual y enseñanza de la ley",
+      "relatedVerses": [
+        "Esdras 7:1-10"
+      ],
+      "yearStart": 458,
+      "yearEnd": null
+    },
+    {
+      "id": "OT119",
+      "event": "Nehemías Reconstruye el Muro",
+      "yearStart": 445,
+      "yearEnd": 433,
+      "yearBC": 445,
+      "yearAD": null,
+      "dateDisplay": "445-433 a.C.",
+      "reference": "Nehemías 1-6",
+      "testament": "OT",
+      "era": "Restauración",
+      "category": "building",
+      "description": "Nehemías regresa y reconstruye el muro de Jerusalén en 52 días a pesar de la oposición",
+      "keyPersons": [
+        "Nehemías",
+        "Esdras"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Restauración física y espiritual de Jerusalén",
+      "relatedVerses": [
+        "Nehemías 1:1-6:19"
+      ]
+    },
+    {
+      "id": "OT120",
+      "event": "Ministerio del Profeta Malaquías",
+      "yearBC": 430,
+      "yearAD": null,
+      "dateDisplay": "430 a.C.",
+      "reference": "Malaquías 1:1",
+      "testament": "OT",
+      "era": "Restauración",
+      "category": "prophecy",
+      "description": "Malaquías, último profeta del Antiguo Testamento, llama al pueblo al arrepentimiento",
+      "keyPersons": [
+        "Malaquías"
+      ],
+      "location": "Judá",
+      "certaintyLevel": "histórico",
+      "significance": "Última palabra profética antes de Cristo",
+      "relatedVerses": [
+        "Malaquías 1:1-4:6"
+      ],
+      "yearStart": 430,
+      "yearEnd": null
+    },
+    {
+      "id": "OT121",
+      "event": "Inicio del Período Intertestamentario",
+      "yearBC": 400,
+      "yearAD": null,
+      "dateDisplay": "400 a.C.",
+      "reference": null,
+      "testament": "OT",
+      "era": "Silencio",
+      "category": "transition",
+      "description": "Inicia período de 400 años sin profeta ni revelación divina hasta Juan el Bautista",
+      "keyPersons": null,
+      "location": "Judea",
+      "certaintyLevel": "histórico",
+      "significance": "400 años de silencio antes de Cristo",
+      "relatedVerses": null,
+      "yearStart": 400,
+      "yearEnd": null
+    },
+    {
+      "id": "NT001",
+      "event": "Nacimiento de Juan el Bautista",
+      "yearBC": 6,
+      "yearAD": null,
+      "dateDisplay": "6 a.C.",
+      "reference": "Lucas 1:57-80",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "birth",
+      "description": "Zacarías y Elisabet dan a luz a Juan, quien será el precursor del Mesías",
+      "keyPersons": [
+        "Juan el Bautista",
+        "Zacarías",
+        "Elisabet"
+      ],
+      "location": "Judea",
+      "certaintyLevel": "histórico",
+      "significance": "Precursor que prepara el camino para Cristo",
+      "relatedVerses": [
+        "Lucas 1:57-80",
+        "Malaquías 3:1"
+      ],
+      "yearStart": 6,
+      "yearEnd": null
+    },
+    {
+      "id": "NT002",
+      "event": "Anunciación a María",
+      "yearBC": 5,
+      "yearAD": null,
+      "dateDisplay": "5 a.C.",
+      "reference": "Lucas 1:26-38",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "annunciation",
+      "description": "El ángel Gabriel anuncia a María que concebirá al Hijo de Dios por el Espíritu Santo",
+      "keyPersons": [
+        "María",
+        "Gabriel",
+        "José"
+      ],
+      "location": "Nazaret",
+      "certaintyLevel": "histórico",
+      "significance": "Inicio de la encarnación del Hijo de Dios",
+      "relatedVerses": [
+        "Lucas 1:26-38",
+        "Mateo 1:18-25"
+      ],
+      "yearStart": 5,
+      "yearEnd": null
+    },
+    {
+      "id": "NT003",
+      "event": "Nacimiento de Jesucristo",
+      "yearBC": 5,
+      "yearAD": null,
+      "dateDisplay": "5-4 a.C.",
+      "reference": "Lucas 2:1-20, Mateo 1:18-25",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "birth",
+      "description": "Jesús nace en Belén de Judea durante el reinado de Herodes el Grande",
+      "keyPersons": [
+        "Jesús",
+        "María",
+        "José"
+      ],
+      "location": "Belén",
+      "certaintyLevel": "histórico",
+      "significance": "Dios se hace hombre, el Verbo hecho carne",
+      "relatedVerses": [
+        "Lucas 2:1-20",
+        "Mateo 1:18-2:12",
+        "Juan 1:14"
+      ],
+      "yearStart": 5,
+      "yearEnd": null
+    },
+    {
+      "id": "NT004",
+      "event": "Visita de los Magos",
+      "yearBC": 4,
+      "yearAD": null,
+      "dateDisplay": "4 a.C.",
+      "reference": "Mateo 2:1-12",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "worship",
+      "description": "Magos de oriente adoran al niño Jesús y le traen oro, incienso y mirra",
+      "keyPersons": [
+        "Magos",
+        "Jesús",
+        "Herodes"
+      ],
+      "location": "Belén",
+      "certaintyLevel": "histórico",
+      "significance": "Gentiles reconocen al Rey de los judíos",
+      "relatedVerses": [
+        "Mateo 2:1-12"
+      ],
+      "yearStart": 4,
+      "yearEnd": null
+    },
+    {
+      "id": "NT005",
+      "event": "Matanza de los Inocentes",
+      "yearBC": 4,
+      "yearAD": null,
+      "dateDisplay": "4 a.C.",
+      "reference": "Mateo 2:16-18",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "persecution",
+      "description": "Herodes ordena matar a todos los niños menores de dos años en Belén",
+      "keyPersons": [
+        "Herodes el Grande"
+      ],
+      "location": "Belén",
+      "certaintyLevel": "histórico",
+      "significance": "Satanás intenta destruir al Mesías",
+      "relatedVerses": [
+        "Mateo 2:16-18"
+      ],
+      "yearStart": 4,
+      "yearEnd": null
+    },
+    {
+      "id": "NT006",
+      "event": "Huida a Egipto",
+      "yearBC": 4,
+      "yearAD": null,
+      "dateDisplay": "4 a.C.",
+      "reference": "Mateo 2:13-15",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "protection",
+      "description": "José, advertido en sueño, huye a Egipto con María y Jesús",
+      "keyPersons": [
+        "José",
+        "María",
+        "Jesús"
+      ],
+      "location": "Belén → Egipto",
+      "certaintyLevel": "histórico",
+      "significance": "Dios protege al Mesías, cumpliendo profecía",
+      "relatedVerses": [
+        "Mateo 2:13-15",
+        "Oseas 11:1"
+      ],
+      "yearStart": 4,
+      "yearEnd": null
+    },
+    {
+      "id": "NT007",
+      "event": "Muerte de Herodes el Grande",
+      "yearBC": 4,
+      "yearAD": null,
+      "dateDisplay": "4 a.C. (marzo/abril)",
+      "reference": "Mateo 2:19",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "death",
+      "description": "Herodes el Grande muere y la familia de Jesús regresa de Egipto",
+      "keyPersons": [
+        "Herodes el Grande"
+      ],
+      "location": "Judea",
+      "certaintyLevel": "histórico",
+      "significance": "Confirmado por Josefo, permite retorno de Jesús",
+      "relatedVerses": [
+        "Mateo 2:19-23"
+      ],
+      "yearStart": 4,
+      "yearEnd": null
+    },
+    {
+      "id": "NT008",
+      "event": "Retorno a Nazaret",
+      "yearBC": 4,
+      "yearAD": null,
+      "dateDisplay": "4 a.C.",
+      "reference": "Mateo 2:19-23",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "return",
+      "description": "La familia regresa de Egipto pero se establece en Nazaret en lugar de Judea",
+      "keyPersons": [
+        "José",
+        "María",
+        "Jesús"
+      ],
+      "location": "Egipto → Nazaret (Galilea)",
+      "certaintyLevel": "histórico",
+      "significance": "Jesús crece en Nazaret, cumpliendo profecía",
+      "relatedVerses": [
+        "Mateo 2:19-23",
+        "Lucas 2:39-40"
+      ],
+      "yearStart": 4,
+      "yearEnd": null
+    },
+    {
+      "id": "NT009",
+      "event": "Jesús en el Templo a los 12 Años",
+      "yearBC": null,
+      "yearAD": 8,
+      "dateDisplay": "8 d.C.",
+      "reference": "Lucas 2:41-52",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "childhood",
+      "description": "Jesús, a los 12 años, dialoga con los maestros en el templo asombrándolos con su entendimiento",
+      "keyPersons": [
+        "Jesús",
+        "María",
+        "José"
+      ],
+      "location": "Jerusalén (Templo)",
+      "certaintyLevel": "histórico",
+      "significance": "Primera manifestación pública de la sabiduría de Cristo",
+      "relatedVerses": [
+        "Lucas 2:41-52"
+      ],
+      "yearStart": 8,
+      "yearEnd": null
+    },
+    {
+      "id": "NT010",
+      "event": "Juan el Bautista Comienza su Ministerio",
+      "yearBC": null,
+      "yearAD": 27,
+      "dateDisplay": "27 d.C. (año 15 de Tiberio)",
+      "reference": "Lucas 3:1-6",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "ministry",
+      "description": "Juan comienza a predicar en el desierto de Judea, preparando el camino del Señor",
+      "keyPersons": [
+        "Juan el Bautista"
+      ],
+      "location": "Desierto de Judea, río Jordán",
+      "certaintyLevel": "histórico",
+      "significance": "Cumplimiento de Isaías 40:3, inicio de la era mesiánica",
+      "relatedVerses": [
+        "Lucas 3:1-6",
+        "Mateo 3:1-12",
+        "Marcos 1:1-8"
+      ],
+      "yearStart": 27,
+      "yearEnd": null
+    },
+    {
+      "id": "NT011",
+      "event": "Bautismo de Jesús",
+      "yearBC": null,
+      "yearAD": 27,
+      "dateDisplay": "27 d.C. (otoño)",
+      "reference": "Mateo 3:13-17",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "baptism",
+      "description": "Jesús es bautizado por Juan. Los cielos se abren, el Espíritu desciende y el Padre habla",
+      "keyPersons": [
+        "Jesús",
+        "Juan el Bautista",
+        "Espíritu Santo",
+        "Dios Padre"
+      ],
+      "location": "Río Jordán",
+      "certaintyLevel": "histórico",
+      "significance": "Inicio del ministerio público de Jesús, revelación de la Trinidad",
+      "relatedVerses": [
+        "Mateo 3:13-17",
+        "Marcos 1:9-11",
+        "Lucas 3:21-22"
+      ],
+      "yearStart": 27,
+      "yearEnd": null
+    },
+    {
+      "id": "NT012",
+      "event": "Tentación de Jesús",
+      "yearBC": null,
+      "yearAD": 27,
+      "dateDisplay": "27 d.C.",
+      "reference": "Mateo 4:1-11",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "temptation",
+      "description": "Jesús es tentado por Satanás en el desierto por 40 días y vence cada tentación",
+      "keyPersons": [
+        "Jesús",
+        "Satanás"
+      ],
+      "location": "Desierto de Judea",
+      "certaintyLevel": "histórico",
+      "significance": "Jesús vence donde Adán falló",
+      "relatedVerses": [
+        "Mateo 4:1-11",
+        "Lucas 4:1-13",
+        "Marcos 1:12-13"
+      ],
+      "yearStart": 27,
+      "yearEnd": null
+    },
+    {
+      "id": "NT013",
+      "event": "Jesús Llama a sus Primeros Discípulos",
+      "yearBC": null,
+      "yearAD": 27,
+      "dateDisplay": "27 d.C.",
+      "reference": "Juan 1:35-51",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "discipleship",
+      "description": "Andrés, Juan, Pedro, Felipe y Natanael se convierten en los primeros discípulos de Jesús",
+      "keyPersons": [
+        "Jesús",
+        "Andrés",
+        "Pedro",
+        "Juan",
+        "Felipe",
+        "Natanael"
+      ],
+      "location": "Río Jordán → Galilea",
+      "certaintyLevel": "histórico",
+      "significance": "Formación del núcleo de los apóstoles",
+      "relatedVerses": [
+        "Juan 1:35-51"
+      ],
+      "yearStart": 27,
+      "yearEnd": null
+    },
+    {
+      "id": "NT014",
+      "event": "Primer Milagro: Agua en Vino",
+      "yearBC": null,
+      "yearAD": 27,
+      "dateDisplay": "27 d.C.",
+      "reference": "Juan 2:1-11",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "miracle",
+      "description": "Jesús convierte agua en vino en las bodas de Caná, su primer milagro",
+      "keyPersons": [
+        "Jesús",
+        "María",
+        "Discípulos"
+      ],
+      "location": "Caná de Galilea",
+      "certaintyLevel": "histórico",
+      "significance": "Primera señal que manifiesta su gloria",
+      "relatedVerses": [
+        "Juan 2:1-11"
+      ],
+      "yearStart": 27,
+      "yearEnd": null
+    },
+    {
+      "id": "NT015",
+      "event": "Jesús Limpia el Templo (Primera Vez)",
+      "yearBC": null,
+      "yearAD": 28,
+      "dateDisplay": "28 d.C. (Pascua)",
+      "reference": "Juan 2:13-22",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "confrontation",
+      "description": "Jesús expulsa a los mercaderes del templo durante la primera Pascua de su ministerio",
+      "keyPersons": [
+        "Jesús",
+        "Mercaderes del templo"
+      ],
+      "location": "Jerusalén (Templo)",
+      "certaintyLevel": "histórico",
+      "significance": "Autoridad de Jesús sobre el templo, celo por la casa de Dios",
+      "relatedVerses": [
+        "Juan 2:13-22"
+      ],
+      "yearStart": 28,
+      "yearEnd": null
+    },
+    {
+      "id": "NT016",
+      "event": "Nicodemo Visita a Jesús",
+      "yearBC": null,
+      "yearAD": 28,
+      "dateDisplay": "28 d.C.",
+      "reference": "Juan 3:1-21",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "teaching",
+      "description": "Jesús enseña a Nicodemo sobre el nuevo nacimiento y el amor de Dios (Juan 3:16)",
+      "keyPersons": [
+        "Jesús",
+        "Nicodemo"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Enseñanza fundamental sobre salvación y regeneración",
+      "relatedVerses": [
+        "Juan 3:1-21"
+      ],
+      "yearStart": 28,
+      "yearEnd": null
+    },
+    {
+      "id": "NT017",
+      "event": "Jesús y la Mujer Samaritana",
+      "yearBC": null,
+      "yearAD": 28,
+      "dateDisplay": "28 d.C.",
+      "reference": "Juan 4:1-42",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "evangelism",
+      "description": "Jesús revela que Él es el Mesías a una mujer samaritana en el pozo de Jacob",
+      "keyPersons": [
+        "Jesús",
+        "Mujer samaritana"
+      ],
+      "location": "Sicar (Samaria)",
+      "certaintyLevel": "histórico",
+      "significance": "Evangelio ofrecido a los samaritanos, agua viva",
+      "relatedVerses": [
+        "Juan 4:1-42"
+      ],
+      "yearStart": 28,
+      "yearEnd": null
+    },
+    {
+      "id": "NT018",
+      "event": "Jesús Rechazado en Nazaret",
+      "yearBC": null,
+      "yearAD": 28,
+      "dateDisplay": "28 d.C.",
+      "reference": "Lucas 4:16-30",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "rejection",
+      "description": "Jesús predica en Nazaret, es rechazado y casi asesinado por su pueblo",
+      "keyPersons": [
+        "Jesús",
+        "Habitantes de Nazaret"
+      ],
+      "location": "Nazaret",
+      "certaintyLevel": "histórico",
+      "significance": "Profeta sin honra en su tierra",
+      "relatedVerses": [
+        "Lucas 4:16-30",
+        "Marcos 6:1-6"
+      ],
+      "yearStart": 28,
+      "yearEnd": null
+    },
+    {
+      "id": "NT019",
+      "event": "Llamado de Pedro, Andrés, Santiago y Juan",
+      "yearBC": null,
+      "yearAD": 28,
+      "dateDisplay": "28 d.C.",
+      "reference": "Lucas 5:1-11",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "discipleship",
+      "description": "Después de la pesca milagrosa, Pedro y sus compañeros dejan todo para seguir a Jesús",
+      "keyPersons": [
+        "Jesús",
+        "Pedro",
+        "Andrés",
+        "Santiago",
+        "Juan"
+      ],
+      "location": "Mar de Galilea",
+      "certaintyLevel": "histórico",
+      "significance": "Pescadores de hombres llamados",
+      "relatedVerses": [
+        "Lucas 5:1-11",
+        "Mateo 4:18-22",
+        "Marcos 1:16-20"
+      ],
+      "yearStart": 28,
+      "yearEnd": null
+    },
+    {
+      "id": "NT020",
+      "event": "Elección de los Doce Apóstoles",
+      "yearBC": null,
+      "yearAD": 28,
+      "dateDisplay": "28 d.C.",
+      "reference": "Lucas 6:12-16",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "discipleship",
+      "description": "Después de orar toda la noche, Jesús elige a los doce apóstoles",
+      "keyPersons": [
+        "Jesús",
+        "Los Doce Apóstoles"
+      ],
+      "location": "Monte cerca del mar de Galilea",
+      "certaintyLevel": "histórico",
+      "significance": "Fundamento de la iglesia establecido",
+      "relatedVerses": [
+        "Lucas 6:12-16",
+        "Mateo 10:1-4",
+        "Marcos 3:13-19"
+      ],
+      "yearStart": 28,
+      "yearEnd": null
+    },
+    {
+      "id": "NT021",
+      "event": "Sermón del Monte",
+      "yearBC": null,
+      "yearAD": 28,
+      "dateDisplay": "28 d.C.",
+      "reference": "Mateo 5-7",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "teaching",
+      "description": "Jesús predica el Sermón del Monte, incluyendo las Bienaventuranzas y el Padre Nuestro",
+      "keyPersons": [
+        "Jesús",
+        "Multitudes"
+      ],
+      "location": "Monte cerca de Capernaum",
+      "certaintyLevel": "histórico",
+      "significance": "Enseñanza fundamental del reino de Dios",
+      "relatedVerses": [
+        "Mateo 5:1-7:29",
+        "Lucas 6:20-49"
+      ],
+      "yearStart": 28,
+      "yearEnd": null
+    },
+    {
+      "id": "NT022",
+      "event": "Jesús Calma la Tormenta",
+      "yearBC": null,
+      "yearAD": 28,
+      "dateDisplay": "28 d.C.",
+      "reference": "Marcos 4:35-41",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "miracle",
+      "description": "Jesús calma una tormenta violenta en el mar de Galilea con su palabra",
+      "keyPersons": [
+        "Jesús",
+        "Discípulos"
+      ],
+      "location": "Mar de Galilea",
+      "certaintyLevel": "histórico",
+      "significance": "Autoridad de Jesús sobre la naturaleza",
+      "relatedVerses": [
+        "Marcos 4:35-41",
+        "Mateo 8:23-27",
+        "Lucas 8:22-25"
+      ],
+      "yearStart": 28,
+      "yearEnd": null
+    },
+    {
+      "id": "NT023",
+      "event": "Alimentación de los 5000",
+      "yearBC": null,
+      "yearAD": 29,
+      "dateDisplay": "29 d.C. (Pascua)",
+      "reference": "Juan 6:1-15",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "miracle",
+      "description": "Jesús multiplica cinco panes y dos peces para alimentar a más de 5000 personas",
+      "keyPersons": [
+        "Jesús",
+        "Felipe",
+        "Andrés",
+        "Muchacho con panes"
+      ],
+      "location": "Cerca de Betsaida",
+      "certaintyLevel": "histórico",
+      "significance": "Único milagro en los cuatro evangelios",
+      "relatedVerses": [
+        "Juan 6:1-15",
+        "Mateo 14:13-21",
+        "Marcos 6:30-44",
+        "Lucas 9:10-17"
+      ],
+      "yearStart": 29,
+      "yearEnd": null
+    },
+    {
+      "id": "NT024",
+      "event": "Jesús Camina sobre el Agua",
+      "yearBC": null,
+      "yearAD": 29,
+      "dateDisplay": "29 d.C.",
+      "reference": "Mateo 14:22-33",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "miracle",
+      "description": "Jesús camina sobre el mar hacia sus discípulos. Pedro intenta imitarlo pero comienza a hundirse.",
+      "keyPersons": [
+        "Jesús",
+        "Pedro",
+        "Discípulos"
+      ],
+      "location": "Mar de Galilea",
+      "certaintyLevel": "histórico",
+      "significance": "Jesús revela su divinidad",
+      "relatedVerses": [
+        "Mateo 14:22-33",
+        "Marcos 6:45-52",
+        "Juan 6:16-21"
+      ],
+      "yearStart": 29,
+      "yearEnd": null
+    },
+    {
+      "id": "NT025",
+      "event": "Pan de Vida (Discurso)",
+      "yearBC": null,
+      "yearAD": 29,
+      "dateDisplay": "29 d.C.",
+      "reference": "Juan 6:22-71",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "teaching",
+      "description": "Jesús se declara el Pan de Vida que descendió del cielo. Muchos discípulos lo abandonan.",
+      "keyPersons": [
+        "Jesús",
+        "Discípulos",
+        "Multitudes"
+      ],
+      "location": "Capernaum (sinagoga)",
+      "certaintyLevel": "histórico",
+      "significance": "Jesús es el pan verdadero, muchos se ofenden",
+      "relatedVerses": [
+        "Juan 6:22-71"
+      ],
+      "yearStart": 29,
+      "yearEnd": null
+    },
+    {
+      "id": "NT026",
+      "event": "Confesión de Pedro",
+      "yearBC": null,
+      "yearAD": 29,
+      "dateDisplay": "29 d.C.",
+      "reference": "Mateo 16:13-20",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "revelation",
+      "description": "Pedro confiesa: 'Tú eres el Cristo, el Hijo del Dios viviente'",
+      "keyPersons": [
+        "Jesús",
+        "Pedro",
+        "Discípulos"
+      ],
+      "location": "Cesarea de Filipo",
+      "certaintyLevel": "histórico",
+      "significance": "Primera confesión explícita de la divinidad de Cristo",
+      "relatedVerses": [
+        "Mateo 16:13-20",
+        "Marcos 8:27-30",
+        "Lucas 9:18-21"
+      ],
+      "yearStart": 29,
+      "yearEnd": null
+    },
+    {
+      "id": "NT027",
+      "event": "La Transfiguración",
+      "yearBC": null,
+      "yearAD": 29,
+      "dateDisplay": "29 d.C.",
+      "reference": "Mateo 17:1-13",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "revelation",
+      "description": "Jesús se transfigura ante Pedro, Santiago y Juan. Moisés y Elías aparecen con Él.",
+      "keyPersons": [
+        "Jesús",
+        "Pedro",
+        "Santiago",
+        "Juan",
+        "Moisés",
+        "Elías"
+      ],
+      "location": "Monte alto (posiblemente Monte Hermón)",
+      "certaintyLevel": "histórico",
+      "significance": "Revelación de la gloria divina de Cristo",
+      "relatedVerses": [
+        "Mateo 17:1-13",
+        "Marcos 9:2-13",
+        "Lucas 9:28-36",
+        "2 Pedro 1:16-18"
+      ],
+      "yearStart": 29,
+      "yearEnd": null
+    },
+    {
+      "id": "NT028",
+      "event": "Lázaro Resucitado",
+      "yearBC": null,
+      "yearAD": 30,
+      "dateDisplay": "30 d.C. (febrero)",
+      "reference": "Juan 11:1-44",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "miracle",
+      "description": "Jesús resucita a Lázaro después de cuatro días en la tumba",
+      "keyPersons": [
+        "Jesús",
+        "Lázaro",
+        "Marta",
+        "María"
+      ],
+      "location": "Betania",
+      "certaintyLevel": "histórico",
+      "significance": "Mayor señal antes de la propia resurrección de Cristo",
+      "relatedVerses": [
+        "Juan 11:1-44"
+      ],
+      "yearStart": 30,
+      "yearEnd": null
+    },
+    {
+      "id": "NT029",
+      "event": "Entrada Triunfal en Jerusalén",
+      "yearBC": null,
+      "yearAD": 30,
+      "dateDisplay": "30 d.C. (abril 2, Domingo de Ramos)",
+      "reference": "Mateo 21:1-11",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "triumph",
+      "description": "Jesús entra a Jerusalén montado en un pollino. La multitud lo aclama como Rey.",
+      "keyPersons": [
+        "Jesús",
+        "Multitudes",
+        "Discípulos"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Cumplimiento de Zacarías 9:9, presentación como Mesías",
+      "relatedVerses": [
+        "Mateo 21:1-11",
+        "Marcos 11:1-11",
+        "Lucas 19:28-44",
+        "Juan 12:12-19"
+      ],
+      "yearStart": 30,
+      "yearEnd": null
+    },
+    {
+      "id": "NT030",
+      "event": "Jesús Limpia el Templo (Segunda Vez)",
+      "yearBC": null,
+      "yearAD": 30,
+      "dateDisplay": "30 d.C. (abril 3, Lunes)",
+      "reference": "Marcos 11:15-18",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "confrontation",
+      "description": "Jesús expulsa a los cambistas del templo en su última semana",
+      "keyPersons": [
+        "Jesús",
+        "Mercaderes",
+        "Líderes religiosos"
+      ],
+      "location": "Jerusalén (Templo)",
+      "certaintyLevel": "histórico",
+      "significance": "Confrontación final con líderes religiosos",
+      "relatedVerses": [
+        "Marcos 11:15-18",
+        "Mateo 21:12-13",
+        "Lucas 19:45-48"
+      ],
+      "yearStart": 30,
+      "yearEnd": null
+    },
+    {
+      "id": "NT031",
+      "event": "Discurso del Monte de los Olivos",
+      "yearBC": null,
+      "yearAD": 30,
+      "dateDisplay": "30 d.C. (abril 5, Miércoles)",
+      "reference": "Mateo 24-25",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "teaching",
+      "description": "Jesús profetiza sobre la destrucción del templo y su segunda venida",
+      "keyPersons": [
+        "Jesús",
+        "Pedro",
+        "Santiago",
+        "Juan",
+        "Andrés"
+      ],
+      "location": "Monte de los Olivos",
+      "certaintyLevel": "histórico",
+      "significance": "Profecía escatológica principal",
+      "relatedVerses": [
+        "Mateo 24:1-25:46",
+        "Marcos 13:1-37",
+        "Lucas 21:5-36"
+      ],
+      "yearStart": 30,
+      "yearEnd": null
+    },
+    {
+      "id": "NT032",
+      "event": "La Última Cena",
+      "yearBC": null,
+      "yearAD": 30,
+      "dateDisplay": "30 d.C. (abril 6, Jueves por la noche)",
+      "reference": "Mateo 26:17-30",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "covenant",
+      "description": "Jesús celebra la Pascua con sus discípulos e instituye la Santa Cena",
+      "keyPersons": [
+        "Jesús",
+        "Los Doce Apóstoles"
+      ],
+      "location": "Jerusalén (Aposento alto)",
+      "certaintyLevel": "histórico",
+      "significance": "Institución del Nuevo Pacto en su sangre",
+      "relatedVerses": [
+        "Mateo 26:17-30",
+        "Marcos 14:12-26",
+        "Lucas 22:7-38",
+        "Juan 13-17"
+      ],
+      "yearStart": 30,
+      "yearEnd": null
+    },
+    {
+      "id": "NT033",
+      "event": "Jesús Lava los Pies de los Discípulos",
+      "yearBC": null,
+      "yearAD": 30,
+      "dateDisplay": "30 d.C. (abril 6, Jueves por la noche)",
+      "reference": "Juan 13:1-17",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "service",
+      "description": "Jesús lava los pies de sus discípulos, demostrando servicio humilde",
+      "keyPersons": [
+        "Jesús",
+        "Pedro",
+        "Discípulos"
+      ],
+      "location": "Jerusalén (Aposento alto)",
+      "certaintyLevel": "histórico",
+      "significance": "Modelo de servicio y humildad",
+      "relatedVerses": [
+        "Juan 13:1-17"
+      ],
+      "yearStart": 30,
+      "yearEnd": null
+    },
+    {
+      "id": "NT034",
+      "event": "Getsemaní",
+      "yearBC": null,
+      "yearAD": 30,
+      "dateDisplay": "30 d.C. (abril 7, Viernes madrugada)",
+      "reference": "Mateo 26:36-46",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "passion",
+      "description": "Jesús ora con agonía en Getsemaní: 'No se haga mi voluntad, sino la tuya'",
+      "keyPersons": [
+        "Jesús",
+        "Pedro",
+        "Santiago",
+        "Juan"
+      ],
+      "location": "Getsemaní (Monte de los Olivos)",
+      "certaintyLevel": "histórico",
+      "significance": "Sumisión total del Hijo al Padre",
+      "relatedVerses": [
+        "Mateo 26:36-46",
+        "Marcos 14:32-42",
+        "Lucas 22:39-46"
+      ],
+      "yearStart": 30,
+      "yearEnd": null
+    },
+    {
+      "id": "NT035",
+      "event": "Arresto de Jesús",
+      "yearBC": null,
+      "yearAD": 30,
+      "dateDisplay": "30 d.C. (abril 7, Viernes madrugada)",
+      "reference": "Mateo 26:47-56",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "passion",
+      "description": "Judas traiciona a Jesús con un beso. Jesús es arrestado.",
+      "keyPersons": [
+        "Jesús",
+        "Judas",
+        "Soldados",
+        "Pedro"
+      ],
+      "location": "Getsemaní",
+      "certaintyLevel": "histórico",
+      "significance": "Cumplimiento de las Escrituras, inicio de la pasión",
+      "relatedVerses": [
+        "Mateo 26:47-56",
+        "Marcos 14:43-52",
+        "Lucas 22:47-53",
+        "Juan 18:1-11"
+      ],
+      "yearStart": 30,
+      "yearEnd": null
+    },
+    {
+      "id": "NT036",
+      "event": "Pedro Niega a Jesús",
+      "yearBC": null,
+      "yearAD": 30,
+      "dateDisplay": "30 d.C. (abril 7, Viernes madrugada)",
+      "reference": "Mateo 26:69-75",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "denial",
+      "description": "Pedro niega tres veces conocer a Jesús, tal como fue profetizado",
+      "keyPersons": [
+        "Pedro",
+        "Siervos"
+      ],
+      "location": "Patio de la casa del sumo sacerdote",
+      "certaintyLevel": "histórico",
+      "significance": "Cumplimiento de profecía, debilidad humana",
+      "relatedVerses": [
+        "Mateo 26:69-75",
+        "Marcos 14:66-72",
+        "Lucas 22:54-62",
+        "Juan 18:15-18, 25-27"
+      ],
+      "yearStart": 30,
+      "yearEnd": null
+    },
+    {
+      "id": "NT037",
+      "event": "Juicio ante el Sanedrín",
+      "yearBC": null,
+      "yearAD": 30,
+      "dateDisplay": "30 d.C. (abril 7, Viernes madrugada)",
+      "reference": "Mateo 26:57-68",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "trial",
+      "description": "Jesús es juzgado ante el sanedrín. Confiesa ser el Cristo, el Hijo de Dios.",
+      "keyPersons": [
+        "Jesús",
+        "Caifás",
+        "Sanedrín"
+      ],
+      "location": "Casa de Caifás, Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Acusado de blasfemia por declararse Dios",
+      "relatedVerses": [
+        "Mateo 26:57-68",
+        "Marcos 14:53-65",
+        "Lucas 22:63-71",
+        "Juan 18:12-24"
+      ],
+      "yearStart": 30,
+      "yearEnd": null
+    },
+    {
+      "id": "NT038",
+      "event": "Juicio ante Pilato",
+      "yearBC": null,
+      "yearAD": 30,
+      "dateDisplay": "30 d.C. (abril 7, Viernes mañana)",
+      "reference": "Mateo 27:11-26",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "trial",
+      "description": "Jesús es llevado ante Pilato. Pilato no encuentra culpa pero cede a la multitud.",
+      "keyPersons": [
+        "Jesús",
+        "Pilato",
+        "Multitud"
+      ],
+      "location": "Pretorio, Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Injusticia extrema contra el Justo",
+      "relatedVerses": [
+        "Mateo 27:11-26",
+        "Marcos 15:1-15",
+        "Lucas 23:1-25",
+        "Juan 18:28-19:16"
+      ],
+      "yearStart": 30,
+      "yearEnd": null
+    },
+    {
+      "id": "NT039",
+      "event": "Crucifixión de Jesucristo",
+      "yearBC": null,
+      "yearAD": 30,
+      "dateDisplay": "30 d.C. (abril 7, Viernes 9:00 AM - 3:00 PM)",
+      "reference": "Mateo 27:32-56",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "crucifixion",
+      "description": "Jesús es crucificado en el Gólgota. Muere a las 3:00 PM diciendo 'Consumado es'",
+      "keyPersons": [
+        "Jesús",
+        "Dos ladrones",
+        "María",
+        "Juan",
+        "Soldados"
+      ],
+      "location": "Gólgota (Calvario), Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Expiación por los pecados del mundo",
+      "relatedVerses": [
+        "Mateo 27:32-56",
+        "Marcos 15:21-41",
+        "Lucas 23:26-49",
+        "Juan 19:17-37"
+      ],
+      "yearStart": 30,
+      "yearEnd": null
+    },
+    {
+      "id": "NT040",
+      "event": "Muerte de Jesús",
+      "yearBC": null,
+      "yearAD": 30,
+      "dateDisplay": "30 d.C. (abril 7, Viernes 3:00 PM)",
+      "reference": "Mateo 27:50",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "death",
+      "description": "Jesús entrega su espíritu. El velo del templo se rasga de arriba abajo.",
+      "keyPersons": [
+        "Jesús"
+      ],
+      "location": "Gólgota",
+      "certaintyLevel": "histórico",
+      "significance": "Acceso directo a Dios abierto, sacrificio completo",
+      "relatedVerses": [
+        "Mateo 27:50-54",
+        "Marcos 15:37-39",
+        "Lucas 23:44-47",
+        "Juan 19:30"
+      ],
+      "yearStart": 30,
+      "yearEnd": null
+    },
+    {
+      "id": "NT041",
+      "event": "Sepultura de Jesús",
+      "yearBC": null,
+      "yearAD": 30,
+      "dateDisplay": "30 d.C. (abril 7, Viernes tarde)",
+      "reference": "Mateo 27:57-61",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "burial",
+      "description": "José de Arimatea y Nicodemo sepultan el cuerpo de Jesús en un sepulcro nuevo",
+      "keyPersons": [
+        "José de Arimatea",
+        "Nicodemo",
+        "María Magdalena",
+        "María"
+      ],
+      "location": "Sepulcro nuevo en jardín cerca del Gólgota",
+      "certaintyLevel": "histórico",
+      "significance": "Cumplimiento de Isaías 53:9",
+      "relatedVerses": [
+        "Mateo 27:57-61",
+        "Marcos 15:42-47",
+        "Lucas 23:50-56",
+        "Juan 19:38-42"
+      ],
+      "yearStart": 30,
+      "yearEnd": null
+    },
+    {
+      "id": "NT042",
+      "event": "Resurrección de Jesucristo",
+      "yearBC": null,
+      "yearAD": 30,
+      "dateDisplay": "30 d.C. (abril 9, Domingo al amanecer)",
+      "reference": "Mateo 28:1-10",
+      "testament": "NT",
+      "era": "Vida de Cristo",
+      "category": "resurrection",
+      "description": "Jesús resucita al tercer día. Ángeles anuncian la resurrección a las mujeres.",
+      "keyPersons": [
+        "Jesús",
+        "María Magdalena",
+        "María",
+        "Ángeles"
+      ],
+      "location": "Sepulcro, Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Victoria sobre la muerte, fundamento del cristianismo",
+      "relatedVerses": [
+        "Mateo 28:1-10",
+        "Marcos 16:1-8",
+        "Lucas 24:1-12",
+        "Juan 20:1-10"
+      ],
+      "yearStart": 30,
+      "yearEnd": null
+    },
+    {
+      "id": "NT043",
+      "event": "Jesús se Aparece a María Magdalena",
+      "yearBC": null,
+      "yearAD": 30,
+      "dateDisplay": "30 d.C. (abril 9, Domingo mañana)",
+      "reference": "Juan 20:11-18",
+      "testament": "NT",
+      "era": "Resurrección",
+      "category": "appearance",
+      "description": "Jesús se aparece primero a María Magdalena cerca del sepulcro",
+      "keyPersons": [
+        "Jesús",
+        "María Magdalena"
+      ],
+      "location": "Jardín del sepulcro",
+      "certaintyLevel": "histórico",
+      "significance": "Primera aparición post-resurrección",
+      "relatedVerses": [
+        "Juan 20:11-18",
+        "Marcos 16:9-11"
+      ],
+      "yearStart": 30,
+      "yearEnd": null
+    },
+    {
+      "id": "NT044",
+      "event": "Jesús se Aparece a los Discípulos",
+      "yearBC": null,
+      "yearAD": 30,
+      "dateDisplay": "30 d.C. (abril 9, Domingo noche)",
+      "reference": "Juan 20:19-23",
+      "testament": "NT",
+      "era": "Resurrección",
+      "category": "appearance",
+      "description": "Jesús se aparece a los discípulos reunidos, sopla sobre ellos el Espíritu Santo",
+      "keyPersons": [
+        "Jesús",
+        "Discípulos (sin Tomás)"
+      ],
+      "location": "Aposento alto, Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Paz y comisión a los apóstoles",
+      "relatedVerses": [
+        "Juan 20:19-23",
+        "Lucas 24:36-49"
+      ],
+      "yearStart": 30,
+      "yearEnd": null
+    },
+    {
+      "id": "NT045",
+      "event": "Jesús y Tomás",
+      "yearBC": null,
+      "yearAD": 30,
+      "dateDisplay": "30 d.C. (abril 16, Domingo siguiente)",
+      "reference": "Juan 20:24-29",
+      "testament": "NT",
+      "era": "Resurrección",
+      "category": "appearance",
+      "description": "Jesús se aparece a Tomás y le muestra sus heridas. Tomás confiesa: 'Señor mío y Dios mío'",
+      "keyPersons": [
+        "Jesús",
+        "Tomás",
+        "Discípulos"
+      ],
+      "location": "Aposento alto, Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Fe confirmada por evidencia",
+      "relatedVerses": [
+        "Juan 20:24-29"
+      ],
+      "yearStart": 30,
+      "yearEnd": null
+    },
+    {
+      "id": "NT046",
+      "event": "Pesca Milagrosa y Restauración de Pedro",
+      "yearBC": null,
+      "yearAD": 30,
+      "dateDisplay": "30 d.C. (abril)",
+      "reference": "Juan 21:1-23",
+      "testament": "NT",
+      "era": "Resurrección",
+      "category": "appearance",
+      "description": "Jesús se aparece junto al mar de Galilea, restaura a Pedro tres veces",
+      "keyPersons": [
+        "Jesús",
+        "Pedro",
+        "Juan",
+        "Otros discípulos"
+      ],
+      "location": "Mar de Galilea (Tiberias)",
+      "certaintyLevel": "histórico",
+      "significance": "Pedro restaurado al ministerio",
+      "relatedVerses": [
+        "Juan 21:1-23"
+      ],
+      "yearStart": 30,
+      "yearEnd": null
+    },
+    {
+      "id": "NT047",
+      "event": "Gran Comisión",
+      "yearBC": null,
+      "yearAD": 30,
+      "dateDisplay": "30 d.C. (mayo)",
+      "reference": "Mateo 28:16-20",
+      "testament": "NT",
+      "era": "Resurrección",
+      "category": "commission",
+      "description": "Jesús da la Gran Comisión: Id y haced discípulos a todas las naciones",
+      "keyPersons": [
+        "Jesús",
+        "Los Once"
+      ],
+      "location": "Monte en Galilea",
+      "certaintyLevel": "histórico",
+      "significance": "Mandato misionero de la iglesia",
+      "relatedVerses": [
+        "Mateo 28:16-20",
+        "Marcos 16:15-18"
+      ],
+      "yearStart": 30,
+      "yearEnd": null
+    },
+    {
+      "id": "NT048",
+      "event": "Ascensión de Jesucristo",
+      "yearBC": null,
+      "yearAD": 30,
+      "dateDisplay": "30 d.C. (mayo 18, 40 días después de resurrección)",
+      "reference": "Hechos 1:9-11",
+      "testament": "NT",
+      "era": "Resurrección",
+      "category": "ascension",
+      "description": "Jesús asciende al cielo desde el Monte de los Olivos ante sus discípulos",
+      "keyPersons": [
+        "Jesús",
+        "Apóstoles",
+        "Ángeles"
+      ],
+      "location": "Monte de los Olivos, Betania",
+      "certaintyLevel": "histórico",
+      "significance": "Cristo exaltado a la diestra de Dios",
+      "relatedVerses": [
+        "Hechos 1:9-11",
+        "Lucas 24:50-53",
+        "Marcos 16:19"
+      ],
+      "yearStart": 30,
+      "yearEnd": null
+    },
+    {
+      "id": "NT049",
+      "event": "Elección de Matías",
+      "yearBC": null,
+      "yearAD": 30,
+      "dateDisplay": "30 d.C. (mayo)",
+      "reference": "Hechos 1:15-26",
+      "testament": "NT",
+      "era": "Iglesia Primitiva",
+      "category": "leadership",
+      "description": "Los apóstoles eligen a Matías para reemplazar a Judas Iscariote",
+      "keyPersons": [
+        "Pedro",
+        "Matías",
+        "José Barsabás"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Restauración de los Doce",
+      "relatedVerses": [
+        "Hechos 1:15-26"
+      ],
+      "yearStart": 30,
+      "yearEnd": null
+    },
+    {
+      "id": "NT050",
+      "event": "Pentecostés",
+      "yearBC": null,
+      "yearAD": 30,
+      "dateDisplay": "30 d.C. (mayo 28, 50 días después de resurrección)",
+      "reference": "Hechos 2:1-47",
+      "testament": "NT",
+      "era": "Iglesia Primitiva",
+      "category": "spirit",
+      "description": "El Espíritu Santo desciende sobre los discípulos. Nacimiento de la iglesia. 3000 se bautizan.",
+      "keyPersons": [
+        "Apóstoles",
+        "Pedro",
+        "Multitudes"
+      ],
+      "location": "Jerusalén (Aposento alto)",
+      "certaintyLevel": "histórico",
+      "significance": "Nacimiento de la iglesia, poder del Espíritu Santo",
+      "relatedVerses": [
+        "Hechos 2:1-47"
+      ],
+      "yearStart": 30,
+      "yearEnd": null
+    },
+    {
+      "id": "NT051",
+      "event": "Sanidad del Cojo en la Puerta la Hermosa",
+      "yearBC": null,
+      "yearAD": 30,
+      "dateDisplay": "30 d.C.",
+      "reference": "Hechos 3:1-10",
+      "testament": "NT",
+      "era": "Iglesia Primitiva",
+      "category": "miracle",
+      "description": "Pedro y Juan sanan a un cojo de nacimiento en el nombre de Jesús",
+      "keyPersons": [
+        "Pedro",
+        "Juan",
+        "Cojo"
+      ],
+      "location": "Templo de Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Primera señal apostólica post-Pentecostés",
+      "relatedVerses": [
+        "Hechos 3:1-10"
+      ],
+      "yearStart": 30,
+      "yearEnd": null
+    },
+    {
+      "id": "NT052",
+      "event": "Pedro y Juan ante el Sanedrín",
+      "yearBC": null,
+      "yearAD": 30,
+      "dateDisplay": "30 d.C.",
+      "reference": "Hechos 4:1-22",
+      "testament": "NT",
+      "era": "Iglesia Primitiva",
+      "category": "persecution",
+      "description": "Pedro y Juan son arrestados y prohibidos de predicar. Responden: 'No podemos dejar de hablar'",
+      "keyPersons": [
+        "Pedro",
+        "Juan",
+        "Sanedrín"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Primera persecución oficial",
+      "relatedVerses": [
+        "Hechos 4:1-22"
+      ],
+      "yearStart": 30,
+      "yearEnd": null
+    },
+    {
+      "id": "NT053",
+      "event": "Ananías y Safira",
+      "yearBC": null,
+      "yearAD": 31,
+      "dateDisplay": "31 d.C.",
+      "reference": "Hechos 5:1-11",
+      "testament": "NT",
+      "era": "Iglesia Primitiva",
+      "category": "judgment",
+      "description": "Ananías y Safira mienten al Espíritu Santo y mueren súbitamente",
+      "keyPersons": [
+        "Ananías",
+        "Safira",
+        "Pedro"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Santidad de Dios en la iglesia",
+      "relatedVerses": [
+        "Hechos 5:1-11"
+      ],
+      "yearStart": 31,
+      "yearEnd": null
+    },
+    {
+      "id": "NT054",
+      "event": "Elección de los Siete Diáconos",
+      "yearBC": null,
+      "yearAD": 33,
+      "dateDisplay": "33 d.C.",
+      "reference": "Hechos 6:1-7",
+      "testament": "NT",
+      "era": "Iglesia Primitiva",
+      "category": "organization",
+      "description": "La iglesia elige a siete hombres (incluyendo Esteban y Felipe) para servir las mesas",
+      "keyPersons": [
+        "Esteban",
+        "Felipe",
+        "Los Doce"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Organización de la iglesia primitiva",
+      "relatedVerses": [
+        "Hechos 6:1-7"
+      ],
+      "yearStart": 33,
+      "yearEnd": null
+    },
+    {
+      "id": "NT055",
+      "event": "Martirio de Esteban",
+      "yearBC": null,
+      "yearAD": 34,
+      "dateDisplay": "34 d.C.",
+      "reference": "Hechos 6:8-7:60",
+      "testament": "NT",
+      "era": "Iglesia Primitiva",
+      "category": "martyrdom",
+      "description": "Esteban es apedreado hasta la muerte. Saulo consiente en su muerte.",
+      "keyPersons": [
+        "Esteban",
+        "Saulo/Pablo"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Primer mártir cristiano",
+      "relatedVerses": [
+        "Hechos 6:8-7:60"
+      ],
+      "yearStart": 34,
+      "yearEnd": null
+    },
+    {
+      "id": "NT056",
+      "event": "Conversión de Saulo",
+      "yearBC": null,
+      "yearAD": 34,
+      "dateDisplay": "34 d.C.",
+      "reference": "Hechos 9:1-19",
+      "testament": "NT",
+      "era": "Iglesia Primitiva",
+      "category": "conversion",
+      "description": "Saulo se encuentra con Cristo resucitado en el camino a Damasco y se convierte",
+      "keyPersons": [
+        "Saulo/Pablo",
+        "Ananías"
+      ],
+      "location": "Camino a Damasco",
+      "certaintyLevel": "histórico",
+      "significance": "Conversión del mayor perseguidor en mayor apóstol",
+      "relatedVerses": [
+        "Hechos 9:1-19",
+        "Hechos 22:6-16",
+        "Hechos 26:12-18"
+      ],
+      "yearStart": 34,
+      "yearEnd": null
+    },
+    {
+      "id": "NT057",
+      "event": "Pablo en Arabia",
+      "yearBC": null,
+      "yearStart": 34,
+      "yearEnd": 37,
+      "yearAD": 34,
+      "dateDisplay": "34-37 d.C.",
+      "reference": "Gálatas 1:17",
+      "testament": "NT",
+      "era": "Ministerio de Pablo",
+      "category": "preparation",
+      "description": "Pablo pasa tres años en Arabia recibiendo revelación directa de Cristo",
+      "keyPersons": [
+        "Pablo"
+      ],
+      "location": "Arabia",
+      "certaintyLevel": "estimado",
+      "significance": "Preparación y revelación del evangelio de la gracia",
+      "relatedVerses": [
+        "Gálatas 1:15-18"
+      ]
+    },
+    {
+      "id": "NT058",
+      "event": "Primera Visita de Pablo a Jerusalén",
+      "yearBC": null,
+      "yearAD": 37,
+      "dateDisplay": "37 d.C.",
+      "reference": "Hechos 9:26-30",
+      "testament": "NT",
+      "era": "Ministerio de Pablo",
+      "category": "fellowship",
+      "description": "Pablo visita Jerusalén, conoce a Pedro por 15 días. Bernabé lo presenta a los apóstoles.",
+      "keyPersons": [
+        "Pablo",
+        "Pedro",
+        "Bernabé"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Reconocimiento apostólico de Pablo",
+      "relatedVerses": [
+        "Hechos 9:26-30",
+        "Gálatas 1:18-19"
+      ],
+      "yearStart": 37,
+      "yearEnd": null
+    },
+    {
+      "id": "NT059",
+      "event": "Pedro y Cornelio",
+      "yearBC": null,
+      "yearAD": 40,
+      "dateDisplay": "40 d.C.",
+      "reference": "Hechos 10",
+      "testament": "NT",
+      "era": "Iglesia Primitiva",
+      "category": "expansion",
+      "description": "Pedro predica a Cornelio, un gentil. El Espíritu Santo cae sobre los gentiles.",
+      "keyPersons": [
+        "Pedro",
+        "Cornelio"
+      ],
+      "location": "Cesarea",
+      "certaintyLevel": "histórico",
+      "significance": "Apertura del evangelio a los gentiles",
+      "relatedVerses": [
+        "Hechos 10:1-11:18"
+      ],
+      "yearStart": 40,
+      "yearEnd": null
+    },
+    {
+      "id": "NT060",
+      "event": "Iglesia en Antioquía Fundada",
+      "yearBC": null,
+      "yearAD": 42,
+      "dateDisplay": "42 d.C.",
+      "reference": "Hechos 11:19-26",
+      "testament": "NT",
+      "era": "Iglesia Primitiva",
+      "category": "expansion",
+      "description": "Se funda la iglesia en Antioquía. Por primera vez los discípulos son llamados 'cristianos'",
+      "keyPersons": [
+        "Bernabé",
+        "Pablo"
+      ],
+      "location": "Antioquía de Siria",
+      "certaintyLevel": "histórico",
+      "significance": "Centro misionero de la iglesia primitiva",
+      "relatedVerses": [
+        "Hechos 11:19-26"
+      ],
+      "yearStart": 42,
+      "yearEnd": null
+    },
+    {
+      "id": "NT061",
+      "event": "Muerte del Apóstol Santiago",
+      "yearBC": null,
+      "yearAD": 44,
+      "dateDisplay": "44 d.C.",
+      "reference": "Hechos 12:1-2",
+      "testament": "NT",
+      "era": "Iglesia Primitiva",
+      "category": "martyrdom",
+      "description": "Herodes Agripa I mata a Santiago, hermano de Juan, con espada",
+      "keyPersons": [
+        "Santiago",
+        "Herodes Agripa I"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Primer apóstol mártir",
+      "relatedVerses": [
+        "Hechos 12:1-2"
+      ],
+      "yearStart": 44,
+      "yearEnd": null
+    },
+    {
+      "id": "NT062",
+      "event": "Pedro Liberado de la Prisión",
+      "yearBC": null,
+      "yearAD": 44,
+      "dateDisplay": "44 d.C.",
+      "reference": "Hechos 12:3-19",
+      "testament": "NT",
+      "era": "Iglesia Primitiva",
+      "category": "deliverance",
+      "description": "Un ángel libera a Pedro de la prisión la noche antes de ser ejecutado",
+      "keyPersons": [
+        "Pedro",
+        "Herodes Agripa I",
+        "Ángel"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Protección divina de los apóstoles",
+      "relatedVerses": [
+        "Hechos 12:3-19"
+      ],
+      "yearStart": 44,
+      "yearEnd": null
+    },
+    {
+      "id": "NT063",
+      "event": "Muerte de Herodes Agripa I",
+      "yearBC": null,
+      "yearAD": 44,
+      "dateDisplay": "44 d.C.",
+      "reference": "Hechos 12:20-23",
+      "testament": "NT",
+      "era": "Iglesia Primitiva",
+      "category": "judgment",
+      "description": "Herodes es comido por gusanos y muere por no dar gloria a Dios",
+      "keyPersons": [
+        "Herodes Agripa I"
+      ],
+      "location": "Cesarea",
+      "certaintyLevel": "histórico",
+      "significance": "Juicio divino sobre perseguidor",
+      "relatedVerses": [
+        "Hechos 12:20-23"
+      ],
+      "yearStart": 44,
+      "yearEnd": null
+    },
+    {
+      "id": "NT064",
+      "event": "Primer Viaje Misionero de Pablo",
+      "yearBC": null,
+      "yearStart": 46,
+      "yearEnd": 48,
+      "yearAD": 46,
+      "dateDisplay": "46-48 d.C.",
+      "reference": "Hechos 13-14",
+      "testament": "NT",
+      "era": "Ministerio de Pablo",
+      "category": "mission",
+      "description": "Pablo y Bernabé son enviados desde Antioquía. Visitan Chipre, Antioquía de Pisidia, Iconio, Listra y Derbe",
+      "keyPersons": [
+        "Pablo",
+        "Bernabé",
+        "Juan Marcos"
+      ],
+      "location": "Chipre, Galacia del Sur",
+      "certaintyLevel": "histórico",
+      "significance": "Inicio de misiones organizadas a los gentiles",
+      "relatedVerses": [
+        "Hechos 13:1-14:28"
+      ]
+    },
+    {
+      "id": "NT065",
+      "event": "Epístola a los Gálatas",
+      "yearBC": null,
+      "yearAD": 49,
+      "dateDisplay": "49 d.C.",
+      "reference": "Gálatas",
+      "testament": "NT",
+      "era": "Ministerio de Pablo",
+      "category": "epistle",
+      "description": "Pablo escribe Gálatas defendiendo la justificación por fe, no por obras de la ley",
+      "keyPersons": [
+        "Pablo",
+        "Iglesias de Galacia"
+      ],
+      "location": "Posiblemente Antioquía",
+      "certaintyLevel": "estimado",
+      "significance": "Primera epístola de Pablo, defensa del evangelio de gracia",
+      "relatedVerses": [
+        "Gálatas 1:1-6:18"
+      ],
+      "yearStart": 49,
+      "yearEnd": null
+    },
+    {
+      "id": "NT066",
+      "event": "Concilio de Jerusalén",
+      "yearBC": null,
+      "yearAD": 49,
+      "dateDisplay": "49 d.C.",
+      "reference": "Hechos 15",
+      "testament": "NT",
+      "era": "Iglesia Primitiva",
+      "category": "council",
+      "description": "La iglesia decide que los gentiles no necesitan circuncidarse ni guardar la ley de Moisés",
+      "keyPersons": [
+        "Pablo",
+        "Bernabé",
+        "Pedro",
+        "Santiago"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Victoria del evangelio de gracia",
+      "relatedVerses": [
+        "Hechos 15:1-35",
+        "Gálatas 2:1-10"
+      ],
+      "yearStart": 49,
+      "yearEnd": null
+    },
+    {
+      "id": "NT067",
+      "event": "Segundo Viaje Misionero de Pablo",
+      "yearBC": null,
+      "yearStart": 49,
+      "yearEnd": 52,
+      "yearAD": 49,
+      "dateDisplay": "49-52 d.C.",
+      "reference": "Hechos 15:36-18:22",
+      "testament": "NT",
+      "era": "Ministerio de Pablo",
+      "category": "mission",
+      "description": "Pablo viaja con Silas. Visitan Macedonia (Filipos, Tesalónica, Berea) y Grecia (Atenas, Corinto)",
+      "keyPersons": [
+        "Pablo",
+        "Silas",
+        "Timoteo",
+        "Lucas"
+      ],
+      "location": "Asia Menor, Macedonia, Acaya",
+      "certaintyLevel": "histórico",
+      "significance": "Evangelio llega a Europa",
+      "relatedVerses": [
+        "Hechos 15:36-18:22"
+      ]
+    },
+    {
+      "id": "NT068",
+      "event": "Visión del Varón Macedonio",
+      "yearBC": null,
+      "yearAD": 50,
+      "dateDisplay": "50 d.C.",
+      "reference": "Hechos 16:9-10",
+      "testament": "NT",
+      "era": "Ministerio de Pablo",
+      "category": "vision",
+      "description": "Pablo ve en visión a un hombre macedonio que pide ayuda. Va a Macedonia.",
+      "keyPersons": [
+        "Pablo",
+        "Silas",
+        "Timoteo"
+      ],
+      "location": "Troas",
+      "certaintyLevel": "histórico",
+      "significance": "Evangelio entra en Europa",
+      "relatedVerses": [
+        "Hechos 16:6-10"
+      ],
+      "yearStart": 50,
+      "yearEnd": null
+    },
+    {
+      "id": "NT069",
+      "event": "Conversión de Lidia",
+      "yearBC": null,
+      "yearAD": 50,
+      "dateDisplay": "50 d.C.",
+      "reference": "Hechos 16:11-15",
+      "testament": "NT",
+      "era": "Ministerio de Pablo",
+      "category": "conversion",
+      "description": "Lidia, vendedora de púrpura, se convierte. Primera convertida en Europa.",
+      "keyPersons": [
+        "Pablo",
+        "Lidia"
+      ],
+      "location": "Filipos (Macedonia)",
+      "certaintyLevel": "histórico",
+      "significance": "Primera cristiana europea",
+      "relatedVerses": [
+        "Hechos 16:11-15"
+      ],
+      "yearStart": 50,
+      "yearEnd": null
+    },
+    {
+      "id": "NT070",
+      "event": "Pablo y Silas en la Cárcel de Filipos",
+      "yearBC": null,
+      "yearAD": 50,
+      "dateDisplay": "50 d.C.",
+      "reference": "Hechos 16:16-40",
+      "testament": "NT",
+      "era": "Ministerio de Pablo",
+      "category": "deliverance",
+      "description": "Pablo y Silas son encarcelados, cantan himnos. Un terremoto los libera. El carcelero se convierte.",
+      "keyPersons": [
+        "Pablo",
+        "Silas",
+        "Carcelero filipino"
+      ],
+      "location": "Filipos",
+      "certaintyLevel": "histórico",
+      "significance": "Victoria en medio del sufrimiento",
+      "relatedVerses": [
+        "Hechos 16:16-40"
+      ],
+      "yearStart": 50,
+      "yearEnd": null
+    },
+    {
+      "id": "NT071",
+      "event": "Pablo en Atenas (Areópago)",
+      "yearBC": null,
+      "yearAD": 51,
+      "dateDisplay": "51 d.C.",
+      "reference": "Hechos 17:16-34",
+      "testament": "NT",
+      "era": "Ministerio de Pablo",
+      "category": "preaching",
+      "description": "Pablo predica en el Areópago sobre el Dios Desconocido. Algunos creen.",
+      "keyPersons": [
+        "Pablo",
+        "Filósofos atenienses",
+        "Dionisio"
+      ],
+      "location": "Atenas (Areópago)",
+      "certaintyLevel": "histórico",
+      "significance": "Evangelio confronta filosofía griega",
+      "relatedVerses": [
+        "Hechos 17:16-34"
+      ],
+      "yearStart": 51,
+      "yearEnd": null
+    },
+    {
+      "id": "NT072",
+      "event": "Pablo en Corinto",
+      "yearBC": null,
+      "yearStart": 51,
+      "yearEnd": 52,
+      "yearAD": 51,
+      "dateDisplay": "51-52 d.C.",
+      "reference": "Hechos 18:1-18",
+      "testament": "NT",
+      "era": "Ministerio de Pablo",
+      "category": "ministry",
+      "description": "Pablo pasa 18 meses en Corinto. Conoce a Aquila y Priscila. Es llevado ante Galión.",
+      "keyPersons": [
+        "Pablo",
+        "Aquila",
+        "Priscila",
+        "Galión"
+      ],
+      "location": "Corinto",
+      "certaintyLevel": "histórico",
+      "significance": "Establecimiento de iglesia importante",
+      "relatedVerses": [
+        "Hechos 18:1-18"
+      ]
+    },
+    {
+      "id": "NT073",
+      "event": "1 y 2 Tesalonicenses",
+      "yearBC": null,
+      "yearStart": 51,
+      "yearEnd": 52,
+      "yearAD": 51,
+      "dateDisplay": "51-52 d.C.",
+      "reference": "1-2 Tesalonicenses",
+      "testament": "NT",
+      "era": "Ministerio de Pablo",
+      "category": "epistle",
+      "description": "Pablo escribe 1 y 2 Tesalonicenses desde Corinto sobre la segunda venida de Cristo",
+      "keyPersons": [
+        "Pablo",
+        "Iglesia de Tesalónica"
+      ],
+      "location": "Corinto",
+      "certaintyLevel": "histórico",
+      "significance": "Primeras epístolas sobre escatología",
+      "relatedVerses": [
+        "1 Tesalonicenses",
+        "2 Tesalonicenses"
+      ]
+    },
+    {
+      "id": "NT074",
+      "event": "Tercer Viaje Misionero de Pablo",
+      "yearBC": null,
+      "yearStart": 53,
+      "yearEnd": 57,
+      "yearAD": 53,
+      "dateDisplay": "53-57 d.C.",
+      "reference": "Hechos 18:23-21:16",
+      "testament": "NT",
+      "era": "Ministerio de Pablo",
+      "category": "mission",
+      "description": "Pablo pasa 3 años en Éfeso, luego visita Macedonia y Grecia",
+      "keyPersons": [
+        "Pablo",
+        "Timoteo",
+        "Erasto"
+      ],
+      "location": "Éfeso, Macedonia, Acaya",
+      "certaintyLevel": "histórico",
+      "significance": "Ministerio más largo en un solo lugar",
+      "relatedVerses": [
+        "Hechos 18:23-21:16"
+      ]
+    },
+    {
+      "id": "NT075",
+      "event": "Pablo en Éfeso",
+      "yearBC": null,
+      "yearStart": 53,
+      "yearEnd": 56,
+      "yearAD": 53,
+      "dateDisplay": "53-56 d.C.",
+      "reference": "Hechos 19",
+      "testament": "NT",
+      "era": "Ministerio de Pablo",
+      "category": "ministry",
+      "description": "Pablo ministra 3 años en Éfeso. Gran avivamiento. Alboroto de los plateros.",
+      "keyPersons": [
+        "Pablo",
+        "Demetrio",
+        "Artemisa"
+      ],
+      "location": "Éfeso",
+      "certaintyLevel": "histórico",
+      "significance": "Poderoso movimiento del Espíritu",
+      "relatedVerses": [
+        "Hechos 19:1-41"
+      ]
+    },
+    {
+      "id": "NT076",
+      "event": "1 Corintios",
+      "yearBC": null,
+      "yearAD": 55,
+      "dateDisplay": "55 d.C.",
+      "reference": "1 Corintios",
+      "testament": "NT",
+      "era": "Ministerio de Pablo",
+      "category": "epistle",
+      "description": "Pablo escribe 1 Corintios desde Éfeso corrigiendo problemas en la iglesia",
+      "keyPersons": [
+        "Pablo",
+        "Iglesia de Corinto"
+      ],
+      "location": "Éfeso",
+      "certaintyLevel": "histórico",
+      "significance": "Corrección pastoral de divisiones y pecados",
+      "relatedVerses": [
+        "1 Corintios 1:1-16:24"
+      ],
+      "yearStart": 55,
+      "yearEnd": null
+    },
+    {
+      "id": "NT077",
+      "event": "2 Corintios",
+      "yearBC": null,
+      "yearAD": 56,
+      "dateDisplay": "56 d.C.",
+      "reference": "2 Corintios",
+      "testament": "NT",
+      "era": "Ministerio de Pablo",
+      "category": "epistle",
+      "description": "Pablo escribe 2 Corintios desde Macedonia defendiendo su apostolado",
+      "keyPersons": [
+        "Pablo",
+        "Tito",
+        "Iglesia de Corinto"
+      ],
+      "location": "Macedonia",
+      "certaintyLevel": "histórico",
+      "significance": "Defensa del ministerio apostólico",
+      "relatedVerses": [
+        "2 Corintios 1:1-13:14"
+      ],
+      "yearStart": 56,
+      "yearEnd": null
+    },
+    {
+      "id": "NT078",
+      "event": "Romanos",
+      "yearBC": null,
+      "yearAD": 57,
+      "dateDisplay": "57 d.C.",
+      "reference": "Romanos",
+      "testament": "NT",
+      "era": "Ministerio de Pablo",
+      "category": "epistle",
+      "description": "Pablo escribe Romanos desde Corinto, la exposición más completa del evangelio",
+      "keyPersons": [
+        "Pablo",
+        "Iglesia de Roma"
+      ],
+      "location": "Corinto",
+      "certaintyLevel": "histórico",
+      "significance": "Obra maestra teológica del evangelio",
+      "relatedVerses": [
+        "Romanos 1:1-16:27"
+      ],
+      "yearStart": 57,
+      "yearEnd": null
+    },
+    {
+      "id": "NT079",
+      "event": "Arresto de Pablo en Jerusalén",
+      "yearBC": null,
+      "yearAD": 57,
+      "dateDisplay": "57 d.C.",
+      "reference": "Hechos 21:27-36",
+      "testament": "NT",
+      "era": "Ministerio de Pablo",
+      "category": "arrest",
+      "description": "Pablo es arrestado en el templo acusado falsamente de profanarlo",
+      "keyPersons": [
+        "Pablo",
+        "Judíos de Asia"
+      ],
+      "location": "Jerusalén (Templo)",
+      "certaintyLevel": "histórico",
+      "significance": "Inicio de largo período de prisión",
+      "relatedVerses": [
+        "Hechos 21:27-36"
+      ],
+      "yearStart": 57,
+      "yearEnd": null
+    },
+    {
+      "id": "NT080",
+      "event": "Pablo Prisionero en Cesarea",
+      "yearBC": null,
+      "yearStart": 57,
+      "yearEnd": 59,
+      "yearAD": 57,
+      "dateDisplay": "57-59 d.C.",
+      "reference": "Hechos 23:23-26:32",
+      "testament": "NT",
+      "era": "Ministerio de Pablo",
+      "category": "imprisonment",
+      "description": "Pablo pasa 2 años prisionero en Cesarea. Testifica ante Félix, Festo y Agripa.",
+      "keyPersons": [
+        "Pablo",
+        "Félix",
+        "Festo",
+        "Agripa II"
+      ],
+      "location": "Cesarea",
+      "certaintyLevel": "histórico",
+      "significance": "Oportunidad de testificar ante autoridades",
+      "relatedVerses": [
+        "Hechos 23:23-26:32"
+      ]
+    },
+    {
+      "id": "NT081",
+      "event": "Viaje de Pablo a Roma",
+      "yearBC": null,
+      "yearStart": 59,
+      "yearEnd": 60,
+      "yearAD": 59,
+      "dateDisplay": "59-60 d.C.",
+      "reference": "Hechos 27-28",
+      "testament": "NT",
+      "era": "Ministerio de Pablo",
+      "category": "journey",
+      "description": "Pablo naufraga en Malta camino a Roma. Llega a Roma como prisionero.",
+      "keyPersons": [
+        "Pablo",
+        "Lucas",
+        "Centurión Julio"
+      ],
+      "location": "Mediterráneo → Malta → Roma",
+      "certaintyLevel": "histórico",
+      "significance": "Pablo llega a Roma como testigo",
+      "relatedVerses": [
+        "Hechos 27:1-28:16"
+      ]
+    },
+    {
+      "id": "NT082",
+      "event": "Primera Prisión Romana",
+      "yearBC": null,
+      "yearStart": 60,
+      "yearEnd": 62,
+      "yearAD": 60,
+      "dateDisplay": "60-62 d.C.",
+      "reference": "Hechos 28:30-31",
+      "testament": "NT",
+      "era": "Ministerio de Pablo",
+      "category": "imprisonment",
+      "description": "Pablo pasa 2 años bajo arresto domiciliario en Roma predicando libremente",
+      "keyPersons": [
+        "Pablo"
+      ],
+      "location": "Roma",
+      "certaintyLevel": "histórico",
+      "significance": "Ministerio fructífero en prisión",
+      "relatedVerses": [
+        "Hechos 28:17-31"
+      ]
+    },
+    {
+      "id": "NT083",
+      "event": "Epístolas de la Prisión",
+      "yearBC": null,
+      "yearStart": 60,
+      "yearEnd": 62,
+      "yearAD": 60,
+      "dateDisplay": "60-62 d.C.",
+      "reference": "Efesios, Filipenses, Colosenses, Filemón",
+      "testament": "NT",
+      "era": "Ministerio de Pablo",
+      "category": "epistle",
+      "description": "Pablo escribe Efesios, Filipenses, Colosenses y Filemón desde Roma",
+      "keyPersons": [
+        "Pablo"
+      ],
+      "location": "Roma",
+      "certaintyLevel": "histórico",
+      "significance": "Profunda teología cristológica",
+      "relatedVerses": [
+        "Efesios",
+        "Filipenses",
+        "Colosenses",
+        "Filemón"
+      ]
+    },
+    {
+      "id": "NT084",
+      "event": "Muerte de Santiago, Hermano del Señor",
+      "yearBC": null,
+      "yearAD": 62,
+      "dateDisplay": "62 d.C.",
+      "reference": "Tradición (Josefo)",
+      "testament": "NT",
+      "era": "Iglesia Primitiva",
+      "category": "martyrdom",
+      "description": "Santiago, líder de la iglesia en Jerusalén, es martirizado",
+      "keyPersons": [
+        "Santiago",
+        "Anano II"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Fin de liderazgo apostólico en Jerusalén",
+      "relatedVerses": null,
+      "yearStart": 62,
+      "yearEnd": null
+    },
+    {
+      "id": "NT085",
+      "event": "Evangelio de Lucas y Hechos",
+      "yearBC": null,
+      "yearAD": 62,
+      "dateDisplay": "62 d.C.",
+      "reference": "Lucas, Hechos",
+      "testament": "NT",
+      "era": "Escritura del NT",
+      "category": "gospel",
+      "description": "Lucas escribe su evangelio y Hechos, posiblemente antes del final de la prisión de Pablo",
+      "keyPersons": [
+        "Lucas"
+      ],
+      "location": "Posiblemente Roma",
+      "certaintyLevel": "estimado",
+      "significance": "Historia ordenada de Cristo y la iglesia",
+      "relatedVerses": [
+        "Lucas 1:1-4",
+        "Hechos 1:1-2"
+      ],
+      "yearStart": 62,
+      "yearEnd": null
+    },
+    {
+      "id": "NT086",
+      "event": "Evangelio de Marcos",
+      "yearBC": null,
+      "yearAD": 63,
+      "dateDisplay": "63 d.C.",
+      "reference": "Marcos",
+      "testament": "NT",
+      "era": "Escritura del NT",
+      "category": "gospel",
+      "description": "Juan Marcos escribe su evangelio, posiblemente en Roma con Pedro",
+      "keyPersons": [
+        "Juan Marcos",
+        "Pedro"
+      ],
+      "location": "Roma",
+      "certaintyLevel": "estimado",
+      "significance": "Primer evangelio escrito",
+      "relatedVerses": [
+        "Marcos 1:1-16:20"
+      ],
+      "yearStart": 63,
+      "yearEnd": null
+    },
+    {
+      "id": "NT087",
+      "event": "Liberación de Pablo",
+      "yearBC": null,
+      "yearAD": 62,
+      "dateDisplay": "62 d.C.",
+      "reference": "Tradición (1 Timoteo, Tito)",
+      "testament": "NT",
+      "era": "Ministerio de Pablo",
+      "category": "release",
+      "description": "Pablo es liberado de su primera prisión romana",
+      "keyPersons": [
+        "Pablo"
+      ],
+      "location": "Roma",
+      "certaintyLevel": "estimado",
+      "significance": "Continúa ministerio en libertad",
+      "relatedVerses": null,
+      "yearStart": 62,
+      "yearEnd": null
+    },
+    {
+      "id": "NT088",
+      "event": "1 Timoteo y Tito",
+      "yearBC": null,
+      "yearStart": 63,
+      "yearEnd": 65,
+      "yearAD": 63,
+      "dateDisplay": "63-65 d.C.",
+      "reference": "1 Timoteo, Tito",
+      "testament": "NT",
+      "era": "Ministerio de Pablo",
+      "category": "epistle",
+      "description": "Pablo escribe 1 Timoteo y Tito, epístolas pastorales",
+      "keyPersons": [
+        "Pablo",
+        "Timoteo",
+        "Tito"
+      ],
+      "location": "Macedonia",
+      "certaintyLevel": "estimado",
+      "significance": "Instrucciones para líderes de iglesia",
+      "relatedVerses": [
+        "1 Timoteo",
+        "Tito"
+      ]
+    },
+    {
+      "id": "NT089",
+      "event": "Gran Incendio de Roma",
+      "yearBC": null,
+      "yearAD": 64,
+      "dateDisplay": "64 d.C. (julio)",
+      "reference": "Historia secular (Tácito)",
+      "testament": "NT",
+      "era": "Persecución",
+      "category": "persecution",
+      "description": "Nerón culpa a los cristianos del incendio de Roma. Comienza persecución imperial.",
+      "keyPersons": [
+        "Nerón"
+      ],
+      "location": "Roma",
+      "certaintyLevel": "histórico",
+      "significance": "Primera persecución imperial sistemática",
+      "relatedVerses": null,
+      "yearStart": 64,
+      "yearEnd": null
+    },
+    {
+      "id": "NT090",
+      "event": "Martirio de Pedro",
+      "yearBC": null,
+      "yearStart": 64,
+      "yearEnd": 67,
+      "yearAD": 64,
+      "dateDisplay": "64-67 d.C.",
+      "reference": "Tradición (Clemente, Tertuliano)",
+      "testament": "NT",
+      "era": "Iglesia Primitiva",
+      "category": "martyrdom",
+      "description": "Pedro es crucificado de cabeza en Roma durante la persecución de Nerón",
+      "keyPersons": [
+        "Pedro",
+        "Nerón"
+      ],
+      "location": "Roma",
+      "certaintyLevel": "histórico",
+      "significance": "Martirio del líder apóstol",
+      "relatedVerses": [
+        "Juan 21:18-19",
+        "2 Pedro 1:14"
+      ]
+    },
+    {
+      "id": "NT091",
+      "event": "1 y 2 Pedro",
+      "yearBC": null,
+      "yearStart": 64,
+      "yearEnd": 65,
+      "yearAD": 64,
+      "dateDisplay": "64-65 d.C.",
+      "reference": "1-2 Pedro",
+      "testament": "NT",
+      "era": "Escritura del NT",
+      "category": "epistle",
+      "description": "Pedro escribe sus epístolas poco antes de su martirio",
+      "keyPersons": [
+        "Pedro"
+      ],
+      "location": "Roma ('Babilonia')",
+      "certaintyLevel": "histórico",
+      "significance": "Aliento en medio de persecución",
+      "relatedVerses": [
+        "1 Pedro",
+        "2 Pedro"
+      ]
+    },
+    {
+      "id": "NT092",
+      "event": "Segundo Arresto de Pablo",
+      "yearBC": null,
+      "yearAD": 66,
+      "dateDisplay": "66 d.C.",
+      "reference": "2 Timoteo 1:15-17",
+      "testament": "NT",
+      "era": "Ministerio de Pablo",
+      "category": "arrest",
+      "description": "Pablo es arrestado nuevamente y llevado a Roma en condiciones más severas",
+      "keyPersons": [
+        "Pablo"
+      ],
+      "location": "Roma",
+      "certaintyLevel": "estimado",
+      "significance": "Prisión final de Pablo",
+      "relatedVerses": [
+        "2 Timoteo 1:15-17",
+        "2 Timoteo 4:6-8"
+      ],
+      "yearStart": 66,
+      "yearEnd": null
+    },
+    {
+      "id": "NT093",
+      "event": "2 Timoteo",
+      "yearBC": null,
+      "yearAD": 67,
+      "dateDisplay": "67 d.C.",
+      "reference": "2 Timoteo",
+      "testament": "NT",
+      "era": "Ministerio de Pablo",
+      "category": "epistle",
+      "description": "Pablo escribe 2 Timoteo, su última carta, desde prisión antes de su ejecución",
+      "keyPersons": [
+        "Pablo",
+        "Timoteo"
+      ],
+      "location": "Roma (prisión)",
+      "certaintyLevel": "histórico",
+      "significance": "Últimas palabras de Pablo",
+      "relatedVerses": [
+        "2 Timoteo 1:1-4:22"
+      ],
+      "yearStart": 67,
+      "yearEnd": null
+    },
+    {
+      "id": "NT094",
+      "event": "Martirio de Pablo",
+      "yearBC": null,
+      "yearAD": 67,
+      "dateDisplay": "67 d.C.",
+      "reference": "Tradición (Eusebio)",
+      "testament": "NT",
+      "era": "Iglesia Primitiva",
+      "category": "martyrdom",
+      "description": "Pablo es decapitado en Roma por orden de Nerón",
+      "keyPersons": [
+        "Pablo",
+        "Nerón"
+      ],
+      "location": "Roma",
+      "certaintyLevel": "histórico",
+      "significance": "Fin del ministerio del apóstol a los gentiles",
+      "relatedVerses": [
+        "2 Timoteo 4:6-8"
+      ],
+      "yearStart": 67,
+      "yearEnd": null
+    },
+    {
+      "id": "NT095",
+      "event": "Epístola a los Hebreos",
+      "yearBC": null,
+      "yearStart": 67,
+      "yearEnd": 69,
+      "yearAD": 67,
+      "dateDisplay": "67-69 d.C.",
+      "reference": "Hebreos",
+      "testament": "NT",
+      "era": "Escritura del NT",
+      "category": "epistle",
+      "description": "Hebreos es escrito (posiblemente por Pablo, Apolos o Bernabé) antes de la destrucción del templo",
+      "keyPersons": [
+        "Autor desconocido"
+      ],
+      "location": "Desconocido",
+      "certaintyLevel": "estimado",
+      "significance": "Superioridad de Cristo sobre el sistema levítico",
+      "relatedVerses": [
+        "Hebreos 1:1-13:25"
+      ]
+    },
+    {
+      "id": "NT096",
+      "event": "Destrucción de Jerusalén",
+      "yearBC": null,
+      "yearAD": 70,
+      "dateDisplay": "70 d.C. (agosto-septiembre)",
+      "reference": "Profetizado en Mateo 24",
+      "testament": "NT",
+      "era": "Cumplimiento Profético",
+      "category": "destruction",
+      "description": "Los romanos bajo Tito destruyen Jerusalén y el segundo templo",
+      "keyPersons": [
+        "Tito"
+      ],
+      "location": "Jerusalén",
+      "certaintyLevel": "histórico",
+      "significance": "Cumplimiento de profecía de Jesús, fin del sistema de sacrificios",
+      "relatedVerses": [
+        "Mateo 24:1-2",
+        "Lucas 21:20-24"
+      ],
+      "yearStart": 70,
+      "yearEnd": null
+    },
+    {
+      "id": "NT097",
+      "event": "Epístola de Judas",
+      "yearBC": null,
+      "yearStart": 70,
+      "yearEnd": 80,
+      "yearAD": 70,
+      "dateDisplay": "70-80 d.C.",
+      "reference": "Judas",
+      "testament": "NT",
+      "era": "Escritura del NT",
+      "category": "epistle",
+      "description": "Judas, hermano de Santiago, escribe advirtiendo contra falsos maestros",
+      "keyPersons": [
+        "Judas"
+      ],
+      "location": "Desconocido",
+      "certaintyLevel": "estimado",
+      "significance": "Advertencia contra apostasía",
+      "relatedVerses": [
+        "Judas 1:1-25"
+      ]
+    },
+    {
+      "id": "NT098",
+      "event": "Evangelio de Mateo",
+      "yearBC": null,
+      "yearStart": 70,
+      "yearEnd": 85,
+      "yearAD": 70,
+      "dateDisplay": "70-85 d.C.",
+      "reference": "Mateo",
+      "testament": "NT",
+      "era": "Escritura del NT",
+      "category": "gospel",
+      "description": "Mateo escribe su evangelio dirigido a audiencia judía",
+      "keyPersons": [
+        "Mateo"
+      ],
+      "location": "Posiblemente Antioquía",
+      "certaintyLevel": "estimado",
+      "significance": "Jesús como Rey-Mesías cumpliendo las Escrituras",
+      "relatedVerses": [
+        "Mateo 1:1-28:20"
+      ]
+    },
+    {
+      "id": "NT099",
+      "event": "Evangelio y Epístolas de Juan",
+      "yearBC": null,
+      "yearStart": 85,
+      "yearEnd": 95,
+      "yearAD": 85,
+      "dateDisplay": "85-95 d.C.",
+      "reference": "Juan, 1-3 Juan",
+      "testament": "NT",
+      "era": "Escritura del NT",
+      "category": "epistle",
+      "description": "Juan escribe su evangelio y tres epístolas",
+      "keyPersons": [
+        "Juan"
+      ],
+      "location": "Éfeso",
+      "certaintyLevel": "histórico",
+      "significance": "Jesús como Dios encarnado, énfasis en amor",
+      "relatedVerses": [
+        "Juan 1:1-21:25",
+        "1-3 Juan"
+      ]
+    },
+    {
+      "id": "NT100",
+      "event": "Juan Exiliado en Patmos",
+      "yearBC": null,
+      "yearAD": 95,
+      "dateDisplay": "95 d.C.",
+      "reference": "Apocalipsis 1:9",
+      "testament": "NT",
+      "era": "Persecución",
+      "category": "exile",
+      "description": "Juan es exiliado a la isla de Patmos durante la persecución de Domiciano",
+      "keyPersons": [
+        "Juan",
+        "Domiciano"
+      ],
+      "location": "Patmos",
+      "certaintyLevel": "histórico",
+      "significance": "Contexto de Apocalipsis",
+      "relatedVerses": [
+        "Apocalipsis 1:9"
+      ],
+      "yearStart": 95,
+      "yearEnd": null
+    },
+    {
+      "id": "NT101",
+      "event": "Apocalipsis",
+      "yearBC": null,
+      "yearAD": 95,
+      "dateDisplay": "95 d.C.",
+      "reference": "Apocalipsis",
+      "testament": "NT",
+      "era": "Escritura del NT",
+      "category": "prophecy",
+      "description": "Juan recibe la revelación de Jesucristo y escribe el Apocalipsis",
+      "keyPersons": [
+        "Juan",
+        "Jesucristo"
+      ],
+      "location": "Patmos",
+      "certaintyLevel": "histórico",
+      "significance": "Último libro del Nuevo Testamento, victoria final de Cristo",
+      "relatedVerses": [
+        "Apocalipsis 1:1-22:21"
+      ],
+      "yearStart": 95,
+      "yearEnd": null
+    },
+    {
+      "id": "NT102",
+      "event": "Muerte del Apóstol Juan",
+      "yearBC": null,
+      "yearAD": 100,
+      "dateDisplay": "100 d.C. (aproximadamente)",
+      "reference": "Tradición (Ireneo, Eusebio)",
+      "testament": "NT",
+      "era": "Fin de la Era Apostólica",
+      "category": "death",
+      "description": "Juan muere en Éfeso como el último apóstol vivo, de muerte natural",
+      "keyPersons": [
+        "Juan"
+      ],
+      "location": "Éfeso",
+      "certaintyLevel": "estimado",
+      "significance": "Fin de la era apostólica",
+      "relatedVerses": null,
+      "yearStart": 100,
+      "yearEnd": null
+    }
+  ]
+}

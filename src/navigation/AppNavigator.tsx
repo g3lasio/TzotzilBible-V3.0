@@ -17,6 +17,8 @@ import MomentsScreen from '../screens/MomentsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import AboutScreen from '../screens/AboutScreen';
 import ContactSupportScreen from '../screens/ContactSupportScreen';
+import TimelineScreen from '../screens/TimelineScreen';
+import TimelineEventDetailScreen from '../screens/TimelineEventDetailScreen';
 import type { RootStackParamList, TabParamList, BibleStackParamList } from '../types/navigation';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
@@ -156,6 +158,8 @@ export default function AppNavigator() {
       <RootStack.Screen name="Moments" component={MomentsScreen} />
       <RootStack.Screen name="About" component={AboutScreen} />
       <RootStack.Screen name="ContactSupport" component={ContactSupportScreen} />
+      <RootStack.Screen name="Timeline" component={TimelineScreen} />
+      <RootStack.Screen name="TimelineEventDetail" component={TimelineEventDetailScreen} />
     </RootStack.Navigator>
   );
 }
