@@ -8,6 +8,7 @@ run = ["sh", "-c", "node server.js"]
 build = ["sh", "-c", "npm install && npx expo export --platform web"]
 deploymentTarget = "cloudrun"
 ignoredPaths = [".git", ".expo", ".expo-shared", "text", "attached_assets", "ios", "android"]
+publicDir = "dist"
 
 [[ports]]
 localPort = 5000
