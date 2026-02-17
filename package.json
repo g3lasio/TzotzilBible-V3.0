@@ -18,6 +18,7 @@
     "production": "node prebuild.js && node server.js"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
     "@babel/core": "^7.28.5",
     "@expo-google-fonts/quantico": "^0.4.1",
     "@expo/metro-runtime": "~6.1.2",

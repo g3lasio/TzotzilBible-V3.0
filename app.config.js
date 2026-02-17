@@ -2,7 +2,7 @@ export default {
   expo: {
     name: "Tzotzil Bible",
     slug: "tzotzil-bible",
-    version: "2.1.0",
+    version: "2.2.0",
     orientation: "portrait",
     icon: "./assets/icon.png",
     userInterfaceStyle: "dark",
@@ -16,7 +16,7 @@ export default {
     ios: {
       supportsTablet: true,
       bundleIdentifier: "com.chyrris.tzotzilbible",
-      buildNumber: "32",
+      buildNumber: "33",
       infoPlist: {
         CFBundleDisplayName: "Tzotzil Bible",
         UIBackgroundModes: [],
@@ -31,7 +31,7 @@ export default {
         backgroundColor: "#0a0e14",
       },
       package: "com.chyrris.tzotzilbible",
-      versionCode: 26,
+      versionCode: 27,
       permissions: ["android.permission.INTERNET"],
       compileSdkVersion: 34,
       targetSdkVersion: 34,
