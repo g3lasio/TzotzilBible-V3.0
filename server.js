@@ -11,9 +11,21 @@ const fs = require('fs');
 const url = require('url');
 
 const PORT = process.env.PORT || 5000;
-const DIST_DIR = path.join(__dirname, 'dist');
-const PAGES_DIR = path.join(__dirname, 'pages');
-const EGW_BOOKS_DIR = path.join(__dirname, 'assets/EGW BOOKS JSON');
+
+// Replit Cloud Run uses /home/runner/workspace as the working directory
+const BASE_DIR = process.env.REPL_HOME || __dirname;
+const DIST_DIR = path.join(BASE_DIR, 'dist');
+const PAGES_DIR = path.join(BASE_DIR, 'pages');
+const EGW_BOOKS_DIR = path.join(BASE_DIR, 'assets/EGW BOOKS JSON');
+
+// Debug logging for Replit
+console.log('Environment:', {
+  __dirname,
+  BASE_DIR,
+  DIST_DIR,
+  'dist exists': fs.existsSync(DIST_DIR),
+  'dist/index.html exists': fs.existsSync(path.join(DIST_DIR, 'index.html'))
+});
 
 // MIME types for static file serving
 const MIME_TYPES = {
