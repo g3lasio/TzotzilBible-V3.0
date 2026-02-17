@@ -1,6 +1,6 @@
 // FIXED BUILD NUMBERS - Increment manually for each release
 // iOS buildNumber must be a string
-const BUILD_NUMBER = "100";
+const BUILD_NUMBER = "101";
 
 // Android versionCode must be an integer, always > previous (27)
 const VERSION_CODE = 100;
