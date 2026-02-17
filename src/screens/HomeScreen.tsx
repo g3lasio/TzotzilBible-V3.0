@@ -97,7 +97,7 @@ export default function HomeScreen() {
               </View>
               <View style={styles.statDivider} />
               <View style={styles.statItem}>
-                <Text style={styles.statNumber}>2</Text>
+                <Text style={styles.statNumber}>5</Text>
                 <Text style={styles.statLabel}>Versiones</Text>
               </View>
               <View style={styles.statDivider} />
@@ -109,17 +109,7 @@ export default function HomeScreen() {
           </LinearGradient>
         </View>
 
-        <View style={styles.tipCard}>
-          <LinearGradient
-            colors={['rgba(0, 243, 255, 0.08)', 'rgba(0, 255, 136, 0.05)']}
-            style={styles.tipGradient}
-          >
-            <MaterialCommunityIcons name="lightbulb-on-outline" size={24} color="#00f3ff" />
-            <Text style={styles.tipText}>
-              Usa la barra de navegación para explorar la Biblia, buscar versículos o hablar con Nevin AI.
-            </Text>
-          </LinearGradient>
-        </View>
+
       </ScrollView>
     </MainLayout>
   );

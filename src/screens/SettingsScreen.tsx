@@ -11,7 +11,7 @@ import MainLayout from '../components/MainLayout';
 import { FONTS } from '../config';
 import type { RootStackParamList } from '../types/navigation';
 
-const APP_VERSION = '2.1.0';
+const APP_VERSION = '4.1.0';
 const FEEDBACK_EMAIL = 'feedback@tzotzilbible.app';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;

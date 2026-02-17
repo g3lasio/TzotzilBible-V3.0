@@ -87,6 +87,26 @@ class NotificationService {
   }
 
   /**
+   * Cancel daily reading reminder specifically
+   */
+  async cancelDailyReminder(): Promise<void> {
+    try {
+      // Get all scheduled notifications
+      const scheduled = await Notifications.getAllScheduledNotificationsAsync();
+      
+      // Find and cancel reading plan reminders
+      for (const notification of scheduled) {
+        if (notification.content.data?.type === 'reading_plan_reminder') {
+          await Notifications.cancelScheduledNotificationAsync(notification.identifier);
+          console.log('Daily reminder cancelled:', notification.identifier);
+        }
+      }
+    } catch (error) {
+      console.error('Error cancelling daily reminder:', error);
+    }
+  }
+
+  /**
    * Cancel all scheduled reminders
    */
   async cancelAllReminders(): Promise<void> {

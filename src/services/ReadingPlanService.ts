@@ -439,8 +439,15 @@ class ReadingPlanService {
    * WARNING: This will delete all progress
    */
   async resetPlan(): Promise<void> {
+    // Cancel any scheduled notifications first
+    await NotificationService.cancelDailyReminder();
+    
+    // Clear ALL reading plan data
     await AsyncStorage.removeItem(STORAGE_KEY_USER_PLAN);
     await AsyncStorage.removeItem(STORAGE_KEY_COMPLETED_DAYS);
+    await AsyncStorage.removeItem(STORAGE_KEY_READING_STATUS);
+    
+    console.log('Reading plan reset successfully - all data cleared');
   }
 
   /**
