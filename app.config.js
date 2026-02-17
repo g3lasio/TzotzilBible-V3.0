@@ -22,11 +22,13 @@ export default {
     platforms: ["ios", "android", "web"],
     ios: {
       supportsTablet: true,
+      requireFullScreen: false,
       bundleIdentifier: "com.chyrris.tzotzilbible",
       buildNumber: BUILD_NUMBER,
       infoPlist: {
         CFBundleDisplayName: "Tzotzil Bible",
         UIBackgroundModes: [],
+        UIDeviceFamily: [1, 2], // 1 = iPhone, 2 = iPad
       },
       config: {
         usesNonExemptEncryption: false,
