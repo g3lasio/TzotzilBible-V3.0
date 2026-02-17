@@ -15,7 +15,8 @@
     "build:deploy": "npm install && npx expo export --platform web",
     "prebuild": "node prebuild.js",
     "serve:production": "node server.js",
-    "production": "node prebuild.js && node server.js"
+    "production": "node prebuild.js && node server.js",
+    "eas-build-pre-install": "node scripts/update-version.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.32.1",
