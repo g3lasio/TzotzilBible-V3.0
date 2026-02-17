@@ -1,7 +1,6 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
-const { execSync } = require('child_process');
 
 const app = express();
 
@@ -11,14 +10,8 @@ const DIST_DIR = path.join(__dirname, 'dist');
 
 const indexPath = path.join(DIST_DIR, 'index.html');
 if (!fs.existsSync(indexPath)) {
-  console.log('dist/index.html not found. Building web bundle...');
-  try {
-    execSync('npx expo export --platform web', { stdio: 'inherit', cwd: __dirname });
-    console.log('Web bundle built successfully.');
-  } catch (err) {
-    console.error('Failed to build web bundle:', err.message);
-    process.exit(1);
-  }
+  console.error('ERROR: dist/index.html not found. Run the build command first: npx expo export --platform web');
+  console.error('The server will start but may not serve the web app correctly.');
 }
 
 const ANTHROPIC_API_URL = 'https://api.anthropic.com/v1/messages';
