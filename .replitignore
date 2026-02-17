@@ -34,12 +34,10 @@ __pycache__/
 .coverage
 htmlcov/
 *.egg-info/
-dist/
 build/
 
 # Database local
 instance/
-*.db
 *.sqlite
 *.sqlite3
 
@@ -70,8 +68,6 @@ test_*.py
 *_test.py
 
 # Documentation
-*.md
-README.md
 LICENSE
 GOOGLE_PLAY_COMPLIANCE.md
 APK_BUILD_INSTRUCTIONS.md
@@ -100,7 +96,3 @@ Tzotzil_database.csv
 other_authors/
 deploy.sh
 build-apk.sh
-er2', 'Doe', '123456789', 'test2@example.com', 'hashedpassword');
-ername VARCHAR(50),
-ername VARCHAR(80) NOT NULL,
-sword_hash VARCHAR(256) NOT NULL,
