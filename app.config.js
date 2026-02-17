@@ -1,3 +1,25 @@
+// Auto-increment build numbers based on timestamp
+// This ensures unique build numbers for every build without manual intervention
+const now = new Date();
+const year = now.getFullYear();
+const month = String(now.getMonth() + 1).padStart(2, '0');
+const day = String(now.getDate()).padStart(2, '0');
+const hour = String(now.getHours()).padStart(2, '0');
+const minute = String(now.getMinutes()).padStart(2, '0');
+
+// Format: YYYYMMDDHHMM (e.g., 202602170320 for Feb 17, 2026 03:20)
+// This creates a unique, always-increasing number
+const BUILD_NUMBER = `${year}${month}${day}${hour}${minute}`;
+
+// Android versionCode must be an integer (max 2100000000)
+// Using format: YYMMDDHHMM (e.g., 2602170320)
+const VERSION_CODE = parseInt(`${String(year).slice(2)}${month}${day}${hour}${minute}`);
+
+console.log(`🔨 Build Configuration:`);
+console.log(`   iOS buildNumber: ${BUILD_NUMBER}`);
+console.log(`   Android versionCode: ${VERSION_CODE}`);
+console.log(`   Generated at: ${now.toISOString()}`);
+
 export default {
   expo: {
     name: "Tzotzil Bible",
@@ -16,7 +38,7 @@ export default {
     ios: {
       supportsTablet: true,
       bundleIdentifier: "com.chyrris.tzotzilbible",
-      buildNumber: "41",
+      buildNumber: BUILD_NUMBER,
       infoPlist: {
         CFBundleDisplayName: "Tzotzil Bible",
         UIBackgroundModes: [],
@@ -31,7 +53,7 @@ export default {
         backgroundColor: "#0a0e14",
       },
       package: "com.chyrris.tzotzilbible",
-      versionCode: 41,
+      versionCode: VERSION_CODE,
       permissions: ["android.permission.INTERNET"],
       compileSdkVersion: 34,
       targetSdkVersion: 34,
