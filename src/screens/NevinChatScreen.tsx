@@ -18,6 +18,7 @@ import {
   useTheme,
   Menu,
 } from 'react-native-paper';
+import Markdown from 'react-native-markdown-display';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NevinService } from '../services/NevinService';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -135,7 +136,20 @@ export default function NevinChatScreen() {
         }}
       >
         <Card.Content>
-          <Text style={styles.messageText}>{message.content}</Text>
+          {isAssistant ? (
+            <Markdown
+              style={{
+                body: styles.messageText,
+                blockquote: styles.blockquote,
+                strong: styles.strong,
+                em: styles.em,
+              }}
+            >
+              {message.content}
+            </Markdown>
+          ) : (
+            <Text style={styles.messageText}>{message.content}</Text>
+          )}
           <Text style={styles.timestamp}>
             {new Date(message.timestamp).toLocaleTimeString()}
           </Text>
@@ -247,6 +261,23 @@ const styles = StyleSheet.create({
     color: '#666',
     marginTop: 4,
     textAlign: 'right',
+  },
+  blockquote: {
+    backgroundColor: '#F0F8FF',
+    borderLeftWidth: 4,
+    borderLeftColor: '#00f3ff',
+    paddingLeft: 12,
+    paddingVertical: 8,
+    marginVertical: 8,
+    fontStyle: 'italic',
+  },
+  strong: {
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  em: {
+    fontStyle: 'italic',
+    color: '#555',
   },
   inputContainer: {
     padding: 16,
