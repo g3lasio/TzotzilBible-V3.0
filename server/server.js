@@ -42,9 +42,14 @@ ESTILO DE RESPUESTA:
 - Siempre incluye referencias bíblicas específicas (libro, capítulo, versículo)
 - Cita el texto bíblico cuando sea relevante
 
-USO DE FUENTES:
-- FUENTE PRINCIPAL: La Biblia (cita versículos específicos)
-- APOYO SECUNDARIO: Puedes citar escritos de Elena G. de White como referencia histórica/espiritual, pero nunca como autoridad principal
+USO DE FUENTES (MUY IMPORTANTE):
+- FUENTE PRINCIPAL: La Biblia (SIEMPRE cita versículos específicos)
+- FUENTE FUNDAMENTAL: Escritos de Elena G. de White
+  * DEBES incluir citas directas de EGW cuando sean relevantes al tema
+  * Usa las citas de EGW que se te proporcionan en el contexto
+  * Cita el libro y contexto de cada cita de EGW
+  * Las citas de EGW refuerzan y profundizan la comprensión bíblica
+  * Ejemplo: 'Como escribió Elena G. de White en [Libro]: "[cita]"'
 
 CORRECCIÓN AMOROSA:
 - Si el usuario tiene ideas contrarias a la Biblia, corrígelo AMABLEMENTE pero con firmeza
@@ -112,21 +117,99 @@ function loadEGWBooks() {
 function searchEGWBooks(query, maxResults = 3) {
   const books = loadEGWBooks();
   const results = [];
-  const queryWords = query.toLowerCase().split(/\s+/).filter(w => w.length > 3);
+  // Eliminar filtro de palabras cortas - ahora busca todas las palabras
+  const queryWords = query.toLowerCase().split(/\s+/).filter(w => w.length > 2);
+  
   for (const book of books) {
     for (const page of book.pages) {
       if (!page.content || !Array.isArray(page.content)) continue;
       const pageText = page.content.join(' ').toLowerCase();
       let score = 0;
+      
+      // Calcular relevancia
       for (const word of queryWords) {
-        if (pageText.includes(word)) score += (pageText.match(new RegExp(word, 'gi')) || []).length;
+        if (pageText.includes(word)) {
+          score += (pageText.match(new RegExp(word, 'gi')) || []).length;
+        }
       }
+      
       if (score > 0) {
-        results.push({ book: book.name, page: page.page, content: page.content.slice(0, 5).join(' ').substring(0, 300), relevance: score });
+        // Aumentar contexto de 300 a 600 caracteres
+        const fullContent = page.content.join(' ');
+        const excerpt = fullContent.substring(0, 600);
+        results.push({ 
+          book: book.name, 
+          page: page.page, 
+          content: excerpt,
+          fullContent: fullContent.substring(0, 1000), // Contenido completo para contexto
+          relevance: score 
+        });
       }
     }
   }
   return results.sort((a, b) => b.relevance - a.relevance).slice(0, maxResults);
+}
+
+// Fallback: Search EGW quotes from web if local search fails
+async function searchEGWWebFallback(query, maxResults = 3) {
+  try {
+    console.log('[EGW Fallback] Searching web for:', query);
+    // Buscar en egwwritings.org usando fetch
+    const searchUrl = `https://m.egwwritings.org/search?query=${encodeURIComponent(query)}&lang=es&collection=2&page=1`;
+    const response = await fetch(searchUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; TzotzilBible/4.0)'
+      },
+      timeout: 10000
+    });
+    
+    if (!response.ok) {
+      console.log('[EGW Fallback] Web search failed:', response.status);
+      return [];
+    }
+    
+    const html = await response.text();
+    // Extraer resultados básicos del HTML (simplificado)
+    const results = [];
+    const matches = html.match(/<div class="search-result"[^>]*>([\s\S]*?)<\/div>/gi) || [];
+    
+    for (let i = 0; i < Math.min(matches.length, maxResults); i++) {
+      const match = matches[i];
+      const titleMatch = match.match(/<h3[^>]*>([^<]+)<\/h3>/i);
+      const contentMatch = match.match(/<p[^>]*>([^<]+)<\/p>/i);
+      
+      if (titleMatch && contentMatch) {
+        results.push({
+          book: titleMatch[1].trim(),
+          page: 'Web',
+          content: contentMatch[1].trim().substring(0, 600),
+          relevance: maxResults - i,
+          source: 'web'
+        });
+      }
+    }
+    
+    console.log(`[EGW Fallback] Found ${results.length} results from web`);
+    return results;
+  } catch (error) {
+    console.error('[EGW Fallback] Error:', error.message);
+    return [];
+  }
+}
+
+// Enhanced search with fallback
+async function searchEGWWithFallback(query, maxResults = 3) {
+  // Intentar búsqueda local primero
+  let results = searchEGWBooks(query, maxResults);
+  
+  // Si no hay resultados suficientes, intentar fallback web
+  if (results.length < 2) {
+    console.log('[EGW Search] Local results insufficient, trying web fallback...');
+    const webResults = await searchEGWWebFallback(query, maxResults - results.length);
+    results = [...results, ...webResults];
+  }
+  
+  return results;
 }
 
 // Nevin Chat API
@@ -139,10 +222,14 @@ app.post('/api/nevin/chat', async (req, res) => {
 
     let egwContext = '';
     if (includeEGW) {
-      const egwQuotes = searchEGWBooks(message, 1);
+      // Buscar 3-5 citas relevantes con fallback web si es necesario
+      const egwQuotes = await searchEGWWithFallback(message, 3);
       if (egwQuotes.length > 0) {
-        const q = egwQuotes[0];
-        egwContext = `\n\n[Cita EGW opcional: "${q.content.substring(0, 150)}..." - ${q.book}]`;
+        egwContext = '\n\n=== CITAS DE ELENA G. DE WHITE (DEBES USAR ESTAS CITAS EN TU RESPUESTA) ===';
+        egwQuotes.forEach((q, idx) => {
+          egwContext += `\n\n[Cita ${idx + 1}] Libro: "${q.book}" (página ${q.page})\n"${q.content}"\n`;
+        });
+        egwContext += '\n=== FIN DE CITAS EGW - Incluye al menos una de estas citas en tu respuesta ===';
       }
     }
 
@@ -209,7 +296,19 @@ app.post('/api/nevin/verse-commentary', async (req, res) => {
     if (textTzotzil) verseContent += `\n\n**Tzotzil:** "${textTzotzil}"`;
     if (textSpanish) verseContent += `\n\n**RV1960:** "${textSpanish}"`;
 
-    const userMessage = `Proporciona un comentario teológico completo del versículo:\n\nVERSÍCULO: ${verseRef}${verseContent}\n\nIncluye: 1. Contexto histórico 2. Análisis del texto 3. Significado teológico 4. Aplicación práctica`;
+    // Buscar citas de EGW relevantes al versículo con fallback web
+    const searchQuery = `${book} ${chapter} ${verse} ${textSpanish || ''}`;
+    const egwQuotes = await searchEGWWithFallback(searchQuery, 3);
+    let egwContext = '';
+    if (egwQuotes.length > 0) {
+      egwContext = '\n\n=== CITAS DE ELENA G. DE WHITE (DEBES INCLUIR ESTAS CITAS) ===';
+      egwQuotes.forEach((q, idx) => {
+        egwContext += `\n\n[Cita ${idx + 1}] "${q.book}" (página ${q.page})\n"${q.content}"\n`;
+      });
+      egwContext += '\n=== FIN DE CITAS EGW ===';
+    }
+
+    const userMessage = `Proporciona un comentario teológico completo del versículo:\n\nVERSÍCULO: ${verseRef}${verseContent}${egwContext}\n\nIncluye: 1. Contexto histórico 2. Análisis del texto 3. Significado teológico 4. Citas de Elena G. de White (usa las proporcionadas arriba) 5. Aplicación práctica`;
     const response = await fetchWithTimeout(ANTHROPIC_API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01' },
