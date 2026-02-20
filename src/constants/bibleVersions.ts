@@ -4,9 +4,10 @@ export type BibleVersion = {
   shortName: string;
   language: string;
   color: string;
-  textField: 'text_tzotzil' | 'text' | 'text_spanish_rv1960' | 'text_spanish_nvi' | 'text_spanish_tla' | 'text_spanish_dhh';
+  textField: 'text_tzotzil' | 'text_spanish_rv1960' | 'text_spanish_nvi' | 'text_spanish_tla' | 'text_spanish_dhh' | 'text_english_nkjv';
   isAvailable: boolean;
   isPrimary?: boolean;
+  isSearchable?: boolean; // Only Tzotzil is searchable
   coverage?: number; // Percentage of verses available (0-100)
 };
 
@@ -19,6 +20,7 @@ export const TZOTZIL_VERSION: BibleVersion = {
   textField: 'text_tzotzil',
   isAvailable: true,
   isPrimary: true,
+  isSearchable: true, // Only Tzotzil is searchable
 };
 
 export const SECONDARY_VERSIONS: BibleVersion[] = [
@@ -30,6 +32,7 @@ export const SECONDARY_VERSIONS: BibleVersion[] = [
     color: '#00f3ff',
     textField: 'text_spanish_rv1960',
     isAvailable: true,
+    isSearchable: false,
     coverage: 100,
   },
   {
@@ -40,7 +43,8 @@ export const SECONDARY_VERSIONS: BibleVersion[] = [
     color: '#9b59b6',
     textField: 'text_spanish_nvi',
     isAvailable: true,
-    coverage: 99.94,
+    isSearchable: false,
+    coverage: 100,
   },
   {
     id: 'tla',
@@ -50,7 +54,8 @@ export const SECONDARY_VERSIONS: BibleVersion[] = [
     color: '#1abc9c',
     textField: 'text_spanish_tla',
     isAvailable: true,
-    coverage: 92.08,
+    isSearchable: false,
+    coverage: 100,
   },
   {
     id: 'dhh',
@@ -60,7 +65,19 @@ export const SECONDARY_VERSIONS: BibleVersion[] = [
     color: '#e67e22',
     textField: 'text_spanish_dhh',
     isAvailable: true,
-    coverage: 79.91,
+    isSearchable: false,
+    coverage: 100,
+  },
+  {
+    id: 'nkjv',
+    name: 'New King James Version',
+    shortName: 'NKJV',
+    language: 'en',
+    color: '#3498db',
+    textField: 'text_english_nkjv',
+    isAvailable: true,
+    isSearchable: false, // NKJV only appears in sidebar, not searchable
+    coverage: 100,
   },
 ];
 
@@ -79,4 +96,8 @@ export const getActiveVersions = (activeIds: Set<string>): BibleVersion[] => {
 
 export const getAvailableSecondaryVersions = (): BibleVersion[] => {
   return SECONDARY_VERSIONS.filter(v => v.isAvailable);
+};
+
+export const getSearchableVersions = (): BibleVersion[] => {
+  return BIBLE_VERSIONS.filter(v => v.isSearchable);
 };

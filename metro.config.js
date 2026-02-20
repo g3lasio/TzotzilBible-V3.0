@@ -8,7 +8,7 @@ module.exports = {
   ...config,
   resolver: {
     ...config.resolver,
-    assetExts: [...config.resolver.assetExts, 'db', 'sqlite'],
+    assetExts: [...config.resolver.assetExts, 'db', 'sqlite', 'wasm'],
     sourceExts: [...config.resolver.sourceExts],
     platforms: ['ios', 'android', 'web']
   },
