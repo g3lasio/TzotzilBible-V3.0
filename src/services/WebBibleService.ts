@@ -95,6 +95,7 @@ export class WebBibleService {
         text_spanish_nvi: v.text_spanish_nvi,
         text_spanish_tla: v.text_spanish_tla,
         text_spanish_dhh: v.text_spanish_dhh,
+        text_english_nkjv: v.text_english_nkjv,
       }))
       .sort((a, b) => a.verse - b.verse);
     
@@ -112,6 +113,7 @@ export class WebBibleService {
         v.text_spanish_nvi?.toLowerCase().includes(lowerQuery) ||
         v.text_spanish_tla?.toLowerCase().includes(lowerQuery) ||
         v.text_spanish_dhh?.toLowerCase().includes(lowerQuery) ||
+        v.text_english_nkjv?.toLowerCase().includes(lowerQuery) ||
         v.text_tzotzil?.toLowerCase().includes(lowerQuery)
       )
       .slice(0, 100)
@@ -127,6 +129,7 @@ export class WebBibleService {
         text_spanish_nvi: v.text_spanish_nvi,
         text_spanish_tla: v.text_spanish_tla,
         text_spanish_dhh: v.text_spanish_dhh,
+        text_english_nkjv: v.text_english_nkjv,
       }));
     
     return results;
@@ -155,6 +158,7 @@ export class WebBibleService {
         text_spanish_nvi: found.text_spanish_nvi,
         text_spanish_tla: found.text_spanish_tla,
         text_spanish_dhh: found.text_spanish_dhh,
+        text_english_nkjv: found.text_english_nkjv,
       };
     }
     
