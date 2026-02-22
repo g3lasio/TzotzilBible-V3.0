@@ -86,27 +86,34 @@ function buildBibleVerse(v: any): BibleVerse {
 }
 
 export class WebBibleService {
+  static async initialize(): Promise<boolean> {
+    await loadVerses();
+    return allVerses !== null && allVerses.length > 0;
+  }
+
+  static isReady(): boolean {
+    return allVerses !== null && allVerses.length > 0;
+  }
+
   static async getBooks(): Promise<Book[]> {
     await loadVerses();
     if (!allVerses) return [];
     
-    const bookMap = new Map<number, { book_name: string; chapters: Set<number> }>();
+    const bookMap = new Map<string, { book_id: number; chapters: Set<number> }>();
     
     for (const verse of allVerses) {
-      if (!bookMap.has(verse.book_id)) {
-        bookMap.set(verse.book_id, {
-          book_name: verse.book_name,
-          chapters: new Set()
-        });
+      if (!bookMap.has(verse.book_name)) {
+        bookMap.set(verse.book_name, { book_id: verse.book_id, chapters: new Set() });
       }
-      bookMap.get(verse.book_id)!.chapters.add(verse.chapter);
+      bookMap.get(verse.book_name)!.chapters.add(verse.chapter);
     }
     
     const books: Book[] = [];
-    bookMap.forEach((data, book_id) => {
+    bookMap.forEach((data, name) => {
       books.push({
-        book_number: book_id,
-        book_name: data.book_name,
+        id: data.book_id,
+        name: name,
+        book_number: data.book_id,
         testament: data.book_id <= 39 ? 'old' : 'new',
         chapters: data.chapters.size
       });
