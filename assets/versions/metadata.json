@@ -2,35 +2,159 @@
   "versions": {
     "nvi": {
       "id": "nvi",
-      "name": "Nueva Versión Internacional",
+      "name": "NVI",
+      "full_name": "Nueva Versión Internacional",
       "language": "es",
-      "verses_count": 31087,
-      "file_size": 6039843,
-      "file_size_mb": 5.8
+      "file": "nvi.json",
+      "size_bytes": 6499557,
+      "size_mb": 6.2,
+      "verses_count": 31105,
+      "non_empty_count": 31087,
+      "coverage": 99.9
     },
     "dhh": {
       "id": "dhh",
-      "name": "Dios Habla Hoy",
+      "name": "DHH",
+      "full_name": "Dios Habla Hoy",
       "language": "es",
-      "verses_count": 24857,
-      "file_size": 5106947,
-      "file_size_mb": 4.9
+      "file": "dhh.json",
+      "size_bytes": 5964913,
+      "size_mb": 5.7,
+      "verses_count": 31105,
+      "non_empty_count": 24857,
+      "coverage": 79.9
     },
     "tla": {
       "id": "tla",
-      "name": "Traducción en Lenguaje Actual",
+      "name": "TLA",
+      "full_name": "Traducción en Lenguaje Actual",
       "language": "es",
-      "verses_count": 28641,
-      "file_size": 7802555,
-      "file_size_mb": 7.4
+      "file": "tla.json",
+      "size_bytes": 8420896,
+      "size_mb": 8.0,
+      "verses_count": 31105,
+      "non_empty_count": 28641,
+      "coverage": 92.1
+    },
+    "lbla": {
+      "id": "lbla",
+      "name": "LBLA",
+      "full_name": "La Biblia de las Américas",
+      "language": "es",
+      "file": "lbla.json",
+      "size_bytes": 6287079,
+      "size_mb": 6.0,
+      "verses_count": 31105,
+      "non_empty_count": 28642,
+      "coverage": 92.1
+    },
+    "nbla": {
+      "id": "nbla",
+      "name": "NBLA",
+      "full_name": "Nueva Biblia de las Américas",
+      "language": "es",
+      "file": "nbla.json",
+      "size_bytes": 6303206,
+      "size_mb": 6.0,
+      "verses_count": 31105,
+      "non_empty_count": 28642,
+      "coverage": 92.1
+    },
+    "ntv": {
+      "id": "ntv",
+      "name": "NTV",
+      "full_name": "Nueva Traducción Viviente",
+      "language": "es",
+      "file": "ntv.json",
+      "size_bytes": 6681276,
+      "size_mb": 6.4,
+      "verses_count": 31105,
+      "non_empty_count": 29968,
+      "coverage": 96.3
+    },
+    "rva2015": {
+      "id": "rva2015",
+      "name": "RVA2015",
+      "full_name": "Reina Valera Actualizada 2015",
+      "language": "es",
+      "file": "rva2015.json",
+      "size_bytes": 6537092,
+      "size_mb": 6.2,
+      "verses_count": 31105,
+      "non_empty_count": 31097,
+      "coverage": 100.0
+    },
+    "rvc": {
+      "id": "rvc",
+      "name": "RVC",
+      "full_name": "Reina Valera Contemporánea",
+      "language": "es",
+      "file": "rvc.json",
+      "size_bytes": 6133241,
+      "size_mb": 5.8,
+      "verses_count": 31105,
+      "non_empty_count": 27325,
+      "coverage": 87.8
+    },
+    "tlai": {
+      "id": "tlai",
+      "name": "TLAI",
+      "full_name": "Traducción en Lenguaje Actual Interconfesional",
+      "language": "es",
+      "file": "tlai.json",
+      "size_bytes": 8683748,
+      "size_mb": 8.3,
+      "verses_count": 31105,
+      "non_empty_count": 31103,
+      "coverage": 100.0
+    },
+    "vbl": {
+      "id": "vbl",
+      "name": "VBL",
+      "full_name": "Versión Biblia Libre",
+      "language": "es",
+      "file": "vbl.json",
+      "size_bytes": 6348732,
+      "size_mb": 6.1,
+      "verses_count": 31105,
+      "non_empty_count": 27738,
+      "coverage": 89.2
+    },
+    "bes": {
+      "id": "bes",
+      "name": "BES",
+      "full_name": "Biblia en Español Sencillo",
+      "language": "es",
+      "file": "bes.json",
+      "size_bytes": 6689373,
+      "size_mb": 6.4,
+      "verses_count": 31105,
+      "non_empty_count": 31056,
+      "coverage": 99.8
+    },
+    "pddpt": {
+      "id": "pddpt",
+      "name": "PDDPT",
+      "full_name": "Palabra de Dios para Todos",
+      "language": "es",
+      "file": "pddpt.json",
+      "size_bytes": 5733405,
+      "size_mb": 5.5,
+      "verses_count": 31105,
+      "non_empty_count": 25348,
+      "coverage": 81.5
     },
     "nkjv": {
       "id": "nkjv",
-      "name": "New King James Version",
+      "name": "NKJV",
+      "full_name": "New King James Version",
       "language": "en",
+      "file": "nkjv.json",
+      "size_bytes": 6057803,
+      "size_mb": 5.8,
       "verses_count": 31102,
-      "file_size": 6057803,
-      "file_size_mb": 5.8
+      "non_empty_count": 31102,
+      "coverage": 100.0
     }
   }
 }

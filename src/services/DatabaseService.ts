@@ -42,7 +42,18 @@ export interface BibleVerse {
   text_spanish_nvi?: string;
   text_spanish_dhh?: string;
   text_spanish_tla?: string;
+  text_spanish_lbla?: string;
+  text_spanish_nbla?: string;
+  text_spanish_ntv?: string;
+  text_spanish_rva2015?: string;
+  text_spanish_rvc?: string;
+  text_spanish_tlai?: string;
+  text_spanish_vbl?: string;
+  text_spanish_bes?: string;
+  text_spanish_pddpt?: string;
   text_english_nkjv?: string;
+  // Allow dynamic version fields
+  [key: string]: any;
 }
 
 export interface PromiseEntry {
@@ -57,11 +68,20 @@ const EXPECTED_BOOKS_COUNT = 66;
 const EXPECTED_VERSES_MIN = 31000;
 const MAX_RECOVERY_ATTEMPTS = 3;
 
-// On-demand version field mapping
+// On-demand version field mapping - all downloadable versions
 const ON_DEMAND_VERSION_FIELDS: Record<string, string> = {
   'nvi': 'text_spanish_nvi',
   'dhh': 'text_spanish_dhh',
   'tla': 'text_spanish_tla',
+  'lbla': 'text_spanish_lbla',
+  'nbla': 'text_spanish_nbla',
+  'ntv': 'text_spanish_ntv',
+  'rva2015': 'text_spanish_rva2015',
+  'rvc': 'text_spanish_rvc',
+  'tlai': 'text_spanish_tlai',
+  'vbl': 'text_spanish_vbl',
+  'bes': 'text_spanish_bes',
+  'pddpt': 'text_spanish_pddpt',
   'nkjv': 'text_english_nkjv',
 };
 
@@ -198,7 +218,11 @@ export class DatabaseService {
    */
   private getSelectClause(): string {
     const baseColumns = ['v.id', 'v.book_id', 'v.chapter', 'v.verse', 'v.book_name'];
-    const textColumns = ['text_tzotzil', 'text_spanish_rv1960', 'text_spanish_nvi', 'text_spanish_dhh', 'text_spanish_tla', 'text_english_nkjv'];
+    // Base text columns + all on-demand version columns
+    const textColumns = [
+      'text_tzotzil', 'text_spanish_rv1960',
+      ...Object.values(ON_DEMAND_VERSION_FIELDS)
+    ];
     
     for (const col of textColumns) {
       if (this.availableColumns.has(col)) {

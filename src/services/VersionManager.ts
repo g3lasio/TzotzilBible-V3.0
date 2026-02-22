@@ -8,6 +8,7 @@
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
+import { BACKEND_URL } from '../config';
 
 // Storage keys
 const VERSION_STORAGE_PREFIX = 'bible_version_';
@@ -20,8 +21,8 @@ const getVersionsApiUrl = (): string => {
     // On web, use relative URL (same origin)
     return '';
   }
-  // On native, use the production URL
-  return 'https://tzotzil.replit.app';
+  // On native, use the unified backend URL
+  return BACKEND_URL;
 };
 
 export interface VersionInfo {

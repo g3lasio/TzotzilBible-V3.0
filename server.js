@@ -721,10 +721,13 @@ function handleVersionsList(req, res) {
   const versions = Object.values(versionsMetadata.versions).map(v => ({
     id: v.id,
     name: v.name,
+    full_name: v.full_name || v.name,
     language: v.language,
     verses_count: v.verses_count,
-    file_size: v.file_size,
-    file_size_mb: v.file_size_mb,
+    non_empty_count: v.non_empty_count || v.verses_count,
+    coverage: v.coverage || 100,
+    size_bytes: v.size_bytes,
+    size_mb: v.size_mb,
   }));
   
   sendJSON(res, 200, {

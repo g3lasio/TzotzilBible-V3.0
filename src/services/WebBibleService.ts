@@ -2,11 +2,12 @@
  * WebBibleService - Web-specific Bible data service
  * 
  * Loads base data (Tzotzil + RV1960) from bundled slim JSON.
- * On-demand versions (NVI, DHH, TLA, NKJV) loaded via VersionManager.
+ * On-demand versions loaded via VersionManager when downloaded.
  */
 
 import { BibleVerse, Book } from '../types/bible';
 import { versionManager } from './VersionManager';
+import { SECONDARY_VERSIONS } from '../constants/bibleVersions';
 
 let allVerses: any[] | null = null;
 let isLoading = false;
@@ -44,16 +45,16 @@ async function loadVerses(): Promise<void> {
   return loadPromise;
 }
 
-// Map version IDs to their text field names
-const VERSION_FIELD_MAP: Record<string, string> = {
-  'nvi': 'text_spanish_nvi',
-  'dhh': 'text_spanish_dhh',
-  'tla': 'text_spanish_tla',
-  'nkjv': 'text_english_nkjv',
-};
+// Build version field map dynamically from SECONDARY_VERSIONS
+const VERSION_FIELD_MAP: Record<string, string> = {};
+const ON_DEMAND_VERSIONS: string[] = [];
 
-// On-demand version IDs
-const ON_DEMAND_VERSIONS = ['nvi', 'dhh', 'tla', 'nkjv'];
+for (const ver of SECONDARY_VERSIONS) {
+  if (ver.isDownloadable) {
+    VERSION_FIELD_MAP[ver.id] = ver.textField;
+    ON_DEMAND_VERSIONS.push(ver.id);
+  }
+}
 
 /**
  * Merge downloaded version data into a verse object
@@ -82,6 +83,30 @@ async function enrichVerseWithDownloads(verse: any): Promise<any> {
   }
   
   return enriched;
+}
+
+/**
+ * Build a BibleVerse object from raw verse data, including all version fields
+ */
+function buildBibleVerse(v: any): BibleVerse {
+  const result: any = {
+    id: v.id,
+    book_id: v.book_id,
+    chapter: v.chapter,
+    verse: v.verse,
+    text: v.text_spanish_rv1960 || '',
+    text_tzotzil: v.text_tzotzil || '',
+    book_name: v.book_name,
+    text_spanish_rv1960: v.text_spanish_rv1960 || '',
+  };
+  
+  // Add all downloadable version fields dynamically
+  for (const versionId of ON_DEMAND_VERSIONS) {
+    const fieldName = VERSION_FIELD_MAP[versionId];
+    result[fieldName] = v[fieldName] || '';
+  }
+  
+  return result as BibleVerse;
 }
 
 export class WebBibleService {
@@ -145,24 +170,7 @@ export class WebBibleService {
     const enrichedPromises = filtered.map(v => enrichVerseWithDownloads(v));
     const enriched = await Promise.all(enrichedPromises);
     
-    const verses = enriched
-      .map(v => ({
-        id: v.id,
-        book_id: v.book_id,
-        chapter: v.chapter,
-        verse: v.verse,
-        text: v.text_spanish_rv1960 || v.text_spanish || '',
-        text_tzotzil: v.text_tzotzil,
-        book_name: v.book_name,
-        text_spanish_rv1960: v.text_spanish_rv1960,
-        text_spanish_nvi: v.text_spanish_nvi || '',
-        text_spanish_tla: v.text_spanish_tla || '',
-        text_spanish_dhh: v.text_spanish_dhh || '',
-        text_english_nkjv: v.text_english_nkjv || '',
-      }))
-      .sort((a, b) => a.verse - b.verse);
-    
-    return verses;
+    return enriched.map(v => buildBibleVerse(v)).sort((a, b) => a.verse - b.verse);
   }
 
   static async searchVerses(query: string): Promise<BibleVerse[]> {
@@ -176,20 +184,7 @@ export class WebBibleService {
         v.text_tzotzil?.toLowerCase().includes(lowerQuery)
       )
       .slice(0, 100)
-      .map(v => ({
-        id: v.id,
-        book_id: v.book_id,
-        chapter: v.chapter,
-        verse: v.verse,
-        text: v.text_spanish_rv1960 || v.text_spanish || '',
-        text_tzotzil: v.text_tzotzil,
-        book_name: v.book_name,
-        text_spanish_rv1960: v.text_spanish_rv1960,
-        text_spanish_nvi: v.text_spanish_nvi || '',
-        text_spanish_tla: v.text_spanish_tla || '',
-        text_spanish_dhh: v.text_spanish_dhh || '',
-        text_english_nkjv: v.text_english_nkjv || '',
-      }));
+      .map(v => buildBibleVerse(v));
     
     return results;
   }
@@ -206,20 +201,7 @@ export class WebBibleService {
     
     if (found) {
       const enriched = await enrichVerseWithDownloads(found);
-      return {
-        id: enriched.id,
-        book_id: enriched.book_id,
-        chapter: enriched.chapter,
-        verse: enriched.verse,
-        text: enriched.text_spanish_rv1960 || enriched.text_spanish || '',
-        text_tzotzil: enriched.text_tzotzil,
-        book_name: enriched.book_name,
-        text_spanish_rv1960: enriched.text_spanish_rv1960,
-        text_spanish_nvi: enriched.text_spanish_nvi || '',
-        text_spanish_tla: enriched.text_spanish_tla || '',
-        text_spanish_dhh: enriched.text_spanish_dhh || '',
-        text_english_nkjv: enriched.text_english_nkjv || '',
-      };
+      return buildBibleVerse(enriched);
     }
     
     return null;

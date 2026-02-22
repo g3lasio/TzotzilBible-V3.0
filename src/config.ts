@@ -1,6 +1,6 @@
 import { Platform } from 'react-native';
 
-export const APP_VERSION = '2.1.0';
+export const APP_VERSION = '4.1.1';
 export const APP_NAME = 'Tzotzil Bible';
 
 export const FONTS = {
@@ -8,9 +8,10 @@ export const FONTS = {
   bold: 'Quantico_700Bold',
 };
 
-export const BACKEND_URL = 'https://nevin-b.replit.app';
+// Unified backend - all services (Nevin AI, versions, EGW) run from same server
+export const BACKEND_URL = 'https://tzotzil.replit.app';
 
 export const getBackendUrl = (): string => {
-  console.log('[Config] Using Nevin backend:', BACKEND_URL);
+  console.log('[Config] Using backend:', BACKEND_URL);
   return BACKEND_URL;
 };

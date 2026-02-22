@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Modal, TouchableOpacity, StyleSheet, Platform, ActivityIndicator, Alert } from 'react-native';
+import { View, Modal, TouchableOpacity, StyleSheet, Platform, ActivityIndicator, Alert, ScrollView } from 'react-native';
 import { Text } from 'react-native-paper';
 import { SECONDARY_VERSIONS, BibleVersion } from '../constants/bibleVersions';
 import { versionManager, VersionDownloadProgress } from '../services/VersionManager';
@@ -32,21 +32,18 @@ export default function VersionPickerModal({ visible, selectedVersion, onSelect,
   };
 
   const handleSelect = (version: BibleVersion) => {
-    // Bundled versions always available
     if (version.isBundled) {
       onSelect(version.id);
       onClose();
       return;
     }
 
-    // Check if downloaded
     if (downloadedVersions.has(version.id)) {
       onSelect(version.id);
       onClose();
       return;
     }
 
-    // Not downloaded - trigger download
     handleDownload(version);
   };
 
@@ -65,7 +62,6 @@ export default function VersionPickerModal({ visible, selectedVersion, onSelect,
 
     if (success) {
       refreshDownloadStatus();
-      // Auto-select after download
       onSelect(version.id);
       onClose();
     } else {
@@ -148,7 +144,7 @@ export default function VersionPickerModal({ visible, selectedVersion, onSelect,
           </View>
         );
       case 'error':
-        return <Text style={styles.badgeError}>Error</Text>;
+        return <Text style={styles.badgeError}>Error - Reintentar</Text>;
       case 'available':
         return (
           <Text style={styles.badgeDownload}>
@@ -157,6 +153,61 @@ export default function VersionPickerModal({ visible, selectedVersion, onSelect,
         );
     }
   };
+
+  // Group versions by language
+  const spanishVersions = SECONDARY_VERSIONS.filter(v => v.language === 'es');
+  const englishVersions = SECONDARY_VERSIONS.filter(v => v.language === 'en');
+
+  const renderVersionItem = (version: BibleVersion) => {
+    const isSelected = version.id === selectedVersion;
+    const status = getVersionStatus(version);
+    const isDownloading = status === 'downloading';
+    
+    return (
+      <TouchableOpacity
+        key={version.id}
+        style={[
+          styles.option,
+          isSelected && styles.optionSelected,
+          isDownloading && styles.optionDownloading,
+        ]}
+        onPress={() => !isDownloading && handleSelect(version)}
+        activeOpacity={isDownloading ? 1 : 0.7}
+        disabled={isDownloading}
+      >
+        <View style={styles.optionContent}>
+          <View style={styles.optionLeft}>
+            <Text style={[
+              styles.optionShortName,
+              isSelected && styles.optionTextSelected,
+              { color: version.color },
+            ]}>
+              {version.shortName}
+            </Text>
+            <View style={styles.optionInfo}>
+              <Text style={[
+                styles.optionName,
+                isSelected && styles.optionNameSelected,
+              ]} numberOfLines={1}>
+                {version.name}
+              </Text>
+              {version.coverage && version.coverage < 100 && (
+                <Text style={styles.coverageText}>
+                  {version.coverage}% cobertura
+                </Text>
+              )}
+            </View>
+          </View>
+          <View style={styles.optionRight}>
+            {renderStatusBadge(version)}
+          </View>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
+  const downloadedCount = downloadedVersions.size;
+  const totalVersions = SECONDARY_VERSIONS.length;
 
   return (
     <Modal
@@ -173,49 +224,31 @@ export default function VersionPickerModal({ visible, selectedVersion, onSelect,
         <View style={styles.container} onStartShouldSetResponder={() => true}>
           <View style={styles.header}>
             <Text style={styles.headerText}>Versiones de la Biblia</Text>
+            <Text style={styles.headerSubtext}>
+              {downloadedCount} de {totalVersions} disponibles
+            </Text>
           </View>
-          <View style={styles.picker}>
-            {SECONDARY_VERSIONS.map((version: BibleVersion) => {
-              const isSelected = version.id === selectedVersion;
-              const status = getVersionStatus(version);
-              const isDownloading = status === 'downloading';
-              
-              return (
-                <TouchableOpacity
-                  key={version.id}
-                  style={[
-                    styles.option,
-                    isSelected && styles.optionSelected,
-                    isDownloading && styles.optionDownloading,
-                  ]}
-                  onPress={() => !isDownloading && handleSelect(version)}
-                  activeOpacity={isDownloading ? 1 : 0.7}
-                  disabled={isDownloading}
-                >
-                  <View style={styles.optionContent}>
-                    <View style={styles.optionLeft}>
-                      <Text style={[
-                        styles.optionShortName,
-                        isSelected && styles.optionTextSelected,
-                        { color: version.color },
-                      ]}>
-                        {version.shortName}
-                      </Text>
-                      <Text style={[
-                        styles.optionName,
-                        isSelected && styles.optionNameSelected,
-                      ]} numberOfLines={1}>
-                        {version.name}
-                      </Text>
-                    </View>
-                    <View style={styles.optionRight}>
-                      {renderStatusBadge(version)}
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
+          
+          <ScrollView style={styles.scrollArea} showsVerticalScrollIndicator={true}>
+            {/* Spanish Versions Section */}
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>Español</Text>
+              <Text style={styles.sectionCount}>{spanishVersions.length} versiones</Text>
+            </View>
+            {spanishVersions.map(renderVersionItem)}
+
+            {/* English Versions Section */}
+            {englishVersions.length > 0 && (
+              <>
+                <View style={styles.sectionHeader}>
+                  <Text style={styles.sectionTitle}>English</Text>
+                  <Text style={styles.sectionCount}>{englishVersions.length} version{englishVersions.length > 1 ? 's' : ''}</Text>
+                </View>
+                {englishVersions.map(renderVersionItem)}
+              </>
+            )}
+          </ScrollView>
+
           <View style={styles.footer}>
             <Text style={styles.footerText}>
               {versionManager.getTotalStorageMB() > 0 
@@ -240,8 +273,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#1a2332',
     borderRadius: 12,
     overflow: 'hidden',
-    minWidth: 300,
-    maxWidth: 360,
+    minWidth: 320,
+    maxWidth: 380,
+    maxHeight: '80%',
     borderWidth: 1,
     borderColor: '#2a3442',
   },
@@ -258,9 +292,38 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
-  picker: {},
+  headerSubtext: {
+    color: '#556677',
+    fontSize: 11,
+    textAlign: 'center',
+    marginTop: 2,
+  },
+  scrollArea: {
+    maxHeight: 450,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    backgroundColor: '#141c28',
+    borderBottomWidth: 1,
+    borderBottomColor: '#2a3442',
+  },
+  sectionTitle: {
+    color: '#00f3ff',
+    fontSize: 12,
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+  },
+  sectionCount: {
+    color: '#556677',
+    fontSize: 10,
+  },
   option: {
-    paddingVertical: 12,
+    paddingVertical: 10,
     paddingHorizontal: 16,
     borderBottomWidth: 1,
     borderBottomColor: '#2a3442',
@@ -282,19 +345,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
   },
-  optionShortName: {
-    fontSize: 15,
-    fontWeight: 'bold',
-    width: 60,
-  },
-  optionName: {
-    color: '#8899aa',
-    fontSize: 12,
+  optionInfo: {
     flex: 1,
     marginRight: 8,
   },
+  optionShortName: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    width: 65,
+  },
+  optionName: {
+    color: '#8899aa',
+    fontSize: 11,
+  },
   optionNameSelected: {
     color: '#aabbcc',
+  },
+  coverageText: {
+    color: '#556677',
+    fontSize: 9,
+    marginTop: 1,
   },
   optionRight: {
     alignItems: 'flex-end',

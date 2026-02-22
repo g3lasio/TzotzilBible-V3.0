@@ -1,5 +1,5 @@
 export const ENV = {
-  API_URL: process.env.API_URL || 'http://localhost:5000',
+  API_URL: process.env.API_URL || 'https://tzotzil.replit.app',
   OPENAI_API_KEY: process.env.OPENAI_API_KEY,
 };
 
