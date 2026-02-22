@@ -61,6 +61,7 @@ for (const ver of SECONDARY_VERSIONS) {
 
 /**
  * Build a BibleVerse object from raw verse data, including all version fields
+ * Ensures all fields are defined (empty string if missing) to prevent undefined access
  */
 function buildBibleVerse(v: any): BibleVerse {
   const result: any = {
@@ -74,10 +75,11 @@ function buildBibleVerse(v: any): BibleVerse {
     text_spanish_rv1960: v.text_spanish_rv1960 || '',
   };
 
-  // Add all version-specific text fields
+  // Add all version-specific text fields with safe fallback
   for (const ver of SECONDARY_VERSIONS) {
     const field = ver.textField;
-    result[field] = v[field] || '';
+    // Ensure field is always a string, never undefined
+    result[field] = (v[field] !== undefined && v[field] !== null) ? v[field] : '';
   }
 
   return result as BibleVerse;
