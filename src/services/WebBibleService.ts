@@ -3,6 +3,9 @@
  * 
  * Loads base data (Tzotzil + RV1960) from bundled slim JSON.
  * On-demand versions loaded via VersionManager when downloaded.
+ * 
+ * FIX: Changed from per-verse enrichment to batch chapter loading
+ * to avoid race conditions when loading large JSON from localStorage.
  */
 
 import { BibleVerse, Book } from '../types/bible';
@@ -57,35 +60,6 @@ for (const ver of SECONDARY_VERSIONS) {
 }
 
 /**
- * Merge downloaded version data into a verse object
- */
-async function enrichVerseWithDownloads(verse: any): Promise<any> {
-  const enriched = { ...verse };
-  
-  for (const versionId of ON_DEMAND_VERSIONS) {
-    const fieldName = VERSION_FIELD_MAP[versionId];
-    
-    // If already has data from base JSON, skip
-    if (enriched[fieldName] && enriched[fieldName].trim()) continue;
-    
-    // Check if version is downloaded
-    if (versionManager.isVersionDownloaded(versionId)) {
-      const text = await versionManager.getVerseText(
-        versionId, 
-        verse.book_name, 
-        verse.chapter, 
-        verse.verse
-      );
-      if (text) {
-        enriched[fieldName] = text;
-      }
-    }
-  }
-  
-  return enriched;
-}
-
-/**
  * Build a BibleVerse object from raw verse data, including all version fields
  */
 function buildBibleVerse(v: any): BibleVerse {
@@ -99,45 +73,38 @@ function buildBibleVerse(v: any): BibleVerse {
     book_name: v.book_name,
     text_spanish_rv1960: v.text_spanish_rv1960 || '',
   };
-  
-  // Add all downloadable version fields dynamically
-  for (const versionId of ON_DEMAND_VERSIONS) {
-    const fieldName = VERSION_FIELD_MAP[versionId];
-    result[fieldName] = v[fieldName] || '';
+
+  // Add all version-specific text fields
+  for (const ver of SECONDARY_VERSIONS) {
+    const field = ver.textField;
+    result[field] = v[field] || '';
   }
-  
+
   return result as BibleVerse;
 }
 
 export class WebBibleService {
-  static async initialize(): Promise<boolean> {
-    await loadVerses();
-    return allVerses !== null && allVerses.length > 0;
-  }
-
-  static isReady(): boolean {
-    return allVerses !== null && allVerses.length > 0;
-  }
-
   static async getBooks(): Promise<Book[]> {
     await loadVerses();
     if (!allVerses) return [];
     
-    const bookMap = new Map<string, { book_id: number; chapters: Set<number> }>();
+    const bookMap = new Map<number, { book_name: string; chapters: Set<number> }>();
     
     for (const verse of allVerses) {
-      if (!bookMap.has(verse.book_name)) {
-        bookMap.set(verse.book_name, { book_id: verse.book_id, chapters: new Set() });
+      if (!bookMap.has(verse.book_id)) {
+        bookMap.set(verse.book_id, {
+          book_name: verse.book_name,
+          chapters: new Set()
+        });
       }
-      bookMap.get(verse.book_name)!.chapters.add(verse.chapter);
+      bookMap.get(verse.book_id)!.chapters.add(verse.chapter);
     }
     
     const books: Book[] = [];
-    bookMap.forEach((data, name) => {
+    bookMap.forEach((data, book_id) => {
       books.push({
-        id: data.book_id,
-        name: name,
-        book_number: data.book_id,
+        book_number: book_id,
+        book_name: data.book_name,
         testament: data.book_id <= 39 ? 'old' : 'new',
         chapters: data.chapters.size
       });
@@ -160,17 +127,48 @@ export class WebBibleService {
     return Array.from(chapters).sort((a, b) => a - b);
   }
 
+  /**
+   * Get verses for a specific book and chapter
+   * 
+   * FIX: Changed to batch-load chapter data from downloaded versions
+   * instead of enriching each verse individually to avoid race conditions.
+   */
   static async getVerses(bookName: string, chapter: number): Promise<BibleVerse[]> {
     await loadVerses();
     if (!allVerses) return [];
     
+    // Get base verses (Tzotzil + RV1960)
     const filtered = allVerses.filter(v => v.book_name === bookName && v.chapter === chapter);
     
-    // Enrich with downloaded version data
-    const enrichedPromises = filtered.map(v => enrichVerseWithDownloads(v));
-    const enriched = await Promise.all(enrichedPromises);
+    // Create a mutable copy of each verse for enrichment
+    const enrichedVerses = filtered.map(v => ({ ...v }));
     
-    return enriched.map(v => buildBibleVerse(v)).sort((a, b) => a.verse - b.verse);
+    // Batch-load chapter data for each downloaded version
+    for (const versionId of ON_DEMAND_VERSIONS) {
+      if (versionManager.isVersionDownloaded(versionId)) {
+        try {
+          console.log(`[WebBible] Loading ${versionId} for ${bookName} ${chapter}`);
+          
+          // Load entire chapter at once (single call to loadVersionIntoCache)
+          const chapterVerses = await versionManager.getChapterVerses(versionId, bookName, chapter);
+          const fieldName = VERSION_FIELD_MAP[versionId];
+          
+          console.log(`[WebBible] Loaded ${chapterVerses.size} verses from ${versionId}`);
+          
+          // Merge into enriched verses
+          for (const verse of enrichedVerses) {
+            const text = chapterVerses.get(verse.verse);
+            if (text && text.trim()) {
+              verse[fieldName] = text;
+            }
+          }
+        } catch (error) {
+          console.error(`[WebBible] Error loading ${versionId} for ${bookName} ${chapter}:`, error);
+        }
+      }
+    }
+    
+    return enrichedVerses.map(v => buildBibleVerse(v)).sort((a, b) => a.verse - b.verse);
   }
 
   static async searchVerses(query: string): Promise<BibleVerse[]> {
@@ -199,11 +197,7 @@ export class WebBibleService {
       v.verse === verse
     );
     
-    if (found) {
-      const enriched = await enrichVerseWithDownloads(found);
-      return buildBibleVerse(enriched);
-    }
-    
-    return null;
+    if (!found) return null;
+    return buildBibleVerse(found);
   }
 }
