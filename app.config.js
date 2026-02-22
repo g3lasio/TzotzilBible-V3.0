@@ -1,15 +1,15 @@
 // FIXED BUILD NUMBERS - Increment manually for each release
 // iOS buildNumber must be a string
-const BUILD_NUMBER = "101";
+const BUILD_NUMBER = "102";
 
-// Android versionCode must be an integer, always > previous (27)
-const VERSION_CODE = 100;
+// Android versionCode must be an integer, always > previous (100)
+const VERSION_CODE = 101;
 
 export default {
   expo: {
     name: "Tzotzil Bible",
     slug: "tzotzil-bible",
-    version: "4.1.0",
+    version: "4.1.1",
     orientation: "portrait",
     icon: "./assets/icon.png",
     userInterfaceStyle: "dark",
