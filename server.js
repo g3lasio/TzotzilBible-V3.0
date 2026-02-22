@@ -17,6 +17,7 @@ const BASE_DIR = process.env.REPL_HOME || __dirname;
 const DIST_DIR = path.join(BASE_DIR, 'dist');
 const PAGES_DIR = path.join(BASE_DIR, 'pages');
 const EGW_BOOKS_DIR = path.join(BASE_DIR, 'assets/EGW BOOKS JSON');
+const VERSIONS_DIR = path.join(BASE_DIR, 'assets/versions');
 
 // Debug logging for Replit
 console.log('Environment:', {
@@ -691,6 +692,105 @@ self.addEventListener('fetch', function(e) { e.respondWith(fetch(e.request)); })
 }
 
 // ============================================================
+// BIBLE VERSION DOWNLOAD API
+// ============================================================
+
+// Cache metadata in memory
+let versionsMetadata = null;
+
+function loadVersionsMetadata() {
+  try {
+    const metaPath = path.join(VERSIONS_DIR, 'metadata.json');
+    if (fs.existsSync(metaPath)) {
+      versionsMetadata = JSON.parse(fs.readFileSync(metaPath, 'utf-8'));
+      console.log(`[Versions] Loaded metadata for ${Object.keys(versionsMetadata.versions).length} downloadable versions`);
+    } else {
+      console.log('[Versions] No metadata.json found in versions directory');
+      versionsMetadata = { versions: {} };
+    }
+  } catch (error) {
+    console.error('[Versions] Error loading metadata:', error);
+    versionsMetadata = { versions: {} };
+  }
+}
+
+// GET /api/versions - List available downloadable versions
+function handleVersionsList(req, res) {
+  if (!versionsMetadata) loadVersionsMetadata();
+  
+  const versions = Object.values(versionsMetadata.versions).map(v => ({
+    id: v.id,
+    name: v.name,
+    language: v.language,
+    verses_count: v.verses_count,
+    file_size: v.file_size,
+    file_size_mb: v.file_size_mb,
+  }));
+  
+  sendJSON(res, 200, {
+    success: true,
+    versions: versions,
+    total: versions.length,
+  });
+}
+
+// GET /api/versions/:id/download - Download a specific version JSON
+function handleVersionDownload(req, res, versionId) {
+  if (!versionsMetadata) loadVersionsMetadata();
+  
+  const versionInfo = versionsMetadata.versions[versionId];
+  if (!versionInfo) {
+    sendJSON(res, 404, { success: false, error: `Version '${versionId}' not found` });
+    return;
+  }
+  
+  const filePath = path.join(VERSIONS_DIR, `${versionId}.json`);
+  if (!fs.existsSync(filePath)) {
+    sendJSON(res, 404, { success: false, error: `Version file for '${versionId}' not found on server` });
+    return;
+  }
+  
+  // Serve the JSON file with gzip support
+  const acceptEncoding = req.headers['accept-encoding'] || '';
+  const fileContent = fs.readFileSync(filePath);
+  
+  const headers = {
+    'Content-Type': 'application/json',
+    'Cache-Control': 'public, max-age=86400', // Cache for 24 hours
+    'X-Version-Id': versionId,
+    'X-Version-Name': versionInfo.name,
+    'X-Verses-Count': String(versionInfo.verses_count),
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Expose-Headers': 'X-Version-Id, X-Version-Name, X-Verses-Count',
+  };
+  
+  // Try gzip compression
+  if (acceptEncoding.includes('gzip')) {
+    const zlib = require('zlib');
+    zlib.gzip(fileContent, (err, compressed) => {
+      if (err) {
+        // Fallback to uncompressed
+        headers['Content-Length'] = String(fileContent.length);
+        res.writeHead(200, headers);
+        res.end(fileContent);
+      } else {
+        headers['Content-Encoding'] = 'gzip';
+        headers['Content-Length'] = String(compressed.length);
+        res.writeHead(200, headers);
+        res.end(compressed);
+      }
+    });
+  } else {
+    headers['Content-Length'] = String(fileContent.length);
+    res.writeHead(200, headers);
+    res.end(fileContent);
+  }
+}
+
+// Load versions metadata at startup
+loadVersionsMetadata();
+
+// ============================================================
 // HTTP SERVER - ZERO DEPENDENCIES
 // ============================================================
 const server = http.createServer(async (req, res) => {
@@ -732,6 +832,15 @@ const server = http.createServer(async (req, res) => {
     }
     if (pathname === '/api/egw/search' && method === 'POST') {
       return await handleEGWSearch(req, res);
+    }
+
+    // Bible Version Download API
+    if (pathname === '/api/versions' && method === 'GET') {
+      return handleVersionsList(req, res);
+    }
+    if (pathname.startsWith('/api/versions/') && pathname.endsWith('/download') && method === 'GET') {
+      const versionId = pathname.split('/')[3]; // /api/versions/:id/download
+      return handleVersionDownload(req, res, versionId);
     }
 
     // Legal pages

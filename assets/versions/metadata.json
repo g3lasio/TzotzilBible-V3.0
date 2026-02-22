@@ -1,0 +1,36 @@
+{
+  "versions": {
+    "nvi": {
+      "id": "nvi",
+      "name": "Nueva Versión Internacional",
+      "language": "es",
+      "verses_count": 31087,
+      "file_size": 6039843,
+      "file_size_mb": 5.8
+    },
+    "dhh": {
+      "id": "dhh",
+      "name": "Dios Habla Hoy",
+      "language": "es",
+      "verses_count": 24857,
+      "file_size": 5106947,
+      "file_size_mb": 4.9
+    },
+    "tla": {
+      "id": "tla",
+      "name": "Traducción en Lenguaje Actual",
+      "language": "es",
+      "verses_count": 28641,
+      "file_size": 7802555,
+      "file_size_mb": 7.4
+    },
+    "nkjv": {
+      "id": "nkjv",
+      "name": "New King James Version",
+      "language": "en",
+      "verses_count": 31102,
+      "file_size": 6057803,
+      "file_size_mb": 5.8
+    }
+  }
+}

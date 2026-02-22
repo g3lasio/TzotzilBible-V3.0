@@ -7,8 +7,11 @@ export type BibleVersion = {
   textField: 'text_tzotzil' | 'text_spanish_rv1960' | 'text_spanish_nvi' | 'text_spanish_tla' | 'text_spanish_dhh' | 'text_english_nkjv';
   isAvailable: boolean;
   isPrimary?: boolean;
-  isSearchable?: boolean; // Only Tzotzil is searchable
-  coverage?: number; // Percentage of verses available (0-100)
+  isSearchable?: boolean;
+  coverage?: number;
+  isBundled?: boolean;      // true = included in the app build
+  isDownloadable?: boolean;  // true = available for on-demand download
+  downloadSizeMB?: number;   // approximate download size in MB
 };
 
 export const TZOTZIL_VERSION: BibleVersion = {
@@ -20,7 +23,9 @@ export const TZOTZIL_VERSION: BibleVersion = {
   textField: 'text_tzotzil',
   isAvailable: true,
   isPrimary: true,
-  isSearchable: true, // Only Tzotzil is searchable
+  isSearchable: true,
+  isBundled: true,
+  isDownloadable: false,
 };
 
 export const SECONDARY_VERSIONS: BibleVersion[] = [
@@ -34,6 +39,8 @@ export const SECONDARY_VERSIONS: BibleVersion[] = [
     isAvailable: true,
     isSearchable: false,
     coverage: 100,
+    isBundled: true,
+    isDownloadable: false,
   },
   {
     id: 'nvi',
@@ -45,6 +52,9 @@ export const SECONDARY_VERSIONS: BibleVersion[] = [
     isAvailable: true,
     isSearchable: false,
     coverage: 100,
+    isBundled: false,
+    isDownloadable: true,
+    downloadSizeMB: 5.2,
   },
   {
     id: 'tla',
@@ -56,6 +66,9 @@ export const SECONDARY_VERSIONS: BibleVersion[] = [
     isAvailable: true,
     isSearchable: false,
     coverage: 100,
+    isBundled: false,
+    isDownloadable: true,
+    downloadSizeMB: 5.0,
   },
   {
     id: 'dhh',
@@ -67,6 +80,9 @@ export const SECONDARY_VERSIONS: BibleVersion[] = [
     isAvailable: true,
     isSearchable: false,
     coverage: 100,
+    isBundled: false,
+    isDownloadable: true,
+    downloadSizeMB: 5.0,
   },
   {
     id: 'nkjv',
@@ -76,8 +92,11 @@ export const SECONDARY_VERSIONS: BibleVersion[] = [
     color: '#3498db',
     textField: 'text_english_nkjv',
     isAvailable: true,
-    isSearchable: false, // NKJV only appears in sidebar, not searchable
+    isSearchable: false,
     coverage: 100,
+    isBundled: false,
+    isDownloadable: true,
+    downloadSizeMB: 4.8,
   },
 ];
 
@@ -100,4 +119,12 @@ export const getAvailableSecondaryVersions = (): BibleVersion[] => {
 
 export const getSearchableVersions = (): BibleVersion[] => {
   return BIBLE_VERSIONS.filter(v => v.isSearchable);
+};
+
+export const getBundledVersions = (): BibleVersion[] => {
+  return BIBLE_VERSIONS.filter(v => v.isBundled);
+};
+
+export const getDownloadableVersions = (): BibleVersion[] => {
+  return SECONDARY_VERSIONS.filter(v => v.isDownloadable);
 };

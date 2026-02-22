@@ -17,9 +17,9 @@ if (Platform.OS !== 'web') {
 
 // ============================================================
 // DATABASE VERSION - INCREMENT THIS WHEN bible.db CHANGES
-// This forces the app to replace the old cached database
+// Version 7 = slim DB (Tzotzil + RV1960 only, on-demand for rest)
 // ============================================================
-const DB_VERSION = 6; // Version 6 = all 6 Bible versions (Tzotzil, RV1960, NVI, DHH, TLA, NKJV)
+const DB_VERSION = 7;
 const DB_VERSION_KEY = '@bible_db_version';
 
 export interface BibleBook {
@@ -57,6 +57,14 @@ const EXPECTED_BOOKS_COUNT = 66;
 const EXPECTED_VERSES_MIN = 31000;
 const MAX_RECOVERY_ATTEMPTS = 3;
 
+// On-demand version field mapping
+const ON_DEMAND_VERSION_FIELDS: Record<string, string> = {
+  'nvi': 'text_spanish_nvi',
+  'dhh': 'text_spanish_dhh',
+  'tla': 'text_spanish_tla',
+  'nkjv': 'text_english_nkjv',
+};
+
 export class DatabaseService {
   private static instance: DatabaseService;
   private db: any = null;
@@ -65,6 +73,8 @@ export class DatabaseService {
   private initError: Error | null = null;
   private initPromise: Promise<boolean> | null = null;
   private recoveryAttempts: number = 0;
+  private availableColumns: Set<string> = new Set();
+  private versionManager: any = null; // Lazy loaded to avoid circular deps
 
   private constructor() {}
 
@@ -100,7 +110,6 @@ export class DatabaseService {
 
     try {
       if (Platform.OS === 'web') {
-        // Web platform: no SQLite available, use WebBibleService via BibleService
         console.log('[DatabaseService] Web platform - using API fallback');
         this.initStatus = 'web_fallback';
         return true;
@@ -115,6 +124,9 @@ export class DatabaseService {
 
       console.log('[DatabaseService] Opening database...');
       this.db = await SQLite!.openDatabaseAsync(DatabaseService.DB_NAME);
+
+      // Detect available columns in the database
+      await this.detectColumns();
 
       const isValid = await this.validateDatabase();
       if (!isValid) {
@@ -133,6 +145,7 @@ export class DatabaseService {
         }
 
         this.db = await SQLite!.openDatabaseAsync(DatabaseService.DB_NAME);
+        await this.detectColumns();
         const retryValid = await this.validateDatabase();
         if (!retryValid) {
           throw new Error('Database validation failed after recovery attempt');
@@ -141,11 +154,19 @@ export class DatabaseService {
         this.recoveryAttempts = 0;
       }
 
-      // Verify all 6 version columns have data
-      await this.verifyVersionData();
+      // Initialize VersionManager for on-demand versions
+      try {
+        const { versionManager } = require('./VersionManager');
+        this.versionManager = versionManager;
+        await this.versionManager.initialize();
+        console.log(`[DatabaseService] VersionManager ready`);
+      } catch (e) {
+        console.log('[DatabaseService] VersionManager not available, on-demand versions disabled');
+      }
 
       this.initStatus = 'ready';
       console.log('[DatabaseService] Database initialized successfully');
+      console.log(`[DatabaseService] Available columns: ${Array.from(this.availableColumns).join(', ')}`);
       return true;
     } catch (error) {
       console.error('[DatabaseService] Initialization failed:', error);
@@ -156,7 +177,40 @@ export class DatabaseService {
   }
 
   // ============================================================
-  // DATABASE VERSION CHECK - Forces update when DB_VERSION changes
+  // COLUMN DETECTION - Handles both slim and full databases
+  // ============================================================
+
+  private async detectColumns(): Promise<void> {
+    try {
+      if (!this.db) return;
+      const result = await this.db.getAllAsync('PRAGMA table_info(verses)') as any[];
+      this.availableColumns = new Set(result.map((r: any) => r.name));
+      console.log(`[DatabaseService] Detected ${this.availableColumns.size} columns in verses table`);
+    } catch (error) {
+      console.error('[DatabaseService] Error detecting columns:', error);
+      // Default to base columns
+      this.availableColumns = new Set(['id', 'book_id', 'book_name', 'chapter', 'verse', 'text_tzotzil', 'text_spanish_rv1960']);
+    }
+  }
+
+  /**
+   * Build SELECT clause based on available columns
+   */
+  private getSelectClause(): string {
+    const baseColumns = ['v.id', 'v.book_id', 'v.chapter', 'v.verse', 'v.book_name'];
+    const textColumns = ['text_tzotzil', 'text_spanish_rv1960', 'text_spanish_nvi', 'text_spanish_dhh', 'text_spanish_tla', 'text_english_nkjv'];
+    
+    for (const col of textColumns) {
+      if (this.availableColumns.has(col)) {
+        baseColumns.push(`v.${col}`);
+      }
+    }
+    
+    return baseColumns.join(', ');
+  }
+
+  // ============================================================
+  // DATABASE VERSION CHECK
   // ============================================================
 
   private async needsDatabaseUpdate(): Promise<boolean> {
@@ -225,36 +279,6 @@ export class DatabaseService {
     }
   }
 
-  private async verifyVersionData(): Promise<void> {
-    try {
-      if (!this.db) return;
-
-      const verseTest = await this.db.getFirstAsync(
-        `SELECT 
-          COUNT(CASE WHEN text_tzotzil IS NOT NULL AND text_tzotzil != '' THEN 1 END) as tzotzil,
-          COUNT(CASE WHEN text_spanish_rv1960 IS NOT NULL AND text_spanish_rv1960 != '' THEN 1 END) as rv1960,
-          COUNT(CASE WHEN text_spanish_nvi IS NOT NULL AND text_spanish_nvi != '' THEN 1 END) as nvi,
-          COUNT(CASE WHEN text_spanish_dhh IS NOT NULL AND text_spanish_dhh != '' THEN 1 END) as dhh,
-          COUNT(CASE WHEN text_spanish_tla IS NOT NULL AND text_spanish_tla != '' THEN 1 END) as tla,
-          COUNT(CASE WHEN text_english_nkjv IS NOT NULL AND text_english_nkjv != '' THEN 1 END) as nkjv
-        FROM verses LIMIT 1000`
-      ) as any;
-
-      console.log(`[DatabaseService] Version data check:`, JSON.stringify(verseTest));
-
-      // If NVI/DHH/TLA are all 0, database is outdated
-      if (verseTest && verseTest.nvi === 0 && verseTest.dhh === 0 && verseTest.tla === 0) {
-        console.error('[DatabaseService] CRITICAL: Database is missing version data! Forcing update...');
-        await AsyncStorage.setItem(DB_VERSION_KEY, '0');
-        console.error('[DatabaseService] Database will be updated on next app launch');
-      }
-    } catch (error) {
-      // If columns don't exist, that's also a sign of old database
-      console.error('[DatabaseService] Version verification error (old schema?):', error);
-      await AsyncStorage.setItem(DB_VERSION_KEY, '0');
-    }
-  }
-
   // ============================================================
   // DATABASE COPY FROM ASSETS
   // ============================================================
@@ -278,12 +302,10 @@ export class DatabaseService {
       const needsUpdate = await this.needsDatabaseUpdate();
 
       if (fileInfo.exists && needsUpdate) {
-        // Database exists but is outdated - replace it
         console.log('[DatabaseService] REPLACING old database with updated version...');
         if (this.db) {
           try {
             await this.db.closeAsync();
-            this.db = null;
           } catch (e) {
             console.log('[DatabaseService] Note: could not close old db connection');
           }
@@ -291,10 +313,9 @@ export class DatabaseService {
         await FileSystem!.deleteAsync(dbPath, { idempotent: true });
         console.log('[DatabaseService] Old database deleted');
       } else if (fileInfo.exists) {
-        // Database exists and is current
         const fileSizeMB = ((fileInfo as any).size || 0) / (1024 * 1024);
         console.log(`[DatabaseService] Existing database found: ${fileSizeMB.toFixed(2)} MB`);
-        if (fileSizeMB > 15) {
+        if (fileSizeMB > 5) { // Slim DB is ~10 MB, old full was ~31 MB
           console.log('[DatabaseService] Database size looks valid, skipping copy');
           return true;
         }
@@ -330,7 +351,6 @@ export class DatabaseService {
       const copiedSizeMB = ((copiedInfo as any).size || 0) / (1024 * 1024);
       console.log(`[DatabaseService] Database copied successfully: ${copiedSizeMB.toFixed(2)} MB`);
 
-      // Save version after successful copy
       await this.saveDatabaseVersion();
 
       return true;
@@ -371,7 +391,6 @@ export class DatabaseService {
         }
       }
 
-      // Reset version to force fresh copy
       await AsyncStorage.setItem(DB_VERSION_KEY, '0');
 
       console.log('[DatabaseService] All database files cleaned up');
@@ -404,7 +423,7 @@ export class DatabaseService {
   }
 
   // ============================================================
-  // DATA ACCESS METHODS - All 6 Bible versions
+  // DATA ACCESS METHODS - Base versions from DB + on-demand from VersionManager
   // ============================================================
 
   async getBooks(): Promise<any[]> {
@@ -455,11 +474,9 @@ export class DatabaseService {
 
       console.log(`[DatabaseService] Loading verses for ${bookName} ${chapter}...`);
 
+      const selectClause = this.getSelectClause();
       const result = await this.db.getAllAsync(
-        `SELECT v.id, v.book_id, v.chapter, v.verse, 
-                v.text_tzotzil, v.text_spanish_rv1960, v.text_spanish_nvi,
-                v.text_spanish_dhh, v.text_spanish_tla, v.text_english_nkjv,
-                v.book_name
+        `SELECT ${selectClause}
          FROM verses v 
          WHERE v.book_name = ? AND v.chapter = ? 
          ORDER BY v.verse`,
@@ -468,9 +485,46 @@ export class DatabaseService {
 
       console.log(`[DatabaseService] Loaded ${result.length} verses for ${bookName} ${chapter}`);
 
+      // Map results and enrich with on-demand versions
+      const verses: BibleVerse[] = [];
+      for (const row of result) {
+        const verse: BibleVerse = {
+          id: row.id,
+          book_id: row.book_id,
+          chapter: row.chapter,
+          verse: row.verse,
+          text: row.text_spanish_rv1960 || '',
+          text_tzotzil: row.text_tzotzil || '',
+          text_spanish_rv1960: row.text_spanish_rv1960 || '',
+          text_spanish_nvi: row.text_spanish_nvi || '',
+          text_spanish_dhh: row.text_spanish_dhh || '',
+          text_spanish_tla: row.text_spanish_tla || '',
+          text_english_nkjv: row.text_english_nkjv || '',
+          book_name: row.book_name
+        };
+
+        // Enrich with downloaded on-demand versions
+        if (this.versionManager) {
+          for (const [versionId, fieldName] of Object.entries(ON_DEMAND_VERSION_FIELDS)) {
+            // Only fetch from VersionManager if DB doesn't have this data
+            const currentValue = (verse as any)[fieldName];
+            if ((!currentValue || !currentValue.trim()) && this.versionManager.isVersionDownloaded(versionId)) {
+              const text = await this.versionManager.getVerseText(
+                versionId, bookName, row.chapter, row.verse
+              );
+              if (text) {
+                (verse as any)[fieldName] = text;
+              }
+            }
+          }
+        }
+
+        verses.push(verse);
+      }
+
       // Log version availability for debugging
-      if (result.length > 0) {
-        const sample = result[0];
+      if (verses.length > 0) {
+        const sample = verses[0];
         const versions = {
           tzotzil: !!sample.text_tzotzil,
           rv1960: !!sample.text_spanish_rv1960,
@@ -482,20 +536,7 @@ export class DatabaseService {
         console.log(`[DatabaseService] Version availability:`, JSON.stringify(versions));
       }
 
-      return result.map((row: any) => ({
-        id: row.id,
-        book_id: row.book_id,
-        chapter: row.chapter,
-        verse: row.verse,
-        text: row.text_spanish_rv1960 || '', // Default text field for backward compatibility
-        text_tzotzil: row.text_tzotzil,
-        text_spanish_rv1960: row.text_spanish_rv1960,
-        text_spanish_nvi: row.text_spanish_nvi,
-        text_spanish_dhh: row.text_spanish_dhh,
-        text_spanish_tla: row.text_spanish_tla,
-        text_english_nkjv: row.text_english_nkjv,
-        book_name: row.book_name
-      }));
+      return verses;
     } catch (error) {
       console.error('[DatabaseService] getVerses error:', error);
       return [];
@@ -506,11 +547,9 @@ export class DatabaseService {
     try {
       if (!this.db || this.initStatus !== 'ready') return [];
       const searchTerm = `%${query}%`;
+      const selectClause = this.getSelectClause();
       const result = await this.db.getAllAsync(
-        `SELECT v.id, v.book_id, v.chapter, v.verse, 
-                v.text_tzotzil, v.text_spanish_rv1960, v.text_spanish_nvi,
-                v.text_spanish_dhh, v.text_spanish_tla, v.text_english_nkjv,
-                v.book_name
+        `SELECT ${selectClause}
          FROM verses v 
          WHERE v.text_spanish_rv1960 LIKE ? OR v.text_tzotzil LIKE ?
          ORDER BY v.book_id, v.chapter, v.verse
@@ -523,12 +562,12 @@ export class DatabaseService {
         chapter: row.chapter,
         verse: row.verse,
         text: row.text_spanish_rv1960 || '',
-        text_tzotzil: row.text_tzotzil,
-        text_spanish_rv1960: row.text_spanish_rv1960,
-        text_spanish_nvi: row.text_spanish_nvi,
-        text_spanish_dhh: row.text_spanish_dhh,
-        text_spanish_tla: row.text_spanish_tla,
-        text_english_nkjv: row.text_english_nkjv,
+        text_tzotzil: row.text_tzotzil || '',
+        text_spanish_rv1960: row.text_spanish_rv1960 || '',
+        text_spanish_nvi: row.text_spanish_nvi || '',
+        text_spanish_dhh: row.text_spanish_dhh || '',
+        text_spanish_tla: row.text_spanish_tla || '',
+        text_english_nkjv: row.text_english_nkjv || '',
         book_name: row.book_name
       }));
     } catch (error) {
@@ -566,30 +605,45 @@ export class DatabaseService {
   async getVerse(bookName: string, chapter: number, verse: number): Promise<BibleVerse | null> {
     try {
       if (!this.db || this.initStatus !== 'ready') return null;
+      const selectClause = this.getSelectClause();
       const result = await this.db.getFirstAsync(
-        `SELECT v.id, v.book_id, v.chapter, v.verse, 
-                v.text_tzotzil, v.text_spanish_rv1960, v.text_spanish_nvi,
-                v.text_spanish_dhh, v.text_spanish_tla, v.text_english_nkjv,
-                v.book_name
+        `SELECT ${selectClause}
          FROM verses v 
          WHERE v.book_name = ? AND v.chapter = ? AND v.verse = ?`,
         [bookName, chapter, verse]
       ) as any | null;
       if (result) {
-        return {
+        const verseObj: BibleVerse = {
           id: result.id,
           book_id: result.book_id,
           chapter: result.chapter,
           verse: result.verse,
           text: result.text_spanish_rv1960 || '',
-          text_tzotzil: result.text_tzotzil,
-          text_spanish_rv1960: result.text_spanish_rv1960,
-          text_spanish_nvi: result.text_spanish_nvi,
-          text_spanish_dhh: result.text_spanish_dhh,
-          text_spanish_tla: result.text_spanish_tla,
-          text_english_nkjv: result.text_english_nkjv,
+          text_tzotzil: result.text_tzotzil || '',
+          text_spanish_rv1960: result.text_spanish_rv1960 || '',
+          text_spanish_nvi: result.text_spanish_nvi || '',
+          text_spanish_dhh: result.text_spanish_dhh || '',
+          text_spanish_tla: result.text_spanish_tla || '',
+          text_english_nkjv: result.text_english_nkjv || '',
           book_name: result.book_name
         };
+
+        // Enrich with downloaded on-demand versions
+        if (this.versionManager) {
+          for (const [versionId, fieldName] of Object.entries(ON_DEMAND_VERSION_FIELDS)) {
+            const currentValue = (verseObj as any)[fieldName];
+            if ((!currentValue || !currentValue.trim()) && this.versionManager.isVersionDownloaded(versionId)) {
+              const text = await this.versionManager.getVerseText(
+                versionId, bookName, chapter, verse
+              );
+              if (text) {
+                (verseObj as any)[fieldName] = text;
+              }
+            }
+          }
+        }
+
+        return verseObj;
       }
       return null;
     } catch (error) {
@@ -600,7 +654,6 @@ export class DatabaseService {
 
   /**
    * Force database update - deletes cached database and re-copies from assets
-   * Use this if user reports missing versions or data issues
    */
   async forceUpdate(): Promise<void> {
     console.log('[DatabaseService] FORCE UPDATE requested');
@@ -620,6 +673,7 @@ export class DatabaseService {
       }
 
       this.db = await SQLite!.openDatabaseAsync(DatabaseService.DB_NAME);
+      await this.detectColumns();
       this.initStatus = 'ready';
       this.initPromise = null;
 
