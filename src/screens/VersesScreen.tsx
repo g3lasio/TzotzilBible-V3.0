@@ -13,6 +13,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import MainLayout from '../components/MainLayout';
 import VersionToggle, { TogglePosition } from '../components/VersionToggle';
 import VersionPickerModal from '../components/VersionPickerModal';
+import BibleWheelPicker from '../components/BibleWheelPicker';
 import { TZOTZIL_VERSION, SECONDARY_VERSIONS, BibleVersion, getVersionById } from '../constants/bibleVersions';
 
 const DEFAULT_SECONDARY_VERSION = 'rv1960';
@@ -75,6 +76,7 @@ export default function VersesScreen() {
   const [fontSize, setFontSize] = useState<'small' | 'medium' | 'large'>('medium');
   const [chaptersRead, setChaptersRead] = useState(0);
   const [canComplete, setCanComplete] = useState(false);
+  const [wheelPickerVisible, setWheelPickerVisible] = useState(false);
 
   const loadVerses = async () => {
     try {
@@ -276,6 +278,11 @@ export default function VersesScreen() {
     if (newChapter >= 1) {
       navigation.replace('Verses', { book, chapter: newChapter });
     }
+  };
+
+  const handleWheelPickerSelect = (selectedBook: string, selectedChapter: number) => {
+    if (selectedBook === book && selectedChapter === chapter) return;
+    navigation.replace('Verses', { book: selectedBook, chapter: selectedChapter });
   };
 
   /**
@@ -531,6 +538,14 @@ export default function VersesScreen() {
                 Anterior
               </Text>
             </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.bottomNavCardCenter}
+              onPress={() => setWheelPickerVisible(true)}
+            >
+              <MaterialCommunityIcons name="book-open-page-variant" size={20} color="#00ff88" />
+              <Text style={styles.bottomNavTextCenter}>Ir a...</Text>
+            </TouchableOpacity>
             
             <TouchableOpacity
               style={styles.bottomNavCard}
@@ -653,6 +668,14 @@ export default function VersesScreen() {
           selectedVersion={selectedSecondaryVersion}
           onSelect={handleVersionSelect}
           onClose={() => setDropdownVisible(false)}
+        />
+
+        <BibleWheelPicker
+          visible={wheelPickerVisible}
+          currentBook={book}
+          currentChapter={chapter}
+          onSelect={handleWheelPickerSelect}
+          onClose={() => setWheelPickerVisible(false)}
         />
 
         {/* Floating Mark Complete button for Reading Plan */}
@@ -1057,6 +1080,23 @@ const styles = StyleSheet.create({
   },
   bottomNavTextDisabled: {
     color: '#6b7c93',
+  },
+  bottomNavCardCenter: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 12,
+    backgroundColor: 'rgba(0, 255, 136, 0.08)',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 255, 136, 0.3)',
+  },
+  bottomNavTextCenter: {
+    fontSize: 10,
+    color: '#00ff88',
+    fontWeight: '600',
+    marginTop: 2,
   },
   errorText: {
     color: '#ff6b6b',

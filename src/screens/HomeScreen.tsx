@@ -97,7 +97,7 @@ export default function HomeScreen() {
               </View>
               <View style={styles.statDivider} />
               <View style={styles.statItem}>
-                <Text style={styles.statNumber}>5</Text>
+                <Text style={styles.statNumber}>14</Text>
                 <Text style={styles.statLabel}>Versiones</Text>
               </View>
               <View style={styles.statDivider} />
