@@ -132,9 +132,14 @@ ESTILO DE RESPUESTA:
 - Siempre incluye referencias bíblicas específicas (libro, capítulo, versículo)
 - Cita el texto bíblico cuando sea relevante
 
-USO DE FUENTES:
-- FUENTE PRINCIPAL: La Biblia (cita versículos específicos)
-- APOYO SECUNDARIO: Puedes citar escritos de Elena G. de White como referencia histórica/espiritual, pero nunca como autoridad principal
+USO DE FUENTES (MUY IMPORTANTE):
+- FUENTE PRINCIPAL: La Biblia (SIEMPRE cita versículos específicos)
+- FUENTE FUNDAMENTAL: Escritos de Elena G. de White
+  * DEBES incluir citas directas de EGW cuando sean relevantes al tema
+  * Usa las citas de EGW que se te proporcionan en el contexto - son citas REALES de libros reales
+  * Cita el libro y página de cada cita de EGW usando el formato (ABREVIATURA p. NÚMERO)
+  * Las citas de EGW refuerzan y profundizan la comprensión bíblica
+  * Si recibes citas de EGW en el contexto, DEBES usar al menos una en tu respuesta
 - APOYO ADICIONAL: Referencias históricas, arqueológicas o científicas cuando refuercen el punto bíblico
 - Siempre ilumina un texto con otros textos bíblicos relacionados (especialmente del Nuevo Testamento)
 
@@ -159,8 +164,8 @@ REGLAS ESTRICTAS:
 2. NUNCA usar guiones, rayas o em-dash antes de la referencia
 3. NUNCA usar el nombre completo del libro
 4. SIEMPRE usar "p." antes del número de página
-5. Las citas de EGW son SOLO comentarios adicionales, NO autoridad doctrinal
-6. Si recibes una cita EGW en el contexto, úsala para enriquecer tu respuesta pero SIEMPRE prioriza la Biblia
+5. Las citas de EGW son fuente fundamental que complementa y profundiza la comprensión bíblica
+6. Si recibes citas de EGW en el contexto, DEBES incluir al menos una en tu respuesta, citando libro y página
 
 CORRECCIÓN AMOROSA:
 - Si el usuario tiene ideas contrarias a la Biblia, corrígelo AMABLEMENTE pero con firmeza
@@ -397,7 +402,7 @@ function expandQueryWithThemes(query) {
       }
     }
   }
-  return Array.from(expanded).filter(w => w.length > 3);
+  return Array.from(expanded).filter(w => w.length > 1);
 }
 
 function searchEGWBooks(query, maxResults = 3) {
@@ -452,11 +457,11 @@ async function handleNevinChat(req, res) {
     if (includeEGW) {
       const egwQuotes = searchEGWBooks(message, 3);
       if (egwQuotes.length > 0) {
-        egwContext = '\n\n[Referencias espirituales disponibles para enriquecer tu respuesta]:\n\n';
+        egwContext = '\n\n=== CITAS DE ELENA G. DE WHITE (DEBES USAR ESTAS CITAS EN TU RESPUESTA) ===\n\n';
         egwQuotes.forEach((q, index) => {
-          egwContext += `Referencia ${index + 1}:\n"${q.content}"\n(${q.bookAbbr} p. ${q.page})\n\n`;
+          egwContext += `[Cita ${index + 1}] Libro: "${q.book}" (${q.bookAbbr} p. ${q.page})\n"${q.content}"\n\n`;
         });
-        egwContext += 'Recuerda: Usa estas citas SOLO como comentarios adicionales, NO como autoridad doctrinal. La Biblia es siempre la fuente principal. Formatea las citas con markdown para mejor legibilidad.';
+        egwContext += '=== FIN DE CITAS EGW - DEBES incluir al menos una de estas citas en tu respuesta, usando el formato (ABREVIATURA p. NÚMERO) ===';
       }
     }
 
@@ -569,16 +574,30 @@ async function handleVerseCommentary(req, res) {
     if (textTzotzil) verseContent += `\n\n**Tzotzil:** "${textTzotzil}"`;
     if (textSpanish) verseContent += `\n\n**RV1960:** "${textSpanish}"`;
 
+    // Search EGW quotes relevant to this verse
+    const egwSearchQuery = `${book} ${chapter} ${verse} ${textSpanish || ''}`;
+    const egwQuotes = searchEGWBooks(egwSearchQuery, 3);
+    let egwContext = '';
+    if (egwQuotes.length > 0) {
+      egwContext = '\n\n=== CITAS DE ELENA G. DE WHITE RELEVANTES A ESTE VERSÍCULO (DEBES INCLUIRLAS) ===\n\n';
+      egwQuotes.forEach((q, index) => {
+        egwContext += `[Cita ${index + 1}] Libro: "${q.book}" (${q.bookAbbr} p. ${q.page})\n"${q.content}"\n\n`;
+      });
+      egwContext += '=== FIN DE CITAS EGW - Incluye al menos una en el punto 5 del comentario ===';
+    }
+
     const userMessage = `Proporciona un comentario teológico completo del siguiente versículo:
 
 VERSÍCULO: ${verseRef}
 ${verseContent}
+${egwContext}
 
 Incluye:
 1. Contexto histórico y literario
 2. Análisis del texto
 3. Significado teológico desde la perspectiva adventista
-4. Aplicación práctica`;
+4. Aplicación práctica
+5. Citas de Elena G. de White relacionadas (usa las citas proporcionadas arriba)`;
 
     console.log('[Verse Commentary] Calling Anthropic API for', verseRef);
     const response = await fetchWithTimeout(ANTHROPIC_API_URL, {
