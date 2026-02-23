@@ -15,9 +15,25 @@ import { SECONDARY_VERSIONS } from '../constants/bibleVersions';
 let allVerses: any[] | null = null;
 let isLoading = false;
 let loadPromise: Promise<void> | null = null;
+// Separate promise for VersionManager initialization so it can be
+// awaited independently from the verses-loading promise.
+let versionManagerInitPromise: Promise<void> | null = null;
+
+async function ensureVersionManagerReady(): Promise<void> {
+  if (versionManagerInitPromise) return versionManagerInitPromise;
+  versionManagerInitPromise = versionManager.initialize().then(() => {
+    console.log(`[WebBible] VersionManager ready, ${versionManager.getDownloadedVersions().length} versions downloaded`);
+  });
+  return versionManagerInitPromise;
+}
 
 async function loadVerses(): Promise<void> {
-  if (allVerses !== null) return;
+  if (allVerses !== null) {
+    // Verses already loaded — still ensure versionManager is ready
+    // (fixes race condition when getBooks/getChapters ran first)
+    await ensureVersionManagerReady();
+    return;
+  }
   if (loadPromise) return loadPromise;
   
   isLoading = true;
@@ -35,8 +51,7 @@ async function loadVerses(): Promise<void> {
       console.log(`[WebBible] Loaded ${allVerses?.length || 0} base verses`);
       
       // Initialize VersionManager for on-demand versions
-      await versionManager.initialize();
-      console.log(`[WebBible] VersionManager ready, ${versionManager.getDownloadedVersions().length} versions downloaded`);
+      await ensureVersionManagerReady();
     } catch (error) {
       console.error('[WebBible] Error loading verses JSON:', error);
       allVerses = [];

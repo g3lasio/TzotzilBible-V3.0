@@ -240,11 +240,17 @@ export default function VersesScreen() {
     savePreferences(selectedSecondaryVersion, mode);
   };
 
-  const handleVersionSelect = (versionId: string) => {
+  const handleVersionSelect = async (versionId: string) => {
     const version = getVersionById(versionId);
     if (version && version.isAvailable) {
       setSelectedSecondaryVersion(versionId);
       savePreferences(versionId, displayMode);
+      // If this is a downloadable version, reload verses so the
+      // enrichment runs with the freshly downloaded data in cache.
+      // This fixes the fallback-to-RV1960 bug on web after download.
+      if (version.isDownloadable) {
+        await loadVerses();
+      }
     }
     setDropdownVisible(false);
   };
