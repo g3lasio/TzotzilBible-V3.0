@@ -44,6 +44,8 @@ const ReadingPlanDayScreen = () => {
   useFocusEffect(
     React.useCallback(() => {
       const checkStatus = async () => {
+        // Ensure plans are loaded before any plan operations
+        await ReadingPlanService.loadPlans();
         const status = await ReadingPlanService.getReadingStatus(day);
         if (status?.hasVisitedBible) {
           setHasStartedReading(true);
@@ -82,7 +84,10 @@ const ReadingPlanDayScreen = () => {
 
     const firstReading = dayReading.readings[0];
     const bookNameSpanish = translateBookName(firstReading.book);
-
+    // Count ALL chapters across every reading segment for this day
+    const totalChaptersForDay = dayReading.readings.reduce(
+      (sum, r) => sum + (r.endChapter - r.startChapter + 1), 0
+    );
     navigation.navigate('MainTabs', {
       screen: 'BibleTab',
       params: {
@@ -92,7 +97,7 @@ const ReadingPlanDayScreen = () => {
           chapter: firstReading.startChapter,
           fromReadingPlan: true,
           planDay: day,
-          totalChapters: firstReading.endChapter - firstReading.startChapter + 1,
+          totalChapters: totalChaptersForDay,
         },
       },
     });

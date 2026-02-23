@@ -86,3 +86,19 @@ export function translateBookName(englishName: string): string {
 export function needsTranslation(bookName: string): boolean {
   return bookName in BOOK_NAME_MAPPING;
 }
+
+/**
+ * Reverse mapping: Spanish book name → English book name
+ * Used to normalize book names before storing in reading plan progress.
+ */
+export const REVERSE_BOOK_NAME_MAPPING: Record<string, string> = Object.fromEntries(
+  Object.entries(BOOK_NAME_MAPPING).map(([en, es]) => [es, en])
+);
+
+/**
+ * Translate Spanish book name to English (for reading plan key storage).
+ * Returns the original name unchanged if no mapping is found.
+ */
+export function toEnglishBookName(bookName: string): string {
+  return REVERSE_BOOK_NAME_MAPPING[bookName] || bookName;
+}

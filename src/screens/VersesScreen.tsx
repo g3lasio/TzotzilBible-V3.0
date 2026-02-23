@@ -88,6 +88,8 @@ export default function VersesScreen() {
       // Track chapter read for reading plan
       if (fromReadingPlan && planDay) {
         const ReadingPlanService = (await import('../services/ReadingPlanService')).default;
+        // Ensure plans are loaded before any plan operations
+        await ReadingPlanService.loadPlans();
         await ReadingPlanService.markChapterRead(planDay, book, chapter);
       }
     } catch (err) {
@@ -153,19 +155,22 @@ export default function VersesScreen() {
   }, [book, chapter]);
 
   // Check reading progress for reading plan
+  // Runs after verses load (which triggers markChapterRead), so progress is up-to-date
   useEffect(() => {
-    if (fromReadingPlan && planDay && totalChapters) {
-      const checkProgress = async () => {
-        const ReadingPlanService = (await import('../services/ReadingPlanService')).default;
-        const completed = await ReadingPlanService.hasCompletedAllChapters(planDay);
-        setCanComplete(completed);
-        // Get chapters read count
-        const progress = await ReadingPlanService.getChaptersReadForDay(planDay);
-        setChaptersRead(progress.length);
-      };
-      checkProgress();
-    }
-  }, [fromReadingPlan, planDay, totalChapters, verses]);
+    if (!fromReadingPlan || !planDay || !totalChapters) return;
+    const checkProgress = async () => {
+      const ReadingPlanService = (await import('../services/ReadingPlanService')).default;
+      // Ensure plans are loaded so getDayReading works correctly
+      await ReadingPlanService.loadPlans();
+      // Use getReadingProgress which filters only the required chapters for this day
+      const progress = await ReadingPlanService.getReadingProgress(planDay);
+      const clampedRead = Math.min(progress.read, totalChapters);
+      setChaptersRead(clampedRead);
+      // canComplete = all required chapters for this day have been read
+      setCanComplete(progress.read >= progress.total && progress.total > 0);
+    };
+    checkProgress();
+  }, [fromReadingPlan, planDay, totalChapters, loading]); // re-check after each chapter loads
 
   const loadFavorites = async () => {
     try {
@@ -582,8 +587,9 @@ export default function VersesScreen() {
             <TouchableOpacity
               style={[styles.readingPlanButton, !canComplete && styles.readingPlanButtonDisabled]}
               onPress={async () => {
-                if (canComplete) {
+                if (canComplete && planDay) {
                   const ReadingPlanService = (await import('../services/ReadingPlanService')).default;
+                  await ReadingPlanService.loadPlans();
                   await ReadingPlanService.markDayCompleted(planDay);
                   navigation.dispatch(CommonActions.navigate({ name: 'ReadingPlanDay', params: { day: planDay } }));
                 }

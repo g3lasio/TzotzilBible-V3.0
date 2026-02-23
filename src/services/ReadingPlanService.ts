@@ -8,7 +8,7 @@ import {
   DayReading,
 } from '../types/readingPlan';
 import NotificationService from './NotificationService';
-import { translateBookName } from '../constants/bookNameMapping';
+import { translateBookName, toEnglishBookName } from '../constants/bookNameMapping';
 
 // Storage keys
 const STORAGE_KEY_USER_PLAN = 'user_reading_plan';
@@ -135,8 +135,11 @@ class ReadingPlanService {
         };
       }
 
-      // Use English book name as the canonical key to avoid translation issues
-      const chapterKey = `${book}:${chapter}`;
+      // Normalize to English book name — VersesScreen passes Spanish names (e.g. "Génesis")
+      // but the plan JSON uses English names (e.g. "Genesis"). We must store with English
+      // so hasCompletedAllChapters / getReadingProgress can match correctly.
+      const englishBook = toEnglishBookName(book);
+      const chapterKey = `${englishBook}:${chapter}`;
       if (!status[day].chaptersRead) {
         status[day].chaptersRead = [];
       }
