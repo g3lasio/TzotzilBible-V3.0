@@ -1,9 +1,9 @@
 // FIXED BUILD NUMBERS - Increment manually for each release
 // iOS buildNumber must be a string
-const BUILD_NUMBER = "701";
+const BUILD_NUMBER = "702";
 
 // Android versionCode must be an integer, always > previous (700)
-const VERSION_CODE = 701;
+const VERSION_CODE = 702;
 
 export default {
   expo: {
