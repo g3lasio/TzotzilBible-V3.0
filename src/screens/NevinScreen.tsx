@@ -12,6 +12,40 @@ import type { RootStackParamList, TabParamList } from '../types/navigation';
 import type { Moment, ChatMessage } from '../types/nevin';
 import MainLayout from '../components/MainLayout';
 import ClickableVerseText from '../components/ClickableVerseText';
+import { EgwCitationCard, parseMessageSegments } from '../components/EgwCitationCard';
+
+/**
+ * NevinMessageContent — renders a Nevin AI message with mixed content:
+ * normal text segments (via ClickableVerseText) and EGW citation blocks
+ * (via EgwCitationCard). The parsing logic lives in EgwCitationCard.ts
+ * and does NOT touch any business/service logic.
+ */
+const NevinMessageContent = React.memo(({ content }: { content: string }) => {
+  const segments = parseMessageSegments(content);
+  return (
+    <View>
+      {segments.map((seg, i) => {
+        if (seg.type === 'egw') {
+          return (
+            <EgwCitationCard
+              key={i}
+              quote={seg.quote}
+              reference={seg.reference}
+            />
+          );
+        }
+        return (
+          <ClickableVerseText
+            key={i}
+            text={seg.content}
+            style={styles.messageText}
+            linkColor="#00f3ff"
+          />
+        );
+      })}
+    </View>
+  );
+});
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 type NevinRouteProp = RouteProp<TabParamList, 'NevinTab'>;
@@ -507,11 +541,7 @@ export default function NevinScreen() {
                     {message.content}
                   </Text>
                 ) : (
-                  <ClickableVerseText 
-                    text={message.content} 
-                    style={styles.messageText}
-                    linkColor="#00f3ff"
-                  />
+                  <NevinMessageContent content={message.content} />
                 )}
                 <View style={styles.messageFooter}>
                   <Text style={[styles.timestamp, message.isUser && styles.userTimestamp]}>
@@ -625,26 +655,43 @@ export default function NevinScreen() {
   );
 }
 
+// ─────────────────────────────────────────────────────────
+// NEBULA DARK — Design Tokens
+// ─────────────────────────────────────────────────────────
+// Background:   #060B14  (deep space navy)
+// Surface:      rgba(12, 21, 37, 0.85)  (frosted glass)
+// Cyan accent:  #00F3FF  (neon glow)
+// Green accent: #00FF88  (status / avatar)
+// Border:       rgba(0, 243, 255, 0.12)
+// Text primary: #E8EDF5
+// Text muted:   #6B7C93
+// User bubble:  #00F3FF  (solid cyan)
+// AI bubble:    rgba(12, 21, 37, 0.85) + cyan border
+// ─────────────────────────────────────────────────────────
+
 const styles = StyleSheet.create({
   keyboardAvoid: {
     flex: 1,
   },
+
+  // ── Header bar ──────────────────────────────────────────
   chatHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 14,
+    paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: 'rgba(0, 243, 255, 0.1)',
+    borderBottomColor: 'rgba(0, 243, 255, 0.12)',
+    backgroundColor: 'rgba(6, 11, 20, 0.95)',
   },
   headerLeft: {
     flexDirection: 'column',
   },
   chatHeaderTitle: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#00ff88',
+    fontWeight: '700',
+    color: '#00F3FF',
     letterSpacing: 0.5,
   },
   statusIndicator: {
@@ -656,18 +703,22 @@ const styles = StyleSheet.create({
     width: 6,
     height: 6,
     borderRadius: 3,
-    backgroundColor: '#00ff88',
+    backgroundColor: '#00FF88',
     marginRight: 5,
   },
   statusText: {
     fontSize: 11,
-    color: '#6b7c93',
+    color: '#6B7C93',
   },
+
+  // ── Moments pill ────────────────────────────────────────
   momentsButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 243, 255, 0.1)',
-    borderRadius: 16,
+    backgroundColor: 'rgba(0, 243, 255, 0.08)',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 243, 255, 0.2)',
     paddingHorizontal: 12,
     paddingVertical: 6,
     gap: 6,
@@ -675,7 +726,8 @@ const styles = StyleSheet.create({
   momentsButtonText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#00f3ff',
+    color: '#00F3FF',
+    letterSpacing: 0.3,
   },
   momentTitleContainer: {
     flex: 1,
@@ -683,38 +735,42 @@ const styles = StyleSheet.create({
   },
   momentTitleText: {
     fontSize: 13,
-    color: '#a0b8d0',
+    color: '#7A8FA6',
     textAlign: 'center',
     fontStyle: 'italic',
   },
+
+  // ── Welcome screen ──────────────────────────────────────
   welcomeContainer: {
-    paddingTop: 40,
-    paddingHorizontal: 8,
+    paddingTop: 48,
+    paddingHorizontal: 12,
   },
   welcomeContent: {
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 44,
   },
   welcomeGreeting: {
-    fontSize: 32,
-    fontWeight: '300',
-    color: '#e6f3ff',
-    marginBottom: 8,
+    fontSize: 36,
+    fontWeight: '200',
+    color: '#E8EDF5',
+    marginBottom: 10,
+    letterSpacing: -0.5,
   },
   welcomeSubtext: {
     fontSize: 14,
-    color: '#6b7c93',
+    color: '#6B7C93',
     textAlign: 'center',
+    lineHeight: 20,
   },
   intrigueContainer: {
-    marginTop: 10,
+    marginTop: 8,
   },
   intrigueLabel: {
-    fontSize: 11,
-    color: '#6b7c93',
+    fontSize: 10,
+    color: '#6B7C93',
     textTransform: 'uppercase',
-    letterSpacing: 1,
-    marginBottom: 12,
+    letterSpacing: 1.5,
+    marginBottom: 14,
   },
   intrigueChips: {
     flexDirection: 'row',
@@ -722,27 +778,32 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   intrigueChip: {
-    backgroundColor: 'rgba(0, 243, 255, 0.06)',
+    backgroundColor: 'rgba(0, 243, 255, 0.05)',
     borderWidth: 1,
-    borderColor: 'rgba(0, 243, 255, 0.15)',
-    borderRadius: 16,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    borderColor: 'rgba(0, 243, 255, 0.14)',
+    borderRadius: 18,
+    paddingHorizontal: 14,
+    paddingVertical: 9,
   },
   intrigueChipText: {
-    color: '#a0b8d0',
+    color: '#A0B8D0',
     fontSize: 12,
+    lineHeight: 17,
   },
+
+  // ── Chat scroll area ────────────────────────────────────
   messagesContainer: {
     flex: 1,
   },
   messagesContent: {
     padding: 16,
-    paddingBottom: 20,
+    paddingBottom: 24,
   },
+
+  // ── Message wrappers ────────────────────────────────────
   messageWrapper: {
     flexDirection: 'row',
-    marginVertical: 6,
+    marginVertical: 5,
     alignItems: 'flex-end',
   },
   userMessageWrapper: {
@@ -754,64 +815,119 @@ const styles = StyleSheet.create({
   thinkingWrapper: {
     marginVertical: 10,
   },
+
+  // ── Avatar ──────────────────────────────────────────────
   avatarContainer: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: 'rgba(0, 255, 136, 0.15)',
+    width: 30,
+    height: 30,
+    borderRadius: 15,
+    backgroundColor: 'rgba(0, 243, 255, 0.08)',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 8,
     borderWidth: 1,
-    borderColor: 'rgba(0, 255, 136, 0.3)',
+    borderColor: 'rgba(0, 243, 255, 0.2)',
+    // Subtle glow on iOS/web
+    ...Platform.select({
+      ios: {
+        shadowColor: '#00F3FF',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.3,
+        shadowRadius: 6,
+      },
+      web: {
+        boxShadow: '0 0 8px rgba(0,243,255,0.2)',
+      } as any,
+    }),
   },
+
+  // ── Message bubble ──────────────────────────────────────
   messageCard: {
-    maxWidth: '80%',
-    borderRadius: 16,
-    padding: 12,
+    // User messages: max 78% width; Nevin messages: up to 88% for long content
+    maxWidth: '88%',
+    borderRadius: 18,
+    padding: 13,
   },
+
+  // User bubble — solid cyan (Nebula Dark signature)
   userMessage: {
-    backgroundColor: '#00f3ff',
+    backgroundColor: '#00F3FF',
     borderBottomRightRadius: 4,
+    maxWidth: '78%',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#00F3FF',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.35,
+        shadowRadius: 10,
+      },
+      web: {
+        boxShadow: '0 4px 20px rgba(0,243,255,0.25)',
+      } as any,
+    }),
   },
+
+  // Nevin bubble — frosted glass with cyan border
   nevinMessage: {
-    backgroundColor: 'rgba(20, 30, 45, 0.9)',
+    backgroundColor: 'rgba(12, 21, 37, 0.85)',
     borderWidth: 1,
-    borderColor: 'rgba(0, 255, 136, 0.3)',
+    borderColor: 'rgba(0, 243, 255, 0.15)',
     borderBottomLeftRadius: 4,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 8,
+      },
+      web: {
+        backdropFilter: 'blur(12px)',
+        boxShadow: '0 2px 16px rgba(0,0,0,0.3)',
+      } as any,
+    }),
   },
+
+  // ── Text styles ─────────────────────────────────────────
   messageText: {
     fontSize: 15,
-    lineHeight: 22,
-    color: '#e6f3ff',
+    lineHeight: 23,
+    color: '#DCE8F5',
   },
   userMessageText: {
-    color: '#0a0e14',
+    color: '#060B14',
+    fontWeight: '500',
   },
+
+  // ── Timestamp & footer ──────────────────────────────────
   timestamp: {
     fontSize: 10,
-    color: '#6b7c93',
-    marginTop: 6,
+    color: '#6B7C93',
+    marginTop: 7,
     textAlign: 'right',
   },
   userTimestamp: {
-    color: 'rgba(10, 14, 20, 0.6)',
+    color: 'rgba(6, 11, 20, 0.55)',
   },
   messageFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 6,
+    marginTop: 7,
+    paddingTop: 7,
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0, 243, 255, 0.08)',
   },
   messageActions: {
     flexDirection: 'row',
-    gap: 8,
+    gap: 10,
   },
   messageActionButton: {
-    padding: 4,
-    borderRadius: 4,
-    backgroundColor: 'rgba(107, 124, 147, 0.1)',
+    padding: 5,
+    borderRadius: 6,
+    backgroundColor: 'rgba(107, 124, 147, 0.08)',
   },
+
+  // ── Typing indicator ────────────────────────────────────
   typingIndicator: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -820,15 +936,22 @@ const styles = StyleSheet.create({
   },
   typingText: {
     marginLeft: 10,
-    color: '#6b7c93',
+    color: '#6B7C93',
     fontSize: 14,
   },
+
+  // ── Input area ──────────────────────────────────────────
   inputContainer: {
-    backgroundColor: 'rgba(10, 14, 20, 0.95)',
+    backgroundColor: 'rgba(6, 11, 20, 0.97)',
     paddingHorizontal: 10,
     paddingVertical: 10,
     borderTopWidth: 1,
-    borderTopColor: 'rgba(0, 243, 255, 0.15)',
+    borderTopColor: 'rgba(0, 243, 255, 0.12)',
+    ...Platform.select({
+      web: {
+        backdropFilter: 'blur(20px)',
+      } as any,
+    }),
   },
   inputRow: {
     flexDirection: 'row',
@@ -839,30 +962,48 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: 'rgba(0, 255, 136, 0.15)',
+    backgroundColor: 'rgba(0, 243, 255, 0.08)',
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: 'rgba(0, 255, 136, 0.3)',
+    borderColor: 'rgba(0, 243, 255, 0.2)',
   },
   newChatButtonDisabled: {
-    opacity: 0.5,
+    opacity: 0.4,
   },
   input: {
     flex: 1,
     maxHeight: 80,
-    backgroundColor: 'rgba(20, 30, 45, 0.6)',
+    backgroundColor: 'rgba(12, 21, 37, 0.7)',
     fontSize: 14,
+    borderRadius: 22,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 243, 255, 0.12)',
   },
   sendButton: {
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: '#00f3ff',
+    backgroundColor: '#00F3FF',
     justifyContent: 'center',
     alignItems: 'center',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#00F3FF',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.5,
+        shadowRadius: 8,
+      },
+      web: {
+        boxShadow: '0 0 12px rgba(0,243,255,0.45)',
+      } as any,
+    }),
   },
   sendButtonDisabled: {
-    backgroundColor: 'rgba(0, 243, 255, 0.3)',
+    backgroundColor: 'rgba(0, 243, 255, 0.25)',
+    ...Platform.select({
+      ios: { shadowOpacity: 0 },
+      web: { boxShadow: 'none' } as any,
+    }),
   },
 });
