@@ -88,8 +88,15 @@ export default {
           defaultChannel: "reading-plan",
         },
       ],
-      "expo-secure-store",
-      "expo-clipboard",
+      [
+        "expo-secure-store",
+        {
+          configureAndroidBackup: true,
+          faceIDPermission: "Allow $(PRODUCT_NAME) to access your Face ID biometric data."
+        },
+      ],
+      // expo-clipboard does NOT have an app.plugin.js — no plugin entry needed,
+      // it works via autolinking on native and the AsyncClipboard API on web.
     ],
     updates: {
       fallbackToCacheTimeout: 0,
