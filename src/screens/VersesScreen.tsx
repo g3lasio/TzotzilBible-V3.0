@@ -273,16 +273,25 @@ export default function VersesScreen() {
     }
   };
 
-  const navigateChapter = (direction: 'prev' | 'next') => {
+   const navigateChapter = (direction: 'prev' | 'next') => {
     const newChapter = direction === 'prev' ? chapter - 1 : chapter + 1;
     if (newChapter >= 1) {
-      navigation.replace('Verses', { book, chapter: newChapter });
+      navigation.replace('Verses', {
+        book,
+        chapter: newChapter,
+        // Preserve reading plan context so the floating button and tracking persist
+        ...(fromReadingPlan && planDay ? { fromReadingPlan, planDay, totalChapters } : {}),
+      });
     }
   };
-
   const handleWheelPickerSelect = (selectedBook: string, selectedChapter: number) => {
     if (selectedBook === book && selectedChapter === chapter) return;
-    navigation.replace('Verses', { book: selectedBook, chapter: selectedChapter });
+    navigation.replace('Verses', {
+      book: selectedBook,
+      chapter: selectedChapter,
+      // Preserve reading plan context
+      ...(fromReadingPlan && planDay ? { fromReadingPlan, planDay, totalChapters } : {}),
+    });
   };
 
   /**
@@ -482,7 +491,7 @@ export default function VersesScreen() {
   // Custom back handler for reading plan
   const handleBackPress = () => {
     if (fromReadingPlan && planDay) {
-      navigation.navigate('ReadingPlanDay', { planId: 'canonical', day: planDay });
+      navigation.dispatch(CommonActions.navigate({ name: 'ReadingPlanDay', params: { day: planDay } }));
     } else {
       navigation.goBack();
     }
@@ -556,6 +565,38 @@ export default function VersesScreen() {
             </TouchableOpacity>
           </View>
         </ScrollView>
+
+        {/* Reading Plan: inline progress bar + complete button — sits below ScrollView, above tab bar */}
+        {fromReadingPlan && planDay && totalChapters && (
+          <View style={styles.readingPlanBar}>
+            <View style={styles.readingPlanProgress}>
+              <MaterialCommunityIcons
+                name={canComplete ? 'check-circle' : 'book-open-page-variant'}
+                size={16}
+                color={canComplete ? '#00ff88' : '#ffa500'}
+              />
+              <Text style={styles.readingPlanProgressText}>
+                {chaptersRead}/{totalChapters} cap.
+              </Text>
+            </View>
+            <TouchableOpacity
+              style={[styles.readingPlanButton, !canComplete && styles.readingPlanButtonDisabled]}
+              onPress={async () => {
+                if (canComplete) {
+                  const ReadingPlanService = (await import('../services/ReadingPlanService')).default;
+                  await ReadingPlanService.markDayCompleted(planDay);
+                  navigation.dispatch(CommonActions.navigate({ name: 'ReadingPlanDay', params: { day: planDay } }));
+                }
+              }}
+              disabled={!canComplete}
+            >
+              <MaterialCommunityIcons name='check-bold' size={16} color='#ffffff' />
+              <Text style={styles.readingPlanButtonText}>
+                {canComplete ? 'Marcar Completado' : `Faltan ${(totalChapters ?? 0) - chaptersRead} cap.`}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
         <Modal
           visible={menuVisible}
@@ -678,45 +719,7 @@ export default function VersesScreen() {
           onClose={() => setWheelPickerVisible(false)}
         />
 
-        {/* Floating Mark Complete button for Reading Plan */}
-        {fromReadingPlan && planDay && totalChapters && (
-          <View style={styles.floatingButtonContainer}>
-            {/* Progress indicator */}
-            <View style={styles.progressBadge}>
-              <MaterialCommunityIcons 
-                name={canComplete ? "check-circle" : "book-open-page-variant"} 
-                size={16} 
-                color={canComplete ? "#00ff88" : "#ffa500"} 
-              />
-              <Text style={styles.progressText}>
-                {chaptersRead}/{totalChapters} capítulos
-              </Text>
-            </View>
-            
-            {/* Mark Complete button */}
-            <TouchableOpacity
-              style={[
-                styles.floatingButton,
-                !canComplete && styles.floatingButtonDisabled
-              ]}
-              onPress={async () => {
-                if (canComplete) {
-                  const ReadingPlanService = (await import('../services/ReadingPlanService')).default;
-                  await ReadingPlanService.markDayCompleted(planDay);
-                  navigation.navigate('ReadingPlanDay', { planId: 'canonical', day: planDay });
-                }
-              }}
-              disabled={!canComplete}
-            >
-              <MaterialCommunityIcons 
-                name="check-bold" 
-                size={20} 
-                color="#ffffff" 
-              />
-              <Text style={styles.floatingButtonText}>Marcar Completado</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+
       </View>
     </MainLayout>
   );
@@ -1282,5 +1285,46 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 14,
     fontWeight: 'bold',
+  },
+  // Reading plan inline bar styles
+  readingPlanBar: {
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    justifyContent: 'space-between' as const,
+    backgroundColor: 'rgba(10, 14, 20, 0.97)',
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0, 243, 255, 0.2)',
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    gap: 10,
+  },
+  readingPlanProgress: {
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    gap: 6,
+    flex: 1,
+  },
+  readingPlanProgressText: {
+    color: '#ffffff',
+    fontSize: 13,
+    fontWeight: '600' as const,
+  },
+  readingPlanButton: {
+    flexDirection: 'row' as const,
+    alignItems: 'center' as const,
+    backgroundColor: '#00ff88',
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 20,
+    gap: 6,
+  },
+  readingPlanButtonDisabled: {
+    backgroundColor: '#3a4a5a',
+    opacity: 0.8,
+  },
+  readingPlanButtonText: {
+    color: '#ffffff',
+    fontSize: 13,
+    fontWeight: 'bold' as const,
   },
 });

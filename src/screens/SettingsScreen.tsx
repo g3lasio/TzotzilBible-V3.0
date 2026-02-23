@@ -92,20 +92,20 @@ export default function SettingsScreen() {
   };
 
   const handleClearHistory = () => {
-    Alert.alert('Limpiar Historial de Nevin', '\u00bfEst\u00e1s seguro? Esto eliminar\u00e1 todas tus conversaciones con Nevin permanentemente.', [
+    Alert.alert('Limpiar Historial de Nevin', '¿Estás seguro? Esto eliminará todas tus conversaciones con Nevin permanentemente.', [
       { text: 'Cancelar', style: 'cancel' },
-      { text: 'Limpiar', style: 'destructive', onPress: async () => { await NevinAIService.clearChatHistory(); Alert.alert('\u2713 Listo', 'Historial eliminado correctamente.'); } },
+      { text: 'Limpiar', style: 'destructive', onPress: async () => { await NevinAIService.clearChatHistory(); Alert.alert('✓ Listo', 'Historial eliminado correctamente.'); } },
     ]);
   };
 
   const handleSendFeedback = () => {
-    const subject = encodeURIComponent(`Feedback \u2014 Tzotzil Bible v${APP_VERSION}`);
-    const body = encodeURIComponent('\n\n---\nDispositivo: \nVersi\u00f3n: ' + APP_VERSION);
+    const subject = encodeURIComponent(`Feedback — Tzotzil Bible v${APP_VERSION}`);
+    const body = encodeURIComponent('\n\n---\nDispositivo: \nVersión: ' + APP_VERSION);
     Linking.openURL(`mailto:${FEEDBACK_EMAIL}?subject=${subject}&body=${body}`);
   };
 
   const handleShareApp = async () => {
-    try { await Share.share({ message: '\u00a1Descarga Tzotzil Bible! Una Biblia biling\u00fce en Tzotzil y Espa\u00f1ol con asistente AI. https://tzotzilbible.app', title: 'Tzotzil Bible' }); }
+    try { await Share.share({ message: '¡Descarga Tzotzil Bible! Una Biblia bilingüe en Tzotzil y Español con asistente AI. https://tzotzilbible.app', title: 'Tzotzil Bible' }); }
     catch (e) { console.error('Error sharing:', e); }
   };
 
@@ -137,8 +137,8 @@ export default function SettingsScreen() {
             <MaterialCommunityIcons name="format-size" size={20} color={COLORS.reading} />
           </View>
           <View style={styles.settingInfo}>
-            <Text style={styles.settingTitle}>Tama\u00f1o de Fuente</Text>
-            <Text style={styles.settingDesc}>Texto de vers\u00edculos</Text>
+            <Text style={styles.settingTitle}>Tamaño de Fuente</Text>
+            <Text style={styles.settingDesc}>Texto de versículos</Text>
           </View>
           <View style={styles.fontSizeControl}>
             {(['small', 'medium', 'large'] as const).map((size, i) => (
@@ -155,7 +155,7 @@ export default function SettingsScreen() {
   const NevinStyleSelector = () => {
     const options: { key: 'devocional' | 'academico' | 'conversacional'; label: string }[] = [
       { key: 'devocional', label: 'Devocional' },
-      { key: 'academico', label: 'Acad\u00e9mico' },
+      { key: 'academico', label: 'Académico' },
       { key: 'conversacional', label: 'Casual' },
     ];
     return (
@@ -167,7 +167,7 @@ export default function SettingsScreen() {
             </View>
             <View style={styles.settingInfo}>
               <Text style={styles.settingTitle}>Estilo de Respuesta</Text>
-              <Text style={styles.settingDesc}>C\u00f3mo responde Nevin AI</Text>
+              <Text style={styles.settingDesc}>Cómo responde Nevin AI</Text>
             </View>
           </View>
           <View style={styles.styleChips}>
@@ -199,7 +199,7 @@ export default function SettingsScreen() {
 
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: COLORS.notifications, textShadowColor: COLORS.notifications }]}>NOTIFICACIONES</Text>
-          <SettingRow icon="weather-sunset-up" iconColor={COLORS.notifications} title="Vers\u00edculo del D\u00eda" desc="Recibe inspiraci\u00f3n cada ma\u00f1ana a las 7:00 AM"
+          <SettingRow icon="weather-sunset-up" iconColor={COLORS.notifications} title="Versículo del Día" desc="Recibe inspiración cada mañana a las 7:00 AM"
             right={<Switch value={dailyVerseEnabled} onValueChange={handleDailyVerseToggle} trackColor={{ false: 'rgba(107,124,147,0.3)', true: `${COLORS.notifications}55` }} thumbColor={dailyVerseEnabled ? COLORS.notifications : '#6B7C93'} />} />
           <SettingRow icon="book-clock-outline" iconColor={COLORS.notifications} title="Recordatorio del Plan" desc="Aviso diario para continuar tu plan de lectura"
             right={<Switch value={readingReminderEnabled} onValueChange={handleReadingReminderToggle} trackColor={{ false: 'rgba(107,124,147,0.3)', true: `${COLORS.notifications}55` }} thumbColor={readingReminderEnabled ? COLORS.notifications : '#6B7C93'} />} />
@@ -207,17 +207,17 @@ export default function SettingsScreen() {
 
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: COLORS.community, textShadowColor: COLORS.community }]}>COMUNIDAD</Text>
-          <SettingRow icon="message-text-outline" iconColor={COLORS.community} title="Enviar Comentarios" desc="Ay\u00fadanos a mejorar la app" onPress={handleSendFeedback} />
+          <SettingRow icon="message-text-outline" iconColor={COLORS.community} title="Enviar Comentarios" desc="Ayúdanos a mejorar la app" onPress={handleSendFeedback} />
           <SettingRow icon="share-variant-outline" iconColor={COLORS.community} title="Compartir App" desc="Recomienda Tzotzil Bible" onPress={handleShareApp} />
-          <SettingRow icon="information-outline" iconColor={COLORS.community} title="Acerca de Nosotros" desc="Conoce m\u00e1s sobre la app" onPress={() => Linking.openURL('https://bible.chyrris.com/about')} />
-          <SettingRow icon="headset" iconColor={COLORS.community} title="Contacto y Soporte" desc="Obt\u00e9n ayuda o env\u00eda sugerencias" onPress={() => Linking.openURL('https://bible.chyrris.com/support')} />
+          <SettingRow icon="information-outline" iconColor={COLORS.community} title="Acerca de Nosotros" desc="Conoce más sobre la app" onPress={() => Linking.openURL('https://bible.chyrris.com/about')} />
+          <SettingRow icon="headset" iconColor={COLORS.community} title="Contacto y Soporte" desc="Obtén ayuda o envía sugerencias" onPress={() => Linking.openURL('https://bible.chyrris.com/support')} />
         </View>
 
         <View style={styles.legalSection}>
-          <TouchableOpacity onPress={() => Linking.openURL('https://bible.chyrris.com/privacy')}><Text style={styles.legalLink}>Pol\u00edtica de Privacidad</Text></TouchableOpacity>
-          <Text style={styles.legalDot}>\u00b7</Text>
-          <TouchableOpacity onPress={() => Linking.openURL('https://bible.chyrris.com/terms')}><Text style={styles.legalLink}>T\u00e9rminos de Servicio</Text></TouchableOpacity>
-          <Text style={styles.legalDot}>\u00b7</Text>
+          <TouchableOpacity onPress={() => Linking.openURL('https://bible.chyrris.com/privacy')}><Text style={styles.legalLink}>Política de Privacidad</Text></TouchableOpacity>
+          <Text style={styles.legalDot}>·</Text>
+          <TouchableOpacity onPress={() => Linking.openURL('https://bible.chyrris.com/terms')}><Text style={styles.legalLink}>Términos de Servicio</Text></TouchableOpacity>
+          <Text style={styles.legalDot}>·</Text>
           <TouchableOpacity onPress={() => Linking.openURL('https://bible.chyrris.com/legal-disclaimer')}><Text style={styles.legalLink}>Aviso Legal</Text></TouchableOpacity>
         </View>
 
@@ -226,19 +226,19 @@ export default function SettingsScreen() {
             <Image source={require('../../assets/icon.png')} style={styles.appLogo} resizeMode="contain" />
           </View>
           <Text style={styles.appName}>Tzotzil Bible</Text>
-          <Text style={styles.versionText}>Versi\u00f3n {APP_VERSION}</Text>
+          <Text style={styles.versionText}>Versión {APP_VERSION}</Text>
           <View style={styles.missionVerse}>
             <MaterialCommunityIcons name="feather" size={12} color="rgba(255,209,102,0.45)" style={{ marginBottom: 8 }} />
             <Text style={styles.missionVerseText}>
-              \u201cVienen d\u00edas\u201d, afirma el Se\u00f1or y Dios,{'\n'}
-              \u201cen que enviar\u00e9 hambre al pa\u00eds;{'\n'}
-              no ser\u00e1 hambre de pan ni sed de agua,{'\n'}
-              sino hambre de o\u00edr las palabras del Se\u00f1or.\u201d
+              “Vienen días”, afirma el Señor y Dios,{'\n'}
+              “en que enviaré hambre al país;{'\n'}
+              no será hambre de pan ni sed de agua,{'\n'}
+              sino hambre de oír las palabras del Señor.”
             </Text>
-            <Text style={styles.missionVerseRef}>Am\u00f3s 8:11</Text>
+            <Text style={styles.missionVerseRef}>Amós 8:11</Text>
           </View>
-          <Text style={styles.infoNote}>La Biblia funciona sin internet.{'\n'}Nevin AI requiere conexi\u00f3n.</Text>
-          <Text style={styles.copyright}>\u00a9 2026 Chyrris Technologies</Text>
+          <Text style={styles.infoNote}>La Biblia funciona sin internet.{'\n'}Nevin AI requiere conexión.</Text>
+          <Text style={styles.copyright}>© 2026 Chyrris Technologies</Text>
         </View>
 
       </ScrollView>
