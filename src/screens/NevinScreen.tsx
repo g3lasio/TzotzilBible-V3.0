@@ -468,6 +468,12 @@ export default function NevinScreen() {
 
   return (
     <MainLayout title="Nevin">
+      {/* Nebula Dark background — overrides MainLayout's default gradient for this screen only */}
+      <LinearGradient
+        colors={['#060B14', '#0A1020', '#060B14']}
+        locations={[0, 0.5, 1]}
+        style={styles.nebulaBackground}
+      >
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardAvoid}
@@ -651,6 +657,7 @@ export default function NevinScreen() {
           </View>
         </View>
       </KeyboardAvoidingView>
+      </LinearGradient>
     </MainLayout>
   );
 }
@@ -670,6 +677,13 @@ export default function NevinScreen() {
 // ─────────────────────────────────────────────────────────
 
 const styles = StyleSheet.create({
+  // Nebula Dark full-screen background overlay
+  // Covers the MainLayout gradient with a deeper space-navy tone
+  nebulaBackground: {
+    flex: 1,
+    backgroundColor: '#060B14',
+  },
+
   keyboardAvoid: {
     flex: 1,
   },
@@ -683,7 +697,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(0, 243, 255, 0.12)',
-    backgroundColor: 'rgba(6, 11, 20, 0.95)',
+    backgroundColor: '#060B14',
   },
   headerLeft: {
     flexDirection: 'column',
@@ -942,7 +956,7 @@ const styles = StyleSheet.create({
 
   // ── Input area ──────────────────────────────────────────
   inputContainer: {
-    backgroundColor: 'rgba(6, 11, 20, 0.97)',
+    backgroundColor: '#060B14',
     paddingHorizontal: 10,
     paddingVertical: 10,
     borderTopWidth: 1,

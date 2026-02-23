@@ -1,16 +1,18 @@
 /**
  * EgwCitationCard — Nebula Dark Style
  *
- * Renders EGW (Ellen G. White) citations found in Nevin AI responses
- * as a distinct "Golden Glow" card. The component parses the standard
- * markdown blockquote format used by the AI:
+ * Renders EGW citations found in Nevin AI responses as a subtle
+ * bordered inline block. The card uses a near-transparent background
+ * with a golden left-border accent and the feather icon — it complements
+ * the chat flow without competing visually.
  *
+ * Policy: The name "Elena G. de White" is NEVER displayed.
+ *         Only the book abbreviation reference is shown (e.g. "CT p. 354").
+ *
+ * Parses the standard markdown blockquote format used by the AI:
  *   > "Quote text here."
  *   >
  *   > — (BookAbbrev p. XXX)
- *
- * It does NOT alter any business logic — it only transforms the visual
- * presentation of these specific text segments.
  */
 
 import React from 'react';
@@ -25,28 +27,25 @@ interface EgwCitationCardProps {
 export function EgwCitationCard({ quote, reference }: EgwCitationCardProps) {
   return (
     <View style={styles.card}>
-      {/* Top golden glow line */}
-      <View style={styles.topLine} />
+      {/* Golden left accent bar */}
+      <View style={styles.leftBar} />
 
-      {/* Badge */}
-      <View style={styles.badge}>
-        <View style={styles.badgeDot} />
-        <Text style={styles.badgeText}>ESCRITOS EGW</Text>
-        {reference ? (
-          <Text style={styles.badgeRef}> · {reference}</Text>
-        ) : null}
-      </View>
+      <View style={styles.inner}>
+        {/* Header row: feather icon + reference only (NO name) */}
+        <View style={styles.header}>
+          <MaterialCommunityIcons
+            name="feather"
+            size={11}
+            color="rgba(255, 209, 102, 0.65)"
+            style={styles.featherIcon}
+          />
+          <Text style={styles.headerText}>
+            {reference ? reference : 'Escritos EGW'}
+          </Text>
+        </View>
 
-      {/* Decorative large quote mark */}
-      <Text style={styles.decorativeQuote}>"</Text>
-
-      {/* Quote text */}
-      <Text style={styles.quoteText}>"{quote.trim()}"</Text>
-
-      {/* Attribution */}
-      <View style={styles.attribution}>
-        <MaterialCommunityIcons name="feather" size={12} color="rgba(255,209,102,0.5)" />
-        <Text style={styles.attributionText}>Elena G. de White</Text>
+        {/* Quote text */}
+        <Text style={styles.quoteText}>"{quote.trim()}"</Text>
       </View>
     </View>
   );
@@ -101,7 +100,7 @@ export function parseMessageSegments(raw: string): MessageSegment[] {
       .map(l => l.replace(/^>\s?/, '').trim())
       .filter(l => l.length > 0);
 
-    // Separate quote lines from attribution line
+    // Separate quote lines from attribution line (starts with —)
     const attributionLine = lines.find(l => /^—\s*\(/.test(l) || /^—\s*[A-Z]/.test(l));
     const quoteLines = lines.filter(l => l !== attributionLine);
 
@@ -140,101 +139,82 @@ export function parseMessageSegments(raw: string): MessageSegment[] {
 }
 
 const styles = StyleSheet.create({
+  // Outer container — very subtle, near-transparent background
   card: {
-    marginVertical: 12,
+    flexDirection: 'row',
+    marginVertical: 10,
     marginHorizontal: 0,
-    backgroundColor: 'rgba(20, 14, 4, 0.85)',
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 209, 102, 0.3)',
-    padding: 14,
+    borderRadius: 8,
     overflow: 'hidden',
-    // Golden glow shadow (works on iOS and web)
+    // Barely-there background: just enough to distinguish from plain text
+    backgroundColor: 'rgba(255, 209, 102, 0.04)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 209, 102, 0.12)',
     ...Platform.select({
       ios: {
         shadowColor: '#FFD166',
         shadowOffset: { width: 0, height: 0 },
-        shadowOpacity: 0.25,
-        shadowRadius: 12,
+        shadowOpacity: 0.08,
+        shadowRadius: 6,
       },
       android: {
-        elevation: 6,
+        elevation: 1,
       },
       web: {
-        boxShadow: '0 0 18px rgba(255, 209, 102, 0.15), inset 0 1px 0 rgba(255,255,255,0.04)',
+        boxShadow: '0 0 8px rgba(255, 209, 102, 0.06)',
       } as any,
     }),
   },
-  topLine: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: 2,
-    backgroundColor: 'rgba(255, 209, 102, 0.6)',
-    // Gradient-like fade via opacity on web
+
+  // Thin golden left accent bar
+  leftBar: {
+    width: 2,
+    backgroundColor: 'rgba(255, 209, 102, 0.55)',
+    borderTopLeftRadius: 8,
+    borderBottomLeftRadius: 8,
     ...Platform.select({
+      ios: {
+        shadowColor: '#FFD166',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.5,
+        shadowRadius: 4,
+      },
       web: {
-        background: 'linear-gradient(90deg, transparent, rgba(255,209,102,0.7), transparent)',
-        boxShadow: '0 0 8px rgba(255,209,102,0.5)',
+        boxShadow: '0 0 6px rgba(255,209,102,0.4)',
       } as any,
     }),
   },
-  badge: {
+
+  // Content area
+  inner: {
+    flex: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+  },
+
+  // Header: feather icon + reference abbreviation only
+  header: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 10,
-    marginTop: 4,
+    marginBottom: 6,
   },
-  badgeDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: '#FFD166',
-    marginRight: 6,
-    ...Platform.select({
-      ios: { shadowColor: '#FFD166', shadowOpacity: 0.8, shadowRadius: 4, shadowOffset: { width: 0, height: 0 } },
-      web: { boxShadow: '0 0 5px #FFD166' } as any,
-    }),
+  featherIcon: {
+    marginRight: 5,
   },
-  badgeText: {
+  headerText: {
     fontSize: 10,
-    fontWeight: '700',
-    color: '#FFD166',
-    letterSpacing: 1.2,
+    fontWeight: '600',
+    color: 'rgba(255, 209, 102, 0.6)',
+    letterSpacing: 0.8,
     textTransform: 'uppercase',
   },
-  badgeRef: {
-    fontSize: 10,
-    fontWeight: '500',
-    color: 'rgba(255, 209, 102, 0.6)',
-    letterSpacing: 0.5,
-  },
-  decorativeQuote: {
-    position: 'absolute',
-    top: 8,
-    right: 12,
-    fontSize: 72,
-    color: 'rgba(255, 209, 102, 0.06)',
-    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
-    lineHeight: 72,
-  },
+
+  // Quote text — serif italic, warm cream tone
   quoteText: {
-    fontSize: 14,
+    fontSize: 13,
     fontStyle: 'italic',
-    color: '#F0E0B0',
-    lineHeight: 22,
-    marginBottom: 10,
+    color: 'rgba(240, 224, 176, 0.85)',
+    lineHeight: 20,
     fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
-  },
-  attribution: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-  },
-  attributionText: {
-    fontSize: 11,
-    color: 'rgba(255, 209, 102, 0.5)',
-    fontWeight: '500',
   },
 });
