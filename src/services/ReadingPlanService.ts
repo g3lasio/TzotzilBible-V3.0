@@ -15,6 +15,10 @@ const STORAGE_KEY_USER_PLAN = 'user_reading_plan';
 const STORAGE_KEY_COMPLETED_DAYS = 'reading_plan_completed_days';
 const STORAGE_KEY_READING_STATUS = 'reading_plan_reading_status';
 
+// Both plans always have exactly 365 days of content.
+// We use the plan's own totalDays field as the authoritative source.
+const PLAN_TOTAL_DAYS = 365;
+
 class ReadingPlanService {
   private chronologicalPlan: ReadingPlan | null = null;
   private canonicalPlan: ReadingPlan | null = null;
@@ -26,7 +30,7 @@ class ReadingPlanService {
     try {
       const chronological = require('../../assets/reading_plans/chronological_plan.json');
       const canonical = require('../../assets/reading_plans/canonical_plan.json');
-      
+
       this.chronologicalPlan = chronological;
       this.canonicalPlan = canonical;
     } catch (error) {
@@ -58,11 +62,17 @@ class ReadingPlanService {
   }
 
   /**
-   * Initialize a new reading plan for the user
+   * Initialize a new reading plan for the user.
+   * The plan always starts from Day 1 regardless of the calendar date —
+   * this is a sequential 365-day journey, not a calendar-locked plan.
+   * Users can start at any time of year.
    */
-  async initializeUserPlan(planType: PlanType, reminderTime: string = '07:00'): Promise<UserReadingPlan> {
+  async initializeUserPlan(
+    planType: PlanType,
+    reminderTime: string = '07:00'
+  ): Promise<UserReadingPlan> {
     const existingPlan = await this.getUserPlan();
-    
+
     // Check if plan is already locked
     if (existingPlan && existingPlan.isLocked) {
       throw new Error('Cannot change plan once started. Current plan is locked.');
@@ -94,10 +104,12 @@ class ReadingPlanService {
     try {
       const statusJson = await AsyncStorage.getItem(STORAGE_KEY_READING_STATUS);
       const status = statusJson ? JSON.parse(statusJson) : {};
-      status[day] = { 
-        hasVisitedBible: true, 
-        timestamp: new Date().toISOString(),
-        chaptersRead: [] // Track which chapters have been read
+      // Preserve existing chaptersRead if the entry already exists
+      const existing = status[day] || {};
+      status[day] = {
+        hasVisitedBible: true,
+        timestamp: existing.timestamp || new Date().toISOString(),
+        chaptersRead: existing.chaptersRead || [],
       };
       await AsyncStorage.setItem(STORAGE_KEY_READING_STATUS, JSON.stringify(status));
     } catch (error) {
@@ -106,30 +118,33 @@ class ReadingPlanService {
   }
 
   /**
-   * Mark a specific chapter as read for a day
+   * Mark a specific chapter as read for a day.
+   * The chapterKey uses the ENGLISH book name (as stored in the plan JSON)
+   * to avoid translation mismatches.
    */
   async markChapterRead(day: number, book: string, chapter: number): Promise<void> {
     try {
       const statusJson = await AsyncStorage.getItem(STORAGE_KEY_READING_STATUS);
       const status = statusJson ? JSON.parse(statusJson) : {};
-      
+
       if (!status[day]) {
-        status[day] = { 
-          hasVisitedBible: true, 
+        status[day] = {
+          hasVisitedBible: true,
           timestamp: new Date().toISOString(),
-          chaptersRead: []
+          chaptersRead: [],
         };
       }
-      
+
+      // Use English book name as the canonical key to avoid translation issues
       const chapterKey = `${book}:${chapter}`;
       if (!status[day].chaptersRead) {
         status[day].chaptersRead = [];
       }
-      
+
       if (!status[day].chaptersRead.includes(chapterKey)) {
         status[day].chaptersRead.push(chapterKey);
       }
-      
+
       await AsyncStorage.setItem(STORAGE_KEY_READING_STATUS, JSON.stringify(status));
     } catch (error) {
       console.error('Error marking chapter read:', error);
@@ -143,12 +158,12 @@ class ReadingPlanService {
     try {
       const statusJson = await AsyncStorage.getItem(STORAGE_KEY_READING_STATUS);
       if (!statusJson) return [];
-      
+
       const status = JSON.parse(statusJson);
       const dayStatus = status[day];
-      
+
       if (!dayStatus || !dayStatus.chaptersRead) return [];
-      
+
       return dayStatus.chaptersRead;
     } catch (error) {
       console.error('Error getting chapters read:', error);
@@ -157,7 +172,8 @@ class ReadingPlanService {
   }
 
   /**
-   * Check if all required chapters for a day have been read
+   * Check if all required chapters for a day have been read.
+   * Uses English book names as keys (consistent with markChapterRead).
    */
   async hasCompletedAllChapters(day: number): Promise<boolean> {
     try {
@@ -166,22 +182,20 @@ class ReadingPlanService {
 
       const statusJson = await AsyncStorage.getItem(STORAGE_KEY_READING_STATUS);
       if (!statusJson) return false;
-      
+
       const status = JSON.parse(statusJson);
       const dayStatus = status[day];
-      
+
       if (!dayStatus || !dayStatus.chaptersRead) return false;
 
-      // Build list of required chapters
+      // Build required chapters using English book names (same as markChapterRead)
       const requiredChapters: string[] = [];
       dayReading.readings.forEach(reading => {
-        const bookNameSpanish = translateBookName(reading.book);
         for (let ch = reading.startChapter; ch <= reading.endChapter; ch++) {
-          requiredChapters.push(`${bookNameSpanish}:${ch}`);
+          requiredChapters.push(`${reading.book}:${ch}`);
         }
       });
 
-      // Check if all required chapters have been read
       return requiredChapters.every(chapter => dayStatus.chaptersRead.includes(chapter));
     } catch (error) {
       console.error('Error checking chapters completion:', error);
@@ -190,9 +204,12 @@ class ReadingPlanService {
   }
 
   /**
-   * Get reading progress for a specific day (how many chapters read vs required)
+   * Get reading progress for a specific day (how many chapters read vs required).
+   * Uses English book names as keys (consistent with markChapterRead).
    */
-  async getReadingProgress(day: number): Promise<{ read: number; total: number; chapters: string[] }> {
+  async getReadingProgress(
+    day: number
+  ): Promise<{ read: number; total: number; chapters: string[] }> {
     try {
       const dayReading = await this.getDayReading(day);
       if (!dayReading) return { read: 0, total: 0, chapters: [] };
@@ -201,22 +218,21 @@ class ReadingPlanService {
       const status = statusJson ? JSON.parse(statusJson) : {};
       const dayStatus = status[day];
 
-      // Build list of required chapters
+      // Build required chapters using English book names
       const requiredChapters: string[] = [];
       dayReading.readings.forEach(reading => {
-        const bookNameSpanish = translateBookName(reading.book);
         for (let ch = reading.startChapter; ch <= reading.endChapter; ch++) {
-          requiredChapters.push(`${bookNameSpanish}:${ch}`);
+          requiredChapters.push(`${reading.book}:${ch}`);
         }
       });
 
-      const chaptersRead = dayStatus?.chaptersRead || [];
+      const chaptersRead: string[] = dayStatus?.chaptersRead || [];
       const readCount = requiredChapters.filter(ch => chaptersRead.includes(ch)).length;
 
       return {
         read: readCount,
         total: requiredChapters.length,
-        chapters: requiredChapters
+        chapters: requiredChapters,
       };
     } catch (error) {
       console.error('Error getting reading progress:', error);
@@ -227,7 +243,9 @@ class ReadingPlanService {
   /**
    * Get reading status for a specific day
    */
-  async getReadingStatus(day: number): Promise<{ hasVisitedBible: boolean; timestamp?: string } | null> {
+  async getReadingStatus(
+    day: number
+  ): Promise<{ hasVisitedBible: boolean; timestamp?: string } | null> {
     try {
       const statusJson = await AsyncStorage.getItem(STORAGE_KEY_READING_STATUS);
       if (!statusJson) return null;
@@ -278,8 +296,10 @@ class ReadingPlanService {
   }
 
   /**
-   * Mark a day as completed (AUTO-CHECKBOX)
-   * This should only be called when user finishes reading and clicks "Mark as Completed"
+   * Mark a day as completed.
+   * After completion, currentDay advances to the next uncompleted day.
+   * Skipped days are allowed — the user can skip a day and come back later;
+   * the plan will not block on skipped days.
    */
   async markDayCompleted(day: number): Promise<void> {
     const userPlan = await this.getUserPlan();
@@ -296,18 +316,24 @@ class ReadingPlanService {
     userPlan.completedDays.push(day);
     userPlan.completedDays.sort((a, b) => a - b); // Keep sorted
 
-    // Update current day to next uncompleted day
-    const nextDay = this.findNextUncompletedDay(userPlan.completedDays, 365);
+    // Advance currentDay to the next uncompleted day
+    const totalDays = this.getPlan(userPlan.planType)?.totalDays ?? PLAN_TOTAL_DAYS;
+    const nextDay = this.findNextUncompletedDay(userPlan.completedDays, totalDays);
     userPlan.currentDay = nextDay;
     userPlan.updatedAt = new Date().toISOString();
 
     // Save updated plan
     await AsyncStorage.setItem(STORAGE_KEY_USER_PLAN, JSON.stringify(userPlan));
-    await AsyncStorage.setItem(STORAGE_KEY_COMPLETED_DAYS, JSON.stringify(userPlan.completedDays));
+    await AsyncStorage.setItem(
+      STORAGE_KEY_COMPLETED_DAYS,
+      JSON.stringify(userPlan.completedDays)
+    );
   }
 
   /**
-   * Find the next uncompleted day
+   * Find the next uncompleted day starting from day 1.
+   * This ensures skipped days are always surfaced as the "current" day,
+   * so the user can go back and complete them without the plan getting stuck.
    */
   private findNextUncompletedDay(completedDays: number[], totalDays: number): number {
     for (let day = 1; day <= totalDays; day++) {
@@ -336,29 +362,34 @@ class ReadingPlanService {
   }
 
   /**
-   * Get reading plan statistics
+   * Get reading plan statistics.
+   * - totalDays comes from the plan JSON (always 365).
+   * - estimatedCompletionDate is calculated from startDate + 365 days,
+   *   correctly handling leap years via Date arithmetic.
    */
   async getStats(): Promise<ReadingPlanStats | null> {
     const userPlan = await this.getUserPlan();
     if (!userPlan) return null;
 
-    const totalDays = 365;
-    const completedDays = userPlan.completedDays.length;
-    const progressPercentage = Math.round((completedDays / totalDays) * 100);
-    const daysRemaining = totalDays - completedDays;
+    const plan = this.getPlan(userPlan.planType);
+    const totalDays = plan?.totalDays ?? PLAN_TOTAL_DAYS;
+    const completedCount = userPlan.completedDays.length;
+    const progressPercentage = Math.round((completedCount / totalDays) * 100);
+    const daysRemaining = Math.max(0, totalDays - completedCount);
 
     // Calculate current streak
     const currentStreak = this.calculateCurrentStreak(userPlan.completedDays);
     const longestStreak = this.calculateLongestStreak(userPlan.completedDays);
 
-    // Calculate estimated completion date
+    // Calculate estimated completion date.
+    // Using Date.setDate() correctly handles month/year rollovers AND leap years.
     const startDate = new Date(userPlan.startDate);
     const estimatedCompletionDate = new Date(startDate);
-    estimatedCompletionDate.setDate(estimatedCompletionDate.getDate() + 365);
+    estimatedCompletionDate.setDate(estimatedCompletionDate.getDate() + totalDays);
 
     return {
       totalDays,
-      completedDays,
+      completedDays: completedCount,
       currentDay: userPlan.currentDay,
       progressPercentage,
       currentStreak,
@@ -369,12 +400,13 @@ class ReadingPlanService {
   }
 
   /**
-   * Calculate current streak (consecutive days from most recent)
+   * Calculate current streak (consecutive completed days ending at the highest completed day).
+   * A "streak" counts consecutive day numbers, not calendar dates.
    */
   private calculateCurrentStreak(completedDays: number[]): number {
     if (completedDays.length === 0) return 0;
 
-    const sorted = [...completedDays].sort((a, b) => b - a); // Descending order
+    const sorted = [...completedDays].sort((a, b) => b - a); // Descending
     let streak = 1;
 
     for (let i = 0; i < sorted.length - 1; i++) {
@@ -389,12 +421,12 @@ class ReadingPlanService {
   }
 
   /**
-   * Calculate longest streak
+   * Calculate longest streak of consecutive completed days
    */
   private calculateLongestStreak(completedDays: number[]): number {
     if (completedDays.length === 0) return 0;
 
-    const sorted = [...completedDays].sort((a, b) => a - b); // Ascending order
+    const sorted = [...completedDays].sort((a, b) => a - b); // Ascending
     let longestStreak = 1;
     let currentStreak = 1;
 
@@ -428,25 +460,28 @@ class ReadingPlanService {
     // Schedule or cancel notifications based on enabled status
     if (enabled) {
       const [hours, minutes] = time.split(':');
-      await NotificationService.scheduleDailyReminder(parseInt(hours, 10), parseInt(minutes, 10));
+      await NotificationService.scheduleDailyReminder(
+        parseInt(hours, 10),
+        parseInt(minutes, 10)
+      );
     } else {
       await NotificationService.cancelAllReminders();
     }
   }
 
   /**
-   * Reset reading plan (for testing or starting over)
-   * WARNING: This will delete all progress
+   * Reset reading plan (for starting over).
+   * WARNING: This will delete all progress.
    */
   async resetPlan(): Promise<void> {
     // Cancel any scheduled notifications first
     await NotificationService.cancelDailyReminder();
-    
+
     // Clear ALL reading plan data
     await AsyncStorage.removeItem(STORAGE_KEY_USER_PLAN);
     await AsyncStorage.removeItem(STORAGE_KEY_COMPLETED_DAYS);
     await AsyncStorage.removeItem(STORAGE_KEY_READING_STATUS);
-    
+
     console.log('Reading plan reset successfully - all data cleared');
   }
 

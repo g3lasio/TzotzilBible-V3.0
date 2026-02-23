@@ -8,7 +8,13 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation, useRoute, useFocusEffect, NavigationProp, RouteProp } from '@react-navigation/native';
+import {
+  useNavigation,
+  useRoute,
+  useFocusEffect,
+  NavigationProp,
+  RouteProp,
+} from '@react-navigation/native';
 import ReadingPlanService from '../services/ReadingPlanService';
 import { DayReading } from '../types/readingPlan';
 import { RootStackParamList } from '../types/navigation';
@@ -23,33 +29,42 @@ const ReadingPlanDayScreen = () => {
   const [dayReading, setDayReading] = useState<DayReading | null>(null);
   const [completing, setCompleting] = useState(false);
   const [hasStartedReading, setHasStartedReading] = useState(false);
-  const [readingProgress, setReadingProgress] = useState({ read: 0, total: 0, chapters: [] as string[] });
+  const [readingProgress, setReadingProgress] = useState({
+    read: 0,
+    total: 0,
+    chapters: [] as string[],
+  });
+  const [isAlreadyCompleted, setIsAlreadyCompleted] = useState(false);
 
   useEffect(() => {
     loadDayReading();
   }, [day]);
 
-  // Check if user returned from Bible reading
+  // Refresh progress whenever the user returns from the Bible screen
   useFocusEffect(
     React.useCallback(() => {
-      // Check if user came back from Bible reading
-      const checkReadingStatus = async () => {
+      const checkStatus = async () => {
         const status = await ReadingPlanService.getReadingStatus(day);
-        if (status && status.hasVisitedBible) {
+        if (status?.hasVisitedBible) {
           setHasStartedReading(true);
         }
-        
-        // Update reading progress
         const progress = await ReadingPlanService.getReadingProgress(day);
         setReadingProgress(progress);
+
+        // Check if this day is already completed
+        const userPlan = await ReadingPlanService.getUserPlan();
+        if (userPlan) {
+          setIsAlreadyCompleted(userPlan.completedDays.includes(day));
+        }
       };
-      checkReadingStatus();
+      checkStatus();
     }, [day])
   );
 
   const loadDayReading = async () => {
     try {
       setLoading(true);
+      await ReadingPlanService.loadPlans();
       const reading = await ReadingPlanService.getDayReading(day);
       setDayReading(reading);
     } catch (error) {
@@ -62,17 +77,12 @@ const ReadingPlanDayScreen = () => {
   const handleStartReading = async () => {
     if (!dayReading || dayReading.readings.length === 0) return;
 
-    // Mark that user has started reading
     await ReadingPlanService.markReadingStarted(day);
     setHasStartedReading(true);
 
-    // Navigate to Bible with the first reading
     const firstReading = dayReading.readings[0];
-    
-    // Translate book name from English to Spanish
     const bookNameSpanish = translateBookName(firstReading.book);
-    
-    // Navigate to Bible tab, then to Verses screen
+
     navigation.navigate('MainTabs', {
       screen: 'BibleTab',
       params: {
@@ -90,26 +100,23 @@ const ReadingPlanDayScreen = () => {
 
   const handleMarkCompleted = async () => {
     if (!hasStartedReading) {
-      alert('Por favor, completa la lectura antes de marcar como completado.');
+      alert('Por favor, comienza la lectura antes de marcar como completado.');
       return;
     }
 
-    // Check if all chapters have been read
     const allChaptersRead = await ReadingPlanService.hasCompletedAllChapters(day);
     if (!allChaptersRead) {
       const progress = await ReadingPlanService.getReadingProgress(day);
-      alert(`Debes leer todos los capítulos asignados. Progreso: ${progress.read}/${progress.total} capítulos leídos.`);
+      alert(
+        `Debes leer todos los capítulos asignados.\nProgreso: ${progress.read}/${progress.total} capítulos leídos.`
+      );
       return;
     }
 
     try {
       setCompleting(true);
       await ReadingPlanService.markDayCompleted(day);
-      
-      // Show success message
       alert('¡Día completado! 🎉');
-      
-      // Go back to plan screen
       navigation.goBack();
     } catch (error: any) {
       alert(error.message || 'Error al marcar como completado');
@@ -143,62 +150,94 @@ const ReadingPlanDayScreen = () => {
     );
   }
 
+  const progressPercent =
+    readingProgress.total > 0
+      ? Math.round((readingProgress.read / readingProgress.total) * 100)
+      : 0;
+  const allRead = readingProgress.read > 0 && readingProgress.read === readingProgress.total;
+
   return (
     <View style={styles.container}>
-      {/* Header with Back Button */}
+      {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#FFFFFF" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Día {day}</Text>
-        <View style={{ width: 24 }} />
+        {isAlreadyCompleted ? (
+          <View style={styles.completedBadgeHeader}>
+            <Ionicons name="checkmark-circle" size={20} color="#00FF88" />
+          </View>
+        ) : (
+          <View style={{ width: 24 }} />
+        )}
       </View>
 
       <ScrollView style={styles.content} contentContainerStyle={styles.contentContainer}>
+        {/* Title */}
         <Text style={styles.title}>Lectura del Día</Text>
 
-        {/* Readings List */}
-        {dayReading.readings.map((reading, index) => (
-          <View key={index} style={styles.readingCard}>
-            <View style={styles.readingIconContainer}>
-              <Ionicons name="book" size={24} color="#00F3FF" />
-            </View>
-            <View style={styles.readingInfo}>
-              <Text style={styles.readingBook}>{reading.book}</Text>
-              <Text style={styles.readingChapters}>
-                {reading.startChapter === reading.endChapter
-                  ? `Capítulo ${reading.startChapter}`
-                  : `Capítulos ${reading.startChapter}-${reading.endChapter}`}
-              </Text>
-            </View>
+        {/* Already completed notice */}
+        {isAlreadyCompleted && (
+          <View style={styles.completedNotice}>
+            <Ionicons name="checkmark-circle" size={18} color="#00FF88" />
+            <Text style={styles.completedNoticeText}>
+              Este día ya está completado. Puedes releerlo cuando quieras.
+            </Text>
           </View>
-        ))}
+        )}
 
-        <View style={styles.instructionsBox}>
-          <Ionicons name="information-circle" size={20} color="#00F3FF" />
-          <Text style={styles.instructionsText}>
-            Presiona "Comenzar Lectura" para abrir la Biblia. Una vez que termines de leer, regresa aquí y marca el día como completado.
-          </Text>
-        </View>
+        {/* Reading Cards — show Spanish book names */}
+        {dayReading.readings.map((reading, index) => {
+          const bookSpanish = translateBookName(reading.book);
+          const chapterLabel =
+            reading.startChapter === reading.endChapter
+              ? `Capítulo ${reading.startChapter}`
+              : `Capítulos ${reading.startChapter}–${reading.endChapter}`;
+          const chapterCount = reading.endChapter - reading.startChapter + 1;
 
-        {/* Reading Progress Indicator */}
+          return (
+            <View key={index} style={styles.readingCard}>
+              <View style={styles.readingIconContainer}>
+                <Ionicons name="book" size={24} color="#00F3FF" />
+              </View>
+              <View style={styles.readingInfo}>
+                <Text style={styles.readingBook}>{bookSpanish}</Text>
+                <Text style={styles.readingChapters}>{chapterLabel}</Text>
+                <Text style={styles.readingMeta}>
+                  {chapterCount} {chapterCount === 1 ? 'capítulo' : 'capítulos'}
+                </Text>
+              </View>
+            </View>
+          );
+        })}
+
+        {/* Instructions */}
+        {!isAlreadyCompleted && (
+          <View style={styles.instructionsBox}>
+            <Ionicons name="information-circle" size={20} color="#00F3FF" />
+            <Text style={styles.instructionsText}>
+              Presiona "Comenzar Lectura" para abrir la Biblia. Cuando termines, regresa aquí
+              y marca el día como completado.
+            </Text>
+          </View>
+        )}
+
+        {/* Reading Progress */}
         {hasStartedReading && readingProgress.total > 0 && (
           <View style={styles.progressContainer}>
             <View style={styles.progressHeader}>
               <Text style={styles.progressTitle}>Progreso de Lectura</Text>
-              <Text style={styles.progressText}>
-                {readingProgress.read}/{readingProgress.total} capítulos
+              <Text style={styles.progressCount}>
+                {readingProgress.read}/{readingProgress.total} cap.
               </Text>
             </View>
             <View style={styles.progressBarBackground}>
-              <View 
-                style={[
-                  styles.progressBarFill,
-                  { width: `${(readingProgress.read / readingProgress.total) * 100}%` }
-                ]} 
+              <View
+                style={[styles.progressBarFill, { width: `${progressPercent}%` }]}
               />
             </View>
-            {readingProgress.read === readingProgress.total && (
+            {allRead && (
               <View style={styles.completionBadge}>
                 <Ionicons name="checkmark-circle" size={16} color="#00FF88" />
                 <Text style={styles.completionText}>¡Todos los capítulos leídos!</Text>
@@ -209,39 +248,49 @@ const ReadingPlanDayScreen = () => {
 
         {/* Start Reading Button */}
         <TouchableOpacity style={styles.startButton} onPress={handleStartReading}>
-          <Text style={styles.startButtonText}>Comenzar Lectura</Text>
+          <Ionicons name="book-outline" size={20} color="#0A1628" />
+          <Text style={styles.startButtonText}>
+            {hasStartedReading ? 'Continuar Lectura' : 'Comenzar Lectura'}
+          </Text>
           <Ionicons name="arrow-forward" size={20} color="#0A1628" />
         </TouchableOpacity>
 
         {/* Mark Completed Button */}
-        <TouchableOpacity
-          style={[
-            styles.completeButton,
-            !hasStartedReading && styles.completeButtonDisabled,
-          ]}
-          onPress={handleMarkCompleted}
-          disabled={completing || !hasStartedReading}
-        >
-          {completing ? (
-            <ActivityIndicator size="small" color="#FFFFFF" />
-          ) : (
-            <>
-              <Ionicons 
-                name="checkmark-circle" 
-                size={20} 
-                color={hasStartedReading ? "#FFFFFF" : "#666666"} 
-              />
-              <Text style={[
-                styles.completeButtonText,
-                !hasStartedReading && styles.completeButtonTextDisabled,
-              ]}>
-                {hasStartedReading ? 'Marcar como Completado' : 'Completa la lectura primero'}
-              </Text>
-            </>
-          )}
-        </TouchableOpacity>
+        {!isAlreadyCompleted && (
+          <TouchableOpacity
+            style={[
+              styles.completeButton,
+              (!hasStartedReading || !allRead) && styles.completeButtonDisabled,
+            ]}
+            onPress={handleMarkCompleted}
+            disabled={completing || !hasStartedReading}
+          >
+            {completing ? (
+              <ActivityIndicator size="small" color="#FFFFFF" />
+            ) : (
+              <>
+                <Ionicons
+                  name="checkmark-circle"
+                  size={20}
+                  color={hasStartedReading && allRead ? '#FFFFFF' : '#666666'}
+                />
+                <Text
+                  style={[
+                    styles.completeButtonText,
+                    (!hasStartedReading || !allRead) && styles.completeButtonTextDisabled,
+                  ]}
+                >
+                  {!hasStartedReading
+                    ? 'Completa la lectura primero'
+                    : allRead
+                    ? 'Marcar como Completado'
+                    : `Faltan ${readingProgress.total - readingProgress.read} capítulos`}
+                </Text>
+              </>
+            )}
+          </TouchableOpacity>
+        )}
 
-        {/* Bottom padding to ensure content is not hidden by tabs */}
         <View style={{ height: 80 }} />
       </ScrollView>
     </View>
@@ -249,10 +298,7 @@ const ReadingPlanDayScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#0A1628',
-  },
+  container: { flex: 1, backgroundColor: '#0A1628' },
   loadingContainer: {
     flex: 1,
     backgroundColor: '#0A1628',
@@ -268,26 +314,37 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#1A2638',
   },
-  backButton: {
-    padding: 4,
-  },
+  backButton: { padding: 4 },
   headerTitle: {
     fontSize: 18,
     fontWeight: '600',
     color: '#FFFFFF',
   },
-  content: {
-    flex: 1,
-  },
-  contentContainer: {
-    padding: 20,
-    paddingBottom: 120, // Extra padding for bottom tabs
-  },
+  completedBadgeHeader: { padding: 4 },
+  content: { flex: 1 },
+  contentContainer: { padding: 20, paddingBottom: 120 },
   title: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: 'bold',
     color: '#FFFFFF',
-    marginBottom: 20,
+    marginBottom: 16,
+  },
+  completedNotice: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,255,136,0.08)',
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(0,255,136,0.2)',
+  },
+  completedNoticeText: {
+    fontSize: 13,
+    color: '#00FF88',
+    marginLeft: 8,
+    flex: 1,
+    lineHeight: 18,
   },
   readingCard: {
     flexDirection: 'row',
@@ -308,18 +365,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: 16,
   },
-  readingInfo: {
-    flex: 1,
-  },
+  readingInfo: { flex: 1 },
   readingBook: {
-    fontSize: 18,
+    fontSize: 17,
     fontWeight: '600',
     color: '#FFFFFF',
-    marginBottom: 4,
+    marginBottom: 3,
   },
   readingChapters: {
     fontSize: 14,
     color: '#B0B0B0',
+    marginBottom: 2,
+  },
+  readingMeta: {
+    fontSize: 12,
+    color: '#00F3FF',
   },
   instructionsBox: {
     flexDirection: 'row',
@@ -327,15 +387,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#0F1F35',
     borderRadius: 8,
     padding: 12,
-    marginTop: 20,
-    marginBottom: 24,
+    marginTop: 8,
+    marginBottom: 20,
   },
   instructionsText: {
-    fontSize: 14,
+    fontSize: 13,
     color: '#B0B0B0',
     marginLeft: 8,
     flex: 1,
-    lineHeight: 20,
+    lineHeight: 19,
   },
   progressContainer: {
     backgroundColor: '#1A2638',
@@ -349,15 +409,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 10,
   },
   progressTitle: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '600',
     color: '#FFFFFF',
   },
-  progressText: {
-    fontSize: 14,
+  progressCount: {
+    fontSize: 13,
     fontWeight: 'bold',
     color: '#00F3FF',
   },
@@ -379,7 +439,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
     paddingVertical: 8,
     paddingHorizontal: 12,
-    backgroundColor: 'rgba(0, 255, 136, 0.1)',
+    backgroundColor: 'rgba(0,255,136,0.1)',
     borderRadius: 8,
   },
   completionText: {
@@ -396,13 +456,13 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     paddingVertical: 16,
     paddingHorizontal: 24,
-    marginBottom: 16,
+    marginBottom: 14,
+    gap: 8,
   },
   startButtonText: {
     fontSize: 16,
     fontWeight: '600',
     color: '#0A1628',
-    marginRight: 8,
   },
   completeButton: {
     flexDirection: 'row',
@@ -414,16 +474,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     borderWidth: 2,
     borderColor: '#00F3FF',
+    gap: 8,
   },
   completeButtonDisabled: {
     borderColor: '#333333',
     opacity: 0.5,
   },
   completeButtonText: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '600',
     color: '#FFFFFF',
-    marginLeft: 8,
   },
   completeButtonTextDisabled: {
     color: '#666666',

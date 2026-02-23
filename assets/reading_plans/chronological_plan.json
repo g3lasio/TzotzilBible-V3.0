@@ -1,7 +1,7 @@
 {
-  "planName": "Cronológico",
+  "planName": "Plan Cronológico",
   "planType": "chronological",
-  "description": "Lee la Biblia en el orden en que los eventos ocurrieron históricamente",
+  "description": "Lee la Biblia en orden cronológico aproximado — siguiendo la línea histórica de los eventos bíblicos — en 365 días.",
   "totalDays": 365,
   "readings": [
     {
@@ -10,12 +10,7 @@
         {
           "book": "Genesis",
           "startChapter": 1,
-          "endChapter": 2
-        },
-        {
-          "book": "Psalms",
-          "startChapter": 8,
-          "endChapter": 8
+          "endChapter": 4
         }
       ]
     },
@@ -24,8 +19,8 @@
       "readings": [
         {
           "book": "Genesis",
-          "startChapter": 3,
-          "endChapter": 5
+          "startChapter": 5,
+          "endChapter": 8
         }
       ]
     },
@@ -34,8 +29,8 @@
       "readings": [
         {
           "book": "Genesis",
-          "startChapter": 6,
-          "endChapter": 9
+          "startChapter": 9,
+          "endChapter": 12
         }
       ]
     },
@@ -44,8 +39,8 @@
       "readings": [
         {
           "book": "Genesis",
-          "startChapter": 10,
-          "endChapter": 11
+          "startChapter": 13,
+          "endChapter": 16
         }
       ]
     },
@@ -53,9 +48,9 @@
       "day": 5,
       "readings": [
         {
-          "book": "Job",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "Genesis",
+          "startChapter": 17,
+          "endChapter": 20
         }
       ]
     },
@@ -63,9 +58,9 @@
       "day": 6,
       "readings": [
         {
-          "book": "Job",
-          "startChapter": 4,
-          "endChapter": 7
+          "book": "Genesis",
+          "startChapter": 21,
+          "endChapter": 24
         }
       ]
     },
@@ -73,9 +68,9 @@
       "day": 7,
       "readings": [
         {
-          "book": "Job",
-          "startChapter": 8,
-          "endChapter": 11
+          "book": "Genesis",
+          "startChapter": 25,
+          "endChapter": 28
         }
       ]
     },
@@ -83,9 +78,9 @@
       "day": 8,
       "readings": [
         {
-          "book": "Job",
-          "startChapter": 12,
-          "endChapter": 15
+          "book": "Genesis",
+          "startChapter": 29,
+          "endChapter": 32
         }
       ]
     },
@@ -93,9 +88,9 @@
       "day": 9,
       "readings": [
         {
-          "book": "Job",
-          "startChapter": 16,
-          "endChapter": 19
+          "book": "Genesis",
+          "startChapter": 33,
+          "endChapter": 36
         }
       ]
     },
@@ -103,9 +98,9 @@
       "day": 10,
       "readings": [
         {
-          "book": "Job",
-          "startChapter": 20,
-          "endChapter": 23
+          "book": "Genesis",
+          "startChapter": 37,
+          "endChapter": 40
         }
       ]
     },
@@ -113,9 +108,9 @@
       "day": 11,
       "readings": [
         {
-          "book": "Job",
-          "startChapter": 24,
-          "endChapter": 28
+          "book": "Genesis",
+          "startChapter": 41,
+          "endChapter": 44
         }
       ]
     },
@@ -123,9 +118,9 @@
       "day": 12,
       "readings": [
         {
-          "book": "Job",
-          "startChapter": 29,
-          "endChapter": 31
+          "book": "Genesis",
+          "startChapter": 45,
+          "endChapter": 48
         }
       ]
     },
@@ -133,9 +128,14 @@
       "day": 13,
       "readings": [
         {
+          "book": "Genesis",
+          "startChapter": 49,
+          "endChapter": 50
+        },
+        {
           "book": "Job",
-          "startChapter": 32,
-          "endChapter": 34
+          "startChapter": 1,
+          "endChapter": 2
         }
       ]
     },
@@ -144,8 +144,8 @@
       "readings": [
         {
           "book": "Job",
-          "startChapter": 35,
-          "endChapter": 37
+          "startChapter": 3,
+          "endChapter": 6
         }
       ]
     },
@@ -154,8 +154,8 @@
       "readings": [
         {
           "book": "Job",
-          "startChapter": 38,
-          "endChapter": 42
+          "startChapter": 7,
+          "endChapter": 10
         }
       ]
     },
@@ -163,9 +163,9 @@
       "day": 16,
       "readings": [
         {
-          "book": "Genesis",
-          "startChapter": 12,
-          "endChapter": 15
+          "book": "Job",
+          "startChapter": 11,
+          "endChapter": 14
         }
       ]
     },
@@ -173,8 +173,8 @@
       "day": 17,
       "readings": [
         {
-          "book": "Genesis",
-          "startChapter": 16,
+          "book": "Job",
+          "startChapter": 15,
           "endChapter": 18
         }
       ]
@@ -183,9 +183,9 @@
       "day": 18,
       "readings": [
         {
-          "book": "Genesis",
+          "book": "Job",
           "startChapter": 19,
-          "endChapter": 21
+          "endChapter": 22
         }
       ]
     },
@@ -193,9 +193,9 @@
       "day": 19,
       "readings": [
         {
-          "book": "Genesis",
-          "startChapter": 22,
-          "endChapter": 24
+          "book": "Job",
+          "startChapter": 23,
+          "endChapter": 26
         }
       ]
     },
@@ -203,9 +203,9 @@
       "day": 20,
       "readings": [
         {
-          "book": "Genesis",
-          "startChapter": 25,
-          "endChapter": 26
+          "book": "Job",
+          "startChapter": 27,
+          "endChapter": 30
         }
       ]
     },
@@ -213,9 +213,9 @@
       "day": 21,
       "readings": [
         {
-          "book": "Genesis",
-          "startChapter": 27,
-          "endChapter": 29
+          "book": "Job",
+          "startChapter": 31,
+          "endChapter": 34
         }
       ]
     },
@@ -223,9 +223,9 @@
       "day": 22,
       "readings": [
         {
-          "book": "Genesis",
-          "startChapter": 30,
-          "endChapter": 31
+          "book": "Job",
+          "startChapter": 35,
+          "endChapter": 38
         }
       ]
     },
@@ -233,9 +233,9 @@
       "day": 23,
       "readings": [
         {
-          "book": "Genesis",
-          "startChapter": 32,
-          "endChapter": 34
+          "book": "Job",
+          "startChapter": 39,
+          "endChapter": 42
         }
       ]
     },
@@ -243,9 +243,9 @@
       "day": 24,
       "readings": [
         {
-          "book": "Genesis",
-          "startChapter": 35,
-          "endChapter": 37
+          "book": "Exodus",
+          "startChapter": 1,
+          "endChapter": 4
         }
       ]
     },
@@ -253,9 +253,9 @@
       "day": 25,
       "readings": [
         {
-          "book": "Genesis",
-          "startChapter": 38,
-          "endChapter": 40
+          "book": "Exodus",
+          "startChapter": 5,
+          "endChapter": 8
         }
       ]
     },
@@ -263,9 +263,9 @@
       "day": 26,
       "readings": [
         {
-          "book": "Genesis",
-          "startChapter": 41,
-          "endChapter": 42
+          "book": "Exodus",
+          "startChapter": 9,
+          "endChapter": 12
         }
       ]
     },
@@ -273,9 +273,9 @@
       "day": 27,
       "readings": [
         {
-          "book": "Genesis",
-          "startChapter": 43,
-          "endChapter": 45
+          "book": "Exodus",
+          "startChapter": 13,
+          "endChapter": 16
         }
       ]
     },
@@ -283,9 +283,9 @@
       "day": 28,
       "readings": [
         {
-          "book": "Genesis",
-          "startChapter": 46,
-          "endChapter": 47
+          "book": "Exodus",
+          "startChapter": 17,
+          "endChapter": 20
         }
       ]
     },
@@ -293,9 +293,9 @@
       "day": 29,
       "readings": [
         {
-          "book": "Genesis",
-          "startChapter": 48,
-          "endChapter": 50
+          "book": "Exodus",
+          "startChapter": 21,
+          "endChapter": 24
         }
       ]
     },
@@ -304,8 +304,8 @@
       "readings": [
         {
           "book": "Exodus",
-          "startChapter": 1,
-          "endChapter": 3
+          "startChapter": 25,
+          "endChapter": 28
         }
       ]
     },
@@ -314,8 +314,8 @@
       "readings": [
         {
           "book": "Exodus",
-          "startChapter": 4,
-          "endChapter": 6
+          "startChapter": 29,
+          "endChapter": 32
         }
       ]
     },
@@ -324,8 +324,8 @@
       "readings": [
         {
           "book": "Exodus",
-          "startChapter": 7,
-          "endChapter": 9
+          "startChapter": 33,
+          "endChapter": 36
         }
       ]
     },
@@ -334,8 +334,8 @@
       "readings": [
         {
           "book": "Exodus",
-          "startChapter": 10,
-          "endChapter": 12
+          "startChapter": 37,
+          "endChapter": 40
         }
       ]
     },
@@ -343,9 +343,9 @@
       "day": 34,
       "readings": [
         {
-          "book": "Exodus",
-          "startChapter": 13,
-          "endChapter": 15
+          "book": "Leviticus",
+          "startChapter": 1,
+          "endChapter": 4
         }
       ]
     },
@@ -353,9 +353,9 @@
       "day": 35,
       "readings": [
         {
-          "book": "Exodus",
-          "startChapter": 16,
-          "endChapter": 18
+          "book": "Leviticus",
+          "startChapter": 5,
+          "endChapter": 8
         }
       ]
     },
@@ -363,9 +363,9 @@
       "day": 36,
       "readings": [
         {
-          "book": "Exodus",
-          "startChapter": 19,
-          "endChapter": 21
+          "book": "Leviticus",
+          "startChapter": 9,
+          "endChapter": 12
         }
       ]
     },
@@ -373,9 +373,9 @@
       "day": 37,
       "readings": [
         {
-          "book": "Exodus",
-          "startChapter": 22,
-          "endChapter": 24
+          "book": "Leviticus",
+          "startChapter": 13,
+          "endChapter": 16
         }
       ]
     },
@@ -383,9 +383,9 @@
       "day": 38,
       "readings": [
         {
-          "book": "Exodus",
-          "startChapter": 25,
-          "endChapter": 27
+          "book": "Leviticus",
+          "startChapter": 17,
+          "endChapter": 20
         }
       ]
     },
@@ -393,9 +393,9 @@
       "day": 39,
       "readings": [
         {
-          "book": "Exodus",
-          "startChapter": 28,
-          "endChapter": 29
+          "book": "Leviticus",
+          "startChapter": 21,
+          "endChapter": 24
         }
       ]
     },
@@ -403,9 +403,14 @@
       "day": 40,
       "readings": [
         {
-          "book": "Exodus",
-          "startChapter": 30,
-          "endChapter": 32
+          "book": "Leviticus",
+          "startChapter": 25,
+          "endChapter": 27
+        },
+        {
+          "book": "Numbers",
+          "startChapter": 1,
+          "endChapter": 1
         }
       ]
     },
@@ -413,9 +418,9 @@
       "day": 41,
       "readings": [
         {
-          "book": "Exodus",
-          "startChapter": 33,
-          "endChapter": 35
+          "book": "Numbers",
+          "startChapter": 2,
+          "endChapter": 5
         }
       ]
     },
@@ -423,9 +428,9 @@
       "day": 42,
       "readings": [
         {
-          "book": "Exodus",
-          "startChapter": 36,
-          "endChapter": 38
+          "book": "Numbers",
+          "startChapter": 6,
+          "endChapter": 9
         }
       ]
     },
@@ -433,9 +438,9 @@
       "day": 43,
       "readings": [
         {
-          "book": "Exodus",
-          "startChapter": 39,
-          "endChapter": 40
+          "book": "Numbers",
+          "startChapter": 10,
+          "endChapter": 13
         }
       ]
     },
@@ -443,9 +448,9 @@
       "day": 44,
       "readings": [
         {
-          "book": "Leviticus",
-          "startChapter": 1,
-          "endChapter": 4
+          "book": "Numbers",
+          "startChapter": 14,
+          "endChapter": 17
         }
       ]
     },
@@ -453,9 +458,9 @@
       "day": 45,
       "readings": [
         {
-          "book": "Leviticus",
-          "startChapter": 5,
-          "endChapter": 7
+          "book": "Numbers",
+          "startChapter": 18,
+          "endChapter": 21
         }
       ]
     },
@@ -463,9 +468,9 @@
       "day": 46,
       "readings": [
         {
-          "book": "Leviticus",
-          "startChapter": 8,
-          "endChapter": 10
+          "book": "Numbers",
+          "startChapter": 22,
+          "endChapter": 25
         }
       ]
     },
@@ -473,9 +478,9 @@
       "day": 47,
       "readings": [
         {
-          "book": "Leviticus",
-          "startChapter": 11,
-          "endChapter": 13
+          "book": "Numbers",
+          "startChapter": 26,
+          "endChapter": 29
         }
       ]
     },
@@ -483,9 +488,9 @@
       "day": 48,
       "readings": [
         {
-          "book": "Leviticus",
-          "startChapter": 14,
-          "endChapter": 15
+          "book": "Numbers",
+          "startChapter": 30,
+          "endChapter": 33
         }
       ]
     },
@@ -493,9 +498,14 @@
       "day": 49,
       "readings": [
         {
-          "book": "Leviticus",
-          "startChapter": 16,
-          "endChapter": 18
+          "book": "Numbers",
+          "startChapter": 34,
+          "endChapter": 36
+        },
+        {
+          "book": "Deuteronomy",
+          "startChapter": 1,
+          "endChapter": 1
         }
       ]
     },
@@ -503,9 +513,9 @@
       "day": 50,
       "readings": [
         {
-          "book": "Leviticus",
-          "startChapter": 19,
-          "endChapter": 21
+          "book": "Deuteronomy",
+          "startChapter": 2,
+          "endChapter": 5
         }
       ]
     },
@@ -513,9 +523,9 @@
       "day": 51,
       "readings": [
         {
-          "book": "Leviticus",
-          "startChapter": 22,
-          "endChapter": 23
+          "book": "Deuteronomy",
+          "startChapter": 6,
+          "endChapter": 9
         }
       ]
     },
@@ -523,9 +533,9 @@
       "day": 52,
       "readings": [
         {
-          "book": "Leviticus",
-          "startChapter": 24,
-          "endChapter": 25
+          "book": "Deuteronomy",
+          "startChapter": 10,
+          "endChapter": 13
         }
       ]
     },
@@ -533,9 +543,9 @@
       "day": 53,
       "readings": [
         {
-          "book": "Leviticus",
-          "startChapter": 26,
-          "endChapter": 27
+          "book": "Deuteronomy",
+          "startChapter": 14,
+          "endChapter": 17
         }
       ]
     },
@@ -543,9 +553,9 @@
       "day": 54,
       "readings": [
         {
-          "book": "Numbers",
-          "startChapter": 1,
-          "endChapter": 2
+          "book": "Deuteronomy",
+          "startChapter": 18,
+          "endChapter": 21
         }
       ]
     },
@@ -553,9 +563,9 @@
       "day": 55,
       "readings": [
         {
-          "book": "Numbers",
-          "startChapter": 3,
-          "endChapter": 4
+          "book": "Deuteronomy",
+          "startChapter": 22,
+          "endChapter": 25
         }
       ]
     },
@@ -563,9 +573,9 @@
       "day": 56,
       "readings": [
         {
-          "book": "Numbers",
-          "startChapter": 5,
-          "endChapter": 6
+          "book": "Deuteronomy",
+          "startChapter": 26,
+          "endChapter": 29
         }
       ]
     },
@@ -573,9 +583,9 @@
       "day": 57,
       "readings": [
         {
-          "book": "Numbers",
-          "startChapter": 7,
-          "endChapter": 7
+          "book": "Deuteronomy",
+          "startChapter": 30,
+          "endChapter": 33
         }
       ]
     },
@@ -583,9 +593,14 @@
       "day": 58,
       "readings": [
         {
-          "book": "Numbers",
-          "startChapter": 8,
-          "endChapter": 10
+          "book": "Deuteronomy",
+          "startChapter": 34,
+          "endChapter": 34
+        },
+        {
+          "book": "Joshua",
+          "startChapter": 1,
+          "endChapter": 3
         }
       ]
     },
@@ -593,9 +608,9 @@
       "day": 59,
       "readings": [
         {
-          "book": "Numbers",
-          "startChapter": 11,
-          "endChapter": 13
+          "book": "Joshua",
+          "startChapter": 4,
+          "endChapter": 7
         }
       ]
     },
@@ -603,14 +618,9 @@
       "day": 60,
       "readings": [
         {
-          "book": "Numbers",
-          "startChapter": 14,
-          "endChapter": 15
-        },
-        {
-          "book": "Psalms",
-          "startChapter": 90,
-          "endChapter": 90
+          "book": "Joshua",
+          "startChapter": 8,
+          "endChapter": 11
         }
       ]
     },
@@ -618,9 +628,9 @@
       "day": 61,
       "readings": [
         {
-          "book": "Numbers",
-          "startChapter": 16,
-          "endChapter": 18
+          "book": "Joshua",
+          "startChapter": 12,
+          "endChapter": 15
         }
       ]
     },
@@ -628,9 +638,9 @@
       "day": 62,
       "readings": [
         {
-          "book": "Numbers",
-          "startChapter": 19,
-          "endChapter": 21
+          "book": "Joshua",
+          "startChapter": 16,
+          "endChapter": 19
         }
       ]
     },
@@ -638,9 +648,9 @@
       "day": 63,
       "readings": [
         {
-          "book": "Numbers",
-          "startChapter": 22,
-          "endChapter": 24
+          "book": "Joshua",
+          "startChapter": 20,
+          "endChapter": 23
         }
       ]
     },
@@ -648,9 +658,14 @@
       "day": 64,
       "readings": [
         {
-          "book": "Numbers",
-          "startChapter": 25,
-          "endChapter": 27
+          "book": "Joshua",
+          "startChapter": 24,
+          "endChapter": 24
+        },
+        {
+          "book": "Judges",
+          "startChapter": 1,
+          "endChapter": 3
         }
       ]
     },
@@ -658,9 +673,9 @@
       "day": 65,
       "readings": [
         {
-          "book": "Numbers",
-          "startChapter": 28,
-          "endChapter": 30
+          "book": "Judges",
+          "startChapter": 4,
+          "endChapter": 7
         }
       ]
     },
@@ -668,9 +683,9 @@
       "day": 66,
       "readings": [
         {
-          "book": "Numbers",
-          "startChapter": 31,
-          "endChapter": 33
+          "book": "Judges",
+          "startChapter": 8,
+          "endChapter": 11
         }
       ]
     },
@@ -678,9 +693,9 @@
       "day": 67,
       "readings": [
         {
-          "book": "Numbers",
-          "startChapter": 34,
-          "endChapter": 36
+          "book": "Judges",
+          "startChapter": 12,
+          "endChapter": 15
         }
       ]
     },
@@ -688,9 +703,9 @@
       "day": 68,
       "readings": [
         {
-          "book": "Deuteronomy",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "Judges",
+          "startChapter": 16,
+          "endChapter": 19
         }
       ]
     },
@@ -698,9 +713,14 @@
       "day": 69,
       "readings": [
         {
-          "book": "Deuteronomy",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "Judges",
+          "startChapter": 20,
+          "endChapter": 21
+        },
+        {
+          "book": "Ruth",
+          "startChapter": 1,
+          "endChapter": 2
         }
       ]
     },
@@ -708,9 +728,14 @@
       "day": 70,
       "readings": [
         {
-          "book": "Deuteronomy",
-          "startChapter": 7,
-          "endChapter": 9
+          "book": "Ruth",
+          "startChapter": 3,
+          "endChapter": 4
+        },
+        {
+          "book": "1 Samuel",
+          "startChapter": 1,
+          "endChapter": 2
         }
       ]
     },
@@ -718,9 +743,9 @@
       "day": 71,
       "readings": [
         {
-          "book": "Deuteronomy",
-          "startChapter": 10,
-          "endChapter": 12
+          "book": "1 Samuel",
+          "startChapter": 3,
+          "endChapter": 6
         }
       ]
     },
@@ -728,9 +753,9 @@
       "day": 72,
       "readings": [
         {
-          "book": "Deuteronomy",
-          "startChapter": 13,
-          "endChapter": 15
+          "book": "1 Samuel",
+          "startChapter": 7,
+          "endChapter": 10
         }
       ]
     },
@@ -738,9 +763,9 @@
       "day": 73,
       "readings": [
         {
-          "book": "Deuteronomy",
-          "startChapter": 16,
-          "endChapter": 18
+          "book": "1 Samuel",
+          "startChapter": 11,
+          "endChapter": 14
         }
       ]
     },
@@ -748,9 +773,9 @@
       "day": 74,
       "readings": [
         {
-          "book": "Deuteronomy",
-          "startChapter": 19,
-          "endChapter": 21
+          "book": "1 Samuel",
+          "startChapter": 15,
+          "endChapter": 18
         }
       ]
     },
@@ -758,9 +783,9 @@
       "day": 75,
       "readings": [
         {
-          "book": "Deuteronomy",
-          "startChapter": 22,
-          "endChapter": 24
+          "book": "1 Samuel",
+          "startChapter": 19,
+          "endChapter": 22
         }
       ]
     },
@@ -768,9 +793,9 @@
       "day": 76,
       "readings": [
         {
-          "book": "Deuteronomy",
-          "startChapter": 25,
-          "endChapter": 27
+          "book": "1 Samuel",
+          "startChapter": 23,
+          "endChapter": 26
         }
       ]
     },
@@ -778,8 +803,8 @@
       "day": 77,
       "readings": [
         {
-          "book": "Deuteronomy",
-          "startChapter": 28,
+          "book": "1 Samuel",
+          "startChapter": 27,
           "endChapter": 30
         }
       ]
@@ -788,9 +813,14 @@
       "day": 78,
       "readings": [
         {
-          "book": "Deuteronomy",
+          "book": "1 Samuel",
           "startChapter": 31,
-          "endChapter": 33
+          "endChapter": 31
+        },
+        {
+          "book": "2 Samuel",
+          "startChapter": 1,
+          "endChapter": 3
         }
       ]
     },
@@ -798,9 +828,9 @@
       "day": 79,
       "readings": [
         {
-          "book": "Deuteronomy",
-          "startChapter": 34,
-          "endChapter": 34
+          "book": "2 Samuel",
+          "startChapter": 4,
+          "endChapter": 7
         }
       ]
     },
@@ -808,9 +838,9 @@
       "day": 80,
       "readings": [
         {
-          "book": "Joshua",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "2 Samuel",
+          "startChapter": 8,
+          "endChapter": 11
         }
       ]
     },
@@ -818,9 +848,9 @@
       "day": 81,
       "readings": [
         {
-          "book": "Joshua",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "2 Samuel",
+          "startChapter": 12,
+          "endChapter": 15
         }
       ]
     },
@@ -828,9 +858,9 @@
       "day": 82,
       "readings": [
         {
-          "book": "Joshua",
-          "startChapter": 7,
-          "endChapter": 9
+          "book": "2 Samuel",
+          "startChapter": 16,
+          "endChapter": 19
         }
       ]
     },
@@ -838,9 +868,9 @@
       "day": 83,
       "readings": [
         {
-          "book": "Joshua",
-          "startChapter": 10,
-          "endChapter": 12
+          "book": "2 Samuel",
+          "startChapter": 20,
+          "endChapter": 23
         }
       ]
     },
@@ -848,9 +878,14 @@
       "day": 84,
       "readings": [
         {
-          "book": "Joshua",
-          "startChapter": 13,
-          "endChapter": 15
+          "book": "2 Samuel",
+          "startChapter": 24,
+          "endChapter": 24
+        },
+        {
+          "book": "Psalms",
+          "startChapter": 1,
+          "endChapter": 3
         }
       ]
     },
@@ -858,9 +893,9 @@
       "day": 85,
       "readings": [
         {
-          "book": "Joshua",
-          "startChapter": 16,
-          "endChapter": 18
+          "book": "Psalms",
+          "startChapter": 4,
+          "endChapter": 7
         }
       ]
     },
@@ -868,9 +903,9 @@
       "day": 86,
       "readings": [
         {
-          "book": "Joshua",
-          "startChapter": 19,
-          "endChapter": 21
+          "book": "Psalms",
+          "startChapter": 8,
+          "endChapter": 11
         }
       ]
     },
@@ -878,9 +913,9 @@
       "day": 87,
       "readings": [
         {
-          "book": "Joshua",
-          "startChapter": 22,
-          "endChapter": 24
+          "book": "Psalms",
+          "startChapter": 12,
+          "endChapter": 15
         }
       ]
     },
@@ -888,9 +923,9 @@
       "day": 88,
       "readings": [
         {
-          "book": "Judges",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "Psalms",
+          "startChapter": 16,
+          "endChapter": 19
         }
       ]
     },
@@ -898,9 +933,9 @@
       "day": 89,
       "readings": [
         {
-          "book": "Judges",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "Psalms",
+          "startChapter": 20,
+          "endChapter": 23
         }
       ]
     },
@@ -908,9 +943,9 @@
       "day": 90,
       "readings": [
         {
-          "book": "Judges",
-          "startChapter": 7,
-          "endChapter": 9
+          "book": "Psalms",
+          "startChapter": 24,
+          "endChapter": 27
         }
       ]
     },
@@ -918,9 +953,9 @@
       "day": 91,
       "readings": [
         {
-          "book": "Judges",
-          "startChapter": 10,
-          "endChapter": 12
+          "book": "Psalms",
+          "startChapter": 28,
+          "endChapter": 31
         }
       ]
     },
@@ -928,9 +963,9 @@
       "day": 92,
       "readings": [
         {
-          "book": "Judges",
-          "startChapter": 13,
-          "endChapter": 15
+          "book": "Psalms",
+          "startChapter": 32,
+          "endChapter": 35
         }
       ]
     },
@@ -938,9 +973,9 @@
       "day": 93,
       "readings": [
         {
-          "book": "Judges",
-          "startChapter": 16,
-          "endChapter": 18
+          "book": "Psalms",
+          "startChapter": 36,
+          "endChapter": 39
         }
       ]
     },
@@ -948,9 +983,9 @@
       "day": 94,
       "readings": [
         {
-          "book": "Judges",
-          "startChapter": 19,
-          "endChapter": 21
+          "book": "Psalms",
+          "startChapter": 40,
+          "endChapter": 43
         }
       ]
     },
@@ -958,9 +993,9 @@
       "day": 95,
       "readings": [
         {
-          "book": "Ruth",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "Psalms",
+          "startChapter": 44,
+          "endChapter": 46
         }
       ]
     },
@@ -968,9 +1003,9 @@
       "day": 96,
       "readings": [
         {
-          "book": "Ruth",
-          "startChapter": 4,
-          "endChapter": 4
+          "book": "Psalms",
+          "startChapter": 47,
+          "endChapter": 49
         }
       ]
     },
@@ -978,9 +1013,9 @@
       "day": 97,
       "readings": [
         {
-          "book": "1 Samuel",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "Psalms",
+          "startChapter": 50,
+          "endChapter": 52
         }
       ]
     },
@@ -988,9 +1023,9 @@
       "day": 98,
       "readings": [
         {
-          "book": "1 Samuel",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "Psalms",
+          "startChapter": 53,
+          "endChapter": 55
         }
       ]
     },
@@ -998,9 +1033,9 @@
       "day": 99,
       "readings": [
         {
-          "book": "1 Samuel",
-          "startChapter": 7,
-          "endChapter": 9
+          "book": "Psalms",
+          "startChapter": 56,
+          "endChapter": 58
         }
       ]
     },
@@ -1008,9 +1043,9 @@
       "day": 100,
       "readings": [
         {
-          "book": "1 Samuel",
-          "startChapter": 10,
-          "endChapter": 12
+          "book": "Psalms",
+          "startChapter": 59,
+          "endChapter": 61
         }
       ]
     },
@@ -1018,9 +1053,9 @@
       "day": 101,
       "readings": [
         {
-          "book": "1 Samuel",
-          "startChapter": 13,
-          "endChapter": 15
+          "book": "Psalms",
+          "startChapter": 62,
+          "endChapter": 64
         }
       ]
     },
@@ -1028,9 +1063,9 @@
       "day": 102,
       "readings": [
         {
-          "book": "1 Samuel",
-          "startChapter": 16,
-          "endChapter": 18
+          "book": "Psalms",
+          "startChapter": 65,
+          "endChapter": 67
         }
       ]
     },
@@ -1038,9 +1073,9 @@
       "day": 103,
       "readings": [
         {
-          "book": "1 Samuel",
-          "startChapter": 19,
-          "endChapter": 21
+          "book": "Psalms",
+          "startChapter": 68,
+          "endChapter": 70
         }
       ]
     },
@@ -1048,9 +1083,9 @@
       "day": 104,
       "readings": [
         {
-          "book": "1 Samuel",
-          "startChapter": 22,
-          "endChapter": 24
+          "book": "Psalms",
+          "startChapter": 71,
+          "endChapter": 73
         }
       ]
     },
@@ -1058,9 +1093,9 @@
       "day": 105,
       "readings": [
         {
-          "book": "1 Samuel",
-          "startChapter": 25,
-          "endChapter": 27
+          "book": "Psalms",
+          "startChapter": 74,
+          "endChapter": 76
         }
       ]
     },
@@ -1068,9 +1103,9 @@
       "day": 106,
       "readings": [
         {
-          "book": "1 Samuel",
-          "startChapter": 28,
-          "endChapter": 30
+          "book": "Psalms",
+          "startChapter": 77,
+          "endChapter": 79
         }
       ]
     },
@@ -1078,9 +1113,9 @@
       "day": 107,
       "readings": [
         {
-          "book": "1 Samuel",
-          "startChapter": 31,
-          "endChapter": 31
+          "book": "Psalms",
+          "startChapter": 80,
+          "endChapter": 82
         }
       ]
     },
@@ -1088,9 +1123,9 @@
       "day": 108,
       "readings": [
         {
-          "book": "2 Samuel",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "Psalms",
+          "startChapter": 83,
+          "endChapter": 85
         }
       ]
     },
@@ -1098,9 +1133,9 @@
       "day": 109,
       "readings": [
         {
-          "book": "2 Samuel",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "Psalms",
+          "startChapter": 86,
+          "endChapter": 88
         }
       ]
     },
@@ -1108,9 +1143,9 @@
       "day": 110,
       "readings": [
         {
-          "book": "2 Samuel",
-          "startChapter": 7,
-          "endChapter": 9
+          "book": "Psalms",
+          "startChapter": 89,
+          "endChapter": 91
         }
       ]
     },
@@ -1118,9 +1153,9 @@
       "day": 111,
       "readings": [
         {
-          "book": "2 Samuel",
-          "startChapter": 10,
-          "endChapter": 12
+          "book": "Psalms",
+          "startChapter": 92,
+          "endChapter": 94
         }
       ]
     },
@@ -1128,9 +1163,9 @@
       "day": 112,
       "readings": [
         {
-          "book": "2 Samuel",
-          "startChapter": 13,
-          "endChapter": 15
+          "book": "Psalms",
+          "startChapter": 95,
+          "endChapter": 97
         }
       ]
     },
@@ -1138,9 +1173,9 @@
       "day": 113,
       "readings": [
         {
-          "book": "2 Samuel",
-          "startChapter": 16,
-          "endChapter": 18
+          "book": "Psalms",
+          "startChapter": 98,
+          "endChapter": 100
         }
       ]
     },
@@ -1148,9 +1183,9 @@
       "day": 114,
       "readings": [
         {
-          "book": "2 Samuel",
-          "startChapter": 19,
-          "endChapter": 21
+          "book": "Psalms",
+          "startChapter": 101,
+          "endChapter": 103
         }
       ]
     },
@@ -1158,9 +1193,9 @@
       "day": 115,
       "readings": [
         {
-          "book": "2 Samuel",
-          "startChapter": 22,
-          "endChapter": 24
+          "book": "Psalms",
+          "startChapter": 104,
+          "endChapter": 106
         }
       ]
     },
@@ -1169,8 +1204,8 @@
       "readings": [
         {
           "book": "Psalms",
-          "startChapter": 1,
-          "endChapter": 3
+          "startChapter": 107,
+          "endChapter": 109
         }
       ]
     },
@@ -1179,8 +1214,8 @@
       "readings": [
         {
           "book": "Psalms",
-          "startChapter": 4,
-          "endChapter": 6
+          "startChapter": 110,
+          "endChapter": 112
         }
       ]
     },
@@ -1189,8 +1224,8 @@
       "readings": [
         {
           "book": "Psalms",
-          "startChapter": 7,
-          "endChapter": 9
+          "startChapter": 113,
+          "endChapter": 115
         }
       ]
     },
@@ -1199,8 +1234,8 @@
       "readings": [
         {
           "book": "Psalms",
-          "startChapter": 10,
-          "endChapter": 12
+          "startChapter": 116,
+          "endChapter": 118
         }
       ]
     },
@@ -1209,8 +1244,8 @@
       "readings": [
         {
           "book": "Psalms",
-          "startChapter": 13,
-          "endChapter": 15
+          "startChapter": 119,
+          "endChapter": 121
         }
       ]
     },
@@ -1219,8 +1254,8 @@
       "readings": [
         {
           "book": "Psalms",
-          "startChapter": 16,
-          "endChapter": 18
+          "startChapter": 122,
+          "endChapter": 124
         }
       ]
     },
@@ -1229,8 +1264,8 @@
       "readings": [
         {
           "book": "Psalms",
-          "startChapter": 19,
-          "endChapter": 21
+          "startChapter": 125,
+          "endChapter": 127
         }
       ]
     },
@@ -1239,8 +1274,8 @@
       "readings": [
         {
           "book": "Psalms",
-          "startChapter": 22,
-          "endChapter": 24
+          "startChapter": 128,
+          "endChapter": 130
         }
       ]
     },
@@ -1249,8 +1284,8 @@
       "readings": [
         {
           "book": "Psalms",
-          "startChapter": 25,
-          "endChapter": 27
+          "startChapter": 131,
+          "endChapter": 133
         }
       ]
     },
@@ -1259,8 +1294,8 @@
       "readings": [
         {
           "book": "Psalms",
-          "startChapter": 28,
-          "endChapter": 30
+          "startChapter": 134,
+          "endChapter": 136
         }
       ]
     },
@@ -1269,8 +1304,8 @@
       "readings": [
         {
           "book": "Psalms",
-          "startChapter": 31,
-          "endChapter": 33
+          "startChapter": 137,
+          "endChapter": 139
         }
       ]
     },
@@ -1279,8 +1314,8 @@
       "readings": [
         {
           "book": "Psalms",
-          "startChapter": 34,
-          "endChapter": 36
+          "startChapter": 140,
+          "endChapter": 142
         }
       ]
     },
@@ -1289,8 +1324,8 @@
       "readings": [
         {
           "book": "Psalms",
-          "startChapter": 37,
-          "endChapter": 39
+          "startChapter": 143,
+          "endChapter": 145
         }
       ]
     },
@@ -1299,8 +1334,8 @@
       "readings": [
         {
           "book": "Psalms",
-          "startChapter": 40,
-          "endChapter": 42
+          "startChapter": 146,
+          "endChapter": 148
         }
       ]
     },
@@ -1309,8 +1344,13 @@
       "readings": [
         {
           "book": "Psalms",
-          "startChapter": 43,
-          "endChapter": 45
+          "startChapter": 149,
+          "endChapter": 150
+        },
+        {
+          "book": "Proverbs",
+          "startChapter": 1,
+          "endChapter": 1
         }
       ]
     },
@@ -1318,9 +1358,9 @@
       "day": 131,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 46,
-          "endChapter": 48
+          "book": "Proverbs",
+          "startChapter": 2,
+          "endChapter": 4
         }
       ]
     },
@@ -1328,9 +1368,9 @@
       "day": 132,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 49,
-          "endChapter": 51
+          "book": "Proverbs",
+          "startChapter": 5,
+          "endChapter": 7
         }
       ]
     },
@@ -1338,9 +1378,9 @@
       "day": 133,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 52,
-          "endChapter": 54
+          "book": "Proverbs",
+          "startChapter": 8,
+          "endChapter": 10
         }
       ]
     },
@@ -1348,9 +1388,9 @@
       "day": 134,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 55,
-          "endChapter": 57
+          "book": "Proverbs",
+          "startChapter": 11,
+          "endChapter": 13
         }
       ]
     },
@@ -1358,9 +1398,9 @@
       "day": 135,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 58,
-          "endChapter": 60
+          "book": "Proverbs",
+          "startChapter": 14,
+          "endChapter": 16
         }
       ]
     },
@@ -1368,9 +1408,9 @@
       "day": 136,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 61,
-          "endChapter": 63
+          "book": "Proverbs",
+          "startChapter": 17,
+          "endChapter": 19
         }
       ]
     },
@@ -1378,9 +1418,9 @@
       "day": 137,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 64,
-          "endChapter": 66
+          "book": "Proverbs",
+          "startChapter": 20,
+          "endChapter": 22
         }
       ]
     },
@@ -1388,9 +1428,9 @@
       "day": 138,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 67,
-          "endChapter": 69
+          "book": "Proverbs",
+          "startChapter": 23,
+          "endChapter": 25
         }
       ]
     },
@@ -1398,9 +1438,9 @@
       "day": 139,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 70,
-          "endChapter": 72
+          "book": "Proverbs",
+          "startChapter": 26,
+          "endChapter": 28
         }
       ]
     },
@@ -1408,9 +1448,9 @@
       "day": 140,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 73,
-          "endChapter": 75
+          "book": "Proverbs",
+          "startChapter": 29,
+          "endChapter": 31
         }
       ]
     },
@@ -1418,9 +1458,9 @@
       "day": 141,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 76,
-          "endChapter": 78
+          "book": "Ecclesiastes",
+          "startChapter": 1,
+          "endChapter": 3
         }
       ]
     },
@@ -1428,9 +1468,9 @@
       "day": 142,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 79,
-          "endChapter": 81
+          "book": "Ecclesiastes",
+          "startChapter": 4,
+          "endChapter": 6
         }
       ]
     },
@@ -1438,9 +1478,9 @@
       "day": 143,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 82,
-          "endChapter": 84
+          "book": "Ecclesiastes",
+          "startChapter": 7,
+          "endChapter": 9
         }
       ]
     },
@@ -1448,9 +1488,9 @@
       "day": 144,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 85,
-          "endChapter": 87
+          "book": "Ecclesiastes",
+          "startChapter": 10,
+          "endChapter": 12
         }
       ]
     },
@@ -1458,9 +1498,9 @@
       "day": 145,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 88,
-          "endChapter": 90
+          "book": "Song of Solomon",
+          "startChapter": 1,
+          "endChapter": 3
         }
       ]
     },
@@ -1468,9 +1508,9 @@
       "day": 146,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 91,
-          "endChapter": 93
+          "book": "Song of Solomon",
+          "startChapter": 4,
+          "endChapter": 6
         }
       ]
     },
@@ -1478,9 +1518,14 @@
       "day": 147,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 94,
-          "endChapter": 96
+          "book": "Song of Solomon",
+          "startChapter": 7,
+          "endChapter": 8
+        },
+        {
+          "book": "1 Kings",
+          "startChapter": 1,
+          "endChapter": 1
         }
       ]
     },
@@ -1488,9 +1533,9 @@
       "day": 148,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 97,
-          "endChapter": 99
+          "book": "1 Kings",
+          "startChapter": 2,
+          "endChapter": 4
         }
       ]
     },
@@ -1498,9 +1543,9 @@
       "day": 149,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 100,
-          "endChapter": 102
+          "book": "1 Kings",
+          "startChapter": 5,
+          "endChapter": 7
         }
       ]
     },
@@ -1508,9 +1553,9 @@
       "day": 150,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 103,
-          "endChapter": 105
+          "book": "1 Kings",
+          "startChapter": 8,
+          "endChapter": 10
         }
       ]
     },
@@ -1518,9 +1563,9 @@
       "day": 151,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 106,
-          "endChapter": 108
+          "book": "1 Kings",
+          "startChapter": 11,
+          "endChapter": 13
         }
       ]
     },
@@ -1528,9 +1573,9 @@
       "day": 152,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 109,
-          "endChapter": 111
+          "book": "1 Kings",
+          "startChapter": 14,
+          "endChapter": 16
         }
       ]
     },
@@ -1538,9 +1583,9 @@
       "day": 153,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 112,
-          "endChapter": 114
+          "book": "1 Kings",
+          "startChapter": 17,
+          "endChapter": 19
         }
       ]
     },
@@ -1548,9 +1593,9 @@
       "day": 154,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 115,
-          "endChapter": 117
+          "book": "1 Kings",
+          "startChapter": 20,
+          "endChapter": 22
         }
       ]
     },
@@ -1558,9 +1603,9 @@
       "day": 155,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 118,
-          "endChapter": 120
+          "book": "2 Kings",
+          "startChapter": 1,
+          "endChapter": 3
         }
       ]
     },
@@ -1568,9 +1613,9 @@
       "day": 156,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 121,
-          "endChapter": 123
+          "book": "2 Kings",
+          "startChapter": 4,
+          "endChapter": 6
         }
       ]
     },
@@ -1578,9 +1623,9 @@
       "day": 157,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 124,
-          "endChapter": 126
+          "book": "2 Kings",
+          "startChapter": 7,
+          "endChapter": 9
         }
       ]
     },
@@ -1588,9 +1633,9 @@
       "day": 158,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 127,
-          "endChapter": 129
+          "book": "2 Kings",
+          "startChapter": 10,
+          "endChapter": 12
         }
       ]
     },
@@ -1598,9 +1643,9 @@
       "day": 159,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 130,
-          "endChapter": 132
+          "book": "2 Kings",
+          "startChapter": 13,
+          "endChapter": 15
         }
       ]
     },
@@ -1608,9 +1653,9 @@
       "day": 160,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 133,
-          "endChapter": 135
+          "book": "2 Kings",
+          "startChapter": 16,
+          "endChapter": 18
         }
       ]
     },
@@ -1618,9 +1663,9 @@
       "day": 161,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 136,
-          "endChapter": 138
+          "book": "2 Kings",
+          "startChapter": 19,
+          "endChapter": 21
         }
       ]
     },
@@ -1628,9 +1673,9 @@
       "day": 162,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 139,
-          "endChapter": 141
+          "book": "2 Kings",
+          "startChapter": 22,
+          "endChapter": 24
         }
       ]
     },
@@ -1638,9 +1683,14 @@
       "day": 163,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 142,
-          "endChapter": 144
+          "book": "2 Kings",
+          "startChapter": 25,
+          "endChapter": 25
+        },
+        {
+          "book": "1 Chronicles",
+          "startChapter": 1,
+          "endChapter": 2
         }
       ]
     },
@@ -1648,9 +1698,9 @@
       "day": 164,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 145,
-          "endChapter": 147
+          "book": "1 Chronicles",
+          "startChapter": 3,
+          "endChapter": 5
         }
       ]
     },
@@ -1658,9 +1708,9 @@
       "day": 165,
       "readings": [
         {
-          "book": "Psalms",
-          "startChapter": 148,
-          "endChapter": 150
+          "book": "1 Chronicles",
+          "startChapter": 6,
+          "endChapter": 8
         }
       ]
     },
@@ -1668,9 +1718,9 @@
       "day": 166,
       "readings": [
         {
-          "book": "1 Kings",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "1 Chronicles",
+          "startChapter": 9,
+          "endChapter": 11
         }
       ]
     },
@@ -1678,9 +1728,9 @@
       "day": 167,
       "readings": [
         {
-          "book": "1 Kings",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "1 Chronicles",
+          "startChapter": 12,
+          "endChapter": 14
         }
       ]
     },
@@ -1688,9 +1738,9 @@
       "day": 168,
       "readings": [
         {
-          "book": "1 Kings",
-          "startChapter": 7,
-          "endChapter": 9
+          "book": "1 Chronicles",
+          "startChapter": 15,
+          "endChapter": 17
         }
       ]
     },
@@ -1698,9 +1748,9 @@
       "day": 169,
       "readings": [
         {
-          "book": "1 Kings",
-          "startChapter": 10,
-          "endChapter": 12
+          "book": "1 Chronicles",
+          "startChapter": 18,
+          "endChapter": 20
         }
       ]
     },
@@ -1708,9 +1758,9 @@
       "day": 170,
       "readings": [
         {
-          "book": "1 Kings",
-          "startChapter": 13,
-          "endChapter": 15
+          "book": "1 Chronicles",
+          "startChapter": 21,
+          "endChapter": 23
         }
       ]
     },
@@ -1718,9 +1768,9 @@
       "day": 171,
       "readings": [
         {
-          "book": "1 Kings",
-          "startChapter": 16,
-          "endChapter": 18
+          "book": "1 Chronicles",
+          "startChapter": 24,
+          "endChapter": 26
         }
       ]
     },
@@ -1728,9 +1778,9 @@
       "day": 172,
       "readings": [
         {
-          "book": "1 Kings",
-          "startChapter": 19,
-          "endChapter": 21
+          "book": "1 Chronicles",
+          "startChapter": 27,
+          "endChapter": 29
         }
       ]
     },
@@ -1738,9 +1788,9 @@
       "day": 173,
       "readings": [
         {
-          "book": "1 Kings",
-          "startChapter": 22,
-          "endChapter": 22
+          "book": "2 Chronicles",
+          "startChapter": 1,
+          "endChapter": 3
         }
       ]
     },
@@ -1748,9 +1798,9 @@
       "day": 174,
       "readings": [
         {
-          "book": "2 Kings",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "2 Chronicles",
+          "startChapter": 4,
+          "endChapter": 6
         }
       ]
     },
@@ -1758,9 +1808,9 @@
       "day": 175,
       "readings": [
         {
-          "book": "2 Kings",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "2 Chronicles",
+          "startChapter": 7,
+          "endChapter": 9
         }
       ]
     },
@@ -1768,9 +1818,9 @@
       "day": 176,
       "readings": [
         {
-          "book": "2 Kings",
-          "startChapter": 7,
-          "endChapter": 9
+          "book": "2 Chronicles",
+          "startChapter": 10,
+          "endChapter": 12
         }
       ]
     },
@@ -1778,9 +1828,9 @@
       "day": 177,
       "readings": [
         {
-          "book": "2 Kings",
-          "startChapter": 10,
-          "endChapter": 12
+          "book": "2 Chronicles",
+          "startChapter": 13,
+          "endChapter": 15
         }
       ]
     },
@@ -1788,9 +1838,9 @@
       "day": 178,
       "readings": [
         {
-          "book": "2 Kings",
-          "startChapter": 13,
-          "endChapter": 15
+          "book": "2 Chronicles",
+          "startChapter": 16,
+          "endChapter": 18
         }
       ]
     },
@@ -1798,9 +1848,9 @@
       "day": 179,
       "readings": [
         {
-          "book": "2 Kings",
-          "startChapter": 16,
-          "endChapter": 18
+          "book": "2 Chronicles",
+          "startChapter": 19,
+          "endChapter": 21
         }
       ]
     },
@@ -1808,9 +1858,9 @@
       "day": 180,
       "readings": [
         {
-          "book": "2 Kings",
-          "startChapter": 19,
-          "endChapter": 21
+          "book": "2 Chronicles",
+          "startChapter": 22,
+          "endChapter": 24
         }
       ]
     },
@@ -1818,9 +1868,9 @@
       "day": 181,
       "readings": [
         {
-          "book": "2 Kings",
-          "startChapter": 22,
-          "endChapter": 24
+          "book": "2 Chronicles",
+          "startChapter": 25,
+          "endChapter": 27
         }
       ]
     },
@@ -1828,9 +1878,9 @@
       "day": 182,
       "readings": [
         {
-          "book": "2 Kings",
-          "startChapter": 25,
-          "endChapter": 25
+          "book": "2 Chronicles",
+          "startChapter": 28,
+          "endChapter": 30
         }
       ]
     },
@@ -1838,9 +1888,9 @@
       "day": 183,
       "readings": [
         {
-          "book": "1 Chronicles",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "2 Chronicles",
+          "startChapter": 31,
+          "endChapter": 33
         }
       ]
     },
@@ -1848,9 +1898,9 @@
       "day": 184,
       "readings": [
         {
-          "book": "1 Chronicles",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "2 Chronicles",
+          "startChapter": 34,
+          "endChapter": 36
         }
       ]
     },
@@ -1858,9 +1908,14 @@
       "day": 185,
       "readings": [
         {
-          "book": "1 Chronicles",
-          "startChapter": 7,
-          "endChapter": 9
+          "book": "Obadiah",
+          "startChapter": 1,
+          "endChapter": 1
+        },
+        {
+          "book": "Joel",
+          "startChapter": 1,
+          "endChapter": 2
         }
       ]
     },
@@ -1868,9 +1923,14 @@
       "day": 186,
       "readings": [
         {
-          "book": "1 Chronicles",
-          "startChapter": 10,
-          "endChapter": 12
+          "book": "Joel",
+          "startChapter": 3,
+          "endChapter": 3
+        },
+        {
+          "book": "Jonah",
+          "startChapter": 1,
+          "endChapter": 2
         }
       ]
     },
@@ -1878,9 +1938,14 @@
       "day": 187,
       "readings": [
         {
-          "book": "1 Chronicles",
-          "startChapter": 13,
-          "endChapter": 15
+          "book": "Jonah",
+          "startChapter": 3,
+          "endChapter": 4
+        },
+        {
+          "book": "Amos",
+          "startChapter": 1,
+          "endChapter": 1
         }
       ]
     },
@@ -1888,9 +1953,9 @@
       "day": 188,
       "readings": [
         {
-          "book": "1 Chronicles",
-          "startChapter": 16,
-          "endChapter": 18
+          "book": "Amos",
+          "startChapter": 2,
+          "endChapter": 4
         }
       ]
     },
@@ -1898,9 +1963,9 @@
       "day": 189,
       "readings": [
         {
-          "book": "1 Chronicles",
-          "startChapter": 19,
-          "endChapter": 21
+          "book": "Amos",
+          "startChapter": 5,
+          "endChapter": 7
         }
       ]
     },
@@ -1908,9 +1973,14 @@
       "day": 190,
       "readings": [
         {
-          "book": "1 Chronicles",
-          "startChapter": 22,
-          "endChapter": 24
+          "book": "Amos",
+          "startChapter": 8,
+          "endChapter": 9
+        },
+        {
+          "book": "Hosea",
+          "startChapter": 1,
+          "endChapter": 1
         }
       ]
     },
@@ -1918,9 +1988,9 @@
       "day": 191,
       "readings": [
         {
-          "book": "1 Chronicles",
-          "startChapter": 25,
-          "endChapter": 27
+          "book": "Hosea",
+          "startChapter": 2,
+          "endChapter": 4
         }
       ]
     },
@@ -1928,9 +1998,9 @@
       "day": 192,
       "readings": [
         {
-          "book": "1 Chronicles",
-          "startChapter": 28,
-          "endChapter": 29
+          "book": "Hosea",
+          "startChapter": 5,
+          "endChapter": 7
         }
       ]
     },
@@ -1938,9 +2008,9 @@
       "day": 193,
       "readings": [
         {
-          "book": "2 Chronicles",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "Hosea",
+          "startChapter": 8,
+          "endChapter": 10
         }
       ]
     },
@@ -1948,9 +2018,9 @@
       "day": 194,
       "readings": [
         {
-          "book": "2 Chronicles",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "Hosea",
+          "startChapter": 11,
+          "endChapter": 13
         }
       ]
     },
@@ -1958,9 +2028,14 @@
       "day": 195,
       "readings": [
         {
-          "book": "2 Chronicles",
-          "startChapter": 7,
-          "endChapter": 9
+          "book": "Hosea",
+          "startChapter": 14,
+          "endChapter": 14
+        },
+        {
+          "book": "Isaiah",
+          "startChapter": 1,
+          "endChapter": 2
         }
       ]
     },
@@ -1968,9 +2043,9 @@
       "day": 196,
       "readings": [
         {
-          "book": "2 Chronicles",
-          "startChapter": 10,
-          "endChapter": 12
+          "book": "Isaiah",
+          "startChapter": 3,
+          "endChapter": 5
         }
       ]
     },
@@ -1978,9 +2053,9 @@
       "day": 197,
       "readings": [
         {
-          "book": "2 Chronicles",
-          "startChapter": 13,
-          "endChapter": 15
+          "book": "Isaiah",
+          "startChapter": 6,
+          "endChapter": 8
         }
       ]
     },
@@ -1988,9 +2063,9 @@
       "day": 198,
       "readings": [
         {
-          "book": "2 Chronicles",
-          "startChapter": 16,
-          "endChapter": 18
+          "book": "Isaiah",
+          "startChapter": 9,
+          "endChapter": 11
         }
       ]
     },
@@ -1998,9 +2073,9 @@
       "day": 199,
       "readings": [
         {
-          "book": "2 Chronicles",
-          "startChapter": 19,
-          "endChapter": 21
+          "book": "Isaiah",
+          "startChapter": 12,
+          "endChapter": 14
         }
       ]
     },
@@ -2008,9 +2083,9 @@
       "day": 200,
       "readings": [
         {
-          "book": "2 Chronicles",
-          "startChapter": 22,
-          "endChapter": 24
+          "book": "Isaiah",
+          "startChapter": 15,
+          "endChapter": 17
         }
       ]
     },
@@ -2018,9 +2093,9 @@
       "day": 201,
       "readings": [
         {
-          "book": "2 Chronicles",
-          "startChapter": 25,
-          "endChapter": 27
+          "book": "Isaiah",
+          "startChapter": 18,
+          "endChapter": 20
         }
       ]
     },
@@ -2028,9 +2103,9 @@
       "day": 202,
       "readings": [
         {
-          "book": "2 Chronicles",
-          "startChapter": 28,
-          "endChapter": 30
+          "book": "Isaiah",
+          "startChapter": 21,
+          "endChapter": 23
         }
       ]
     },
@@ -2038,9 +2113,9 @@
       "day": 203,
       "readings": [
         {
-          "book": "2 Chronicles",
-          "startChapter": 31,
-          "endChapter": 33
+          "book": "Isaiah",
+          "startChapter": 24,
+          "endChapter": 26
         }
       ]
     },
@@ -2048,9 +2123,9 @@
       "day": 204,
       "readings": [
         {
-          "book": "2 Chronicles",
-          "startChapter": 34,
-          "endChapter": 36
+          "book": "Isaiah",
+          "startChapter": 27,
+          "endChapter": 29
         }
       ]
     },
@@ -2058,9 +2133,9 @@
       "day": 205,
       "readings": [
         {
-          "book": "Ezra",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "Isaiah",
+          "startChapter": 30,
+          "endChapter": 32
         }
       ]
     },
@@ -2068,9 +2143,9 @@
       "day": 206,
       "readings": [
         {
-          "book": "Ezra",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "Isaiah",
+          "startChapter": 33,
+          "endChapter": 35
         }
       ]
     },
@@ -2078,9 +2153,9 @@
       "day": 207,
       "readings": [
         {
-          "book": "Ezra",
-          "startChapter": 7,
-          "endChapter": 9
+          "book": "Isaiah",
+          "startChapter": 36,
+          "endChapter": 38
         }
       ]
     },
@@ -2088,9 +2163,9 @@
       "day": 208,
       "readings": [
         {
-          "book": "Ezra",
-          "startChapter": 10,
-          "endChapter": 10
+          "book": "Isaiah",
+          "startChapter": 39,
+          "endChapter": 41
         }
       ]
     },
@@ -2098,9 +2173,9 @@
       "day": 209,
       "readings": [
         {
-          "book": "Nehemiah",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "Isaiah",
+          "startChapter": 42,
+          "endChapter": 44
         }
       ]
     },
@@ -2108,9 +2183,9 @@
       "day": 210,
       "readings": [
         {
-          "book": "Nehemiah",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "Isaiah",
+          "startChapter": 45,
+          "endChapter": 47
         }
       ]
     },
@@ -2118,9 +2193,9 @@
       "day": 211,
       "readings": [
         {
-          "book": "Nehemiah",
-          "startChapter": 7,
-          "endChapter": 9
+          "book": "Isaiah",
+          "startChapter": 48,
+          "endChapter": 50
         }
       ]
     },
@@ -2128,9 +2203,9 @@
       "day": 212,
       "readings": [
         {
-          "book": "Nehemiah",
-          "startChapter": 10,
-          "endChapter": 12
+          "book": "Isaiah",
+          "startChapter": 51,
+          "endChapter": 53
         }
       ]
     },
@@ -2138,9 +2213,9 @@
       "day": 213,
       "readings": [
         {
-          "book": "Nehemiah",
-          "startChapter": 13,
-          "endChapter": 13
+          "book": "Isaiah",
+          "startChapter": 54,
+          "endChapter": 56
         }
       ]
     },
@@ -2148,9 +2223,9 @@
       "day": 214,
       "readings": [
         {
-          "book": "Esther",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "Isaiah",
+          "startChapter": 57,
+          "endChapter": 59
         }
       ]
     },
@@ -2158,9 +2233,9 @@
       "day": 215,
       "readings": [
         {
-          "book": "Esther",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "Isaiah",
+          "startChapter": 60,
+          "endChapter": 62
         }
       ]
     },
@@ -2168,9 +2243,9 @@
       "day": 216,
       "readings": [
         {
-          "book": "Esther",
-          "startChapter": 7,
-          "endChapter": 9
+          "book": "Isaiah",
+          "startChapter": 63,
+          "endChapter": 65
         }
       ]
     },
@@ -2178,9 +2253,14 @@
       "day": 217,
       "readings": [
         {
-          "book": "Esther",
-          "startChapter": 10,
-          "endChapter": 10
+          "book": "Isaiah",
+          "startChapter": 66,
+          "endChapter": 66
+        },
+        {
+          "book": "Micah",
+          "startChapter": 1,
+          "endChapter": 2
         }
       ]
     },
@@ -2188,9 +2268,9 @@
       "day": 218,
       "readings": [
         {
-          "book": "Proverbs",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "Micah",
+          "startChapter": 3,
+          "endChapter": 5
         }
       ]
     },
@@ -2198,9 +2278,14 @@
       "day": 219,
       "readings": [
         {
-          "book": "Proverbs",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "Micah",
+          "startChapter": 6,
+          "endChapter": 7
+        },
+        {
+          "book": "Nahum",
+          "startChapter": 1,
+          "endChapter": 1
         }
       ]
     },
@@ -2208,9 +2293,14 @@
       "day": 220,
       "readings": [
         {
-          "book": "Proverbs",
-          "startChapter": 7,
-          "endChapter": 9
+          "book": "Nahum",
+          "startChapter": 2,
+          "endChapter": 3
+        },
+        {
+          "book": "Zephaniah",
+          "startChapter": 1,
+          "endChapter": 1
         }
       ]
     },
@@ -2218,9 +2308,14 @@
       "day": 221,
       "readings": [
         {
-          "book": "Proverbs",
-          "startChapter": 10,
-          "endChapter": 12
+          "book": "Zephaniah",
+          "startChapter": 2,
+          "endChapter": 3
+        },
+        {
+          "book": "Habakkuk",
+          "startChapter": 1,
+          "endChapter": 1
         }
       ]
     },
@@ -2228,9 +2323,14 @@
       "day": 222,
       "readings": [
         {
-          "book": "Proverbs",
-          "startChapter": 13,
-          "endChapter": 15
+          "book": "Habakkuk",
+          "startChapter": 2,
+          "endChapter": 3
+        },
+        {
+          "book": "Jeremiah",
+          "startChapter": 1,
+          "endChapter": 1
         }
       ]
     },
@@ -2238,9 +2338,9 @@
       "day": 223,
       "readings": [
         {
-          "book": "Proverbs",
-          "startChapter": 16,
-          "endChapter": 18
+          "book": "Jeremiah",
+          "startChapter": 2,
+          "endChapter": 4
         }
       ]
     },
@@ -2248,9 +2348,9 @@
       "day": 224,
       "readings": [
         {
-          "book": "Proverbs",
-          "startChapter": 19,
-          "endChapter": 21
+          "book": "Jeremiah",
+          "startChapter": 5,
+          "endChapter": 7
         }
       ]
     },
@@ -2258,9 +2358,9 @@
       "day": 225,
       "readings": [
         {
-          "book": "Proverbs",
-          "startChapter": 22,
-          "endChapter": 24
+          "book": "Jeremiah",
+          "startChapter": 8,
+          "endChapter": 10
         }
       ]
     },
@@ -2268,9 +2368,9 @@
       "day": 226,
       "readings": [
         {
-          "book": "Proverbs",
-          "startChapter": 25,
-          "endChapter": 27
+          "book": "Jeremiah",
+          "startChapter": 11,
+          "endChapter": 13
         }
       ]
     },
@@ -2278,9 +2378,9 @@
       "day": 227,
       "readings": [
         {
-          "book": "Proverbs",
-          "startChapter": 28,
-          "endChapter": 30
+          "book": "Jeremiah",
+          "startChapter": 14,
+          "endChapter": 16
         }
       ]
     },
@@ -2288,9 +2388,9 @@
       "day": 228,
       "readings": [
         {
-          "book": "Proverbs",
-          "startChapter": 31,
-          "endChapter": 31
+          "book": "Jeremiah",
+          "startChapter": 17,
+          "endChapter": 19
         }
       ]
     },
@@ -2298,9 +2398,9 @@
       "day": 229,
       "readings": [
         {
-          "book": "Ecclesiastes",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "Jeremiah",
+          "startChapter": 20,
+          "endChapter": 22
         }
       ]
     },
@@ -2308,9 +2408,9 @@
       "day": 230,
       "readings": [
         {
-          "book": "Ecclesiastes",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "Jeremiah",
+          "startChapter": 23,
+          "endChapter": 25
         }
       ]
     },
@@ -2318,9 +2418,9 @@
       "day": 231,
       "readings": [
         {
-          "book": "Ecclesiastes",
-          "startChapter": 7,
-          "endChapter": 9
+          "book": "Jeremiah",
+          "startChapter": 26,
+          "endChapter": 28
         }
       ]
     },
@@ -2328,9 +2428,9 @@
       "day": 232,
       "readings": [
         {
-          "book": "Ecclesiastes",
-          "startChapter": 10,
-          "endChapter": 12
+          "book": "Jeremiah",
+          "startChapter": 29,
+          "endChapter": 31
         }
       ]
     },
@@ -2338,9 +2438,9 @@
       "day": 233,
       "readings": [
         {
-          "book": "Song of Solomon",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "Jeremiah",
+          "startChapter": 32,
+          "endChapter": 34
         }
       ]
     },
@@ -2348,9 +2448,9 @@
       "day": 234,
       "readings": [
         {
-          "book": "Song of Solomon",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "Jeremiah",
+          "startChapter": 35,
+          "endChapter": 37
         }
       ]
     },
@@ -2358,9 +2458,9 @@
       "day": 235,
       "readings": [
         {
-          "book": "Song of Solomon",
-          "startChapter": 7,
-          "endChapter": 8
+          "book": "Jeremiah",
+          "startChapter": 38,
+          "endChapter": 40
         }
       ]
     },
@@ -2368,9 +2468,9 @@
       "day": 236,
       "readings": [
         {
-          "book": "Isaiah",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "Jeremiah",
+          "startChapter": 41,
+          "endChapter": 43
         }
       ]
     },
@@ -2378,9 +2478,9 @@
       "day": 237,
       "readings": [
         {
-          "book": "Isaiah",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "Jeremiah",
+          "startChapter": 44,
+          "endChapter": 46
         }
       ]
     },
@@ -2388,9 +2488,9 @@
       "day": 238,
       "readings": [
         {
-          "book": "Isaiah",
-          "startChapter": 7,
-          "endChapter": 9
+          "book": "Jeremiah",
+          "startChapter": 47,
+          "endChapter": 49
         }
       ]
     },
@@ -2398,9 +2498,9 @@
       "day": 239,
       "readings": [
         {
-          "book": "Isaiah",
-          "startChapter": 10,
-          "endChapter": 12
+          "book": "Jeremiah",
+          "startChapter": 50,
+          "endChapter": 52
         }
       ]
     },
@@ -2408,9 +2508,9 @@
       "day": 240,
       "readings": [
         {
-          "book": "Isaiah",
-          "startChapter": 13,
-          "endChapter": 15
+          "book": "Lamentations",
+          "startChapter": 1,
+          "endChapter": 3
         }
       ]
     },
@@ -2418,9 +2518,14 @@
       "day": 241,
       "readings": [
         {
-          "book": "Isaiah",
-          "startChapter": 16,
-          "endChapter": 18
+          "book": "Lamentations",
+          "startChapter": 4,
+          "endChapter": 5
+        },
+        {
+          "book": "Ezekiel",
+          "startChapter": 1,
+          "endChapter": 1
         }
       ]
     },
@@ -2428,9 +2533,9 @@
       "day": 242,
       "readings": [
         {
-          "book": "Isaiah",
-          "startChapter": 19,
-          "endChapter": 21
+          "book": "Ezekiel",
+          "startChapter": 2,
+          "endChapter": 4
         }
       ]
     },
@@ -2438,9 +2543,9 @@
       "day": 243,
       "readings": [
         {
-          "book": "Isaiah",
-          "startChapter": 22,
-          "endChapter": 24
+          "book": "Ezekiel",
+          "startChapter": 5,
+          "endChapter": 7
         }
       ]
     },
@@ -2448,9 +2553,9 @@
       "day": 244,
       "readings": [
         {
-          "book": "Isaiah",
-          "startChapter": 25,
-          "endChapter": 27
+          "book": "Ezekiel",
+          "startChapter": 8,
+          "endChapter": 10
         }
       ]
     },
@@ -2458,9 +2563,9 @@
       "day": 245,
       "readings": [
         {
-          "book": "Isaiah",
-          "startChapter": 28,
-          "endChapter": 30
+          "book": "Ezekiel",
+          "startChapter": 11,
+          "endChapter": 13
         }
       ]
     },
@@ -2468,9 +2573,9 @@
       "day": 246,
       "readings": [
         {
-          "book": "Isaiah",
-          "startChapter": 31,
-          "endChapter": 33
+          "book": "Ezekiel",
+          "startChapter": 14,
+          "endChapter": 16
         }
       ]
     },
@@ -2478,9 +2583,9 @@
       "day": 247,
       "readings": [
         {
-          "book": "Isaiah",
-          "startChapter": 34,
-          "endChapter": 36
+          "book": "Ezekiel",
+          "startChapter": 17,
+          "endChapter": 19
         }
       ]
     },
@@ -2488,9 +2593,9 @@
       "day": 248,
       "readings": [
         {
-          "book": "Isaiah",
-          "startChapter": 37,
-          "endChapter": 39
+          "book": "Ezekiel",
+          "startChapter": 20,
+          "endChapter": 22
         }
       ]
     },
@@ -2498,9 +2603,9 @@
       "day": 249,
       "readings": [
         {
-          "book": "Isaiah",
-          "startChapter": 40,
-          "endChapter": 42
+          "book": "Ezekiel",
+          "startChapter": 23,
+          "endChapter": 25
         }
       ]
     },
@@ -2508,9 +2613,9 @@
       "day": 250,
       "readings": [
         {
-          "book": "Isaiah",
-          "startChapter": 43,
-          "endChapter": 45
+          "book": "Ezekiel",
+          "startChapter": 26,
+          "endChapter": 28
         }
       ]
     },
@@ -2518,9 +2623,9 @@
       "day": 251,
       "readings": [
         {
-          "book": "Isaiah",
-          "startChapter": 46,
-          "endChapter": 48
+          "book": "Ezekiel",
+          "startChapter": 29,
+          "endChapter": 31
         }
       ]
     },
@@ -2528,9 +2633,9 @@
       "day": 252,
       "readings": [
         {
-          "book": "Isaiah",
-          "startChapter": 49,
-          "endChapter": 51
+          "book": "Ezekiel",
+          "startChapter": 32,
+          "endChapter": 34
         }
       ]
     },
@@ -2538,9 +2643,9 @@
       "day": 253,
       "readings": [
         {
-          "book": "Isaiah",
-          "startChapter": 52,
-          "endChapter": 54
+          "book": "Ezekiel",
+          "startChapter": 35,
+          "endChapter": 37
         }
       ]
     },
@@ -2548,9 +2653,9 @@
       "day": 254,
       "readings": [
         {
-          "book": "Isaiah",
-          "startChapter": 55,
-          "endChapter": 57
+          "book": "Ezekiel",
+          "startChapter": 38,
+          "endChapter": 40
         }
       ]
     },
@@ -2558,9 +2663,9 @@
       "day": 255,
       "readings": [
         {
-          "book": "Isaiah",
-          "startChapter": 58,
-          "endChapter": 60
+          "book": "Ezekiel",
+          "startChapter": 41,
+          "endChapter": 43
         }
       ]
     },
@@ -2568,9 +2673,9 @@
       "day": 256,
       "readings": [
         {
-          "book": "Isaiah",
-          "startChapter": 61,
-          "endChapter": 63
+          "book": "Ezekiel",
+          "startChapter": 44,
+          "endChapter": 46
         }
       ]
     },
@@ -2578,9 +2683,14 @@
       "day": 257,
       "readings": [
         {
-          "book": "Isaiah",
-          "startChapter": 64,
-          "endChapter": 66
+          "book": "Ezekiel",
+          "startChapter": 47,
+          "endChapter": 48
+        },
+        {
+          "book": "Daniel",
+          "startChapter": 1,
+          "endChapter": 1
         }
       ]
     },
@@ -2588,9 +2698,9 @@
       "day": 258,
       "readings": [
         {
-          "book": "Jeremiah",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "Daniel",
+          "startChapter": 2,
+          "endChapter": 4
         }
       ]
     },
@@ -2598,9 +2708,9 @@
       "day": 259,
       "readings": [
         {
-          "book": "Jeremiah",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "Daniel",
+          "startChapter": 5,
+          "endChapter": 7
         }
       ]
     },
@@ -2608,9 +2718,9 @@
       "day": 260,
       "readings": [
         {
-          "book": "Jeremiah",
-          "startChapter": 7,
-          "endChapter": 9
+          "book": "Daniel",
+          "startChapter": 8,
+          "endChapter": 10
         }
       ]
     },
@@ -2618,9 +2728,14 @@
       "day": 261,
       "readings": [
         {
-          "book": "Jeremiah",
-          "startChapter": 10,
+          "book": "Daniel",
+          "startChapter": 11,
           "endChapter": 12
+        },
+        {
+          "book": "Haggai",
+          "startChapter": 1,
+          "endChapter": 1
         }
       ]
     },
@@ -2628,9 +2743,14 @@
       "day": 262,
       "readings": [
         {
-          "book": "Jeremiah",
-          "startChapter": 13,
-          "endChapter": 15
+          "book": "Haggai",
+          "startChapter": 2,
+          "endChapter": 2
+        },
+        {
+          "book": "Zechariah",
+          "startChapter": 1,
+          "endChapter": 2
         }
       ]
     },
@@ -2638,9 +2758,9 @@
       "day": 263,
       "readings": [
         {
-          "book": "Jeremiah",
-          "startChapter": 16,
-          "endChapter": 18
+          "book": "Zechariah",
+          "startChapter": 3,
+          "endChapter": 5
         }
       ]
     },
@@ -2648,9 +2768,9 @@
       "day": 264,
       "readings": [
         {
-          "book": "Jeremiah",
-          "startChapter": 19,
-          "endChapter": 21
+          "book": "Zechariah",
+          "startChapter": 6,
+          "endChapter": 8
         }
       ]
     },
@@ -2658,9 +2778,9 @@
       "day": 265,
       "readings": [
         {
-          "book": "Jeremiah",
-          "startChapter": 22,
-          "endChapter": 24
+          "book": "Zechariah",
+          "startChapter": 9,
+          "endChapter": 11
         }
       ]
     },
@@ -2668,9 +2788,9 @@
       "day": 266,
       "readings": [
         {
-          "book": "Jeremiah",
-          "startChapter": 25,
-          "endChapter": 27
+          "book": "Zechariah",
+          "startChapter": 12,
+          "endChapter": 14
         }
       ]
     },
@@ -2678,9 +2798,9 @@
       "day": 267,
       "readings": [
         {
-          "book": "Jeremiah",
-          "startChapter": 28,
-          "endChapter": 30
+          "book": "Ezra",
+          "startChapter": 1,
+          "endChapter": 3
         }
       ]
     },
@@ -2688,9 +2808,9 @@
       "day": 268,
       "readings": [
         {
-          "book": "Jeremiah",
-          "startChapter": 31,
-          "endChapter": 33
+          "book": "Ezra",
+          "startChapter": 4,
+          "endChapter": 6
         }
       ]
     },
@@ -2698,9 +2818,9 @@
       "day": 269,
       "readings": [
         {
-          "book": "Jeremiah",
-          "startChapter": 34,
-          "endChapter": 36
+          "book": "Ezra",
+          "startChapter": 7,
+          "endChapter": 9
         }
       ]
     },
@@ -2708,9 +2828,14 @@
       "day": 270,
       "readings": [
         {
-          "book": "Jeremiah",
-          "startChapter": 37,
-          "endChapter": 39
+          "book": "Ezra",
+          "startChapter": 10,
+          "endChapter": 10
+        },
+        {
+          "book": "Nehemiah",
+          "startChapter": 1,
+          "endChapter": 2
         }
       ]
     },
@@ -2718,9 +2843,9 @@
       "day": 271,
       "readings": [
         {
-          "book": "Jeremiah",
-          "startChapter": 40,
-          "endChapter": 42
+          "book": "Nehemiah",
+          "startChapter": 3,
+          "endChapter": 5
         }
       ]
     },
@@ -2728,9 +2853,9 @@
       "day": 272,
       "readings": [
         {
-          "book": "Jeremiah",
-          "startChapter": 43,
-          "endChapter": 45
+          "book": "Nehemiah",
+          "startChapter": 6,
+          "endChapter": 8
         }
       ]
     },
@@ -2738,9 +2863,9 @@
       "day": 273,
       "readings": [
         {
-          "book": "Jeremiah",
-          "startChapter": 46,
-          "endChapter": 48
+          "book": "Nehemiah",
+          "startChapter": 9,
+          "endChapter": 11
         }
       ]
     },
@@ -2748,9 +2873,14 @@
       "day": 274,
       "readings": [
         {
-          "book": "Jeremiah",
-          "startChapter": 49,
-          "endChapter": 51
+          "book": "Nehemiah",
+          "startChapter": 12,
+          "endChapter": 13
+        },
+        {
+          "book": "Esther",
+          "startChapter": 1,
+          "endChapter": 1
         }
       ]
     },
@@ -2758,9 +2888,9 @@
       "day": 275,
       "readings": [
         {
-          "book": "Jeremiah",
-          "startChapter": 52,
-          "endChapter": 52
+          "book": "Esther",
+          "startChapter": 2,
+          "endChapter": 4
         }
       ]
     },
@@ -2768,9 +2898,9 @@
       "day": 276,
       "readings": [
         {
-          "book": "Lamentations",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "Esther",
+          "startChapter": 5,
+          "endChapter": 7
         }
       ]
     },
@@ -2778,9 +2908,9 @@
       "day": 277,
       "readings": [
         {
-          "book": "Lamentations",
-          "startChapter": 4,
-          "endChapter": 5
+          "book": "Esther",
+          "startChapter": 8,
+          "endChapter": 10
         }
       ]
     },
@@ -2788,7 +2918,7 @@
       "day": 278,
       "readings": [
         {
-          "book": "Ezekiel",
+          "book": "Malachi",
           "startChapter": 1,
           "endChapter": 3
         }
@@ -2798,9 +2928,14 @@
       "day": 279,
       "readings": [
         {
-          "book": "Ezekiel",
+          "book": "Malachi",
           "startChapter": 4,
-          "endChapter": 6
+          "endChapter": 4
+        },
+        {
+          "book": "Matthew",
+          "startChapter": 1,
+          "endChapter": 2
         }
       ]
     },
@@ -2808,9 +2943,9 @@
       "day": 280,
       "readings": [
         {
-          "book": "Ezekiel",
-          "startChapter": 7,
-          "endChapter": 9
+          "book": "Matthew",
+          "startChapter": 3,
+          "endChapter": 5
         }
       ]
     },
@@ -2818,9 +2953,9 @@
       "day": 281,
       "readings": [
         {
-          "book": "Ezekiel",
-          "startChapter": 10,
-          "endChapter": 12
+          "book": "Matthew",
+          "startChapter": 6,
+          "endChapter": 8
         }
       ]
     },
@@ -2828,9 +2963,9 @@
       "day": 282,
       "readings": [
         {
-          "book": "Ezekiel",
-          "startChapter": 13,
-          "endChapter": 15
+          "book": "Matthew",
+          "startChapter": 9,
+          "endChapter": 11
         }
       ]
     },
@@ -2838,9 +2973,9 @@
       "day": 283,
       "readings": [
         {
-          "book": "Ezekiel",
-          "startChapter": 16,
-          "endChapter": 18
+          "book": "Matthew",
+          "startChapter": 12,
+          "endChapter": 14
         }
       ]
     },
@@ -2848,9 +2983,9 @@
       "day": 284,
       "readings": [
         {
-          "book": "Ezekiel",
-          "startChapter": 19,
-          "endChapter": 21
+          "book": "Matthew",
+          "startChapter": 15,
+          "endChapter": 17
         }
       ]
     },
@@ -2858,9 +2993,9 @@
       "day": 285,
       "readings": [
         {
-          "book": "Ezekiel",
-          "startChapter": 22,
-          "endChapter": 24
+          "book": "Matthew",
+          "startChapter": 18,
+          "endChapter": 20
         }
       ]
     },
@@ -2868,9 +3003,9 @@
       "day": 286,
       "readings": [
         {
-          "book": "Ezekiel",
-          "startChapter": 25,
-          "endChapter": 27
+          "book": "Matthew",
+          "startChapter": 21,
+          "endChapter": 23
         }
       ]
     },
@@ -2878,9 +3013,9 @@
       "day": 287,
       "readings": [
         {
-          "book": "Ezekiel",
-          "startChapter": 28,
-          "endChapter": 30
+          "book": "Matthew",
+          "startChapter": 24,
+          "endChapter": 26
         }
       ]
     },
@@ -2888,9 +3023,14 @@
       "day": 288,
       "readings": [
         {
-          "book": "Ezekiel",
-          "startChapter": 31,
-          "endChapter": 33
+          "book": "Matthew",
+          "startChapter": 27,
+          "endChapter": 28
+        },
+        {
+          "book": "Mark",
+          "startChapter": 1,
+          "endChapter": 1
         }
       ]
     },
@@ -2898,9 +3038,9 @@
       "day": 289,
       "readings": [
         {
-          "book": "Ezekiel",
-          "startChapter": 34,
-          "endChapter": 36
+          "book": "Mark",
+          "startChapter": 2,
+          "endChapter": 4
         }
       ]
     },
@@ -2908,9 +3048,9 @@
       "day": 290,
       "readings": [
         {
-          "book": "Ezekiel",
-          "startChapter": 37,
-          "endChapter": 39
+          "book": "Mark",
+          "startChapter": 5,
+          "endChapter": 7
         }
       ]
     },
@@ -2918,9 +3058,9 @@
       "day": 291,
       "readings": [
         {
-          "book": "Ezekiel",
-          "startChapter": 40,
-          "endChapter": 42
+          "book": "Mark",
+          "startChapter": 8,
+          "endChapter": 10
         }
       ]
     },
@@ -2928,9 +3068,9 @@
       "day": 292,
       "readings": [
         {
-          "book": "Ezekiel",
-          "startChapter": 43,
-          "endChapter": 45
+          "book": "Mark",
+          "startChapter": 11,
+          "endChapter": 13
         }
       ]
     },
@@ -2938,9 +3078,9 @@
       "day": 293,
       "readings": [
         {
-          "book": "Ezekiel",
-          "startChapter": 46,
-          "endChapter": 48
+          "book": "Mark",
+          "startChapter": 14,
+          "endChapter": 16
         }
       ]
     },
@@ -2948,7 +3088,7 @@
       "day": 294,
       "readings": [
         {
-          "book": "Daniel",
+          "book": "Luke",
           "startChapter": 1,
           "endChapter": 3
         }
@@ -2958,7 +3098,7 @@
       "day": 295,
       "readings": [
         {
-          "book": "Daniel",
+          "book": "Luke",
           "startChapter": 4,
           "endChapter": 6
         }
@@ -2968,7 +3108,7 @@
       "day": 296,
       "readings": [
         {
-          "book": "Daniel",
+          "book": "Luke",
           "startChapter": 7,
           "endChapter": 9
         }
@@ -2978,7 +3118,7 @@
       "day": 297,
       "readings": [
         {
-          "book": "Daniel",
+          "book": "Luke",
           "startChapter": 10,
           "endChapter": 12
         }
@@ -2988,9 +3128,9 @@
       "day": 298,
       "readings": [
         {
-          "book": "Hosea",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "Luke",
+          "startChapter": 13,
+          "endChapter": 15
         }
       ]
     },
@@ -2998,9 +3138,9 @@
       "day": 299,
       "readings": [
         {
-          "book": "Hosea",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "Luke",
+          "startChapter": 16,
+          "endChapter": 18
         }
       ]
     },
@@ -3008,9 +3148,9 @@
       "day": 300,
       "readings": [
         {
-          "book": "Hosea",
-          "startChapter": 7,
-          "endChapter": 9
+          "book": "Luke",
+          "startChapter": 19,
+          "endChapter": 21
         }
       ]
     },
@@ -3018,9 +3158,9 @@
       "day": 301,
       "readings": [
         {
-          "book": "Hosea",
-          "startChapter": 10,
-          "endChapter": 12
+          "book": "Luke",
+          "startChapter": 22,
+          "endChapter": 24
         }
       ]
     },
@@ -3028,9 +3168,9 @@
       "day": 302,
       "readings": [
         {
-          "book": "Hosea",
-          "startChapter": 13,
-          "endChapter": 14
+          "book": "John",
+          "startChapter": 1,
+          "endChapter": 3
         }
       ]
     },
@@ -3038,9 +3178,9 @@
       "day": 303,
       "readings": [
         {
-          "book": "Joel",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "John",
+          "startChapter": 4,
+          "endChapter": 6
         }
       ]
     },
@@ -3048,9 +3188,9 @@
       "day": 304,
       "readings": [
         {
-          "book": "Amos",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "John",
+          "startChapter": 7,
+          "endChapter": 9
         }
       ]
     },
@@ -3058,9 +3198,9 @@
       "day": 305,
       "readings": [
         {
-          "book": "Amos",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "John",
+          "startChapter": 10,
+          "endChapter": 12
         }
       ]
     },
@@ -3068,9 +3208,9 @@
       "day": 306,
       "readings": [
         {
-          "book": "Amos",
-          "startChapter": 7,
-          "endChapter": 9
+          "book": "John",
+          "startChapter": 13,
+          "endChapter": 15
         }
       ]
     },
@@ -3078,9 +3218,9 @@
       "day": 307,
       "readings": [
         {
-          "book": "Obadiah",
-          "startChapter": 1,
-          "endChapter": 1
+          "book": "John",
+          "startChapter": 16,
+          "endChapter": 18
         }
       ]
     },
@@ -3088,9 +3228,9 @@
       "day": 308,
       "readings": [
         {
-          "book": "Jonah",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "John",
+          "startChapter": 19,
+          "endChapter": 21
         }
       ]
     },
@@ -3098,9 +3238,9 @@
       "day": 309,
       "readings": [
         {
-          "book": "Jonah",
-          "startChapter": 4,
-          "endChapter": 4
+          "book": "Acts",
+          "startChapter": 1,
+          "endChapter": 3
         }
       ]
     },
@@ -3108,9 +3248,9 @@
       "day": 310,
       "readings": [
         {
-          "book": "Micah",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "Acts",
+          "startChapter": 4,
+          "endChapter": 6
         }
       ]
     },
@@ -3118,9 +3258,9 @@
       "day": 311,
       "readings": [
         {
-          "book": "Micah",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "Acts",
+          "startChapter": 7,
+          "endChapter": 9
         }
       ]
     },
@@ -3128,9 +3268,9 @@
       "day": 312,
       "readings": [
         {
-          "book": "Micah",
-          "startChapter": 7,
-          "endChapter": 7
+          "book": "Acts",
+          "startChapter": 10,
+          "endChapter": 12
         }
       ]
     },
@@ -3138,9 +3278,9 @@
       "day": 313,
       "readings": [
         {
-          "book": "Nahum",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "Acts",
+          "startChapter": 13,
+          "endChapter": 15
         }
       ]
     },
@@ -3148,9 +3288,9 @@
       "day": 314,
       "readings": [
         {
-          "book": "Habakkuk",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "Acts",
+          "startChapter": 16,
+          "endChapter": 18
         }
       ]
     },
@@ -3158,9 +3298,9 @@
       "day": 315,
       "readings": [
         {
-          "book": "Zephaniah",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "Acts",
+          "startChapter": 19,
+          "endChapter": 21
         }
       ]
     },
@@ -3168,9 +3308,9 @@
       "day": 316,
       "readings": [
         {
-          "book": "Haggai",
-          "startChapter": 1,
-          "endChapter": 2
+          "book": "Acts",
+          "startChapter": 22,
+          "endChapter": 24
         }
       ]
     },
@@ -3178,9 +3318,9 @@
       "day": 317,
       "readings": [
         {
-          "book": "Zechariah",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "Acts",
+          "startChapter": 25,
+          "endChapter": 27
         }
       ]
     },
@@ -3188,9 +3328,14 @@
       "day": 318,
       "readings": [
         {
-          "book": "Zechariah",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "Acts",
+          "startChapter": 28,
+          "endChapter": 28
+        },
+        {
+          "book": "Romans",
+          "startChapter": 1,
+          "endChapter": 2
         }
       ]
     },
@@ -3198,9 +3343,9 @@
       "day": 319,
       "readings": [
         {
-          "book": "Zechariah",
-          "startChapter": 7,
-          "endChapter": 9
+          "book": "Romans",
+          "startChapter": 3,
+          "endChapter": 5
         }
       ]
     },
@@ -3208,9 +3353,9 @@
       "day": 320,
       "readings": [
         {
-          "book": "Zechariah",
-          "startChapter": 10,
-          "endChapter": 12
+          "book": "Romans",
+          "startChapter": 6,
+          "endChapter": 8
         }
       ]
     },
@@ -3218,9 +3363,9 @@
       "day": 321,
       "readings": [
         {
-          "book": "Zechariah",
-          "startChapter": 13,
-          "endChapter": 14
+          "book": "Romans",
+          "startChapter": 9,
+          "endChapter": 11
         }
       ]
     },
@@ -3228,9 +3373,9 @@
       "day": 322,
       "readings": [
         {
-          "book": "Malachi",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "Romans",
+          "startChapter": 12,
+          "endChapter": 14
         }
       ]
     },
@@ -3238,9 +3383,14 @@
       "day": 323,
       "readings": [
         {
-          "book": "Malachi",
-          "startChapter": 4,
-          "endChapter": 4
+          "book": "Romans",
+          "startChapter": 15,
+          "endChapter": 16
+        },
+        {
+          "book": "1 Corinthians",
+          "startChapter": 1,
+          "endChapter": 1
         }
       ]
     },
@@ -3248,9 +3398,9 @@
       "day": 324,
       "readings": [
         {
-          "book": "James",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "1 Corinthians",
+          "startChapter": 2,
+          "endChapter": 4
         }
       ]
     },
@@ -3258,9 +3408,9 @@
       "day": 325,
       "readings": [
         {
-          "book": "James",
-          "startChapter": 4,
-          "endChapter": 5
+          "book": "1 Corinthians",
+          "startChapter": 5,
+          "endChapter": 7
         }
       ]
     },
@@ -3268,9 +3418,9 @@
       "day": 326,
       "readings": [
         {
-          "book": "Galatians",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "1 Corinthians",
+          "startChapter": 8,
+          "endChapter": 10
         }
       ]
     },
@@ -3278,9 +3428,9 @@
       "day": 327,
       "readings": [
         {
-          "book": "Galatians",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "1 Corinthians",
+          "startChapter": 11,
+          "endChapter": 13
         }
       ]
     },
@@ -3288,9 +3438,9 @@
       "day": 328,
       "readings": [
         {
-          "book": "Matthew",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "1 Corinthians",
+          "startChapter": 14,
+          "endChapter": 16
         }
       ]
     },
@@ -3298,9 +3448,9 @@
       "day": 329,
       "readings": [
         {
-          "book": "Matthew",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "2 Corinthians",
+          "startChapter": 1,
+          "endChapter": 3
         }
       ]
     },
@@ -3308,9 +3458,9 @@
       "day": 330,
       "readings": [
         {
-          "book": "Matthew",
-          "startChapter": 7,
-          "endChapter": 9
+          "book": "2 Corinthians",
+          "startChapter": 4,
+          "endChapter": 6
         }
       ]
     },
@@ -3318,9 +3468,9 @@
       "day": 331,
       "readings": [
         {
-          "book": "Matthew",
-          "startChapter": 10,
-          "endChapter": 12
+          "book": "2 Corinthians",
+          "startChapter": 7,
+          "endChapter": 9
         }
       ]
     },
@@ -3328,9 +3478,9 @@
       "day": 332,
       "readings": [
         {
-          "book": "Matthew",
-          "startChapter": 13,
-          "endChapter": 15
+          "book": "2 Corinthians",
+          "startChapter": 10,
+          "endChapter": 12
         }
       ]
     },
@@ -3338,9 +3488,14 @@
       "day": 333,
       "readings": [
         {
-          "book": "Matthew",
-          "startChapter": 16,
-          "endChapter": 18
+          "book": "2 Corinthians",
+          "startChapter": 13,
+          "endChapter": 13
+        },
+        {
+          "book": "Galatians",
+          "startChapter": 1,
+          "endChapter": 2
         }
       ]
     },
@@ -3348,9 +3503,9 @@
       "day": 334,
       "readings": [
         {
-          "book": "Matthew",
-          "startChapter": 19,
-          "endChapter": 21
+          "book": "Galatians",
+          "startChapter": 3,
+          "endChapter": 5
         }
       ]
     },
@@ -3358,9 +3513,14 @@
       "day": 335,
       "readings": [
         {
-          "book": "Matthew",
-          "startChapter": 22,
-          "endChapter": 24
+          "book": "Galatians",
+          "startChapter": 6,
+          "endChapter": 6
+        },
+        {
+          "book": "Ephesians",
+          "startChapter": 1,
+          "endChapter": 2
         }
       ]
     },
@@ -3368,9 +3528,9 @@
       "day": 336,
       "readings": [
         {
-          "book": "Matthew",
-          "startChapter": 25,
-          "endChapter": 27
+          "book": "Ephesians",
+          "startChapter": 3,
+          "endChapter": 5
         }
       ]
     },
@@ -3378,9 +3538,14 @@
       "day": 337,
       "readings": [
         {
-          "book": "Matthew",
-          "startChapter": 28,
-          "endChapter": 28
+          "book": "Ephesians",
+          "startChapter": 6,
+          "endChapter": 6
+        },
+        {
+          "book": "Philippians",
+          "startChapter": 1,
+          "endChapter": 2
         }
       ]
     },
@@ -3388,9 +3553,14 @@
       "day": 338,
       "readings": [
         {
-          "book": "Mark",
+          "book": "Philippians",
+          "startChapter": 3,
+          "endChapter": 4
+        },
+        {
+          "book": "Colossians",
           "startChapter": 1,
-          "endChapter": 3
+          "endChapter": 1
         }
       ]
     },
@@ -3398,54 +3568,14 @@
       "day": 339,
       "readings": [
         {
-          "book": "Mark",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "Colossians",
+          "startChapter": 2,
+          "endChapter": 4
         }
       ]
     },
     {
       "day": 340,
-      "readings": [
-        {
-          "book": "Mark",
-          "startChapter": 7,
-          "endChapter": 9
-        }
-      ]
-    },
-    {
-      "day": 341,
-      "readings": [
-        {
-          "book": "Mark",
-          "startChapter": 10,
-          "endChapter": 12
-        }
-      ]
-    },
-    {
-      "day": 342,
-      "readings": [
-        {
-          "book": "Mark",
-          "startChapter": 13,
-          "endChapter": 15
-        }
-      ]
-    },
-    {
-      "day": 343,
-      "readings": [
-        {
-          "book": "Mark",
-          "startChapter": 16,
-          "endChapter": 16
-        }
-      ]
-    },
-    {
-      "day": 344,
       "readings": [
         {
           "book": "1 Thessalonians",
@@ -3455,12 +3585,67 @@
       ]
     },
     {
-      "day": 345,
+      "day": 341,
       "readings": [
         {
           "book": "1 Thessalonians",
           "startChapter": 4,
           "endChapter": 5
+        },
+        {
+          "book": "2 Thessalonians",
+          "startChapter": 1,
+          "endChapter": 1
+        }
+      ]
+    },
+    {
+      "day": 342,
+      "readings": [
+        {
+          "book": "2 Thessalonians",
+          "startChapter": 2,
+          "endChapter": 3
+        },
+        {
+          "book": "1 Timothy",
+          "startChapter": 1,
+          "endChapter": 1
+        }
+      ]
+    },
+    {
+      "day": 343,
+      "readings": [
+        {
+          "book": "1 Timothy",
+          "startChapter": 2,
+          "endChapter": 4
+        }
+      ]
+    },
+    {
+      "day": 344,
+      "readings": [
+        {
+          "book": "1 Timothy",
+          "startChapter": 5,
+          "endChapter": 6
+        },
+        {
+          "book": "2 Timothy",
+          "startChapter": 1,
+          "endChapter": 1
+        }
+      ]
+    },
+    {
+      "day": 345,
+      "readings": [
+        {
+          "book": "2 Timothy",
+          "startChapter": 2,
+          "endChapter": 4
         }
       ]
     },
@@ -3468,7 +3653,7 @@
       "day": 346,
       "readings": [
         {
-          "book": "2 Thessalonians",
+          "book": "Titus",
           "startChapter": 1,
           "endChapter": 3
         }
@@ -3478,9 +3663,14 @@
       "day": 347,
       "readings": [
         {
-          "book": "1 Corinthians",
+          "book": "Philemon",
           "startChapter": 1,
-          "endChapter": 3
+          "endChapter": 1
+        },
+        {
+          "book": "Hebrews",
+          "startChapter": 1,
+          "endChapter": 2
         }
       ]
     },
@@ -3488,9 +3678,9 @@
       "day": 348,
       "readings": [
         {
-          "book": "1 Corinthians",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "Hebrews",
+          "startChapter": 3,
+          "endChapter": 5
         }
       ]
     },
@@ -3498,9 +3688,9 @@
       "day": 349,
       "readings": [
         {
-          "book": "1 Corinthians",
-          "startChapter": 7,
-          "endChapter": 9
+          "book": "Hebrews",
+          "startChapter": 6,
+          "endChapter": 8
         }
       ]
     },
@@ -3508,9 +3698,9 @@
       "day": 350,
       "readings": [
         {
-          "book": "1 Corinthians",
-          "startChapter": 10,
-          "endChapter": 12
+          "book": "Hebrews",
+          "startChapter": 9,
+          "endChapter": 11
         }
       ]
     },
@@ -3518,9 +3708,14 @@
       "day": 351,
       "readings": [
         {
-          "book": "1 Corinthians",
-          "startChapter": 13,
-          "endChapter": 15
+          "book": "Hebrews",
+          "startChapter": 12,
+          "endChapter": 13
+        },
+        {
+          "book": "James",
+          "startChapter": 1,
+          "endChapter": 1
         }
       ]
     },
@@ -3528,9 +3723,9 @@
       "day": 352,
       "readings": [
         {
-          "book": "1 Corinthians",
-          "startChapter": 16,
-          "endChapter": 16
+          "book": "James",
+          "startChapter": 2,
+          "endChapter": 4
         }
       ]
     },
@@ -3538,9 +3733,14 @@
       "day": 353,
       "readings": [
         {
-          "book": "2 Corinthians",
+          "book": "James",
+          "startChapter": 5,
+          "endChapter": 5
+        },
+        {
+          "book": "1 Peter",
           "startChapter": 1,
-          "endChapter": 3
+          "endChapter": 2
         }
       ]
     },
@@ -3548,9 +3748,9 @@
       "day": 354,
       "readings": [
         {
-          "book": "2 Corinthians",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "1 Peter",
+          "startChapter": 3,
+          "endChapter": 5
         }
       ]
     },
@@ -3558,9 +3758,9 @@
       "day": 355,
       "readings": [
         {
-          "book": "2 Corinthians",
-          "startChapter": 7,
-          "endChapter": 9
+          "book": "2 Peter",
+          "startChapter": 1,
+          "endChapter": 3
         }
       ]
     },
@@ -3568,9 +3768,9 @@
       "day": 356,
       "readings": [
         {
-          "book": "2 Corinthians",
-          "startChapter": 10,
-          "endChapter": 12
+          "book": "1 John",
+          "startChapter": 1,
+          "endChapter": 3
         }
       ]
     },
@@ -3578,9 +3778,14 @@
       "day": 357,
       "readings": [
         {
-          "book": "2 Corinthians",
-          "startChapter": 13,
-          "endChapter": 13
+          "book": "1 John",
+          "startChapter": 4,
+          "endChapter": 5
+        },
+        {
+          "book": "2 John",
+          "startChapter": 1,
+          "endChapter": 1
         }
       ]
     },
@@ -3588,9 +3793,19 @@
       "day": 358,
       "readings": [
         {
-          "book": "Romans",
+          "book": "3 John",
           "startChapter": 1,
-          "endChapter": 3
+          "endChapter": 1
+        },
+        {
+          "book": "Jude",
+          "startChapter": 1,
+          "endChapter": 1
+        },
+        {
+          "book": "Revelation",
+          "startChapter": 1,
+          "endChapter": 1
         }
       ]
     },
@@ -3598,9 +3813,9 @@
       "day": 359,
       "readings": [
         {
-          "book": "Romans",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "Revelation",
+          "startChapter": 2,
+          "endChapter": 4
         }
       ]
     },
@@ -3608,9 +3823,9 @@
       "day": 360,
       "readings": [
         {
-          "book": "Romans",
-          "startChapter": 7,
-          "endChapter": 9
+          "book": "Revelation",
+          "startChapter": 5,
+          "endChapter": 7
         }
       ]
     },
@@ -3618,9 +3833,9 @@
       "day": 361,
       "readings": [
         {
-          "book": "Romans",
-          "startChapter": 10,
-          "endChapter": 12
+          "book": "Revelation",
+          "startChapter": 8,
+          "endChapter": 10
         }
       ]
     },
@@ -3628,9 +3843,9 @@
       "day": 362,
       "readings": [
         {
-          "book": "Romans",
-          "startChapter": 13,
-          "endChapter": 15
+          "book": "Revelation",
+          "startChapter": 11,
+          "endChapter": 13
         }
       ]
     },
@@ -3638,8 +3853,8 @@
       "day": 363,
       "readings": [
         {
-          "book": "Romans",
-          "startChapter": 16,
+          "book": "Revelation",
+          "startChapter": 14,
           "endChapter": 16
         }
       ]
@@ -3648,9 +3863,9 @@
       "day": 364,
       "readings": [
         {
-          "book": "Luke",
-          "startChapter": 1,
-          "endChapter": 3
+          "book": "Revelation",
+          "startChapter": 17,
+          "endChapter": 19
         }
       ]
     },
@@ -3658,9 +3873,9 @@
       "day": 365,
       "readings": [
         {
-          "book": "Luke",
-          "startChapter": 4,
-          "endChapter": 6
+          "book": "Revelation",
+          "startChapter": 20,
+          "endChapter": 22
         }
       ]
     }
