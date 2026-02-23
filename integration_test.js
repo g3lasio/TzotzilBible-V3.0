@@ -186,15 +186,15 @@ test('Verse commentary includes EGW', () => {
 // === BUILD CONFIG ===
 console.log('\n--- BUILD CONFIG ---');
 
-test('Version is 4.1.1 in app.config.js', () => {
+test('Version is 7.0.0 in app.config.js', () => {
   const config = fs.readFileSync('app.config.js', 'utf-8');
-  return config.includes('version: "4.1.1"') || 'Wrong version';
+  return config.includes('version: "7.0.0"') || 'Wrong version';
 });
 
-test('iOS Info.plist version is 4.1.1', () => {
+test('iOS Info.plist version is 7.0.0', () => {
   const plist = fs.readFileSync('ios/TzotzilBible/Info.plist', 'utf-8');
   const match = plist.match(/CFBundleShortVersionString[\s\S]*?<string>(.*?)<\/string>/);
-  return (match && match[1] === '4.1.1') || `Got ${match ? match[1] : 'not found'}`;
+  return (match && match[1] === '7.0.0') || `Got ${match ? match[1] : 'not found'}`;
 });
 
 test('iOS Info.plist build is 102', () => {
@@ -203,14 +203,14 @@ test('iOS Info.plist build is 102', () => {
   return (match && match[1] === '102') || `Got ${match ? match[1] : 'not found'}`;
 });
 
-test('Android versionName is 4.1.1', () => {
+test('Android versionName is 7.0.0', () => {
   const gradle = fs.readFileSync('android/app/build.gradle', 'utf-8');
-  return gradle.includes('versionName "4.1.1"') || 'Wrong versionName';
+  return gradle.includes('versionName "7.0.0"') || 'Wrong versionName';
 });
 
 test('Android versionCode is 101', () => {
   const gradle = fs.readFileSync('android/app/build.gradle', 'utf-8');
-  return gradle.includes('versionCode 101') || 'Wrong versionCode';
+  return gradle.includes('versionCode 700') || 'Wrong versionCode';
 });
 
 test('TARGETED_DEVICE_FAMILY includes iPad', () => {

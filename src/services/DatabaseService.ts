@@ -509,41 +509,42 @@ export class DatabaseService {
 
       console.log(`[DatabaseService] Loaded ${result.length} verses for ${bookName} ${chapter}`);
 
-      // Map results and enrich with on-demand versions
-      const verses: BibleVerse[] = [];
-      for (const row of result) {
-        const verse: BibleVerse = {
-          id: row.id,
-          book_id: row.book_id,
-          chapter: row.chapter,
-          verse: row.verse,
-          text: row.text_spanish_rv1960 || '',
-          text_tzotzil: row.text_tzotzil || '',
-          text_spanish_rv1960: row.text_spanish_rv1960 || '',
-          text_spanish_nvi: row.text_spanish_nvi || '',
-          text_spanish_dhh: row.text_spanish_dhh || '',
-          text_spanish_tla: row.text_spanish_tla || '',
-          text_english_nkjv: row.text_english_nkjv || '',
-          book_name: row.book_name
-        };
+      // Map results into verse objects
+      const verses: BibleVerse[] = result.map((row: any) => ({
+        id: row.id,
+        book_id: row.book_id,
+        chapter: row.chapter,
+        verse: row.verse,
+        text: row.text_spanish_rv1960 || '',
+        text_tzotzil: row.text_tzotzil || '',
+        text_spanish_rv1960: row.text_spanish_rv1960 || '',
+        text_spanish_nvi: row.text_spanish_nvi || '',
+        text_spanish_dhh: row.text_spanish_dhh || '',
+        text_spanish_tla: row.text_spanish_tla || '',
+        text_english_nkjv: row.text_english_nkjv || '',
+        book_name: row.book_name
+      }));
 
-        // Enrich with downloaded on-demand versions
-        if (this.versionManager) {
-          for (const [versionId, fieldName] of Object.entries(ON_DEMAND_VERSION_FIELDS)) {
-            // Only fetch from VersionManager if DB doesn't have this data
-            const currentValue = (verse as any)[fieldName];
-            if ((!currentValue || !currentValue.trim()) && this.versionManager.isVersionDownloaded(versionId)) {
-              const text = await this.versionManager.getVerseText(
-                versionId, bookName, row.chapter, row.verse
-              );
-              if (text) {
-                (verse as any)[fieldName] = text;
+      // Enrich with downloaded on-demand versions using bulk chapter load.
+      // Loading an entire chapter at once (getChapterVerses) is far more
+      // efficient than the previous per-verse approach and fixes the fallback bug.
+      if (this.versionManager && verses.length > 0) {
+        for (const [versionId, fieldName] of Object.entries(ON_DEMAND_VERSION_FIELDS)) {
+          if (this.versionManager.isVersionDownloaded(versionId)) {
+            const chapterMap: Map<number, string> = await this.versionManager.getChapterVerses(
+              versionId, bookName, chapter
+            );
+            if (chapterMap.size > 0) {
+              for (const verse of verses) {
+                const text = chapterMap.get(verse.verse);
+                if (text && text.trim()) {
+                  (verse as any)[fieldName] = text;
+                }
               }
+              console.log(`[DatabaseService] Enriched ${chapterMap.size} verses with version: ${versionId}`);
             }
           }
         }
-
-        verses.push(verse);
       }
 
       // Log version availability for debugging

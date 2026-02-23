@@ -1,441 +1,89 @@
-# Análisis Completo de Implementación - TzotzilBible
-
-**Fecha**: 16 de Enero, 2026  
-**Commit**: `6c1a3b0`  
-**Archivos Analizados**: NevinScreen.tsx, VersesScreen.tsx, SettingsScreen.tsx
-
----
-
-## 🎯 Objetivo del Análisis
-
-Identificar por qué los cambios implementados (botones Copy/Share en Nevin y control de fuente en versículos) no se reflejan en la aplicación a pesar de estar presentes en los archivos fuente.
-
----
-
-## 📋 Resumen Ejecutivo
-
-### ✅ **CONCLUSIÓN**: Los cambios están correctamente implementados
-
-**El problema NO es el código**. El problema es que React Native/Expo está sirviendo código compilado viejo desde caché.
-
-### 🔍 Hallazgos Clave
-
-1. ✅ **Código fuente correcto**: Todos los cambios están presentes y bien implementados
-2. ✅ **Sintaxis válida**: No hay errores de sintaxis ni llaves desbalanceadas
-3. ✅ **Commit subido**: El commit `6c1a3b0` está en GitHub
-4. ⚠️ **Caché corrupto**: React Native está usando código compilado viejo
-5. ⚠️ **Procesos activos**: Hay procesos Expo corriendo que deben ser detenidos
-
----
-
-## 📊 Análisis Detallado por Archivo
-
-### 1. NevinScreen.tsx (852 líneas)
-
-#### ✅ Cambios Implementados Correctamente
-
-**Imports**:
-```typescript
-import { ..., Clipboard, Share } from 'react-native';
-```
-- ✅ Clipboard importado
-- ✅ Share importado
-
-**Estructura de Mensaje** (líneas 515-547):
-```typescript
-<View style={styles.messageFooter}>
-  <Text style={styles.timestamp}>...</Text>
-  {!message.isUser && (
-    <View style={styles.messageActions}>
-      <TouchableOpacity onPress={() => Clipboard.setString(...)}>
-        <MaterialCommunityIcons name="content-copy" />
-      </TouchableOpacity>
-      <TouchableOpacity onPress={async () => await Share.share(...)}>
-        <MaterialCommunityIcons name="share-variant" />
-      </TouchableOpacity>
-    </View>
-  )}
-</View>
-```
-- ✅ messageFooter implementado
-- ✅ messageActions implementado
-- ✅ Botones solo aparecen en mensajes de Nevin (!message.isUser)
-- ✅ Funcionalidad de copiar con Alert de feedback
-- ✅ Funcionalidad de compartir con formato correcto
-
-**Estilos** (líneas 784-798):
-```typescript
-messageFooter: {
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  marginTop: 6,
-},
-messageActions: {
-  flexDirection: 'row',
-  gap: 8,
-},
-messageActionButton: {
-  padding: 4,
-  borderRadius: 4,
-  backgroundColor: 'rgba(107, 124, 147, 0.1)',
-},
-```
-- ✅ Todos los estilos definidos correctamente
-- ✅ Layout responsive con flexbox
-
-#### 🔍 Verificación de Integridad
-
-- **Paréntesis y llaves**: 466 aperturas, 466 cierres ✅ Balanceado
-- **Imports**: 13 imports totales ✅ Todos válidos
-- **Sintaxis**: ✅ Sin errores
-
-#### 🎯 Conclusión: NevinScreen.tsx
-
-**Estado**: ✅ **CORRECTO AL 100%**
-
-No hay bugs, conflictos ni errores. La implementación es sólida y profesional.
-
----
-
-### 2. VersesScreen.tsx (1122 líneas)
-
-#### ✅ Cambios Implementados Correctamente
-
-**Estado** (línea 74):
-```typescript
-const [fontSize, setFontSize] = useState<'small' | 'medium' | 'large'>('medium');
-```
-- ✅ Estado definido con TypeScript typing correcto
-- ✅ Valor por defecto: 'medium'
-
-**Constante** (línea 56):
-```typescript
-const FONT_SIZE_KEY = 'verse_font_size';
-```
-- ✅ Key para AsyncStorage definida
-
-**Funciones Dinámicas** (líneas 261-273):
-```typescript
-const getFontSizeValue = () => {
-  switch (fontSize) {
-    case 'small': return { normal: 14, parallel: 11 };
-    case 'large': return { normal: 18, parallel: 15 };
-    default: return { normal: 16, parallel: 13 };
-  }
-};
-
-const getLineHeightValue = () => {
-  switch (fontSize) {
-    case 'small': return { normal: 22, parallel: 18 };
-    case 'large': return { normal: 30, parallel: 24 };
-    default: return { normal: 26, parallel: 21 };
-  }
-};
-```
-- ✅ Funciones bien implementadas
-- ✅ Valores diferentes para vista simple vs paralela
-- ✅ Line-height proporcional al fontSize
-
-**Aplicación en Renderizado**:
-
-Vista Simple (línea 320):
-```typescript
-<Text style={[
-  styles.verseText, 
-  { 
-    fontSize: getFontSizeValue().normal, 
-    lineHeight: getLineHeightValue().normal 
-  }
-]}>
-```
-
-Vista Paralela (líneas 369, 381):
-```typescript
-<Text style={[
-  styles.parallelVerseText, 
-  { 
-    fontSize: getFontSizeValue().parallel, 
-    lineHeight: getLineHeightValue().parallel 
-  }
-]}>
-```
-- ✅ Aplicado correctamente en ambas vistas
-- ✅ Inline styles dinámicos funcionan correctamente
-
-**Menú de Opciones**:
-```typescript
-<View style={styles.menuItem}>
-  <MaterialCommunityIcons name="format-size" size={20} color="#00f3ff" />
-  <Text style={styles.menuItemText}>Tamaño de fuente</Text>
-  <View style={styles.fontSizeControl}>
-    <TouchableOpacity 
-      style={[styles.fontButton, fontSize === 'small' && styles.fontButtonActive]}
-      onPress={async () => {
-        setFontSize('small');
-        await AsyncStorage.setItem(FONT_SIZE_KEY, 'small');
-      }}
-    >
-      <Text style={[styles.fontButtonText, fontSize === 'small' && styles.fontButtonTextActive]}>A</Text>
-    </TouchableOpacity>
-    {/* Medium y Large buttons... */}
-  </View>
-</View>
-```
-- ✅ Menú implementado correctamente
-- ✅ Botones con estado activo visual
-- ✅ Persistencia en AsyncStorage
-
-**Estilos**:
-```typescript
-fontSizeControl: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  gap: 6,
-  marginLeft: 'auto',
-},
-fontButton: {
-  width: 32,
-  height: 32,
-  borderRadius: 6,
-  backgroundColor: 'rgba(0, 243, 255, 0.1)',
-  justifyContent: 'center',
-  alignItems: 'center',
-  borderWidth: 1,
-  borderColor: 'rgba(0, 243, 255, 0.2)',
-},
-fontButtonActive: {
-  backgroundColor: 'rgba(0, 255, 136, 0.2)',
-  borderColor: '#00ff88',
-},
-fontButtonText: {
-  fontSize: 10,
-  color: '#6b7c93',
-  fontWeight: 'bold',
-},
-fontButtonTextActive: {
-  color: '#00ff88',
-},
-```
-- ✅ Todos los estilos definidos
-- ✅ Estados activos bien diferenciados
-
-#### 🔍 Verificación de Integridad
-
-- **Paréntesis y llaves**: 630 aperturas, 630 cierres ✅ Balanceado
-- **Imports**: 15 imports totales ✅ Todos válidos
-- **Sintaxis**: ✅ Sin errores
-
-#### 🎯 Conclusión: VersesScreen.tsx
-
-**Estado**: ✅ **CORRECTO AL 100%**
-
-La implementación es completa, funcional y bien estructurada. No hay bugs ni conflictos.
-
----
-
-### 3. SettingsScreen.tsx (446 líneas)
-
-#### ✅ Cambios Implementados Correctamente
-
-**Eliminación de APARIENCIA**:
-- ✅ Sección "APARIENCIA" eliminada completamente
-- ✅ Control de "Tamaño de Fuente" eliminado
-- ✅ Funciones relacionadas eliminadas
-- ✅ Comentario agregado indicando que se movió a versículos
-
-#### 🔍 Verificación de Integridad
-
-- **Paréntesis y llaves**: 249 aperturas, 249 cierres ✅ Balanceado
-- **Imports**: 12 imports totales ✅ Todos válidos
-- **Sintaxis**: ✅ Sin errores
-- **Búsqueda de residuos**: ✅ No quedan referencias a APARIENCIA o Tamaño de Fuente
-
-#### 🎯 Conclusión: SettingsScreen.tsx
-
-**Estado**: ✅ **CORRECTO AL 100%**
-
-La eliminación fue limpia y completa. No hay código residual.
-
----
-
-## 🔍 Análisis de Conflictos Potenciales
-
-### ✅ No Hay Conflictos con Otros Componentes
-
-He verificado:
-- ✅ No hay dependencias circulares
-- ✅ Los imports no causan conflictos
-- ✅ Los nombres de estilos son únicos
-- ✅ No hay sobrescritura de props
-- ✅ Los componentes son independientes
-
-### ✅ No Hay Problemas de Compatibilidad
-
-- ✅ Clipboard y Share son APIs nativas de React Native
-- ✅ AsyncStorage es compatible con Expo
-- ✅ MaterialCommunityIcons está disponible
-- ✅ TouchableOpacity es estándar
-
----
-
-## 🐛 Búsqueda de Bugs
-
-### Análisis de Posibles Bugs
-
-#### 1. ¿Puede fallar Clipboard.setString()?
-**Respuesta**: No, es una API síncrona y siempre funciona.
-
-#### 2. ¿Puede fallar Share.share()?
-**Respuesta**: Sí, pero está envuelto en try/catch. ✅ Manejado correctamente.
-
-#### 3. ¿Puede fallar AsyncStorage?
-**Respuesta**: Sí, pero se usa await y el error no rompe la UI. ✅ Manejado correctamente.
-
-#### 4. ¿Los inline styles pueden causar problemas?
-**Respuesta**: No, React Native los soporta perfectamente. ✅ Correcto.
-
-#### 5. ¿El gap en flexbox funciona en React Native?
-**Respuesta**: Sí, desde React Native 0.71+. La versión del proyecto es 0.81.5. ✅ Compatible.
-
-### 🎯 Conclusión de Bugs
-
-**NO HAY BUGS** en la implementación. El código es robusto y maneja errores correctamente.
-
----
-
-## 🔧 Análisis del Problema Real
-
-### ¿Por Qué No Se Ven los Cambios?
-
-#### Verificación 1: ¿Los archivos tienen los cambios?
-✅ **SÍ** - Verificado con grep y análisis de código
-
-#### Verificación 2: ¿El commit está en GitHub?
-✅ **SÍ** - Commit `6c1a3b0` subido correctamente
-
-#### Verificación 3: ¿Se hizo git pull en Replit?
-✅ **SÍ** - El usuario confirmó que ejecutó git pull
-
-#### Verificación 4: ¿Hay errores de sintaxis?
-✅ **NO** - Todos los archivos tienen sintaxis válida
-
-#### Verificación 5: ¿Hay cachés activos?
-⚠️ **POSIBLEMENTE** - React Native cachea agresivamente
-
-#### Verificación 6: ¿Hay procesos corriendo?
-⚠️ **SÍ** - Hay 1 proceso Expo activo
-
-### 🎯 Diagnóstico Final
-
-**El problema es 100% de caché de React Native/Expo.**
-
-Cuando se hacen cambios estructurales como:
-- Agregar nuevos imports (Clipboard, Share)
-- Modificar la estructura de componentes (messageFooter)
-- Agregar estados nuevos (fontSize)
-- Cambiar estilos dinámicos
-
-React Native/Metro Bundler puede quedar con un caché "corrupto" que sigue sirviendo el código compilado viejo, incluso después de:
-- Recargar la app (Reload)
-- Hacer git pull
-- Reiniciar el servidor
-
-**La única solución es forzar una recompilación completa eliminando TODOS los cachés.**
-
----
-
-## 🚀 Solución Definitiva
-
-### Comandos para Ejecutar en Replit
-
-```bash
-# 1. DETENER TODOS LOS PROCESOS
-pkill -f "expo"
-pkill -f "metro"
-pkill -f "react-native"
-
-# 2. LIMPIAR TODOS LOS CACHÉS
-rm -rf .expo
-rm -rf node_modules/.cache
-rm -rf /tmp/metro-*
-rm -rf /tmp/haste-map-*
-rm -rf $HOME/.expo
-rm -rf $HOME/.cache/expo
-
-# 3. REINSTALAR DEPENDENCIAS (si es necesario)
-npm install
-
-# 4. INICIAR CON CACHÉ COMPLETAMENTE LIMPIO
-npx expo start --clear --reset-cache
-
-# 5. EN EL DISPOSITIVO
-# - Sacudir el dispositivo
-# - Seleccionar "Reload"
-# - O presionar 'r' en la terminal
-```
-
-### ¿Por Qué Esto Funciona?
-
-- `--clear`: Limpia el caché de Expo
-- `--reset-cache`: Limpia el caché de Metro Bundler
-- `rm -rf .expo`: Elimina configuración local de Expo
-- `rm -rf node_modules/.cache`: Elimina caché de Babel/Metro
-- `rm -rf /tmp/metro-*`: Elimina cachés temporales de Metro
-- `pkill`: Mata procesos que pueden estar usando caché viejo
-
----
-
-## 📊 Tabla de Verificación Final
-
-| Aspecto | Estado | Detalles |
-|---------|--------|----------|
-| **Código fuente** | ✅ Correcto | Todos los cambios implementados correctamente |
-| **Sintaxis** | ✅ Válida | Sin errores, llaves balanceadas |
-| **Imports** | ✅ Correctos | Clipboard, Share, AsyncStorage disponibles |
-| **Estilos** | ✅ Completos | Todos los estilos definidos |
-| **Funcionalidad** | ✅ Implementada | Copy, Share, fontSize funcionan |
-| **Manejo de errores** | ✅ Robusto | Try/catch, validaciones presentes |
-| **Compatibilidad** | ✅ Compatible | React Native 0.81.5, Expo 54 |
-| **Conflictos** | ✅ Sin conflictos | No hay dependencias problemáticas |
-| **Bugs** | ✅ Sin bugs | Código limpio y funcional |
-| **Commit** | ✅ En GitHub | `6c1a3b0` subido correctamente |
-| **Caché** | ⚠️ Problema | React Native usando código viejo |
-
----
-
-## 🎯 Conclusión Final
-
-### ✅ **EL CÓDIGO ESTÁ PERFECTO**
-
-No hay bugs, conflictos ni errores en la implementación. Los cambios están correctamente implementados y son de alta calidad.
-
-### ⚠️ **EL PROBLEMA ES EL CACHÉ**
-
-React Native/Expo está sirviendo código compilado viejo desde caché. La solución es forzar una recompilación completa.
-
-### 🚀 **PRÓXIMOS PASOS**
-
-1. Ejecutar los comandos de limpieza en Replit
-2. Iniciar con `npx expo start --clear --reset-cache`
-3. Recargar la app en el dispositivo
-4. Verificar que los cambios aparecen
-
-### 📈 **CONFIANZA EN LA SOLUCIÓN**
-
-**99%** de confianza en que la limpieza de caché resolverá el problema.
-
-Si después de esto los cambios aún no aparecen, entonces hay un problema más profundo en el entorno de Replit que requeriría:
-- Reinstalación completa de node_modules
-- Verificación de la versión de Node.js
-- Revisión de permisos de archivos
-- Posible corrupción del proyecto
-
----
-
-**Análisis completado el 16 de Enero, 2026**
-
-**Archivos analizados**: 3  
-**Líneas de código revisadas**: 2,420  
-**Tiempo de análisis**: Completo y exhaustivo  
-**Resultado**: Código correcto, problema de caché identificado
+# Análisis Detallado y Plan de Acción para el Proyecto Tzotzil Bible v7.0.0
+
+**Fecha:** 23 de Febrero de 2026
+**Autor:** Manus AI
+
+## 1. Resumen Ejecutivo
+
+Tras un análisis exhaustivo del repositorio `g3lasio/TzotzilBible-V3.0`, se han identificado varias áreas críticas que requieren atención inmediata antes de proceder con el despliegue y la compilación de las aplicaciones para iOS y Android. Los problemas principales se centran en la gestión de dependencias, la carga de datos asíncrona que provoca errores en la interfaz de usuario, una lógica de fallback de versiones de la Biblia que no funciona como se esperaba en la plataforma nativa, y una configuración de compilación incompleta que impide el correcto funcionamiento de módulos nativos.
+
+Este informe detalla los hallazgos clave y presenta un plan de acción concreto para estabilizar el proyecto, corregir los errores y asegurar un proceso de compilación y despliegue exitoso. Las acciones recomendadas se dividen en tres áreas principales: **Correcciones Críticas de la Aplicación**, **Optimización del Proceso de Compilación (Builds)** y **Mejoras Recomendadas a Largo Plazo**.
+
+## 2. Diagnóstico de Problemas Críticos
+
+A continuación, se presenta una tabla que resume los problemas más importantes encontrados durante el análisis, su impacto en el proyecto y la causa raíz identificada.
+
+| Problema Crítico | Impacto | Causa Raíz | Archivos Afectados |
+| :--- | :--- | :--- | :--- |
+| **Error Fatal: `TypeError: Cannot read properties of undefined (reading 'toLowerCase')`** | La aplicación crashea en la pantalla de selección de libros, impidiendo la navegación. | Una condición de carrera (race condition) en `BibleScreen.tsx`. El componente intenta renderizar la lista de libros antes de que los nombres de los libros se hayan cargado de forma asíncrona, resultando en un intento de llamar a `.toLowerCase()` sobre un valor `undefined`. | `src/screens/BibleScreen.tsx`, `src/services/BibleService.ts` |
+| **Fallo en Versiones Descargadas (Fallback a RV1960)** | Las versiones de la Biblia que el usuario descarga no se muestran en la app nativa; el sistema recurre incorrectamente a la versión RV1960. | La base de datos SQLite (`bible.db`) incluida en la app solo contiene las columnas para las versiones Tzotzil y RV1960. La lógica en `DatabaseService.ts` para "enriquecer" los versículos con el texto de las versiones descargadas es ineficiente y propensa a fallos, ya que realiza una consulta a `VersionManager` por cada versículo individualmente, lo cual no funciona correctamente. | `src/services/DatabaseService.ts`, `src/services/VersionManager.ts`, `assets/bible.db` |
+| **Módulos Nativos No Registrados** | Funcionalidades como notificaciones, almacenamiento seguro y el portapapeles no funcionarán en las compilaciones de iOS y Android. | Los plugins de Expo para `expo-notifications`, `expo-secure-store` y `expo-clipboard` están instalados y se usan en el código, pero no están declarados en la sección `plugins` del archivo `app.config.js`. Esto impide que EAS (Expo Application Services) configure el código nativo necesario durante el proceso de compilación. | `app.config.js` |
+| **Dependencias Redundantes y Conflictivas** | Riesgo de conflictos de versiones y aumento innecesario del tamaño de la aplicación. | El proyecto incluye tanto `@expo/vector-icons` como `react-native-vector-icons` en `package.json`. La primera es la librería recomendada para proyectos de Expo y ya gestiona la segunda internamente, por lo que tener ambas explícitamente es redundante y una fuente común de errores de compilación. | `package.json` |
+
+## 3. Plan de Acción Detallado
+
+Se ha preparado un plan de acción dividido en fases para abordar sistemáticamente los problemas identificados. Se recomienda aplicar estas correcciones en el orden presentado para maximizar la estabilidad del proyecto.
+
+### Fase 1: Correcciones Críticas de la Aplicación
+
+El objetivo de esta fase es solucionar los errores que impiden el funcionamiento básico de la aplicación.
+
+1.  **Solucionar el `TypeError` en `BibleScreen.tsx`:**
+    *   **Acción:** Añadir una guarda de seguridad en el método `filter` para asegurar que `book.name` exista antes de llamar a `.toLowerCase()`. Esto previene el crash de la aplicación si el componente se renderiza antes de que los datos estén completamente cargados.
+    *   **Código Sugerido en `src/screens/BibleScreen.tsx`:**
+        ```typescript
+        const filteredBooks = books.filter(book => {
+          const matchesSearch = book && book.name ? book.name.toLowerCase().includes(searchQuery.toLowerCase()) : false;
+          // ... resto de la lógica del filtro
+          return matchesSearch && matchesTestament;
+        });
+        ```
+
+2.  **Corregir el Fallback de Versiones en Nativas (iOS/Android):**
+    *   **Acción:** Modificar la estrategia de carga de datos en `DatabaseService.ts`. En lugar de enriquecer cada versículo individualmente (lo cual es ineficiente y la causa del fallo), se debe cargar el capítulo completo de la versión descargada en memoria y luego unirlo con los datos de la base de datos. Este enfoque es similar al que ya se utiliza con éxito en la versión web (`WebBibleService.ts`).
+    *   **Pasos de Implementación:**
+        1.  En `DatabaseService.getVerses`, después de obtener los versículos base de SQLite, iterar sobre las versiones descargadas activas.
+        2.  Para cada versión descargada, usar `versionManager.getChapterVerses()` para obtener un mapa con todos los versículos de ese capítulo.
+        3.  Unir los textos del mapa en los objetos de versículos correspondientes. Esto reduce cientos de llamadas asíncronas a una sola por versión y capítulo, solucionando el problema de raíz.
+
+### Fase 2: Optimización del Proceso de Compilación (Builds)
+
+Esta fase se enfoca en configurar correctamente el entorno de compilación para asegurar que todas las funcionalidades nativas se incluyan en las apps de iOS y Android.
+
+1.  **Registrar los Plugins Nativos Faltantes:**
+    *   **Acción:** Añadir los plugins de Expo que faltan al array `plugins` en `app.config.js`. Esto es **mandatorio** para que las notificaciones y otras funcionalidades nativas funcionen.
+    *   **Código Sugerido en `app.config.js`:**
+        ```javascript
+        plugins: [
+          "expo-font",
+          ["expo-splash-screen", { /* ...config... */ }],
+          ["expo-asset", { assets: ["./assets/bible.db"] }],
+          // AÑADIR ESTOS PLUGINS
+          "expo-notifications",
+          "expo-secure-store",
+          "expo-clipboard"
+        ],
+        ```
+
+2.  **Eliminar Dependencia Redundante:**
+    *   **Acción:** Desinstalar `react-native-vector-icons` y eliminarlo de `package.json`. `@expo/vector-icons` ya lo gestiona, y eliminar la dependencia explícita previene posibles conflictos de autolinking.
+    *   **Comando:**
+        ```bash
+        npm uninstall react-native-vector-icons
+        ```
+
+### Fase 3: Mejoras Recomendadas a Largo Plazo
+
+Estas acciones mejorarán la mantenibilidad y el rendimiento del proyecto a futuro.
+
+1.  **Refactorizar la Carga de Datos en `BibleScreen.tsx`:**
+    *   **Recomendación:** En lugar de depender de un `useEffect` para cargar los libros, considerar el uso de una librería de gestión de estado como `React Query` (que ya está instalada) para manejar la carga, el cacheo y los estados de error de forma más robusta y declarativa.
+
+2.  **Centralizar la Lógica de Versiones:**
+    *   **Recomendación:** La lógica para obtener el texto de un versículo con su respectivo fallback a RV1960 está duplicada en `VersesScreen.tsx` y tiene una implementación diferente y compleja en `DatabaseService.ts`. Se debería crear una función de utilidad única en `VersionManager.ts` o un servicio similar que sea la única fuente de verdad para obtener el texto de un versículo, independientemente de la plataforma (web o nativa).
+
+## 4. Conclusión
+
+El proyecto `Tzotzil Bible` es robusto y cuenta con una arquitectura sólida, pero sufre de problemas puntuales críticos que están impidiendo su correcto funcionamiento y despliegue. El `TypeError` y el fallo en el sistema de versiones descargadas son los bloqueadores más inmediatos. La falta de registro de los plugins nativos es un error silencioso que se manifestaría con funcionalidades rotas en producción.
+
+Siguiendo el plan de acción propuesto, es posible estabilizar la aplicación, corregir los errores y preparar el proyecto para una compilación exitosa en iOS y Android. Se recomienda encarecidamente aplicar las correcciones de las Fases 1 y 2 antes de intentar cualquier nuevo build.

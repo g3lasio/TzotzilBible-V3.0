@@ -36,7 +36,7 @@ export default function BibleScreen() {
       const data = await BibleService.getBooks();
       const displayBooks: BookDisplay[] = data.map((book: any, index: number) => ({
         id: book.id || book.book_number || index + 1,
-        name: book.name,
+        name: book.name || '',
         chapters: book.chapters || book.chapters_count || 0,
         testament: index < 39 ? 'old' : 'new'
       }));
@@ -49,7 +49,7 @@ export default function BibleScreen() {
   };
 
   const filteredBooks = books.filter(book => {
-    const matchesSearch = book.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = book && book.name ? book.name.toLowerCase().includes(searchQuery.toLowerCase()) : false;
     const matchesTestament = selectedTestament === 'all' || 
       (selectedTestament === 'old' && book.testament === 'old') ||
       (selectedTestament === 'new' && book.testament === 'new');
@@ -111,9 +111,9 @@ export default function BibleScreen() {
 
   const getSections = () => {
     const filteredOld = oldTestamentBooks.filter(b => 
-      b.name.toLowerCase().includes(searchQuery.toLowerCase()));
+      b && b.name ? b.name.toLowerCase().includes(searchQuery.toLowerCase()) : false);
     const filteredNew = newTestamentBooks.filter(b => 
-      b.name.toLowerCase().includes(searchQuery.toLowerCase()));
+      b && b.name ? b.name.toLowerCase().includes(searchQuery.toLowerCase()) : false);
 
     if (selectedTestament === 'old') {
       return [{ title: 'ANTIGUO TESTAMENTO', data: chunkArray(filteredOld, 2) }];
