@@ -7,13 +7,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // ============================================================
 let SQLite: typeof import('expo-sqlite') | null = null;
 let FileSystem: typeof import('expo-file-system') | null = null;
-let Asset: typeof import('expo-asset').Asset | null = null;
 
 if (Platform.OS !== 'web') {
   SQLite = require('expo-sqlite');
   FileSystem = require('expo-file-system');
-  Asset = require('expo-asset').Asset;
 }
+
+// Remote URL for bible.db — served from Replit backend
+const DB_REMOTE_URL = 'https://tzotzil.replit.app/api/database/download';
 
 // ============================================================
 // DATABASE VERSION - INCREMENT THIS WHEN bible.db CHANGES
@@ -304,7 +305,9 @@ export class DatabaseService {
   }
 
   // ============================================================
-  // DATABASE COPY FROM ASSETS
+  // DATABASE DOWNLOAD FROM SERVER
+  // Downloads bible.db from the Replit backend on first install.
+  // This avoids all Xcode asset bundling issues entirely.
   // ============================================================
 
   private async copyDatabaseFromAssets(): Promise<boolean> {
@@ -328,58 +331,44 @@ export class DatabaseService {
       if (fileInfo.exists && needsUpdate) {
         console.log('[DatabaseService] REPLACING old database with updated version...');
         if (this.db) {
-          try {
-            await this.db.closeAsync();
-          } catch (e) {
-            console.log('[DatabaseService] Note: could not close old db connection');
-          }
+          try { await this.db.closeAsync(); } catch (e) {}
         }
         await FileSystem!.deleteAsync(dbPath, { idempotent: true });
         console.log('[DatabaseService] Old database deleted');
       } else if (fileInfo.exists) {
         const fileSizeMB = ((fileInfo as any).size || 0) / (1024 * 1024);
         console.log(`[DatabaseService] Existing database found: ${fileSizeMB.toFixed(2)} MB`);
-        if (fileSizeMB > 5) { // Slim DB is ~10 MB, old full was ~31 MB
-          console.log('[DatabaseService] Database size looks valid, skipping copy');
+        if (fileSizeMB > 5) {
+          console.log('[DatabaseService] Database size looks valid, skipping download');
           return true;
         }
-        console.log('[DatabaseService] Database too small, will recopy');
+        console.log('[DatabaseService] Database too small, will re-download');
         await FileSystem!.deleteAsync(dbPath, { idempotent: true });
       }
 
-      // Copy fresh database from assets
-      console.log('[DatabaseService] Loading database from assets...');
-      const asset = Asset!.fromModule(require('../../assets/bible.db'));
+      // Download fresh database from server (no Xcode bundling required)
+      console.log(`[DatabaseService] Downloading database from server: ${DB_REMOTE_URL}`);
+      const downloadResult = await FileSystem!.downloadAsync(DB_REMOTE_URL, dbPath);
 
-      console.log('[DatabaseService] Downloading asset...');
-      await asset.downloadAsync();
-
-      if (!asset.localUri) {
-        console.error('[DatabaseService] Asset localUri is null after download');
+      if (downloadResult.status !== 200) {
+        console.error(`[DatabaseService] Server returned status ${downloadResult.status}`);
         return false;
       }
 
-      console.log(`[DatabaseService] Asset ready at: ${asset.localUri}`);
-
-      const assetInfo = await FileSystem!.getInfoAsync(asset.localUri);
-      const assetSizeMB = ((assetInfo as any).size || 0) / (1024 * 1024);
-      console.log(`[DatabaseService] Asset size: ${assetSizeMB.toFixed(2)} MB`);
-
-      console.log('[DatabaseService] Copying database to document directory...');
-      await FileSystem!.copyAsync({
-        from: asset.localUri,
-        to: dbPath
-      });
-
       const copiedInfo = await FileSystem!.getInfoAsync(dbPath);
       const copiedSizeMB = ((copiedInfo as any).size || 0) / (1024 * 1024);
-      console.log(`[DatabaseService] Database copied successfully: ${copiedSizeMB.toFixed(2)} MB`);
+      console.log(`[DatabaseService] Database downloaded successfully: ${copiedSizeMB.toFixed(2)} MB`);
+
+      if (copiedSizeMB < 5) {
+        console.error('[DatabaseService] Downloaded file too small — server may have returned an error page');
+        await FileSystem!.deleteAsync(dbPath, { idempotent: true });
+        return false;
+      }
 
       await this.saveDatabaseVersion();
-
       return true;
     } catch (error) {
-      console.error('[DatabaseService] Error copying database:', error);
+      console.error('[DatabaseService] Error downloading database:', error);
       return false;
     }
   }

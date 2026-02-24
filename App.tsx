@@ -33,6 +33,7 @@ type AppState = 'loading' | 'ready' | 'error';
 export default function App() {
   const [appState, setAppState] = useState<AppState>('loading');
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [loadingText, setLoadingText] = useState<string>('Iniciando...');
   
   const [fontsLoaded] = useFonts({
     Quantico_400Regular,
@@ -51,11 +52,18 @@ export default function App() {
 
   const initializeApp = async () => {
     setAppState('loading');
+    setLoadingText('Iniciando...');
+    // Show download hint after 2 seconds if still loading (first install)
+    const hintTimer = setTimeout(() => {
+      setLoadingText('Descargando base de datos...\n(Solo la primera vez, ~10 MB)');
+    }, 2000);
     try {
       const dbInitialized = await databaseService.initDatabase();
+      clearTimeout(hintTimer);
       const status = databaseService.getStatus();
       
       if (!dbInitialized || status === 'failed' || status === 'pending') {
+        clearTimeout(hintTimer);
         const error = databaseService.getInitError();
         setErrorMessage(
           error?.message || 
@@ -72,6 +80,7 @@ export default function App() {
         setAppState('error');
       }
     } catch (error) {
+      clearTimeout(hintTimer);
       console.error('Error initializing app:', error);
       setErrorMessage('Error inesperado al iniciar la aplicación.');
       setAppState('error');
@@ -92,7 +101,7 @@ export default function App() {
           />
           <Text style={styles.loadingTitle}>Tzotzil Bible</Text>
           <ActivityIndicator size="large" color="#00f3ff" style={styles.loader} />
-          <Text style={styles.loadingText}>Cargando Biblia...</Text>
+          <Text style={styles.loadingText}>{loadingText}</Text>
         </LinearGradient>
       </View>
     );

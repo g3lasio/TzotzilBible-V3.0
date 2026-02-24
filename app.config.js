@@ -75,12 +75,6 @@ export default {
         },
       ],
       [
-        "expo-asset",
-        {
-          assets: ["./assets/bible.db"],
-        },
-      ],
-      [
         "expo-notifications",
         {
           icon: "./assets/icon.png",

@@ -837,6 +837,25 @@ const server = http.createServer(async (req, res) => {
       return await handleEGWSearch(req, res);
     }
 
+    // Bible Database Download API — used by native apps on first install
+    if (pathname === '/api/database/download' && method === 'GET') {
+      const dbPath = path.join(BASE_DIR, 'assets/bible.db');
+      if (!fs.existsSync(dbPath)) {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Database file not found' }));
+        return;
+      }
+      const stat = fs.statSync(dbPath);
+      res.writeHead(200, {
+        'Content-Type': 'application/octet-stream',
+        'Content-Length': stat.size,
+        'Content-Disposition': 'attachment; filename="bible.db"',
+        'Cache-Control': 'public, max-age=86400',
+        'Access-Control-Allow-Origin': '*',
+      });
+      fs.createReadStream(dbPath).pipe(res);
+      return;
+    }
     // Bible Version Download API
     if (pathname === '/api/versions' && method === 'GET') {
       return handleVersionsList(req, res);
