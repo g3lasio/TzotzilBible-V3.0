@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform, Alert, Animated, TouchableOpacity, Dimensions, Share } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import { Text, TextInput, ActivityIndicator, IconButton } from 'react-native-paper';
@@ -13,6 +13,53 @@ import type { Moment, ChatMessage } from '../types/nevin';
 import MainLayout from '../components/MainLayout';
 import ClickableVerseText from '../components/ClickableVerseText';
 import { EgwCitationCard, parseMessageSegments } from '../components/EgwCitationCard';
+
+
+// ─── Typewriter hook ──────────────────────────────────────────────────────────
+// Reveals `fullText` character-by-character at `speed` ms/char.
+// When `active` is false it returns the full text immediately (no animation).
+function useTypewriter(fullText: string, active: boolean, speed: number = 12): string {
+  const [displayed, setDisplayed] = React.useState(active ? '' : fullText);
+  const indexRef = React.useRef(active ? 0 : fullText.length);
+  const timerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  React.useEffect(() => {
+    if (!active) {
+      setDisplayed(fullText);
+      indexRef.current = fullText.length;
+      return;
+    }
+    // Reset when a new active text arrives
+    setDisplayed('');
+    indexRef.current = 0;
+
+    const tick = () => {
+      if (indexRef.current < fullText.length) {
+        indexRef.current += 1;
+        setDisplayed(fullText.slice(0, indexRef.current));
+        timerRef.current = setTimeout(tick, speed);
+      }
+    };
+    timerRef.current = setTimeout(tick, speed);
+
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, [fullText, active, speed]);
+
+  return displayed;
+}
+
+// ─── TypewriterNevinMessage ───────────────────────────────────────────────────
+// Wraps NevinMessageContent with a typewriter reveal.
+// `active` = true  → text is revealed char-by-char
+// `active` = false → renders instantly (existing messages)
+const TypewriterNevinMessage = React.memo(
+  ({ content, active }: { content: string; active: boolean }) => {
+    const displayed = useTypewriter(content, active, 12);
+    return <NevinMessageContent content={displayed} />;
+  }
+);
 
 /**
  * NevinMessageContent — renders a Nevin AI message with mixed content:
@@ -201,6 +248,7 @@ export default function NevinScreen() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [loading, setLoading] = useState(false);
+  const [typingMessageId, setTypingMessageId] = useState<string | null>(null);
   const [initialQuestionProcessed, setInitialQuestionProcessed] = useState(false);
   const [momentLoaded, setMomentLoaded] = useState(false);
   const [currentMoment, setCurrentMoment] = useState<Moment | null>(null);
@@ -299,6 +347,7 @@ export default function NevinScreen() {
       };
 
       setMessages(prev => [...prev, nevinResponse]);
+      setTypingMessageId(nevinResponse.id);
 
       const userChatMsg: ChatMessage = {
         id: newUserMessage.id,
@@ -359,6 +408,7 @@ export default function NevinScreen() {
       };
 
       setMessages(prev => [...prev, nevinResponse]);
+      setTypingMessageId(nevinResponse.id);
 
       const userChatMsg: ChatMessage = {
         id: newUserMessage.id,
@@ -547,7 +597,10 @@ export default function NevinScreen() {
                     {message.content}
                   </Text>
                 ) : (
-                  <NevinMessageContent content={message.content} />
+                  <TypewriterNevinMessage
+                    content={message.content}
+                    active={message.id === typingMessageId}
+                  />
                 )}
                 <View style={styles.messageFooter}>
                   <Text style={[styles.timestamp, message.isUser && styles.userTimestamp]}>
