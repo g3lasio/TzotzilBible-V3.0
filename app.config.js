@@ -1,24 +1,15 @@
-// BUILD NUMBER — auto-generated from timestamp at build time.
+// BUILD NUMBER — Fixed for this release (7.1.0 / build 2602281000)
 // Format: YYMMDDHHMM — always unique and always increasing.
-// iOS buildNumber (string): e.g. "2602280017"
-// Android versionCode (int): e.g. 2602280017
 //
-// HOW TO USE WITH LOCAL XCODE:
-//   Run this ONCE before every Archive in Xcode:
-//     node scripts/set-build-number.js
-//   Then open Xcode and Archive.
+// IMPORTANT: Increment BUILD_NUMBER and VERSION_CODE before each new build
+// to avoid rejection by Apple App Store or Google Play.
 //
-// The timestamp is evaluated when `expo prebuild` runs on your Mac,
-// so each prebuild generates a fresh, unique build number automatically.
-const now = new Date();
-const year = now.getFullYear().toString().slice(-2);
-const month = (now.getMonth() + 1).toString().padStart(2, '0');
-const day = now.getDate().toString().padStart(2, '0');
-const hours = now.getHours().toString().padStart(2, '0');
-const minutes = now.getMinutes().toString().padStart(2, '0');
+// Current values set for: 2026-02-28 10:00 UTC
+// iOS buildNumber: "2602281000"
+// Android versionCode: 2602281000
 
-const BUILD_NUMBER = `${year}${month}${day}${hours}${minutes}`;
-const VERSION_CODE = parseInt(BUILD_NUMBER, 10);
+const BUILD_NUMBER = "2602281000";
+const VERSION_CODE = 2602281000;
 
 export default {
   expo: {

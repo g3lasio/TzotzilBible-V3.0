@@ -7,20 +7,22 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // ============================================================
 let SQLite: typeof import('expo-sqlite') | null = null;
 let FileSystem: typeof import('expo-file-system') | null = null;
+let Asset: typeof import('expo-asset').Asset | null = null;
 
 if (Platform.OS !== 'web') {
   SQLite = require('expo-sqlite');
   FileSystem = require('expo-file-system');
+  Asset = require('expo-asset').Asset;
 }
 
-// Remote URL for bible.db — served from Replit backend
-const DB_REMOTE_URL = 'https://tzotzil.replit.app/api/database/download';
+// NOTE: bible.db is bundled inside the APK/IPA via Metro (assets/bible.db).
+// No internet required for initialization. expo-asset handles the copy.
 
 // ============================================================
 // DATABASE VERSION - INCREMENT THIS WHEN bible.db CHANGES
-// Version 7 = slim DB (Tzotzil + RV1960 only, on-demand for rest)
+// Version 8 = bundled asset DB (no download required)
 // ============================================================
-const DB_VERSION = 7;
+const DB_VERSION = 8;
 const DB_VERSION_KEY = '@bible_db_version';
 
 export interface BibleBook {
@@ -136,11 +138,11 @@ export class DatabaseService {
         return true;
       }
 
-      console.log('[DatabaseService] Native platform - initializing SQLite...');
+      console.log('[DatabaseService] Native platform - copying DB from bundled assets...');
 
-      const copySuccess = await this.copyDatabaseFromAssets();
+      const copySuccess = await this.copyDatabaseFromBundledAsset();
       if (!copySuccess) {
-        throw new Error('Failed to copy database from assets');
+        throw new Error('No se pudo copiar la base de datos desde los assets del app.');
       }
 
       console.log('[DatabaseService] Opening database...');
@@ -162,7 +164,7 @@ export class DatabaseService {
 
         const recopySuccess = await this.forceRecopyDatabase();
         if (!recopySuccess) {
-          throw new Error('Failed to recopy database during recovery');
+          throw new Error('Re-copia de base de datos fallida durante recuperación.');
         }
 
         this.db = await SQLite!.openDatabaseAsync(DatabaseService.DB_NAME);
@@ -305,70 +307,78 @@ export class DatabaseService {
   }
 
   // ============================================================
-  // DATABASE DOWNLOAD FROM SERVER
-  // Downloads bible.db from the Replit backend on first install.
-  // This avoids all Xcode asset bundling issues entirely.
+  // COPY DB FROM BUNDLED ASSET (no internet, no download)
+  // bible.db is included inside the APK/IPA via Metro bundler.
+  // expo-asset resolves its local URI and FileSystem copies it.
+  // This NEVER fails due to network issues.
   // ============================================================
 
-  private async copyDatabaseFromAssets(): Promise<boolean> {
+  private async copyDatabaseFromBundledAsset(): Promise<boolean> {
     if (Platform.OS === 'web') return true;
 
     try {
       const dbDir = `${FileSystem!.documentDirectory}SQLite/`;
       const dbPath = `${dbDir}${DatabaseService.DB_NAME}`;
 
-      console.log(`[DatabaseService] Checking database at: ${dbPath}`);
-
+      // Ensure SQLite directory exists
       const dirInfo = await FileSystem!.getInfoAsync(dbDir);
       if (!dirInfo.exists) {
-        console.log('[DatabaseService] Creating SQLite directory...');
         await FileSystem!.makeDirectoryAsync(dbDir, { intermediates: true });
+        console.log('[DatabaseService] Created SQLite directory');
       }
 
+      // Check if DB already exists and is valid
       const fileInfo = await FileSystem!.getInfoAsync(dbPath);
-      const needsUpdate = await this.needsDatabaseUpdate();
+      const storedVersion = await AsyncStorage.getItem(DB_VERSION_KEY);
+      const currentVersion = storedVersion ? parseInt(storedVersion, 10) : 0;
+      const needsUpdate = currentVersion < DB_VERSION;
 
-      if (fileInfo.exists && needsUpdate) {
-        console.log('[DatabaseService] REPLACING old database with updated version...');
-        if (this.db) {
-          try { await this.db.closeAsync(); } catch (e) {}
-        }
-        await FileSystem!.deleteAsync(dbPath, { idempotent: true });
-        console.log('[DatabaseService] Old database deleted');
-      } else if (fileInfo.exists) {
-        const fileSizeMB = ((fileInfo as any).size || 0) / (1024 * 1024);
-        console.log(`[DatabaseService] Existing database found: ${fileSizeMB.toFixed(2)} MB`);
-        if (fileSizeMB > 5) {
-          console.log('[DatabaseService] Database size looks valid, skipping download');
+      if (fileInfo.exists && !needsUpdate) {
+        const sizeMB = ((fileInfo as any).size || 0) / (1024 * 1024);
+        if (sizeMB > 5) {
+          console.log(`[DatabaseService] DB already exists (${sizeMB.toFixed(1)} MB), skipping copy`);
           return true;
         }
-        console.log('[DatabaseService] Database too small, will re-download');
+        console.log('[DatabaseService] DB too small, will re-copy from bundled assets');
+        await FileSystem!.deleteAsync(dbPath, { idempotent: true });
+      } else if (fileInfo.exists && needsUpdate) {
+        console.log(`[DatabaseService] DB version update (${currentVersion} → ${DB_VERSION}), re-copying`);
         await FileSystem!.deleteAsync(dbPath, { idempotent: true });
       }
 
-      // Download fresh database from server (no Xcode bundling required)
-      console.log(`[DatabaseService] Downloading database from server: ${DB_REMOTE_URL}`);
-      const downloadResult = await FileSystem!.downloadAsync(DB_REMOTE_URL, dbPath);
+      // Load the bundled asset — this is inside the APK/IPA, no internet needed
+      console.log('[DatabaseService] Loading bundled bible.db from app assets...');
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const asset = Asset!.fromModule(require('../../assets/bible.db'));
+      await asset.downloadAsync(); // resolves local URI from bundle
 
-      if (downloadResult.status !== 200) {
-        console.error(`[DatabaseService] Server returned status ${downloadResult.status}`);
+      if (!asset.localUri) {
+        console.error('[DatabaseService] Asset has no localUri — check metro.config.js includes .db extension');
         return false;
       }
 
+      console.log(`[DatabaseService] Copying from: ${asset.localUri}`);
+      await FileSystem!.copyAsync({
+        from: asset.localUri,
+        to: dbPath,
+      });
+
+      // Verify the copy
       const copiedInfo = await FileSystem!.getInfoAsync(dbPath);
       const copiedSizeMB = ((copiedInfo as any).size || 0) / (1024 * 1024);
-      console.log(`[DatabaseService] Database downloaded successfully: ${copiedSizeMB.toFixed(2)} MB`);
+      console.log(`[DatabaseService] DB copied successfully: ${copiedSizeMB.toFixed(1)} MB`);
 
       if (copiedSizeMB < 5) {
-        console.error('[DatabaseService] Downloaded file too small — server may have returned an error page');
+        console.error('[DatabaseService] Copied file too small — asset may be corrupted');
         await FileSystem!.deleteAsync(dbPath, { idempotent: true });
         return false;
       }
 
-      await this.saveDatabaseVersion();
+      await AsyncStorage.setItem(DB_VERSION_KEY, DB_VERSION.toString());
       return true;
+
     } catch (error) {
-      console.error('[DatabaseService] Error downloading database:', error);
+      console.error('[DatabaseService] Error copying bundled asset:', error);
       return false;
     }
   }
@@ -408,7 +418,7 @@ export class DatabaseService {
 
       console.log('[DatabaseService] All database files cleaned up');
 
-      return await this.copyDatabaseFromAssets();
+      return await this.copyDatabaseFromBundledAsset();
     } catch (error) {
       console.error('[DatabaseService] Force recopy failed:', error);
       return false;
