@@ -24,7 +24,7 @@ export default {
   expo: {
     name: "Tzotzil Bible",
     slug: "tzotzil-bible",
-    version: "7.0.0",
+    version: "7.1.0",
     orientation: "portrait",
     icon: "./assets/icon.png",
     userInterfaceStyle: "dark",
