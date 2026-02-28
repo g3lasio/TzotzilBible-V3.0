@@ -20,7 +20,7 @@ if (Platform.OS !== 'web') {
 // DATABASE VERSION - INCREMENT THIS WHEN bible.db CHANGES
 // Version 8 = bundled asset DB (no download required)
 // ============================================================
-const DB_VERSION = 8;
+const DB_VERSION = 10;
 const DB_VERSION_KEY = '@bible_db_version';
 
 export interface BibleBook {
@@ -317,60 +317,25 @@ export class DatabaseService {
       const dbDir = `${FileSystem!.documentDirectory}SQLite/`;
       const dbPath = `${dbDir}${DatabaseService.DB_NAME}`;
 
-      // Check if DB already exists with correct version (skip re-copy)
-      const storedVersion = await AsyncStorage.getItem(DB_VERSION_KEY);
-      const currentVersion = storedVersion ? parseInt(storedVersion, 10) : 0;
-      const needsUpdate = currentVersion < DB_VERSION;
-
-      if (!needsUpdate) {
-        const fileInfo = await FileSystem!.getInfoAsync(dbPath);
-        if (fileInfo.exists) {
-          const sizeMB = ((fileInfo as any).size || 0) / (1024 * 1024);
-          if (sizeMB > 5) {
-            console.log(`[DatabaseService] DB v${currentVersion} exists (${sizeMB.toFixed(1)} MB), skipping copy`);
-            return true;
-          }
-          console.log('[DatabaseService] Existing DB too small, will re-copy');
-          await FileSystem!.deleteAsync(dbPath, { idempotent: true });
-        }
-      } else {
-        console.log(`[DatabaseService] DB version update: ${currentVersion} -> ${DB_VERSION}`);
-        const fileInfo = await FileSystem!.getInfoAsync(dbPath);
-        if (fileInfo.exists) {
-          await FileSystem!.deleteAsync(dbPath, { idempotent: true });
-        }
-      }
-
       // Ensure SQLite directory exists
       const dirInfo = await FileSystem!.getInfoAsync(dbDir);
       if (!dirInfo.exists) {
         await FileSystem!.makeDirectoryAsync(dbDir, { intermediates: true });
       }
 
-      // Platform-specific asset URI - verified against native source code:
-      //
-      // iOS: bible.db is at Bundle.main.bundlePath + '/assets/bible.db'
-      //   FileSystemLegacyModule.swift line 119: copyAsync with 'file://' scheme
-      //   -> EXFileSystemLocalFileHandler.copy() -> NSFileManager.copyItemAtPath()
-      //
-      // Android: bible.db is in res/raw/ (Metro puts .db files in res/raw/)
-      //   FileSystemLegacyModule.kt line 331: copyAsync with 'asset://' scheme
-      //   -> openAssetInputStream(uri) -> context.assets.open(path)
-      //
-      let assetUri: string;
-      if (Platform.OS === 'ios') {
-        // iOS: file is in app bundle at assets/bible.db
-        assetUri = `${FileSystem!.bundleDirectory}assets/bible.db`;
-      } else {
-        // Android: file is in res/raw/ accessible via asset:// scheme
-        assetUri = 'asset:///bible.db';
-      }
+      // SOLUTION CONFIRMED by Expo collaborator alanjhughes (GitHub issue #23455):
+      // Use Asset.fromModule().uri (NOT .localUri) with FileSystem.downloadAsync
+      // .uri is always valid in production builds (EAS Build), .localUri can be null
+      // FileSystem.downloadAsync handles both iOS and Android correctly
+      const { Asset } = require('expo-asset');
+      const asset = Asset.fromModule(require('../../assets/bible.db'));
 
-      console.log(`[DatabaseService] Copying bible.db from bundle: ${assetUri}`);
-      await FileSystem!.copyAsync({
-        from: assetUri,
-        to: dbPath,
-      });
+      console.log(`[DatabaseService] Asset uri: ${asset.uri}`);
+
+      await FileSystem!.downloadAsync(
+        asset.uri,
+        dbPath
+      );
 
       // Verify the copy succeeded
       const copiedInfo = await FileSystem!.getInfoAsync(dbPath);
