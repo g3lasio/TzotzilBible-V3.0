@@ -6,10 +6,10 @@
 //
 // Current values set for: 2026-02-28 10:00 UTC
 // iOS buildNumber: "2602281000"
-// Android versionCode: 2602281000
+// Android versionCode: 26022810 (YYMMDDHH format — max allowed by Google Play is 2,100,000,000)
 
 const BUILD_NUMBER = "2602281000";
-const VERSION_CODE = 2602281000;
+const VERSION_CODE = 26022810;
 
 export default {
   expo: {
