@@ -525,9 +525,9 @@ export default function NevinScreen() {
         style={styles.nebulaBackground}
       >
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior="padding"
         style={styles.keyboardAvoid}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 80}
       >
         <View style={styles.chatHeader}>
           <TouchableOpacity style={styles.momentsButton} onPress={handleOpenMoments}>

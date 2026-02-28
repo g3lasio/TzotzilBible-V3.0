@@ -522,6 +522,14 @@ export default function VersesScreen() {
             leftColor={TZOTZIL_VERSION.color}
             rightColor={currentSecondaryVersion.color}
           />
+          <TouchableOpacity
+            style={styles.goToButton}
+            onPress={() => setWheelPickerVisible(true)}
+          >
+            <MaterialCommunityIcons name="book-open-page-variant" size={13} color="#00ff88" />
+            <Text style={styles.goToButtonText}>Ir a libro / capítulo</Text>
+            <MaterialCommunityIcons name="chevron-right" size={13} color="#00ff88" />
+          </TouchableOpacity>
         </View>
 
         <ScrollView 
@@ -753,12 +761,30 @@ const styles = StyleSheet.create({
   },
   controls: {
     paddingHorizontal: 14,
-    paddingVertical: 10,
+    paddingTop: 10,
+    paddingBottom: 6,
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(0, 243, 255, 0.12)',
     backgroundColor: 'rgba(10, 14, 20, 0.7)',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  goToButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    marginTop: 6,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 20,
+    backgroundColor: 'rgba(0, 255, 136, 0.07)',
+    borderWidth: 1,
+    borderColor: 'rgba(0, 255, 136, 0.2)',
+  },
+  goToButtonText: {
+    fontSize: 11,
+    color: '#00ff88',
+    fontWeight: '500',
   },
   controlsRow: {
     flexDirection: 'row',
