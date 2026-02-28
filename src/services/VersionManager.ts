@@ -3,25 +3,31 @@
  * 
  * Handles downloading, storing, and loading Bible versions on demand.
  * Default build includes only Tzotzil + RV1960.
- * Other versions (NVI, DHH, TLA, NKJV) are downloaded from the server.
+ * Other versions (NVI, DHH, TLA, NKJV, etc.) are downloaded from the server.
+ *
+ * Storage strategy:
+ *   - Web:    IndexedDB (no quota limit — can store hundreds of MB)
+ *   - Native: AsyncStorage (React Native, backed by SQLite on device)
+ *
+ * The old localStorage/chunked approach caused QuotaExceededError on web
+ * because localStorage has a ~5 MB total limit per origin, and each version
+ * JSON is 5–8 MB. IndexedDB has no practical limit.
  */
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import { BACKEND_URL } from '../config';
+import { idbSetItem, idbGetItem, idbRemoveItem } from './IndexedDBStorage';
 
 // Storage keys
-const VERSION_STORAGE_PREFIX = 'bible_version_';
 const VERSION_META_KEY = 'downloaded_versions_meta';
 const VERSION_DATA_PREFIX = 'bible_version_data_';
 
 // API URL - same server that serves the web app
 const getVersionsApiUrl = (): string => {
   if (Platform.OS === 'web') {
-    // On web, use relative URL (same origin)
-    return '';
+    return ''; // relative URL (same origin)
   }
-  // On native, use the unified backend URL
   return BACKEND_URL;
 };
 
@@ -49,7 +55,7 @@ export interface VersionDownloadProgress {
   error?: string;
 }
 
-// In-memory cache for downloaded version data
+// In-memory cache for downloaded version data (avoids repeated IDB reads)
 const versionDataCache: Map<string, Map<string, string>> = new Map();
 
 class VersionManagerService {
@@ -57,8 +63,40 @@ class VersionManagerService {
   private initialized = false;
   private progressCallbacks: Map<string, (progress: VersionDownloadProgress) => void> = new Map();
 
+  // ===== STORAGE HELPERS =====
+
+  /** Store large string — IndexedDB on web, AsyncStorage on native */
+  private async storeLarge(key: string, value: string): Promise<void> {
+    if (Platform.OS === 'web') {
+      await idbSetItem(key, value);
+    } else {
+      await AsyncStorage.setItem(key, value);
+    }
+  }
+
+  /** Load large string — IndexedDB on web, AsyncStorage on native */
+  private async loadLarge(key: string): Promise<string | null> {
+    if (Platform.OS === 'web') {
+      return await idbGetItem(key);
+    } else {
+      return await AsyncStorage.getItem(key);
+    }
+  }
+
+  /** Remove large string — IndexedDB on web, AsyncStorage on native */
+  private async removeLarge(key: string): Promise<void> {
+    if (Platform.OS === 'web') {
+      await idbRemoveItem(key);
+    } else {
+      await AsyncStorage.removeItem(key);
+    }
+  }
+
+  // ===== PUBLIC API =====
+
   /**
-   * Initialize the version manager - load metadata of downloaded versions
+   * Initialize the version manager — load metadata of downloaded versions.
+   * Metadata (small JSON) always uses AsyncStorage on both platforms.
    */
   async initialize(): Promise<void> {
     if (this.initialized) return;
@@ -114,7 +152,8 @@ class VersionManagerService {
   }
 
   /**
-   * Download a Bible version from the server
+   * Download a Bible version from the server and persist it.
+   * Uses IndexedDB on web (no quota limit) and AsyncStorage on native.
    */
   async downloadVersion(
     versionId: string,
@@ -125,10 +164,7 @@ class VersionManagerService {
     }
 
     try {
-      // Report downloading status
-      this.reportProgress(versionId, { 
-        versionId, progress: 0, status: 'downloading' 
-      });
+      this.reportProgress(versionId, { versionId, progress: 0, status: 'downloading' });
 
       const baseUrl = getVersionsApiUrl();
       const response = await fetch(`${baseUrl}/api/versions/${versionId}/download`);
@@ -137,9 +173,7 @@ class VersionManagerService {
         throw new Error(`Download failed: HTTP ${response.status}`);
       }
 
-      this.reportProgress(versionId, { 
-        versionId, progress: 50, status: 'downloading' 
-      });
+      this.reportProgress(versionId, { versionId, progress: 50, status: 'downloading' });
 
       const data = await response.json();
       
@@ -147,9 +181,7 @@ class VersionManagerService {
         throw new Error('Invalid version data received');
       }
 
-      this.reportProgress(versionId, { 
-        versionId, progress: 70, status: 'processing' 
-      });
+      this.reportProgress(versionId, { versionId, progress: 70, status: 'processing' });
 
       // Build lookup map: "book_name|chapter|verse" -> text
       const lookupMap: Record<string, string> = {};
@@ -158,21 +190,13 @@ class VersionManagerService {
         lookupMap[key] = entry.text;
       }
 
-      this.reportProgress(versionId, { 
-        versionId, progress: 85, status: 'processing' 
-      });
+      this.reportProgress(versionId, { versionId, progress: 85, status: 'processing' });
 
-      // Store in AsyncStorage (chunked for large data)
+      // Persist to storage (IndexedDB on web, AsyncStorage on native)
       const jsonStr = JSON.stringify(lookupMap);
-      
-      // For web, use localStorage-friendly chunking
-      if (Platform.OS === 'web') {
-        await this.storeChunked(versionId, jsonStr);
-      } else {
-        await AsyncStorage.setItem(`${VERSION_DATA_PREFIX}${versionId}`, jsonStr);
-      }
+      await this.storeLarge(`${VERSION_DATA_PREFIX}${versionId}`, jsonStr);
 
-      // Update metadata
+      // Save metadata (small JSON — always AsyncStorage)
       const versionName = response.headers.get('X-Version-Name') || versionId;
       const versesCount = parseInt(response.headers.get('X-Verses-Count') || String(data.length));
       
@@ -187,25 +211,20 @@ class VersionManagerService {
       this.downloadedVersions.set(versionId, meta);
       await this.saveMetadata();
 
-      // Cache in memory
+      // Cache in memory for fast access
       const memoryMap = new Map<string, string>();
       for (const [key, value] of Object.entries(lookupMap)) {
         memoryMap.set(key, value);
       }
       versionDataCache.set(versionId, memoryMap);
 
-      this.reportProgress(versionId, { 
-        versionId, progress: 100, status: 'complete' 
-      });
-
+      this.reportProgress(versionId, { versionId, progress: 100, status: 'complete' });
       console.log(`[VersionManager] Downloaded ${versionId}: ${data.length} verses`);
       return true;
 
     } catch (error: any) {
       console.error(`[VersionManager] Error downloading ${versionId}:`, error);
-      this.reportProgress(versionId, { 
-        versionId, progress: 0, status: 'error', error: error.message 
-      });
+      this.reportProgress(versionId, { versionId, progress: 0, status: 'error', error: error.message });
       return false;
     } finally {
       this.progressCallbacks.delete(versionId);
@@ -218,12 +237,10 @@ class VersionManagerService {
   async getVerseText(versionId: string, bookName: string, chapter: number, verse: number): Promise<string | null> {
     const key = `${bookName}|${chapter}|${verse}`;
     
-    // Check memory cache first
     if (versionDataCache.has(versionId)) {
       return versionDataCache.get(versionId)!.get(key) || null;
     }
 
-    // Load from storage
     try {
       await this.loadVersionIntoCache(versionId);
       if (versionDataCache.has(versionId)) {
@@ -246,7 +263,6 @@ class VersionManagerService {
   ): Promise<Map<number, string>> {
     const result = new Map<number, string>();
     
-    // Ensure version is in memory cache
     if (!versionDataCache.has(versionId)) {
       await this.loadVersionIntoCache(versionId);
     }
@@ -254,7 +270,6 @@ class VersionManagerService {
     const cache = versionDataCache.get(versionId);
     if (!cache) return result;
 
-    // Find all verses for this book/chapter
     const prefix = `${bookName}|${chapter}|`;
     for (const [key, text] of cache.entries()) {
       if (key.startsWith(prefix)) {
@@ -267,24 +282,16 @@ class VersionManagerService {
   }
 
   /**
-   * Delete a downloaded version
+   * Delete a downloaded version from storage and memory
    */
   async deleteVersion(versionId: string): Promise<boolean> {
     try {
-      // Remove from storage
-      if (Platform.OS === 'web') {
-        await this.deleteChunked(versionId);
-      } else {
-        await AsyncStorage.removeItem(`${VERSION_DATA_PREFIX}${versionId}`);
-      }
+      await this.removeLarge(`${VERSION_DATA_PREFIX}${versionId}`);
 
-      // Remove from metadata
       this.downloadedVersions.delete(versionId);
       await this.saveMetadata();
 
-      // Remove from memory cache
       versionDataCache.delete(versionId);
-
       console.log(`[VersionManager] Deleted version ${versionId}`);
       return true;
     } catch (error) {
@@ -294,7 +301,7 @@ class VersionManagerService {
   }
 
   /**
-   * Get total storage used by downloaded versions
+   * Get total storage used by downloaded versions (in MB)
    */
   getTotalStorageMB(): number {
     let total = 0;
@@ -308,14 +315,7 @@ class VersionManagerService {
 
   private async loadVersionIntoCache(versionId: string): Promise<void> {
     try {
-      let jsonStr: string | null;
-      
-      if (Platform.OS === 'web') {
-        jsonStr = await this.loadChunked(versionId);
-      } else {
-        jsonStr = await AsyncStorage.getItem(`${VERSION_DATA_PREFIX}${versionId}`);
-      }
-
+      const jsonStr = await this.loadLarge(`${VERSION_DATA_PREFIX}${versionId}`);
       if (!jsonStr) return;
 
       const lookupMap = JSON.parse(jsonStr) as Record<string, string>;
@@ -335,6 +335,7 @@ class VersionManagerService {
     for (const [id, info] of this.downloadedVersions.entries()) {
       meta[id] = info;
     }
+    // Metadata is small (<1 KB) — safe to use AsyncStorage on all platforms
     await AsyncStorage.setItem(VERSION_META_KEY, JSON.stringify(meta));
   }
 
@@ -342,55 +343,6 @@ class VersionManagerService {
     const callback = this.progressCallbacks.get(versionId);
     if (callback) {
       callback(progress);
-    }
-  }
-
-  // Web-specific chunked storage (localStorage has ~5MB limit per key)
-  private async storeChunked(versionId: string, data: string): Promise<void> {
-    const CHUNK_SIZE = 2 * 1024 * 1024; // 2MB chunks
-    const chunks = Math.ceil(data.length / CHUNK_SIZE);
-    
-    // Store chunk count
-    await AsyncStorage.setItem(`${VERSION_DATA_PREFIX}${versionId}_chunks`, String(chunks));
-    
-    // Store each chunk
-    for (let i = 0; i < chunks; i++) {
-      const chunk = data.slice(i * CHUNK_SIZE, (i + 1) * CHUNK_SIZE);
-      await AsyncStorage.setItem(`${VERSION_DATA_PREFIX}${versionId}_${i}`, chunk);
-    }
-  }
-
-  private async loadChunked(versionId: string): Promise<string | null> {
-    // Try direct load first (for native or small data)
-    const direct = await AsyncStorage.getItem(`${VERSION_DATA_PREFIX}${versionId}`);
-    if (direct) return direct;
-
-    // Try chunked load
-    const chunksStr = await AsyncStorage.getItem(`${VERSION_DATA_PREFIX}${versionId}_chunks`);
-    if (!chunksStr) return null;
-
-    const chunks = parseInt(chunksStr);
-    let result = '';
-    for (let i = 0; i < chunks; i++) {
-      const chunk = await AsyncStorage.getItem(`${VERSION_DATA_PREFIX}${versionId}_${i}`);
-      if (!chunk) return null;
-      result += chunk;
-    }
-    return result;
-  }
-
-  private async deleteChunked(versionId: string): Promise<void> {
-    // Delete direct key
-    await AsyncStorage.removeItem(`${VERSION_DATA_PREFIX}${versionId}`);
-    
-    // Delete chunked keys
-    const chunksStr = await AsyncStorage.getItem(`${VERSION_DATA_PREFIX}${versionId}_chunks`);
-    if (chunksStr) {
-      const chunks = parseInt(chunksStr);
-      for (let i = 0; i < chunks; i++) {
-        await AsyncStorage.removeItem(`${VERSION_DATA_PREFIX}${versionId}_${i}`);
-      }
-      await AsyncStorage.removeItem(`${VERSION_DATA_PREFIX}${versionId}_chunks`);
     }
   }
 }
