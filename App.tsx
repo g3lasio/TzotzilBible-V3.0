@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useState, useEffect } from 'react';
-import { View, ActivityIndicator, StyleSheet, Text, TouchableOpacity, Image } from 'react-native';
+import { View, ActivityIndicator, StyleSheet, Text, TouchableOpacity, Image, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider as PaperProvider, MD3DarkTheme } from 'react-native-paper';
 import AppNavigator from './src/navigation/AppNavigator';
@@ -11,6 +11,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useFonts, Quantico_400Regular, Quantico_700Bold } from '@expo-google-fonts/quantico';
 import * as SplashScreen from 'expo-splash-screen';
+
+// SQLiteProvider handles the asset copy natively — no manual FileSystem code needed.
+// On Android and iOS it uses Asset.fromModule().downloadAsync() + importAssetDatabaseAsync()
+// which is the only method guaranteed to work on local Gradle builds, EAS, and App Store.
+let SQLiteProvider: React.ComponentType<any> | null = null;
+if (Platform.OS !== 'web') {
+  SQLiteProvider = require('expo-sqlite').SQLiteProvider;
+}
 
 SplashScreen.preventAutoHideAsync();
 
@@ -30,11 +38,11 @@ const darkTheme = {
 
 type AppState = 'loading' | 'ready' | 'error';
 
-export default function App() {
+// ─── Inner app — runs after SQLiteProvider has prepared the DB ────────────────
+function InnerApp() {
   const [appState, setAppState] = useState<AppState>('loading');
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const [loadingText, setLoadingText] = useState<string>('Iniciando...');
-  
+
   const [fontsLoaded] = useFonts({
     Quantico_400Regular,
     Quantico_700Bold,
@@ -52,27 +60,21 @@ export default function App() {
 
   const initializeApp = async () => {
     setAppState('loading');
-    setLoadingText('Iniciando...');
-    // Show download hint after 2 seconds if still loading (first install)
-    const hintTimer = setTimeout(() => {
-      setLoadingText('Descargando base de datos...\n(Solo la primera vez, ~10 MB)');
-    }, 2000);
     try {
+      // SQLiteProvider already prepared the DB — DatabaseService just opens it.
       const dbInitialized = await databaseService.initDatabase();
-      clearTimeout(hintTimer);
       const status = databaseService.getStatus();
-      
+
       if (!dbInitialized || status === 'failed' || status === 'pending') {
-        clearTimeout(hintTimer);
         const error = databaseService.getInitError();
         setErrorMessage(
-          error?.message || 
+          error?.message ||
           'No se pudo inicializar la base de datos. Por favor reinicia la aplicación.'
         );
         setAppState('error');
         return;
       }
-      
+
       if (status === 'ready' || status === 'web_fallback') {
         setAppState('ready');
       } else {
@@ -80,7 +82,6 @@ export default function App() {
         setAppState('error');
       }
     } catch (error) {
-      clearTimeout(hintTimer);
       console.error('Error initializing app:', error);
       setErrorMessage('Error inesperado al iniciar la aplicación.');
       setAppState('error');
@@ -94,14 +95,14 @@ export default function App() {
           colors={['#0a0e14', '#1a2332']}
           style={styles.gradient}
         >
-          <Image 
-            source={require('./assets/icon.png')} 
+          <Image
+            source={require('./assets/icon.png')}
             style={styles.appLogo}
             resizeMode="contain"
           />
           <Text style={styles.loadingTitle}>Tzotzil Bible</Text>
           <ActivityIndicator size="large" color="#00f3ff" style={styles.loader} />
-          <Text style={styles.loadingText}>{loadingText}</Text>
+          <Text style={styles.loadingText}>Iniciando...</Text>
         </LinearGradient>
       </View>
     );
@@ -134,6 +135,29 @@ export default function App() {
         </NavigationContainer>
       </PaperProvider>
     </QueryClientProvider>
+  );
+}
+
+// ─── Root — wraps with SQLiteProvider on native, renders directly on web ─────
+export default function App() {
+  // On web, SQLiteProvider is not needed (DatabaseService uses API fallback)
+  if (Platform.OS === 'web' || !SQLiteProvider) {
+    return <InnerApp />;
+  }
+
+  // On Android and iOS: SQLiteProvider copies bible.db from assets to the
+  // SQLite documents directory before InnerApp runs. This is the ONLY reliable
+  // method for local Gradle builds, EAS builds, and App Store submissions.
+  return (
+    <SQLiteProvider
+      databaseName="bible.db"
+      assetSource={{ assetId: require('./assets/bible.db'), forceOverwrite: false }}
+      onError={(error: Error) => {
+        console.error('[SQLiteProvider] Failed to open database from asset:', error);
+      }}
+    >
+      <InnerApp />
+    </SQLiteProvider>
   );
 }
 

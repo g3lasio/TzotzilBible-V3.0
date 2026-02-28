@@ -6,22 +6,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // This prevents web crashes from undefined native modules
 // ============================================================
 let SQLite: typeof import('expo-sqlite') | null = null;
-let FileSystem: typeof import('expo-file-system') | null = null;
 
 if (Platform.OS !== 'web') {
   SQLite = require('expo-sqlite');
-  FileSystem = require('expo-file-system');
 }
 
-// NOTE: bible.db is bundled inside the APK/IPA via Metro (assets/bible.db).
-// No internet required for initialization. expo-asset handles the copy.
-
 // ============================================================
-// DATABASE VERSION - INCREMENT THIS WHEN bible.db CHANGES
-// Version 8 = bundled asset DB (no download required)
+// bible.db is now opened directly by SQLiteProvider in App.tsx
+// using assetSource — no manual copy needed.
+// DatabaseService.initialize() just calls openDatabaseAsync()
+// which connects to the already-prepared database.
 // ============================================================
-const DB_VERSION = 11; // v11: switched to importDatabaseFromAssetAsync (fixes local Gradle builds)
-const DB_VERSION_KEY = '@bible_db_version';
 
 export interface BibleBook {
   id: number;
@@ -67,23 +62,22 @@ export type InitializationStatus = 'pending' | 'initializing' | 'ready' | 'web_f
 
 const EXPECTED_BOOKS_COUNT = 66;
 const EXPECTED_VERSES_MIN = 31000;
-const MAX_RECOVERY_ATTEMPTS = 3;
 
-// On-demand version field mapping - all downloadable versions
-const ON_DEMAND_VERSION_FIELDS: Record<string, string> = {
-  'nvi': 'text_spanish_nvi',
-  'dhh': 'text_spanish_dhh',
-  'tla': 'text_spanish_tla',
-  'lbla': 'text_spanish_lbla',
-  'nbla': 'text_spanish_nbla',
-  'ntv': 'text_spanish_ntv',
+// All version field mappings — all now bundled in bible.db
+const ALL_VERSION_FIELDS: Record<string, string> = {
+  'nvi':     'text_spanish_nvi',
+  'dhh':     'text_spanish_dhh',
+  'tla':     'text_spanish_tla',
+  'lbla':    'text_spanish_lbla',
+  'nbla':    'text_spanish_nbla',
+  'ntv':     'text_spanish_ntv',
   'rva2015': 'text_spanish_rva2015',
-  'rvc': 'text_spanish_rvc',
-  'tlai': 'text_spanish_tlai',
-  'vbl': 'text_spanish_vbl',
-  'bes': 'text_spanish_bes',
-  'pddpt': 'text_spanish_pddpt',
-  'nkjv': 'text_english_nkjv',
+  'rvc':     'text_spanish_rvc',
+  'tlai':    'text_spanish_tlai',
+  'vbl':     'text_spanish_vbl',
+  'bes':     'text_spanish_bes',
+  'pddpt':   'text_spanish_pddpt',
+  'nkjv':    'text_english_nkjv',
 };
 
 export class DatabaseService {
@@ -93,9 +87,7 @@ export class DatabaseService {
   private initStatus: InitializationStatus = 'pending';
   private initError: Error | null = null;
   private initPromise: Promise<boolean> | null = null;
-  private recoveryAttempts: number = 0;
   private availableColumns: Set<string> = new Set();
-  private versionManager: any = null; // Lazy loaded to avoid circular deps
 
   private constructor() {}
 
@@ -107,7 +99,7 @@ export class DatabaseService {
   }
 
   // ============================================================
-  // PUBLIC API - These method names MUST match what BibleService.ts expects
+  // PUBLIC API
   // ============================================================
 
   async initDatabase(): Promise<boolean> {
@@ -136,53 +128,19 @@ export class DatabaseService {
         return true;
       }
 
-      console.log('[DatabaseService] Native platform - copying DB from bundled assets...');
-
-      const copySuccess = await this.copyDatabaseFromBundledAsset();
-      if (!copySuccess) {
-        throw new Error('No se pudo copiar la base de datos desde los assets del app.');
-      }
-
-      console.log('[DatabaseService] Opening database...');
+      // SQLiteProvider in App.tsx has already copied bible.db from assets
+      // via assetSource. We just open the connection here.
+      console.log('[DatabaseService] Opening database (prepared by SQLiteProvider)...');
       this.db = await SQLite!.openDatabaseAsync(DatabaseService.DB_NAME);
 
-      // Detect available columns in the database
       await this.detectColumns();
 
       const isValid = await this.validateDatabase();
       if (!isValid) {
-        console.log('[DatabaseService] Database validation failed, attempting recovery...');
-
-        if (this.recoveryAttempts >= MAX_RECOVERY_ATTEMPTS) {
-          throw new Error(`Database recovery failed after ${MAX_RECOVERY_ATTEMPTS} attempts. Please reinstall the app.`);
-        }
-
-        this.recoveryAttempts++;
-        console.log(`[DatabaseService] Recovery attempt ${this.recoveryAttempts}/${MAX_RECOVERY_ATTEMPTS}`);
-
-        const recopySuccess = await this.forceRecopyDatabase();
-        if (!recopySuccess) {
-          throw new Error('Re-copia de base de datos fallida durante recuperación.');
-        }
-
-        this.db = await SQLite!.openDatabaseAsync(DatabaseService.DB_NAME);
-        await this.detectColumns();
-        const retryValid = await this.validateDatabase();
-        if (!retryValid) {
-          throw new Error('Database validation failed after recovery attempt');
-        }
-
-        this.recoveryAttempts = 0;
-      }
-
-      // Initialize VersionManager for on-demand versions
-      try {
-        const { versionManager } = require('./VersionManager');
-        this.versionManager = versionManager;
-        await this.versionManager.initialize();
-        console.log(`[DatabaseService] VersionManager ready`);
-      } catch (e) {
-        console.log('[DatabaseService] VersionManager not available, on-demand versions disabled');
+        throw new Error(
+          'La base de datos no pasó la validación. ' +
+          'Verifica que bible.db esté correctamente incluido en los assets del APK.'
+        );
       }
 
       this.initStatus = 'ready';
@@ -198,7 +156,7 @@ export class DatabaseService {
   }
 
   // ============================================================
-  // COLUMN DETECTION - Handles both slim and full databases
+  // COLUMN DETECTION
   // ============================================================
 
   private async detectColumns(): Promise<void> {
@@ -209,8 +167,10 @@ export class DatabaseService {
       console.log(`[DatabaseService] Detected ${this.availableColumns.size} columns in verses table`);
     } catch (error) {
       console.error('[DatabaseService] Error detecting columns:', error);
-      // Default to base columns
-      this.availableColumns = new Set(['id', 'book_id', 'book_name', 'chapter', 'verse', 'text_tzotzil', 'text_spanish_rv1960']);
+      this.availableColumns = new Set([
+        'id', 'book_id', 'book_name', 'chapter', 'verse',
+        'text_tzotzil', 'text_spanish_rv1960'
+      ]);
     }
   }
 
@@ -219,51 +179,16 @@ export class DatabaseService {
    */
   private getSelectClause(): string {
     const baseColumns = ['v.id', 'v.book_id', 'v.chapter', 'v.verse', 'v.book_name'];
-    // Base text columns + all on-demand version columns
     const textColumns = [
       'text_tzotzil', 'text_spanish_rv1960',
-      ...Object.values(ON_DEMAND_VERSION_FIELDS)
+      ...Object.values(ALL_VERSION_FIELDS)
     ];
-    
     for (const col of textColumns) {
       if (this.availableColumns.has(col)) {
         baseColumns.push(`v.${col}`);
       }
     }
-    
     return baseColumns.join(', ');
-  }
-
-  // ============================================================
-  // DATABASE VERSION CHECK
-  // ============================================================
-
-  private async needsDatabaseUpdate(): Promise<boolean> {
-    try {
-      const storedVersion = await AsyncStorage.getItem(DB_VERSION_KEY);
-      const currentVersion = storedVersion ? parseInt(storedVersion, 10) : 0;
-
-      console.log(`[DatabaseService] Stored DB version: ${currentVersion}, Required: ${DB_VERSION}`);
-
-      if (currentVersion < DB_VERSION) {
-        console.log('[DatabaseService] DATABASE UPDATE NEEDED - new version available');
-        return true;
-      }
-
-      return false;
-    } catch (error) {
-      console.log('[DatabaseService] Error checking DB version, will update:', error);
-      return true;
-    }
-  }
-
-  private async saveDatabaseVersion(): Promise<void> {
-    try {
-      await AsyncStorage.setItem(DB_VERSION_KEY, DB_VERSION.toString());
-      console.log(`[DatabaseService] Saved DB version: ${DB_VERSION}`);
-    } catch (error) {
-      console.error('[DatabaseService] Error saving DB version:', error);
-    }
   }
 
   // ============================================================
@@ -305,104 +230,6 @@ export class DatabaseService {
   }
 
   // ============================================================
-  // COPY DB FROM BUNDLED ASSET — Official expo-sqlite method
-  // Uses importDatabaseFromAssetAsync which calls:
-  //   1. Asset.fromModule(assetId).downloadAsync() → gets real localUri
-  //   2. ExpoSQLite.importAssetDatabaseAsync() → native file copy
-  // This works on local Gradle builds, EAS builds, iOS and Android.
-  // Asset.fromModule().uri alone fails on local Android builds because
-  // FileSystem.downloadAsync cannot read asset:/// URIs in that context.
-  // ============================================================
-
-  private async copyDatabaseFromBundledAsset(): Promise<boolean> {
-    if (Platform.OS === 'web') return true;
-    try {
-      // importDatabaseFromAssetAsync is the official expo-sqlite API for
-      // copying a bundled asset DB into the SQLite documents directory.
-      // It handles all platforms and build types correctly.
-      const { importDatabaseFromAssetAsync } = require('expo-sqlite');
-      const assetId = require('../../assets/bible.db');
-
-      console.log('[DatabaseService] Copying bible.db via importDatabaseFromAssetAsync...');
-
-      await importDatabaseFromAssetAsync(
-        DatabaseService.DB_NAME,
-        { assetId, forceOverwrite: false }
-      );
-
-      // Verify the copy succeeded by checking the file via FileSystem
-      const dbDir = `${FileSystem!.documentDirectory}SQLite/`;
-      const dbPath = `${dbDir}${DatabaseService.DB_NAME}`;
-      const copiedInfo = await FileSystem!.getInfoAsync(dbPath);
-      const copiedSizeMB = ((copiedInfo as any).size || 0) / (1024 * 1024);
-      console.log(`[DatabaseService] DB copied: ${copiedSizeMB.toFixed(1)} MB at ${dbPath}`);
-
-      if (!copiedInfo.exists || copiedSizeMB < 5) {
-        console.error('[DatabaseService] Copied DB too small or missing — retrying with forceOverwrite');
-        // Retry with forceOverwrite in case a corrupt file exists
-        await importDatabaseFromAssetAsync(
-          DatabaseService.DB_NAME,
-          { assetId, forceOverwrite: true }
-        );
-        const retryInfo = await FileSystem!.getInfoAsync(dbPath);
-        const retrySizeMB = ((retryInfo as any).size || 0) / (1024 * 1024);
-        if (!retryInfo.exists || retrySizeMB < 5) {
-          console.error('[DatabaseService] Retry also failed');
-          return false;
-        }
-      }
-
-      await AsyncStorage.setItem(DB_VERSION_KEY, DB_VERSION.toString());
-      return true;
-    } catch (error) {
-      console.error('[DatabaseService] Error copying DB from bundle:', error);
-      return false;
-    }
-  }
-
-  private async forceRecopyDatabase(): Promise<boolean> {
-    if (Platform.OS === 'web') return true;
-
-    try {
-      const dbDir = `${FileSystem!.documentDirectory}SQLite/`;
-      const dbPath = `${dbDir}${DatabaseService.DB_NAME}`;
-      const dbJournalPath = `${dbPath}-journal`;
-      const dbWalPath = `${dbPath}-wal`;
-      const dbShmPath = `${dbPath}-shm`;
-
-      if (this.db) {
-        console.log('[DatabaseService] Closing database before recopy...');
-        try {
-          await this.db.closeAsync();
-        } catch (e) {
-          console.log('[DatabaseService] Could not close database:', e);
-        }
-        this.db = null;
-      }
-
-      console.log('[DatabaseService] Force recopy - cleaning up all database files...');
-
-      const filesToDelete = [dbPath, dbJournalPath, dbWalPath, dbShmPath];
-      for (const file of filesToDelete) {
-        try {
-          await FileSystem!.deleteAsync(file, { idempotent: true });
-        } catch (e) {
-          // Ignore errors on cleanup
-        }
-      }
-
-      await AsyncStorage.setItem(DB_VERSION_KEY, '0');
-
-      console.log('[DatabaseService] All database files cleaned up');
-
-      return await this.copyDatabaseFromBundledAsset();
-    } catch (error) {
-      console.error('[DatabaseService] Force recopy failed:', error);
-      return false;
-    }
-  }
-
-  // ============================================================
   // STATUS METHODS
   // ============================================================
 
@@ -423,7 +250,7 @@ export class DatabaseService {
   }
 
   // ============================================================
-  // DATA ACCESS METHODS - Base versions from DB + on-demand from VersionManager
+  // DATA ACCESS METHODS
   // ============================================================
 
   async getBooks(): Promise<any[]> {
@@ -485,57 +312,25 @@ export class DatabaseService {
 
       console.log(`[DatabaseService] Loaded ${result.length} verses for ${bookName} ${chapter}`);
 
-      // Map results into verse objects
-      const verses: BibleVerse[] = result.map((row: any) => ({
-        id: row.id,
-        book_id: row.book_id,
-        chapter: row.chapter,
-        verse: row.verse,
-        text: row.text_spanish_rv1960 || '',
-        text_tzotzil: row.text_tzotzil || '',
-        text_spanish_rv1960: row.text_spanish_rv1960 || '',
-        text_spanish_nvi: row.text_spanish_nvi || '',
-        text_spanish_dhh: row.text_spanish_dhh || '',
-        text_spanish_tla: row.text_spanish_tla || '',
-        text_english_nkjv: row.text_english_nkjv || '',
-        book_name: row.book_name
-      }));
-
-      // Enrich with downloaded on-demand versions using bulk chapter load.
-      // Loading an entire chapter at once (getChapterVerses) is far more
-      // efficient than the previous per-verse approach and fixes the fallback bug.
-      if (this.versionManager && verses.length > 0) {
-        for (const [versionId, fieldName] of Object.entries(ON_DEMAND_VERSION_FIELDS)) {
-          if (this.versionManager.isVersionDownloaded(versionId)) {
-            const chapterMap: Map<number, string> = await this.versionManager.getChapterVerses(
-              versionId, bookName, chapter
-            );
-            if (chapterMap.size > 0) {
-              for (const verse of verses) {
-                const text = chapterMap.get(verse.verse);
-                if (text && text.trim()) {
-                  (verse as any)[fieldName] = text;
-                }
-              }
-              console.log(`[DatabaseService] Enriched ${chapterMap.size} verses with version: ${versionId}`);
-            }
+      const verses: BibleVerse[] = result.map((row: any) => {
+        const verse: BibleVerse = {
+          id: row.id,
+          book_id: row.book_id,
+          chapter: row.chapter,
+          verse: row.verse,
+          text: row.text_spanish_rv1960 || '',
+          text_tzotzil: row.text_tzotzil || '',
+          text_spanish_rv1960: row.text_spanish_rv1960 || '',
+          book_name: row.book_name
+        };
+        // Add all bundled version fields
+        for (const fieldName of Object.values(ALL_VERSION_FIELDS)) {
+          if (this.availableColumns.has(fieldName)) {
+            verse[fieldName] = row[fieldName] || '';
           }
         }
-      }
-
-      // Log version availability for debugging
-      if (verses.length > 0) {
-        const sample = verses[0];
-        const versions = {
-          tzotzil: !!sample.text_tzotzil,
-          rv1960: !!sample.text_spanish_rv1960,
-          nvi: !!sample.text_spanish_nvi,
-          dhh: !!sample.text_spanish_dhh,
-          tla: !!sample.text_spanish_tla,
-          nkjv: !!sample.text_english_nkjv,
-        };
-        console.log(`[DatabaseService] Version availability:`, JSON.stringify(versions));
-      }
+        return verse;
+      });
 
       return verses;
     } catch (error) {
@@ -557,20 +352,24 @@ export class DatabaseService {
          LIMIT 100`,
         [searchTerm, searchTerm]
       ) as any[];
-      return result.map((row: any) => ({
-        id: row.id,
-        book_id: row.book_id,
-        chapter: row.chapter,
-        verse: row.verse,
-        text: row.text_spanish_rv1960 || '',
-        text_tzotzil: row.text_tzotzil || '',
-        text_spanish_rv1960: row.text_spanish_rv1960 || '',
-        text_spanish_nvi: row.text_spanish_nvi || '',
-        text_spanish_dhh: row.text_spanish_dhh || '',
-        text_spanish_tla: row.text_spanish_tla || '',
-        text_english_nkjv: row.text_english_nkjv || '',
-        book_name: row.book_name
-      }));
+      return result.map((row: any) => {
+        const verse: BibleVerse = {
+          id: row.id,
+          book_id: row.book_id,
+          chapter: row.chapter,
+          verse: row.verse,
+          text: row.text_spanish_rv1960 || '',
+          text_tzotzil: row.text_tzotzil || '',
+          text_spanish_rv1960: row.text_spanish_rv1960 || '',
+          book_name: row.book_name
+        };
+        for (const fieldName of Object.values(ALL_VERSION_FIELDS)) {
+          if (this.availableColumns.has(fieldName)) {
+            verse[fieldName] = row[fieldName] || '';
+          }
+        }
+        return verse;
+      });
     } catch (error) {
       console.error('[DatabaseService] searchVerses error:', error);
       return [];
@@ -622,28 +421,13 @@ export class DatabaseService {
           text: result.text_spanish_rv1960 || '',
           text_tzotzil: result.text_tzotzil || '',
           text_spanish_rv1960: result.text_spanish_rv1960 || '',
-          text_spanish_nvi: result.text_spanish_nvi || '',
-          text_spanish_dhh: result.text_spanish_dhh || '',
-          text_spanish_tla: result.text_spanish_tla || '',
-          text_english_nkjv: result.text_english_nkjv || '',
           book_name: result.book_name
         };
-
-        // Enrich with downloaded on-demand versions
-        if (this.versionManager) {
-          for (const [versionId, fieldName] of Object.entries(ON_DEMAND_VERSION_FIELDS)) {
-            const currentValue = (verseObj as any)[fieldName];
-            if ((!currentValue || !currentValue.trim()) && this.versionManager.isVersionDownloaded(versionId)) {
-              const text = await this.versionManager.getVerseText(
-                versionId, bookName, chapter, verse
-              );
-              if (text) {
-                (verseObj as any)[fieldName] = text;
-              }
-            }
+        for (const fieldName of Object.values(ALL_VERSION_FIELDS)) {
+          if (this.availableColumns.has(fieldName)) {
+            verseObj[fieldName] = result[fieldName] || '';
           }
         }
-
         return verseObj;
       }
       return null;
@@ -653,36 +437,10 @@ export class DatabaseService {
     }
   }
 
-  /**
-   * Force database update - deletes cached database and re-copies from assets
-   */
   async forceUpdate(): Promise<void> {
-    console.log('[DatabaseService] FORCE UPDATE requested');
-
-    if (Platform.OS === 'web') {
-      console.log('[DatabaseService] Web platform - re-initializing...');
-      this.initStatus = 'pending';
-      this.initPromise = null;
-      await this.initDatabase();
-      return;
-    }
-
-    try {
-      const recopySuccess = await this.forceRecopyDatabase();
-      if (!recopySuccess) {
-        throw new Error('Force recopy failed');
-      }
-
-      this.db = await SQLite!.openDatabaseAsync(DatabaseService.DB_NAME);
-      await this.detectColumns();
-      this.initStatus = 'ready';
-      this.initPromise = null;
-
-      console.log('[DatabaseService] Force update complete');
-    } catch (error) {
-      console.error('[DatabaseService] Force update failed:', error);
-      throw error;
-    }
+    // With SQLiteProvider, there is nothing to force-update manually.
+    // The database is always the bundled version from the APK.
+    console.log('[DatabaseService] forceUpdate: no-op (database is bundled in APK)');
   }
 
   async close(): Promise<void> {
