@@ -20,7 +20,7 @@ if (Platform.OS !== 'web') {
 // DATABASE VERSION - INCREMENT THIS WHEN bible.db CHANGES
 // Version 8 = bundled asset DB (no download required)
 // ============================================================
-const DB_VERSION = 10;
+const DB_VERSION = 11; // v11: switched to importDatabaseFromAssetAsync (fixes local Gradle builds)
 const DB_VERSION_KEY = '@bible_db_version';
 
 export interface BibleBook {
@@ -305,47 +305,51 @@ export class DatabaseService {
   }
 
   // ============================================================
-  // COPY DB FROM BUNDLED ASSET (no internet, no download)
-  // bible.db is included inside the APK/IPA via Metro bundler.
-  // expo-asset resolves its local URI and FileSystem copies it.
-  // This NEVER fails due to network issues.
+  // COPY DB FROM BUNDLED ASSET — Official expo-sqlite method
+  // Uses importDatabaseFromAssetAsync which calls:
+  //   1. Asset.fromModule(assetId).downloadAsync() → gets real localUri
+  //   2. ExpoSQLite.importAssetDatabaseAsync() → native file copy
+  // This works on local Gradle builds, EAS builds, iOS and Android.
+  // Asset.fromModule().uri alone fails on local Android builds because
+  // FileSystem.downloadAsync cannot read asset:/// URIs in that context.
   // ============================================================
 
   private async copyDatabaseFromBundledAsset(): Promise<boolean> {
     if (Platform.OS === 'web') return true;
     try {
-      const dbDir = `${FileSystem!.documentDirectory}SQLite/`;
-      const dbPath = `${dbDir}${DatabaseService.DB_NAME}`;
+      // importDatabaseFromAssetAsync is the official expo-sqlite API for
+      // copying a bundled asset DB into the SQLite documents directory.
+      // It handles all platforms and build types correctly.
+      const { importDatabaseFromAssetAsync } = require('expo-sqlite');
+      const assetId = require('../../assets/bible.db');
 
-      // Ensure SQLite directory exists
-      const dirInfo = await FileSystem!.getInfoAsync(dbDir);
-      if (!dirInfo.exists) {
-        await FileSystem!.makeDirectoryAsync(dbDir, { intermediates: true });
-      }
+      console.log('[DatabaseService] Copying bible.db via importDatabaseFromAssetAsync...');
 
-      // SOLUTION CONFIRMED by Expo collaborator alanjhughes (GitHub issue #23455):
-      // Use Asset.fromModule().uri (NOT .localUri) with FileSystem.downloadAsync
-      // .uri is always valid in production builds (EAS Build), .localUri can be null
-      // FileSystem.downloadAsync handles both iOS and Android correctly
-      const { Asset } = require('expo-asset');
-      const asset = Asset.fromModule(require('../../assets/bible.db'));
-
-      console.log(`[DatabaseService] Asset uri: ${asset.uri}`);
-
-      await FileSystem!.downloadAsync(
-        asset.uri,
-        dbPath
+      await importDatabaseFromAssetAsync(
+        DatabaseService.DB_NAME,
+        { assetId, forceOverwrite: false }
       );
 
-      // Verify the copy succeeded
+      // Verify the copy succeeded by checking the file via FileSystem
+      const dbDir = `${FileSystem!.documentDirectory}SQLite/`;
+      const dbPath = `${dbDir}${DatabaseService.DB_NAME}`;
       const copiedInfo = await FileSystem!.getInfoAsync(dbPath);
       const copiedSizeMB = ((copiedInfo as any).size || 0) / (1024 * 1024);
-      console.log(`[DatabaseService] DB copied: ${copiedSizeMB.toFixed(1)} MB`);
+      console.log(`[DatabaseService] DB copied: ${copiedSizeMB.toFixed(1)} MB at ${dbPath}`);
 
       if (!copiedInfo.exists || copiedSizeMB < 5) {
-        console.error('[DatabaseService] Copied DB too small or missing');
-        await FileSystem!.deleteAsync(dbPath, { idempotent: true });
-        return false;
+        console.error('[DatabaseService] Copied DB too small or missing — retrying with forceOverwrite');
+        // Retry with forceOverwrite in case a corrupt file exists
+        await importDatabaseFromAssetAsync(
+          DatabaseService.DB_NAME,
+          { assetId, forceOverwrite: true }
+        );
+        const retryInfo = await FileSystem!.getInfoAsync(dbPath);
+        const retrySizeMB = ((retryInfo as any).size || 0) / (1024 * 1024);
+        if (!retryInfo.exists || retrySizeMB < 5) {
+          console.error('[DatabaseService] Retry also failed');
+          return false;
+        }
       }
 
       await AsyncStorage.setItem(DB_VERSION_KEY, DB_VERSION.toString());
