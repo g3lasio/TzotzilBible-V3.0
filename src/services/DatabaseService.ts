@@ -8,11 +8,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 let SQLite: typeof import('expo-sqlite') | null = null;
 let FileSystem: typeof import('expo-file-system') | null = null;
 let Asset: typeof import('expo-asset').Asset | null = null;
+let importDatabaseFromAssetAsync: ((databaseName: string, assetSource: { assetId: number; forceOverwrite?: boolean }, directory?: string) => Promise<void>) | null = null;
 
 if (Platform.OS !== 'web') {
   SQLite = require('expo-sqlite');
   FileSystem = require('expo-file-system');
   Asset = require('expo-asset').Asset;
+  // Use expo-sqlite's official native function for importing bundled .db assets
+  importDatabaseFromAssetAsync = require('expo-sqlite/build/hooks').importDatabaseFromAssetAsync;
 }
 
 // NOTE: bible.db is bundled inside the APK/IPA via Metro (assets/bible.db).
@@ -315,70 +318,55 @@ export class DatabaseService {
 
   private async copyDatabaseFromBundledAsset(): Promise<boolean> {
     if (Platform.OS === 'web') return true;
-
     try {
-      const dbDir = `${FileSystem!.documentDirectory}SQLite/`;
-      const dbPath = `${dbDir}${DatabaseService.DB_NAME}`;
-
-      // Ensure SQLite directory exists
-      const dirInfo = await FileSystem!.getInfoAsync(dbDir);
-      if (!dirInfo.exists) {
-        await FileSystem!.makeDirectoryAsync(dbDir, { intermediates: true });
-        console.log('[DatabaseService] Created SQLite directory');
-      }
-
-      // Check if DB already exists and is valid
-      const fileInfo = await FileSystem!.getInfoAsync(dbPath);
+      // Check if DB already exists and is valid (skip re-copy if version matches)
       const storedVersion = await AsyncStorage.getItem(DB_VERSION_KEY);
       const currentVersion = storedVersion ? parseInt(storedVersion, 10) : 0;
       const needsUpdate = currentVersion < DB_VERSION;
 
-      if (fileInfo.exists && !needsUpdate) {
-        const sizeMB = ((fileInfo as any).size || 0) / (1024 * 1024);
-        if (sizeMB > 5) {
-          console.log(`[DatabaseService] DB already exists (${sizeMB.toFixed(1)} MB), skipping copy`);
-          return true;
+      if (!needsUpdate) {
+        // Verify the existing file is large enough
+        const dbDir = `${FileSystem!.documentDirectory}SQLite/`;
+        const dbPath = `${dbDir}${DatabaseService.DB_NAME}`;
+        const fileInfo = await FileSystem!.getInfoAsync(dbPath);
+        if (fileInfo.exists) {
+          const sizeMB = ((fileInfo as any).size || 0) / (1024 * 1024);
+          if (sizeMB > 5) {
+            console.log(`[DatabaseService] DB already exists v${currentVersion} (${sizeMB.toFixed(1)} MB), skipping copy`);
+            return true;
+          }
+          console.log('[DatabaseService] Existing DB too small, will re-import');
         }
-        console.log('[DatabaseService] DB too small, will re-copy from bundled assets');
-        await FileSystem!.deleteAsync(dbPath, { idempotent: true });
-      } else if (fileInfo.exists && needsUpdate) {
-        console.log(`[DatabaseService] DB version update (${currentVersion} → ${DB_VERSION}), re-copying`);
-        await FileSystem!.deleteAsync(dbPath, { idempotent: true });
+      } else {
+        console.log(`[DatabaseService] DB version update needed (${currentVersion} to ${DB_VERSION})`);
       }
 
-      // Load the bundled asset — this is inside the APK/IPA, no internet needed
-      console.log('[DatabaseService] Loading bundled bible.db from app assets...');
+      // Use expo-sqlite's official native importDatabaseFromAssetAsync
+      // This is the CORRECT way for Expo SDK 52 - handles Android asset:// URIs natively
+      console.log('[DatabaseService] Importing bible.db from bundled assets via expo-sqlite native API...');
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const asset = Asset!.fromModule(require('../../assets/bible.db'));
-      await asset.downloadAsync(); // resolves local URI from bundle
+      const assetId = require('../../assets/bible.db');
+      await importDatabaseFromAssetAsync!(
+        DatabaseService.DB_NAME,
+        { assetId, forceOverwrite: needsUpdate }
+      );
 
-      if (!asset.localUri) {
-        console.error('[DatabaseService] Asset has no localUri — check metro.config.js includes .db extension');
-        return false;
-      }
-
-      console.log(`[DatabaseService] Copying from: ${asset.localUri}`);
-      await FileSystem!.copyAsync({
-        from: asset.localUri,
-        to: dbPath,
-      });
-
-      // Verify the copy
-      const copiedInfo = await FileSystem!.getInfoAsync(dbPath);
+      // Verify the import succeeded
+      const dbDir2 = `${FileSystem!.documentDirectory}SQLite/`;
+      const dbPath2 = `${dbDir2}${DatabaseService.DB_NAME}`;
+      const copiedInfo = await FileSystem!.getInfoAsync(dbPath2);
       const copiedSizeMB = ((copiedInfo as any).size || 0) / (1024 * 1024);
-      console.log(`[DatabaseService] DB copied successfully: ${copiedSizeMB.toFixed(1)} MB`);
+      console.log(`[DatabaseService] DB imported successfully: ${copiedSizeMB.toFixed(1)} MB`);
 
       if (copiedSizeMB < 5) {
-        console.error('[DatabaseService] Copied file too small — asset may be corrupted');
-        await FileSystem!.deleteAsync(dbPath, { idempotent: true });
+        console.error('[DatabaseService] Imported DB too small - asset may be corrupted in bundle');
         return false;
       }
 
       await AsyncStorage.setItem(DB_VERSION_KEY, DB_VERSION.toString());
       return true;
-
     } catch (error) {
-      console.error('[DatabaseService] Error copying bundled asset:', error);
+      console.error('[DatabaseService] Error importing bundled asset:', error);
       return false;
     }
   }
