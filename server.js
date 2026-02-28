@@ -838,6 +838,24 @@ const server = http.createServer(async (req, res) => {
     }
 
     // Bible Database Download API — used by native apps on first install
+    if (pathname === '/api/database/initial-data' && method === 'GET') {
+      const dataPath = path.join(BASE_DIR, 'assets/initial-data.json');
+      if (!fs.existsSync(dataPath)) {
+        res.writeHead(404, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Initial data file not found' }));
+        return;
+      }
+      const stat = fs.statSync(dataPath);
+      res.writeHead(200, {
+        'Content-Type': 'application/json',
+        'Content-Length': stat.size,
+        'Cache-Control': 'public, max-age=86400',
+      });
+      fs.createReadStream(dataPath).pipe(res);
+      return;
+    }
+
+    // Bible Database Download API — used by native apps on first install
     if (pathname === '/api/database/download' && method === 'GET') {
       const dbPath = path.join(BASE_DIR, 'assets/bible.db');
       if (!fs.existsSync(dbPath)) {

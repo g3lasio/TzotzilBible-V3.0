@@ -13,14 +13,17 @@ if (Platform.OS !== 'web') {
   FileSystem = require('expo-file-system');
 }
 
-// Remote URL for bible.db — served from Replit backend
-const DB_REMOTE_URL = 'https://tzotzil.replit.app/api/database/download';
+// Remote URL for initial bible data (JSON) — served from Replit backend.
+// This endpoint returns a JSON object with { books: [...], verses: [...] }
+// which is used to create and populate the SQLite database on the device.
+// This approach is 100% reliable on iOS because it avoids all file-copy/asset
+// bundling issues: we create the DB schema ourselves and insert data via SQL.
+const INITIAL_DATA_URL = 'https://tzotzil.replit.app/api/database/initial-data';
 
 // ============================================================
-// DATABASE VERSION - INCREMENT THIS WHEN bible.db CHANGES
-// Version 7 = slim DB (Tzotzil + RV1960 only, on-demand for rest)
+// DATABASE VERSION - INCREMENT THIS WHEN bible.db DATA CHANGES
 // ============================================================
-const DB_VERSION = 7;
+const DB_VERSION = 8; // Bumped to 8 for new on-device generation strategy
 const DB_VERSION_KEY = '@bible_db_version';
 
 export interface BibleBook {
@@ -89,7 +92,7 @@ const ON_DEMAND_VERSION_FIELDS: Record<string, string> = {
 export class DatabaseService {
   private static instance: DatabaseService;
   private db: any = null;
-  private static readonly DB_NAME = 'bible.db';
+  private static readonly DB_NAME = 'bible_v8.db'; // New name to avoid conflicts with old file
   private initStatus: InitializationStatus = 'pending';
   private initError: Error | null = null;
   private initPromise: Promise<boolean> | null = null;
@@ -107,7 +110,7 @@ export class DatabaseService {
   }
 
   // ============================================================
-  // PUBLIC API - These method names MUST match what BibleService.ts expects
+  // PUBLIC API
   // ============================================================
 
   async initDatabase(): Promise<boolean> {
@@ -138,17 +141,21 @@ export class DatabaseService {
 
       console.log('[DatabaseService] Native platform - initializing SQLite...');
 
-      const copySuccess = await this.copyDatabaseFromAssets();
-      if (!copySuccess) {
-        throw new Error('Failed to copy database from assets');
+      // Step 1: Ensure the database file exists and is up to date.
+      // This creates the DB schema and populates it from JSON if needed.
+      const dbReady = await this.ensureDatabaseReady();
+      if (!dbReady) {
+        throw new Error('Database initialization failed: Could not create or verify database.');
       }
 
-      console.log('[DatabaseService] Opening database...');
+      // Step 2: Open the database connection.
+      console.log('[DatabaseService] Opening database connection...');
       this.db = await SQLite!.openDatabaseAsync(DatabaseService.DB_NAME);
 
-      // Detect available columns in the database
+      // Step 3: Detect available columns.
       await this.detectColumns();
 
+      // Step 4: Validate the database has the expected data.
       const isValid = await this.validateDatabase();
       if (!isValid) {
         console.log('[DatabaseService] Database validation failed, attempting recovery...');
@@ -160,9 +167,9 @@ export class DatabaseService {
         this.recoveryAttempts++;
         console.log(`[DatabaseService] Recovery attempt ${this.recoveryAttempts}/${MAX_RECOVERY_ATTEMPTS}`);
 
-        const recopySuccess = await this.forceRecopyDatabase();
-        if (!recopySuccess) {
-          throw new Error('Failed to recopy database during recovery');
+        const recoverSuccess = await this.forceRecreateDatabase();
+        if (!recoverSuccess) {
+          throw new Error('Failed to recreate database during recovery');
         }
 
         this.db = await SQLite!.openDatabaseAsync(DatabaseService.DB_NAME);
@@ -175,12 +182,12 @@ export class DatabaseService {
         this.recoveryAttempts = 0;
       }
 
-      // Initialize VersionManager for on-demand versions
+      // Step 5: Initialize VersionManager for on-demand versions.
       try {
         const { versionManager } = require('./VersionManager');
         this.versionManager = versionManager;
         await this.versionManager.initialize();
-        console.log(`[DatabaseService] VersionManager ready`);
+        console.log('[DatabaseService] VersionManager ready');
       } catch (e) {
         console.log('[DatabaseService] VersionManager not available, on-demand versions disabled');
       }
@@ -189,6 +196,7 @@ export class DatabaseService {
       console.log('[DatabaseService] Database initialized successfully');
       console.log(`[DatabaseService] Available columns: ${Array.from(this.availableColumns).join(', ')}`);
       return true;
+
     } catch (error) {
       console.error('[DatabaseService] Initialization failed:', error);
       this.initError = error as Error;
@@ -198,7 +206,219 @@ export class DatabaseService {
   }
 
   // ============================================================
-  // COLUMN DETECTION - Handles both slim and full databases
+  // CORE: ON-DEVICE DATABASE CREATION
+  // Creates the SQLite DB schema and populates it from a JSON
+  // endpoint. No binary file copy or asset bundling required.
+  // ============================================================
+
+  /**
+   * Ensures the database file exists and is populated.
+   * If the DB is missing or outdated, it is created from scratch.
+   */
+  private async ensureDatabaseReady(): Promise<boolean> {
+    if (Platform.OS === 'web') return true;
+
+    try {
+      const dbDir = `${FileSystem!.documentDirectory}SQLite/`;
+      const dbPath = `${dbDir}${DatabaseService.DB_NAME}`;
+
+      console.log(`[DatabaseService] Checking for database at: ${dbPath}`);
+
+      // Ensure the SQLite directory exists.
+      const dirInfo = await FileSystem!.getInfoAsync(dbDir);
+      if (!dirInfo.exists) {
+        console.log('[DatabaseService] Creating SQLite directory...');
+        await FileSystem!.makeDirectoryAsync(dbDir, { intermediates: true });
+      }
+
+      const fileInfo = await FileSystem!.getInfoAsync(dbPath);
+      const needsUpdate = await this.needsDatabaseUpdate();
+
+      // If the file exists and is up to date, we are done.
+      if (fileInfo.exists && !needsUpdate) {
+        console.log('[DatabaseService] Database exists and is up to date. Skipping creation.');
+        return true;
+      }
+
+      // If the file exists but is outdated, delete it.
+      if (fileInfo.exists) {
+        console.log('[DatabaseService] Database is outdated. Deleting for recreation.');
+        if (this.db) {
+          try { await this.db.closeAsync(); } catch (e) {}
+          this.db = null;
+        }
+        await FileSystem!.deleteAsync(dbPath, { idempotent: true });
+      }
+
+      // Create a new empty database and populate it from the server.
+      return await this.createAndPopulateDatabase();
+
+    } catch (error) {
+      console.error('[DatabaseService] ensureDatabaseReady failed:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Creates a new SQLite database, creates the schema, downloads
+   * the initial data from the server, and populates the tables.
+   */
+  private async createAndPopulateDatabase(): Promise<boolean> {
+    if (Platform.OS === 'web') return true;
+
+    let tempDb: any = null;
+    try {
+      console.log('[DatabaseService] Creating new empty SQLite database...');
+      tempDb = await SQLite!.openDatabaseAsync(DatabaseService.DB_NAME);
+
+      console.log('[DatabaseService] Creating database schema...');
+      await this.createSchema(tempDb);
+
+      console.log('[DatabaseService] Downloading initial data from server...');
+      const initialData = await this.fetchInitialData();
+      if (!initialData || !initialData.books || !initialData.verses) {
+        throw new Error('Invalid or missing initial data from server.');
+      }
+      console.log(`[DatabaseService] Received ${initialData.books.length} books and ${initialData.verses.length} verses.`);
+
+      console.log('[DatabaseService] Populating database...');
+      await this.populateDatabase(tempDb, initialData);
+
+      await tempDb.closeAsync();
+      tempDb = null;
+
+      await this.saveDatabaseVersion();
+      console.log('[DatabaseService] Database created and populated successfully.');
+      return true;
+
+    } catch (error) {
+      console.error('[DatabaseService] createAndPopulateDatabase failed:', error);
+      if (tempDb) {
+        try { await tempDb.closeAsync(); } catch (e) {}
+      }
+      // Clean up the partially created database file.
+      try {
+        const dbPath = `${FileSystem!.documentDirectory}SQLite/${DatabaseService.DB_NAME}`;
+        await FileSystem!.deleteAsync(dbPath, { idempotent: true });
+        console.log('[DatabaseService] Cleaned up partially created database.');
+      } catch (cleanupError) {
+        console.error('[DatabaseService] Failed to clean up partial database:', cleanupError);
+      }
+      return false;
+    }
+  }
+
+  /**
+   * Creates the database schema (tables and indexes).
+   */
+  private async createSchema(db: any): Promise<void> {
+    await db.execAsync(`
+      CREATE TABLE IF NOT EXISTS books (
+        id INTEGER PRIMARY KEY NOT NULL,
+        name TEXT NOT NULL,
+        book_number INTEGER NOT NULL,
+        testament TEXT NOT NULL,
+        chapters_count INTEGER NOT NULL
+      );
+
+      CREATE TABLE IF NOT EXISTS verses (
+        id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+        book_id INTEGER NOT NULL,
+        book_name TEXT NOT NULL,
+        chapter INTEGER NOT NULL,
+        verse INTEGER NOT NULL,
+        text_tzotzil TEXT,
+        text_spanish_rv1960 TEXT,
+        FOREIGN KEY (book_id) REFERENCES books (id)
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_verses_book_chapter ON verses (book_name, chapter);
+    `);
+    console.log('[DatabaseService] Schema created successfully.');
+  }
+
+  /**
+   * Downloads the initial data JSON from the server.
+   */
+  private async fetchInitialData(): Promise<{ books: any[]; verses: any[] } | null> {
+    try {
+      console.log(`[DatabaseService] Fetching initial data from: ${INITIAL_DATA_URL}`);
+      const response = await fetch(INITIAL_DATA_URL);
+      if (!response.ok) {
+        throw new Error(`Server responded with HTTP ${response.status}`);
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('[DatabaseService] fetchInitialData failed:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Inserts books and verses into the database using batch transactions.
+   */
+  private async populateDatabase(db: any, data: { books: any[]; verses: any[] }): Promise<void> {
+    // Insert books
+    console.log(`[DatabaseService] Inserting ${data.books.length} books...`);
+    await db.withTransactionAsync(async () => {
+      for (const book of data.books) {
+        await db.runAsync(
+          'INSERT INTO books (id, name, book_number, testament, chapters_count) VALUES (?, ?, ?, ?, ?)',
+          [book.id, book.name, book.book_number, book.testament, book.chapters_count]
+        );
+      }
+    });
+
+    // Insert verses in batches to avoid memory issues
+    const BATCH_SIZE = 1000;
+    const totalVerses = data.verses.length;
+    console.log(`[DatabaseService] Inserting ${totalVerses} verses in batches of ${BATCH_SIZE}...`);
+
+    for (let i = 0; i < totalVerses; i += BATCH_SIZE) {
+      const batch = data.verses.slice(i, i + BATCH_SIZE);
+      await db.withTransactionAsync(async () => {
+        for (const verse of batch) {
+          await db.runAsync(
+            'INSERT INTO verses (book_id, book_name, chapter, verse, text_tzotzil, text_spanish_rv1960) VALUES (?, ?, ?, ?, ?, ?)',
+            [verse.book_id, verse.book_name, verse.chapter, verse.verse, verse.text_tzotzil ?? null, verse.text_spanish_rv1960 ?? null]
+          );
+        }
+      });
+      console.log(`[DatabaseService] Inserted verses ${i + 1} - ${Math.min(i + BATCH_SIZE, totalVerses)} / ${totalVerses}`);
+    }
+
+    console.log('[DatabaseService] Database population complete.');
+  }
+
+  /**
+   * Deletes the database file and re-creates it from scratch.
+   */
+  private async forceRecreateDatabase(): Promise<boolean> {
+    if (Platform.OS === 'web') return true;
+
+    try {
+      const dbPath = `${FileSystem!.documentDirectory}SQLite/${DatabaseService.DB_NAME}`;
+      console.log('[DatabaseService] Force recreation - deleting database file...');
+
+      if (this.db) {
+        try { await this.db.closeAsync(); } catch (e) {}
+        this.db = null;
+      }
+
+      await FileSystem!.deleteAsync(dbPath, { idempotent: true });
+      await AsyncStorage.setItem(DB_VERSION_KEY, '0');
+
+      console.log('[DatabaseService] Database deleted. Re-creating from source...');
+      return await this.createAndPopulateDatabase();
+    } catch (error) {
+      console.error('[DatabaseService] forceRecreateDatabase failed:', error);
+      return false;
+    }
+  }
+
+  // ============================================================
+  // COLUMN DETECTION
   // ============================================================
 
   private async detectColumns(): Promise<void> {
@@ -209,28 +429,23 @@ export class DatabaseService {
       console.log(`[DatabaseService] Detected ${this.availableColumns.size} columns in verses table`);
     } catch (error) {
       console.error('[DatabaseService] Error detecting columns:', error);
-      // Default to base columns
       this.availableColumns = new Set(['id', 'book_id', 'book_name', 'chapter', 'verse', 'text_tzotzil', 'text_spanish_rv1960']);
     }
   }
 
-  /**
-   * Build SELECT clause based on available columns
-   */
   private getSelectClause(): string {
     const baseColumns = ['v.id', 'v.book_id', 'v.chapter', 'v.verse', 'v.book_name'];
-    // Base text columns + all on-demand version columns
     const textColumns = [
       'text_tzotzil', 'text_spanish_rv1960',
       ...Object.values(ON_DEMAND_VERSION_FIELDS)
     ];
-    
+
     for (const col of textColumns) {
       if (this.availableColumns.has(col)) {
         baseColumns.push(`v.${col}`);
       }
     }
-    
+
     return baseColumns.join(', ');
   }
 
@@ -242,15 +457,8 @@ export class DatabaseService {
     try {
       const storedVersion = await AsyncStorage.getItem(DB_VERSION_KEY);
       const currentVersion = storedVersion ? parseInt(storedVersion, 10) : 0;
-
       console.log(`[DatabaseService] Stored DB version: ${currentVersion}, Required: ${DB_VERSION}`);
-
-      if (currentVersion < DB_VERSION) {
-        console.log('[DatabaseService] DATABASE UPDATE NEEDED - new version available');
-        return true;
-      }
-
-      return false;
+      return currentVersion < DB_VERSION;
     } catch (error) {
       console.log('[DatabaseService] Error checking DB version, will update:', error);
       return true;
@@ -305,117 +513,6 @@ export class DatabaseService {
   }
 
   // ============================================================
-  // DATABASE DOWNLOAD FROM SERVER
-  // Downloads bible.db from the Replit backend on first install.
-  // This avoids all Xcode asset bundling issues entirely.
-  // ============================================================
-
-  private async copyDatabaseFromAssets(): Promise<boolean> {
-    if (Platform.OS === 'web') return true;
-
-    try {
-      const dbDir = `${FileSystem!.documentDirectory}SQLite/`;
-      const dbPath = `${dbDir}${DatabaseService.DB_NAME}`;
-
-      console.log(`[DatabaseService] Checking database at: ${dbPath}`);
-
-      const dirInfo = await FileSystem!.getInfoAsync(dbDir);
-      if (!dirInfo.exists) {
-        console.log('[DatabaseService] Creating SQLite directory...');
-        await FileSystem!.makeDirectoryAsync(dbDir, { intermediates: true });
-      }
-
-      const fileInfo = await FileSystem!.getInfoAsync(dbPath);
-      const needsUpdate = await this.needsDatabaseUpdate();
-
-      if (fileInfo.exists && needsUpdate) {
-        console.log('[DatabaseService] REPLACING old database with updated version...');
-        if (this.db) {
-          try { await this.db.closeAsync(); } catch (e) {}
-        }
-        await FileSystem!.deleteAsync(dbPath, { idempotent: true });
-        console.log('[DatabaseService] Old database deleted');
-      } else if (fileInfo.exists) {
-        const fileSizeMB = ((fileInfo as any).size || 0) / (1024 * 1024);
-        console.log(`[DatabaseService] Existing database found: ${fileSizeMB.toFixed(2)} MB`);
-        if (fileSizeMB > 5) {
-          console.log('[DatabaseService] Database size looks valid, skipping download');
-          return true;
-        }
-        console.log('[DatabaseService] Database too small, will re-download');
-        await FileSystem!.deleteAsync(dbPath, { idempotent: true });
-      }
-
-      // Download fresh database from server (no Xcode bundling required)
-      console.log(`[DatabaseService] Downloading database from server: ${DB_REMOTE_URL}`);
-      const downloadResult = await FileSystem!.downloadAsync(DB_REMOTE_URL, dbPath);
-
-      if (downloadResult.status !== 200) {
-        console.error(`[DatabaseService] Server returned status ${downloadResult.status}`);
-        return false;
-      }
-
-      const copiedInfo = await FileSystem!.getInfoAsync(dbPath);
-      const copiedSizeMB = ((copiedInfo as any).size || 0) / (1024 * 1024);
-      console.log(`[DatabaseService] Database downloaded successfully: ${copiedSizeMB.toFixed(2)} MB`);
-
-      if (copiedSizeMB < 5) {
-        console.error('[DatabaseService] Downloaded file too small — server may have returned an error page');
-        await FileSystem!.deleteAsync(dbPath, { idempotent: true });
-        return false;
-      }
-
-      await this.saveDatabaseVersion();
-      return true;
-    } catch (error) {
-      console.error('[DatabaseService] Error downloading database:', error);
-      return false;
-    }
-  }
-
-  private async forceRecopyDatabase(): Promise<boolean> {
-    if (Platform.OS === 'web') return true;
-
-    try {
-      const dbDir = `${FileSystem!.documentDirectory}SQLite/`;
-      const dbPath = `${dbDir}${DatabaseService.DB_NAME}`;
-      const dbJournalPath = `${dbPath}-journal`;
-      const dbWalPath = `${dbPath}-wal`;
-      const dbShmPath = `${dbPath}-shm`;
-
-      if (this.db) {
-        console.log('[DatabaseService] Closing database before recopy...');
-        try {
-          await this.db.closeAsync();
-        } catch (e) {
-          console.log('[DatabaseService] Could not close database:', e);
-        }
-        this.db = null;
-      }
-
-      console.log('[DatabaseService] Force recopy - cleaning up all database files...');
-
-      const filesToDelete = [dbPath, dbJournalPath, dbWalPath, dbShmPath];
-      for (const file of filesToDelete) {
-        try {
-          await FileSystem!.deleteAsync(file, { idempotent: true });
-        } catch (e) {
-          // Ignore errors on cleanup
-        }
-      }
-
-      await AsyncStorage.setItem(DB_VERSION_KEY, '0');
-
-      console.log('[DatabaseService] All database files cleaned up');
-
-      return await this.copyDatabaseFromAssets();
-    } catch (error) {
-      console.error('[DatabaseService] Force recopy failed:', error);
-      return false;
-    }
-  }
-
-  // ============================================================
   // STATUS METHODS
   // ============================================================
 
@@ -436,7 +533,7 @@ export class DatabaseService {
   }
 
   // ============================================================
-  // DATA ACCESS METHODS - Base versions from DB + on-demand from VersionManager
+  // DATA ACCESS METHODS
   // ============================================================
 
   async getBooks(): Promise<any[]> {
@@ -490,15 +587,14 @@ export class DatabaseService {
       const selectClause = this.getSelectClause();
       const result = await this.db.getAllAsync(
         `SELECT ${selectClause}
-         FROM verses v 
-         WHERE v.book_name = ? AND v.chapter = ? 
+         FROM verses v
+         WHERE v.book_name = ? AND v.chapter = ?
          ORDER BY v.verse`,
         [bookName, chapter]
       ) as any[];
 
       console.log(`[DatabaseService] Loaded ${result.length} verses for ${bookName} ${chapter}`);
 
-      // Map results into verse objects
       const verses: BibleVerse[] = result.map((row: any) => ({
         id: row.id,
         book_id: row.book_id,
@@ -514,9 +610,7 @@ export class DatabaseService {
         book_name: row.book_name
       }));
 
-      // Enrich with downloaded on-demand versions using bulk chapter load.
-      // Loading an entire chapter at once (getChapterVerses) is far more
-      // efficient than the previous per-verse approach and fixes the fallback bug.
+      // Enrich with downloaded on-demand versions
       if (this.versionManager && verses.length > 0) {
         for (const [versionId, fieldName] of Object.entries(ON_DEMAND_VERSION_FIELDS)) {
           if (this.versionManager.isVersionDownloaded(versionId)) {
@@ -530,24 +624,9 @@ export class DatabaseService {
                   (verse as any)[fieldName] = text;
                 }
               }
-              console.log(`[DatabaseService] Enriched ${chapterMap.size} verses with version: ${versionId}`);
             }
           }
         }
-      }
-
-      // Log version availability for debugging
-      if (verses.length > 0) {
-        const sample = verses[0];
-        const versions = {
-          tzotzil: !!sample.text_tzotzil,
-          rv1960: !!sample.text_spanish_rv1960,
-          nvi: !!sample.text_spanish_nvi,
-          dhh: !!sample.text_spanish_dhh,
-          tla: !!sample.text_spanish_tla,
-          nkjv: !!sample.text_english_nkjv,
-        };
-        console.log(`[DatabaseService] Version availability:`, JSON.stringify(versions));
       }
 
       return verses;
@@ -564,7 +643,7 @@ export class DatabaseService {
       const selectClause = this.getSelectClause();
       const result = await this.db.getAllAsync(
         `SELECT ${selectClause}
-         FROM verses v 
+         FROM verses v
          WHERE v.text_spanish_rv1960 LIKE ? OR v.text_tzotzil LIKE ?
          ORDER BY v.book_id, v.chapter, v.verse
          LIMIT 100`,
@@ -622,7 +701,7 @@ export class DatabaseService {
       const selectClause = this.getSelectClause();
       const result = await this.db.getFirstAsync(
         `SELECT ${selectClause}
-         FROM verses v 
+         FROM verses v
          WHERE v.book_name = ? AND v.chapter = ? AND v.verse = ?`,
         [bookName, chapter, verse]
       ) as any | null;
@@ -642,14 +721,11 @@ export class DatabaseService {
           book_name: result.book_name
         };
 
-        // Enrich with downloaded on-demand versions
         if (this.versionManager) {
           for (const [versionId, fieldName] of Object.entries(ON_DEMAND_VERSION_FIELDS)) {
             const currentValue = (verseObj as any)[fieldName];
             if ((!currentValue || !currentValue.trim()) && this.versionManager.isVersionDownloaded(versionId)) {
-              const text = await this.versionManager.getVerseText(
-                versionId, bookName, chapter, verse
-              );
+              const text = await this.versionManager.getVerseText(versionId, bookName, chapter, verse);
               if (text) {
                 (verseObj as any)[fieldName] = text;
               }
@@ -666,14 +742,10 @@ export class DatabaseService {
     }
   }
 
-  /**
-   * Force database update - deletes cached database and re-copies from assets
-   */
   async forceUpdate(): Promise<void> {
     console.log('[DatabaseService] FORCE UPDATE requested');
 
     if (Platform.OS === 'web') {
-      console.log('[DatabaseService] Web platform - re-initializing...');
       this.initStatus = 'pending';
       this.initPromise = null;
       await this.initDatabase();
@@ -681,9 +753,9 @@ export class DatabaseService {
     }
 
     try {
-      const recopySuccess = await this.forceRecopyDatabase();
-      if (!recopySuccess) {
-        throw new Error('Force recopy failed');
+      const success = await this.forceRecreateDatabase();
+      if (!success) {
+        throw new Error('Force recreation failed');
       }
 
       this.db = await SQLite!.openDatabaseAsync(DatabaseService.DB_NAME);

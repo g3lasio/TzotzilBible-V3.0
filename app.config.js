@@ -1,9 +1,14 @@
 // FIXED BUILD NUMBERS - Increment manually for each release
 // iOS buildNumber must be a string
-const BUILD_NUMBER = "2602240253";
+const now = new Date();
+const year = now.getFullYear().toString().slice(-2);
+const month = (now.getMonth() + 1).toString().padStart(2, '0');
+const day = now.getDate().toString().padStart(2, '0');
+const hours = now.getHours().toString().padStart(2, '0');
+const minutes = now.getMinutes().toString().padStart(2, '0');
 
-// Android versionCode must be an integer, always > previous (700)
-const VERSION_CODE = 2602240253;
+const BUILD_NUMBER = `${year}${month}${day}${hours}${minutes}`;
+const VERSION_CODE = parseInt(BUILD_NUMBER);
 
 export default {
   expo: {
