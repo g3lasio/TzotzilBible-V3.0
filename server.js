@@ -12,8 +12,8 @@ const url = require('url');
 
 const PORT = process.env.PORT || 5000;
 
-// Replit Cloud Run uses /home/runner/workspace as the working directory
-const BASE_DIR = process.env.REPL_HOME || __dirname;
+// Railway uses the project root as the working directory
+const BASE_DIR = process.env.RAILWAY_APP_ROOT || process.env.REPL_HOME || __dirname;
 const DIST_DIR = path.join(BASE_DIR, 'dist');
 const PAGES_DIR = path.join(BASE_DIR, 'pages');
 const EGW_BOOKS_DIR = path.join(BASE_DIR, 'assets/EGW BOOKS JSON');

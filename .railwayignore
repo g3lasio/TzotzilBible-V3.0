@@ -1,0 +1,11 @@
+node_modules
+.replit
+replit.nix
+android
+ios
+app-store-assets
+*.jks
+*.p8
+*.p12
+*.mobileprovision
+nevin-backend/node_modules
