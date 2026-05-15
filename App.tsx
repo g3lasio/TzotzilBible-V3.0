@@ -7,6 +7,7 @@ import AppNavigator from './src/navigation/AppNavigator';
 import { StatusBar } from 'expo-status-bar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { databaseService } from './src/services/DatabaseService';
+import { fetchRemoteConfig } from './src/config';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useFonts, Quantico_400Regular, Quantico_700Bold } from '@expo-google-fonts/quantico';
@@ -61,6 +62,9 @@ function InnerApp() {
   const initializeApp = async () => {
     setAppState('loading');
     try {
+      // Fetch remote config (fire-and-forget — falls back to hardcoded URL if fails)
+      fetchRemoteConfig().catch(() => {});
+
       // SQLiteProvider already prepared the DB — DatabaseService just opens it.
       const dbInitialized = await databaseService.initDatabase();
       const status = databaseService.getStatus();

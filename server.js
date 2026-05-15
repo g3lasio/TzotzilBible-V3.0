@@ -440,6 +440,24 @@ function searchEGWBooks(query, maxResults = 3) {
 // ROUTE HANDLERS
 // ============================================================
 
+// GET /api/config - Remote configuration for mobile app
+// Allows updating backend URL, model, and feature flags without rebuilding the app
+function handleRemoteConfig(req, res) {
+  const config = {
+    backend_url: 'https://bible.chyrris.com',
+    nevin_model: ANTHROPIC_MODEL,
+    app_min_version: '7.1.0',
+    features: {
+      nevin_enabled: true,
+      egw_enabled: true,
+      versions_bundled: true
+    },
+    updated_at: new Date().toISOString()
+  };
+  res.writeHead(200, { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' });
+  res.end(JSON.stringify(config));
+}
+
 async function handleHealth(req, res) {
   const hasKey = !!process.env.ANTHROPIC_API_KEY;
   sendJSON(res, 200, { status: 'ok', service: 'Nevin AI Backend', api_configured: hasKey });
@@ -818,6 +836,9 @@ const server = http.createServer(async (req, res) => {
 
   try {
     // API Routes
+    if (pathname === '/api/config' && method === 'GET') {
+      return handleRemoteConfig(req, res);
+    }
     if (pathname === '/api/health' && method === 'GET') {
       return await handleHealth(req, res);
     }
