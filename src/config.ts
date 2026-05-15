@@ -9,7 +9,7 @@ export const FONTS = {
 };
 
 // Unified backend - all services (Nevin AI, versions, EGW) run from same server
-export const BACKEND_URL = 'https://tzotzil.replit.app';
+export const BACKEND_URL = 'https://bible.chyrris.com';
 
 export const getBackendUrl = (): string => {
   console.log('[Config] Using backend:', BACKEND_URL);
