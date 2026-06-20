@@ -16,6 +16,7 @@ export default {
     name: "Tzotzil Bible",
     slug: "tzotzil-bible",
     version: "7.1.0",
+    scheme: "com.chyrris.tzotzilbible",
     orientation: "portrait",
     icon: "./assets/icon.png",
     userInterfaceStyle: "dark",
@@ -54,6 +55,9 @@ export default {
       blockedPermissions: [
         "android.permission.RECORD_AUDIO",
         "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.SYSTEM_ALERT_WINDOW",
       ],
     },
     web: {
