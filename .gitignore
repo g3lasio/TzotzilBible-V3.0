@@ -52,3 +52,7 @@ app.json
 # Full database backup (not needed in repo)
 assets/bible_full.db
 assets/bible_slim.db
+
+# SQLite runtime temp files
+*.db-wal
+*.db-shm
