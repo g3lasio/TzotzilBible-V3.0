@@ -1,15 +1,15 @@
-// BUILD NUMBER — Fixed for this release (7.1.0 / build 2605151000)
+// BUILD NUMBER — Fixed for this release (7.1.0 / build 2606201023)
 // Format: YYMMDDHHMM — always unique and always increasing.
 //
 // IMPORTANT: Increment BUILD_NUMBER and VERSION_CODE before each new build
 // to avoid rejection by Apple App Store or Google Play.
 //
-// Current values set for: 2026-05-15 10:00 UTC
-// iOS buildNumber: "2605151000"
-// Android versionCode: 26051510 (YYMMDDHH format — max allowed by Google Play is 2,100,000,000)
+// Current values set for: 2026-06-20 10:23 UTC
+// iOS buildNumber: "2606201023"
+// Android versionCode: 26062010 (YYMMDDHH format — max allowed by Google Play is 2,100,000,000)
 
-const BUILD_NUMBER = "2605151000";
-const VERSION_CODE = 26051510;
+const BUILD_NUMBER = "2606201023";
+const VERSION_CODE = 26062010;
 
 export default {
   expo: {
