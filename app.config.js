@@ -71,6 +71,11 @@ export default {
       },
     },
     plugins: [
+      // Listed FIRST so its entitlements mod runs LAST (Expo mods execute in
+      // reverse registration order). Removes the unused aps-environment (remote
+      // push) entitlement that expo-notifications adds; app uses only local
+      // notifications, so the provisioning profile needs no push capability.
+      "./plugins/withoutPushEntitlement.js",
       "expo-font",
       "@react-native-community/datetimepicker",
       [
