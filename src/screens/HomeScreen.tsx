@@ -3,13 +3,51 @@ import { View, ScrollView, StyleSheet, Share, Dimensions, TouchableOpacity, Imag
 import { Text, ActivityIndicator } from 'react-native-paper';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { BibleService } from '../services/BibleService';
 import MainLayout from '../components/MainLayout';
 import { FONTS } from '../config';
+import type { RootStackParamList } from '../types/navigation';
 
 const { width } = Dimensions.get('window');
 
+type QuickAction = {
+  icon: string;
+  label: string;
+  color: string;
+  onPress: (nav: NativeStackNavigationProp<RootStackParamList>) => void;
+};
+
+const QUICK_ACTIONS: QuickAction[] = [
+  {
+    icon: 'creation',
+    label: 'Nevin AI',
+    color: '#00ff88',
+    onPress: (nav) => nav.navigate('MainTabs', { screen: 'NevinTab' } as any),
+  },
+  {
+    icon: 'book-open-page-variant',
+    label: 'Explorar',
+    color: '#00f3ff',
+    onPress: (nav) => nav.navigate('MainTabs', { screen: 'BibleTab' } as any),
+  },
+  {
+    icon: 'book-clock',
+    label: 'Plan de Lectura',
+    color: '#00f3ff',
+    onPress: (nav) => nav.navigate('ReadingPlan'),
+  },
+  {
+    icon: 'timeline-text',
+    label: 'Cronología',
+    color: '#00ff88',
+    onPress: (nav) => nav.navigate('Timeline'),
+  },
+];
+
 export default function HomeScreen() {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [dailyPromise, setDailyPromise] = useState('');
   const [promiseReference, setPromiseReference] = useState('');
   const [loading, setLoading] = useState(true);
@@ -109,7 +147,22 @@ export default function HomeScreen() {
           </LinearGradient>
         </View>
 
-
+        <Text style={styles.sectionTitle}>Accesos rápidos</Text>
+        <View style={styles.quickGrid}>
+          {QUICK_ACTIONS.map((action) => (
+            <TouchableOpacity
+              key={action.label}
+              style={styles.quickCard}
+              activeOpacity={0.8}
+              onPress={() => action.onPress(navigation)}
+            >
+              <View style={[styles.quickIconWrap, { borderColor: action.color }]}>
+                <MaterialCommunityIcons name={action.icon as any} size={24} color={action.color} />
+              </View>
+              <Text style={styles.quickLabel}>{action.label}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
       </ScrollView>
     </MainLayout>
   );
@@ -250,22 +303,45 @@ const styles = StyleSheet.create({
     height: 40,
     backgroundColor: 'rgba(0, 243, 255, 0.2)',
   },
-  tipCard: {
-    borderRadius: 16,
-    overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: 'rgba(0, 243, 255, 0.2)',
+  sectionTitle: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#6b7c93',
+    textTransform: 'uppercase',
+    letterSpacing: 1.5,
+    marginBottom: 14,
+    marginLeft: 4,
   },
-  tipGradient: {
-    padding: 16,
+  quickGrid: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  quickCard: {
+    width: '48%',
+    backgroundColor: 'rgba(15, 25, 40, 0.7)',
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(0, 243, 255, 0.15)',
+    paddingVertical: 20,
+    paddingHorizontal: 16,
+    marginBottom: 14,
     alignItems: 'center',
   },
-  tipText: {
-    flex: 1,
-    fontSize: 14,
-    color: '#6b7c93',
-    marginLeft: 12,
-    lineHeight: 20,
+  quickIconWrap: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    borderWidth: 1.5,
+    backgroundColor: 'rgba(0, 243, 255, 0.06)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  quickLabel: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#e6f3ff',
+    textAlign: 'center',
   },
 });

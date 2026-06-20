@@ -20,9 +20,46 @@ export interface VerseCommentary {
 
 export class NevinAIService {
   private static readonly CHAT_HISTORY_KEY = 'nevin_chat_history';
+  private static readonly REQUEST_TIMEOUT_MS = 45000; // backend may cold-start
+  private static readonly MAX_ATTEMPTS = 3;
 
   static async hasApiKey(): Promise<boolean> {
     return true;
+  }
+
+  /**
+   * POST with timeout + retry. Retries on network errors and 5xx
+   * (covers Railway/Replit cold-starts) with exponential backoff.
+   */
+  private static async postWithRetry(url: string, body: unknown): Promise<Response> {
+    let lastError: unknown;
+    for (let attempt = 1; attempt <= this.MAX_ATTEMPTS; attempt++) {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), this.REQUEST_TIMEOUT_MS);
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(body),
+          signal: controller.signal,
+        });
+        clearTimeout(timeout);
+        // Retry on transient server errors (5xx) but not on 4xx
+        if (response.status >= 500 && attempt < this.MAX_ATTEMPTS) {
+          await new Promise(r => setTimeout(r, attempt * 1500));
+          continue;
+        }
+        return response;
+      } catch (error) {
+        clearTimeout(timeout);
+        lastError = error;
+        if (attempt < this.MAX_ATTEMPTS) {
+          await new Promise(r => setTimeout(r, attempt * 1500));
+          continue;
+        }
+      }
+    }
+    throw lastError;
   }
 
   static async processQuery(
@@ -40,17 +77,10 @@ export class NevinAIService {
         content: msg.content
       }));
 
-      const response = await fetch(`${backendUrl}/api/nevin/chat`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify({
-          message,
-          context,
-          history
-        })
+      const response = await this.postWithRetry(`${backendUrl}/api/nevin/chat`, {
+        message,
+        context,
+        history
       });
 
       // Check if response is OK before parsing
@@ -123,19 +153,21 @@ export class NevinAIService {
     try {
       const backendUrl = getBackendUrl();
 
-      const response = await fetch(`${backendUrl}/api/nevin/verse-commentary`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          book: request.book,
-          chapter: request.chapter,
-          verse: request.verse,
-          textTzotzil: request.textTzotzil,
-          textSpanish: request.textSpanish
-        })
+      const response = await this.postWithRetry(`${backendUrl}/api/nevin/verse-commentary`, {
+        book: request.book,
+        chapter: request.chapter,
+        verse: request.verse,
+        textTzotzil: request.textTzotzil,
+        textSpanish: request.textSpanish
       });
+
+      const contentType = response.headers.get('content-type');
+      if (!response.ok || !contentType || !contentType.includes('application/json')) {
+        return {
+          success: false,
+          error: 'El servidor no respondió correctamente. Por favor intenta de nuevo.'
+        };
+      }
 
       const data = await response.json();
 

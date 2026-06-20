@@ -50,7 +50,7 @@ export default function MainLayout({ children, showBackButton = false, title, on
     if (item.isTab) {
       navigation.navigate('MainTabs', { screen: item.route } as any);
     } else {
-      navigation.navigate(item.route as keyof RootStackParamList);
+      navigation.navigate(item.route as 'ReadingPlan' | 'Timeline');
     }
   };
 

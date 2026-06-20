@@ -482,16 +482,7 @@ export default function NevinScreen() {
       setCurrentMoment(newMoment);
       setMomentTitle(newMoment.title);
       setMessages([]);
-      
-      console.log('handleNewMoment: State updated successfully');
-      
-      // Mostrar feedback visual de éxito
-      Alert.alert(
-        'Nueva conversación',
-        'Se creó una nueva conversación exitosamente',
-        [{ text: 'OK' }]
-      );
-      
+      setInputMessage('');
     } catch (error: any) {
       console.error('handleNewMoment: Error creating new moment:', error);
       console.error('handleNewMoment: Error stack:', error.stack);
@@ -525,9 +516,9 @@ export default function NevinScreen() {
         style={styles.nebulaBackground}
       >
       <KeyboardAvoidingView
-        behavior="padding"
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardAvoid}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 80}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}
       >
         <View style={styles.chatHeader}>
           <TouchableOpacity style={styles.momentsButton} onPress={handleOpenMoments}>
@@ -752,31 +743,6 @@ const styles = StyleSheet.create({
     borderBottomColor: 'rgba(0, 243, 255, 0.12)',
     backgroundColor: '#060B14',
   },
-  headerLeft: {
-    flexDirection: 'column',
-  },
-  chatHeaderTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#00F3FF',
-    letterSpacing: 0.5,
-  },
-  statusIndicator: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 2,
-  },
-  statusDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: '#00FF88',
-    marginRight: 5,
-  },
-  statusText: {
-    fontSize: 11,
-    color: '#6B7C93',
-  },
 
   // ── Moments pill ────────────────────────────────────────
   momentsButton: {
@@ -992,19 +958,6 @@ const styles = StyleSheet.create({
     padding: 5,
     borderRadius: 6,
     backgroundColor: 'rgba(107, 124, 147, 0.08)',
-  },
-
-  // ── Typing indicator ────────────────────────────────────
-  typingIndicator: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-  },
-  typingText: {
-    marginLeft: 10,
-    color: '#6B7C93',
-    fontSize: 14,
   },
 
   // ── Input area ──────────────────────────────────────────

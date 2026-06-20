@@ -32,7 +32,7 @@ export interface BibleVerse {
   book_name: string;
   chapter: number;
   verse: number;
-  text?: string;
+  text: string;
   text_tzotzil?: string;
   text_spanish_rv1960?: string;
   text_spanish_nvi?: string;

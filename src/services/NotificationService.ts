@@ -4,7 +4,8 @@ import { Platform } from 'react-native';
 // Configure notification handler
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true,
+    shouldShowBanner: true,
+    shouldShowList: true,
     shouldPlaySound: true,
     shouldSetBadge: true,
   }),
@@ -72,9 +73,9 @@ class NotificationService {
           data: { type: 'reading_plan_reminder' },
         },
         trigger: {
+          type: Notifications.SchedulableTriggerInputTypes.DAILY,
           hour,
           minute,
-          repeats: true,
         },
       });
 
