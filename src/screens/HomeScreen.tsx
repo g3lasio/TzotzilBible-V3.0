@@ -104,19 +104,49 @@ export default function HomeScreen() {
               <MaterialCommunityIcons name="star-four-points" size={20} color="#00f3ff" />
               <Text style={styles.promiseTitle}>Promesa del día</Text>
             </View>
-            
-            <View style={styles.referenceBadge}>
-              <Text style={styles.referenceText}>{promiseReference}</Text>
-            </View>
-            
+
             {loading ? (
               <ActivityIndicator size="small" color="#00f3ff" style={styles.loader} />
             ) : (
-              <Text style={styles.promiseText}>{dailyPromise}</Text>
+              <>
+                <View style={styles.quoteBox}>
+                  <MaterialCommunityIcons
+                    name="format-quote-open"
+                    size={30}
+                    color="rgba(0, 243, 255, 0.6)"
+                    style={styles.quoteOpen}
+                  />
+                  <Text style={styles.promiseText}>{dailyPromise}</Text>
+                  <MaterialCommunityIcons
+                    name="format-quote-close"
+                    size={30}
+                    color="rgba(0, 243, 255, 0.6)"
+                    style={styles.quoteClose}
+                  />
+                </View>
+
+                <View style={styles.referenceRow}>
+                  <LinearGradient
+                    colors={['transparent', 'rgba(0, 243, 255, 0.5)']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                    style={styles.refLine}
+                  />
+                  <View style={styles.refDot} />
+                  <Text style={styles.referenceText}>{promiseReference}</Text>
+                  <View style={styles.refDot} />
+                  <LinearGradient
+                    colors={['rgba(0, 243, 255, 0.5)', 'transparent']}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                    style={styles.refLine}
+                  />
+                </View>
+              </>
             )}
-            
-            <TouchableOpacity style={styles.shareButton} onPress={handleShare}>
-              <MaterialCommunityIcons name="share-variant" size={18} color="#0a0e14" />
+
+            <TouchableOpacity style={styles.shareButton} onPress={handleShare} activeOpacity={0.8}>
+              <MaterialCommunityIcons name="share-variant" size={18} color="#00f3ff" />
               <Text style={styles.shareButtonText}>Compartir</Text>
             </TouchableOpacity>
           </LinearGradient>
@@ -226,27 +256,55 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 12,
   },
-  referenceBadge: {
-    backgroundColor: 'rgba(0, 243, 255, 0.15)',
-    paddingHorizontal: 16,
-    paddingVertical: 6,
-    borderRadius: 20,
+  quoteBox: {
+    width: '100%',
+    backgroundColor: 'rgba(0, 243, 255, 0.04)',
+    borderRadius: 18,
     borderWidth: 1,
-    borderColor: 'rgba(0, 243, 255, 0.4)',
-    marginBottom: 20,
+    borderColor: 'rgba(0, 243, 255, 0.12)',
+    paddingHorizontal: 28,
+    paddingVertical: 24,
+    marginBottom: 22,
+    position: 'relative',
   },
-  referenceText: {
-    color: '#00f3ff',
-    fontWeight: '600',
-    fontSize: 14,
+  quoteOpen: {
+    position: 'absolute',
+    top: 10,
+    left: 12,
+  },
+  quoteClose: {
+    position: 'absolute',
+    bottom: 10,
+    right: 12,
   },
   promiseText: {
-    fontSize: 20,
-    lineHeight: 32,
+    fontSize: 19,
+    lineHeight: 30,
     color: '#e6f3ff',
     textAlign: 'center',
-    fontStyle: 'italic',
+  },
+  referenceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
     marginBottom: 24,
+  },
+  refLine: {
+    flex: 1,
+    height: 1,
+  },
+  refDot: {
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: 'rgba(0, 243, 255, 0.7)',
+    marginHorizontal: 8,
+  },
+  referenceText: {
+    color: '#9fdfff',
+    fontWeight: '600',
+    fontSize: 15,
+    letterSpacing: 0.3,
   },
   loader: {
     marginVertical: 40,
@@ -254,14 +312,17 @@ const styles = StyleSheet.create({
   shareButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#00ff88',
-    paddingHorizontal: 24,
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+    paddingHorizontal: 36,
     paddingVertical: 12,
     borderRadius: 25,
+    borderWidth: 1.5,
+    borderColor: 'rgba(0, 243, 255, 0.6)',
   },
   shareButtonText: {
-    color: '#0a0e14',
-    fontWeight: 'bold',
+    color: '#00f3ff',
+    fontWeight: '600',
     fontSize: 14,
     marginLeft: 8,
   },
