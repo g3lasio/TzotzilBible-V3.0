@@ -1,21 +1,25 @@
-// BUILD NUMBER — Fixed for this release (7.1.0 / build 2606201023)
+// BUILD NUMBER — Fixed for this release (7.1.1 / build 2606201145)
 // Format: YYMMDDHHMM — always unique and always increasing.
 //
 // IMPORTANT: Increment BUILD_NUMBER and VERSION_CODE before each new build
 // to avoid rejection by Apple App Store or Google Play.
 //
-// Current values set for: 2026-06-20 10:23 UTC
-// iOS buildNumber: "2606201023"
-// Android versionCode: 26062010 (YYMMDDHH format — max allowed by Google Play is 2,100,000,000)
+// NOTE: marketing version bumped 7.1.0 -> 7.1.1 because Apple closed the 7.1.0
+// train (errors 90062 / 90186 — CFBundleShortVersionString must be higher than
+// the previously approved 7.1.0).
+//
+// Current values set for: 2026-06-20 11:45 UTC
+// iOS buildNumber: "2606201145"
+// Android versionCode: 26062011 (YYMMDDHH format — max allowed by Google Play is 2,100,000,000)
 
-const BUILD_NUMBER = "2606201023";
-const VERSION_CODE = 26062010;
+const BUILD_NUMBER = "2606201145";
+const VERSION_CODE = 26062011;
 
 export default {
   expo: {
     name: "Tzotzil Bible",
     slug: "tzotzil-bible",
-    version: "7.1.0",
+    version: "7.1.1",
     scheme: "com.chyrris.tzotzilbible",
     orientation: "portrait",
     icon: "./assets/icon.png",
